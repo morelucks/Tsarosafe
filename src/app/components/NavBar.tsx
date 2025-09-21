@@ -1,7 +1,7 @@
 import Link from "next/link";
-// import { ConnectButton } from "@rainbow-me/rainbowkit"; // This will be handled separately
+// import { ConnectButton } from "@rainbow-me/rainbowkit"; 
 // import Image from "next/image";
-// import TsarosafeLogo from "../assets/TsarosafeLogo.png"; // Assuming a TsarosafeLogo.png will be placed here
+// import TsarosafeLogo from "../assets/TsarosafeLogo.png"; 
 
 const NavBar = () => {
   return (
