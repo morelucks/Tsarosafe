@@ -1,9 +1,64 @@
+"use client";
 import Link from "next/link";
+import { useCallback, useEffect, useMemo, useState } from "react";
 // import { ConnectButton } from "@rainbow-me/rainbowkit"; 
 // import Image from "next/image";
 // import TsarosafeLogo from "../assets/TsarosafeLogo.png"; 
 
+type EthereumProvider = {
+  request: (args: { method: string; params?: unknown[] }) => Promise<unknown>;
+  on?: (event: string, handler: (...args: unknown[]) => void) => void;
+  removeListener?: (event: string, handler: (...args: unknown[]) => void) => void;
+};
+
 const NavBar = () => {
+  const [account, setAccount] = useState<string | null>(null);
+  const [isConnecting, setIsConnecting] = useState(false);
+
+  const ethereum = useMemo<EthereumProvider | undefined>(() => {
+    if (typeof window === "undefined") return undefined;
+    const w = window as Window & { ethereum?: EthereumProvider };
+    return w.ethereum;
+  }, []);
+
+  const shortAddress = useMemo(() => {
+    if (!account) return "";
+    return account.slice(0, 6) + "…" + account.slice(-4);
+  }, [account]);
+
+  const handleConnect = useCallback(async () => {
+    if (!ethereum) {
+      alert("No Ethereum provider found. Install MetaMask.");
+      return;
+    }
+    try {
+      setIsConnecting(true);
+      const accounts = (await ethereum.request({ method: "eth_requestAccounts" })) as string[];
+      setAccount(accounts?.[0] ?? null);
+    } catch (err) {
+      console.error("Wallet connection failed", err);
+    } finally {
+      setIsConnecting(false);
+    }
+  }, [ethereum]);
+
+  useEffect(() => {
+    if (!ethereum?.on) return;
+    const handleAccountsChanged = (...args: unknown[]) => {
+      const accounts = (args[0] as string[]) || [];
+      setAccount(accounts?.[0] ?? null);
+    };
+    ethereum
+      .request({ method: "eth_accounts" })
+      .then((acc) => setAccount((acc as string[])?.[0] ?? null))
+      .catch(() => {});
+    ethereum.on && ethereum.on("accountsChanged", handleAccountsChanged);
+    return () => {
+      if (ethereum?.removeListener) {
+        ethereum.removeListener("accountsChanged", handleAccountsChanged);
+      }
+    };
+  }, [ethereum]);
   return (
     <div>
       <nav className="bg-white border-gray-200 dark:bg-gray-900 border-b-2 ">
@@ -26,6 +81,14 @@ const NavBar = () => {
           </Link>
           {/*  */}
           <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+            <button
+              onClick={handleConnect}
+              type="button"
+              className="rounded-full bg-blue-600 text-white px-4 py-2 mr-4 disabled:opacity-60"
+              disabled={isConnecting}
+            >
+              {account ? `Connected: ${shortAddress}` : isConnecting ? "Connecting…" : "Connect Wallet"}
+            </button>
             {/* ConnectButton will need to be re-evaluated for Next.js */}
             {/* <button
               type="button"

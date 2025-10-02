@@ -1,3 +1,4 @@
+import Image from "next/image"
 import FirstIcon from "../assets/ph_arrows-split-light.png"
 import SecondIcon from "../assets/iconamoon_shield-light.png"
 import ThridIcon from "../assets/ph_arrows-split-light.png"
@@ -14,7 +15,7 @@ const WhyUs = () => {
             {/* first card */}
             <div className="flex flex-col items-center w-60 border-2 rounded-xl px-4 h-64 py-7 shadow-lg">
                 <div className="bg-blue-900 w-10 h-10 p-3 rounded-full">
-                    <img src={FirstIcon.src} alt="" />
+                    <Image src={FirstIcon} alt="" width={16} height={16} />
                 </div>
                 <div className="flex flex-col items-center mt-10">
                     <h2 className="font-semibold leading-5 font-wix">Flexibility</h2>
@@ -24,7 +25,7 @@ const WhyUs = () => {
              {/* first card */}
              <div className="flex flex-col items-center w-60 border-2 rounded-xl px-4 h-64 py-7  ml-8 shadow-lg" >
                 <div className="bg-blue-900 w-10 h-10 p-3 rounded-full">
-                    <img src={SecondIcon.src} alt="" />
+                    <Image src={SecondIcon} alt="" width={16} height={16} />
                 </div>
                 <div className="flex flex-col items-center mt-10">
                     <h2 className="font-semibold leading-5 font-wix">Reliability</h2>
@@ -34,7 +35,7 @@ const WhyUs = () => {
              {/* first card */}
              <div className="flex flex-col items-center w-60 border-2 rounded-xl px-4 h-64 py-7 ml-10 shadow-lg">
                 <div className="bg-blue-900 w-10 h-10 p-3 rounded-full">
-                    <img src={ThridIcon.src} alt="" />
+                    <Image src={ThridIcon} alt="" width={16} height={16} />
                 </div>
                 <div className="flex flex-col items-center mt-10">
                     <h2 className="font-semibold leading-5 font-wix">Security</h2>
@@ -44,7 +45,7 @@ const WhyUs = () => {
         </div>
 
           <div className="w-96  absolute top-[40%] right-0"> 
-             <img src={DecentralizeImage.src} alt="" className="w-full h-full" />
+             <Image src={DecentralizeImage} alt="" className="w-full h-full" width={384} height={200} />
           </div>
     </div>
   )

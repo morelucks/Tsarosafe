@@ -3,7 +3,6 @@ import bgImage from "./assets/Tsarosafe.png"
 import bgImage2 from "./assets/image 7.png"
 import Pointer from "./assets/Group.png"
 import WhyUs from "./components/WhyUs"
-import HowItWorks from "./components/HowItWorks"
 
 const LandingPage = () => {
   return (
@@ -11,7 +10,7 @@ const LandingPage = () => {
         <div className="mb-10">
         <div className="md:w-[60%]">
             <h2 className="font-semibold text-5xl leading-10 font-wix fade-in" style={{ animationDelay: '0.2s' }}>Save Smarter, Together or Individually.</h2>
-            <p className="text-lg leading-6 mt-3 w-[80%] font-montserrat fade-in" style={{ animationDelay: '0.4s' }}>Empower your financial journey with savings plans that work for you, whether you're saving solo or as part of a group.</p>
+            <p className="text-lg leading-6 mt-3 w-[80%] font-montserrat fade-in" style={{ animationDelay: '0.4s' }}>Empower your financial journey with savings plans that work for you, whether you&apos;re saving solo or as part of a group.</p>
         </div>
 
         {/* image section */}
@@ -22,7 +21,7 @@ const LandingPage = () => {
                 </div>
 
                 <div className="absolute left-[30%] bottom-0 bg-transparent w-96 h-80 fade-in" style={{ animationDelay: '0.8s' }}>
-                    <img src={bgImage2.src} alt="bground image" className="object-fill w-full h-full"/>
+                    <Image src={bgImage2} alt="bground image" className="object-fill w-full h-full" width={384} height={320} />
                 </div>
 
              </div>
@@ -35,13 +34,15 @@ const LandingPage = () => {
             <button className="rounded-full bg-white text-blue-900 font-wix py-2 px-5 flex flex-row items-center border border-blue-900 ml-4">
             Learn more
             <div  className=" ml-2 bg-blue-900 p-3 rounded-full text-center flex items-center "> 
-            <img src={Pointer.src} alt="" className="object-cover  text-white w-2 h-2"/>
+            <Image src={Pointer} alt="" className="object-cover  text-white w-2 h-2" width={8} height={8} />
             </div>
             
             </button>
         </div>
         </div>
-        <WhyUs className="mt-10"/>
+        <div className="mt-10">
+            <WhyUs />
+        </div>
         {/* <HowItWorks/> */}
     </div>
   )
