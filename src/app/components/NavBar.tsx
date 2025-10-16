@@ -52,7 +52,9 @@ const NavBar = () => {
       .request({ method: "eth_accounts" })
       .then((acc) => setAccount((acc as string[])?.[0] ?? null))
       .catch(() => {});
-    ethereum.on && ethereum.on("accountsChanged", handleAccountsChanged);
+    if (ethereum && ethereum.on) {
+      ethereum.on("accountsChanged", handleAccountsChanged);
+    }
     return () => {
       if (ethereum?.removeListener) {
         ethereum.removeListener("accountsChanged", handleAccountsChanged);
