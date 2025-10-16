@@ -48,6 +48,62 @@ const CreateGroupPage = () => {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
+  const [errors, setErrors] = useState<{ 
+    name?: string;
+    pendingMember?: string;
+    targetAmount?: string;
+    startDate?: string;
+    endDate?: string;
+    dateRange?: string;
+  }>({});
+
+  const isValidEmail = (value: string): boolean => {
+    // Basic RFC-like email pattern
+    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
+  };
+
+  const isValidEthAddressFormat = (value: string): boolean => {
+    return /^0x[a-fA-F0-9]{40}$/.test(value);
+  };
+
+  const validateSettings = (s: GroupSettings) => {
+    const next: typeof errors = {};
+    if (s.name.trim().length < 3) next.name = "Name must be at least 3 characters.";
+    setErrors(prev => ({ ...prev, ...next }));
+    return Object.keys(next).length === 0;
+  };
+
+  const validatePendingMember = (value: string) => {
+    const trimmed = value.trim();
+    if (!trimmed) {
+      setErrors(prev => ({ ...prev, pendingMember: "Enter an email or wallet address." }));
+      return false;
+    }
+    const emailOk = isValidEmail(trimmed);
+    const walletOk = isValidEthAddressFormat(trimmed);
+    if (!emailOk && !walletOk) {
+      setErrors(prev => ({ ...prev, pendingMember: "Invalid email or wallet address (0x + 40 hex)." }));
+      return false;
+    }
+    setErrors(prev => ({ ...prev, pendingMember: undefined }));
+    return true;
+  };
+
+  const validateGoal = (g: SavingsGoal) => {
+    const next: typeof errors = {};
+    if (!(g.targetAmount > 0)) next.targetAmount = "Target must be greater than 0.";
+    if (!g.startDate) next.startDate = "Start date is required.";
+    if (g.endDate && g.startDate) {
+      const start = new Date(g.startDate);
+      const end = new Date(g.endDate);
+      if (isFinite(start.getTime()) && isFinite(end.getTime())) {
+        if (end < start) next.dateRange = "End date must be on or after start date.";
+      }
+    }
+    setErrors(prev => ({ ...prev, ...next }));
+    return Object.keys(next).length === 0;
+  };
+
   const canContinue = useMemo(() => {
     if (activeStep === 0) {
       return settings.name.trim().length >= 3;
@@ -56,14 +112,21 @@ const CreateGroupPage = () => {
       return members.length >= 1; // at least one member besides creator
     }
     if (activeStep === 2) {
-      return goal.targetAmount > 0 && !!goal.startDate;
+      const basic = goal.targetAmount > 0 && !!goal.startDate;
+      if (!basic) return false;
+      if (goal.endDate && goal.startDate) {
+        const start = new Date(goal.startDate);
+        const end = new Date(goal.endDate);
+        if (isFinite(start.getTime()) && isFinite(end.getTime()) && end < start) return false;
+      }
+      return true;
     }
     return true;
   }, [activeStep, settings, members, goal]);
 
   const addMember = () => {
     const value = pendingMember.trim();
-    if (!value) return;
+    if (!validatePendingMember(value)) return;
     setMembers(prev => [
       ...prev,
       { id: crypto.randomUUID(), addressOrEmail: value, role: pendingRole },
@@ -76,7 +139,15 @@ const CreateGroupPage = () => {
     setMembers(prev => prev.filter(m => m.id !== id));
   };
 
-  const next = () => setActiveStep(s => Math.min(s + 1, steps.length - 1));
+  const next = () => {
+    if (activeStep === 0) {
+      if (!validateSettings(settings)) return;
+    }
+    if (activeStep === 2) {
+      if (!validateGoal(goal)) return;
+    }
+    setActiveStep(s => Math.min(s + 1, steps.length - 1));
+  };
   const back = () => setActiveStep(s => Math.max(s - 1, 0));
 
   const handleSubmit = async () => {
@@ -123,6 +194,9 @@ const CreateGroupPage = () => {
                   placeholder="e.g., Family Savings Circle"
                   className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900 bg-white placeholder-gray-400"
                 />
+                {errors.name && (
+                  <p className="text-xs text-red-600 mt-1">{errors.name}</p>
+                )}
                 <p className="text-xs text-gray-500 mt-1">Minimum 3 characters.</p>
               </div>
               <div>
@@ -179,6 +253,9 @@ const CreateGroupPage = () => {
                     placeholder="0x... or name@example.com"
                     className="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900 bg-white placeholder-gray-400"
                   />
+                  {errors.pendingMember && (
+                    <p className="text-xs text-red-600 mt-1">{errors.pendingMember}</p>
+                  )}
                   <select
                     value={pendingRole}
                     onChange={e => setPendingRole(e.target.value as MemberRole)}
@@ -233,6 +310,9 @@ const CreateGroupPage = () => {
                     onChange={e => setGoal({ ...goal, targetAmount: Number(e.target.value) })}
                     className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900 bg-white"
                   />
+                  {errors.targetAmount && (
+                    <p className="text-xs text-red-600 mt-1">{errors.targetAmount}</p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700">Cadence</label>
@@ -254,6 +334,9 @@ const CreateGroupPage = () => {
                     onChange={e => setGoal({ ...goal, startDate: e.target.value })}
                     className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900 bg-white"
                   />
+                  {errors.startDate && (
+                    <p className="text-xs text-red-600 mt-1">{errors.startDate}</p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700">End Date (optional)</label>
@@ -263,6 +346,9 @@ const CreateGroupPage = () => {
                     onChange={e => setGoal({ ...goal, endDate: e.target.value })}
                     className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900 bg-white"
                   />
+                  {(errors.endDate || errors.dateRange) && (
+                    <p className="text-xs text-red-600 mt-1">{errors.endDate || errors.dateRange}</p>
+                  )}
                 </div>
               </div>
             </div>
