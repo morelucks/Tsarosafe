@@ -47,6 +47,7 @@ const CreateGroupPage = () => {
   const [goal, setGoal] = useState<SavingsGoal>(initialGoal);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [invites, setInvites] = useState<Array<{ code: string; addressOrEmail: string; status: 'sent' | 'accepted' | 'declined'; }>>([]);
 
   const [errors, setErrors] = useState<{ 
     name?: string;
@@ -133,6 +134,31 @@ const CreateGroupPage = () => {
     ]);
     setPendingMember("");
     setPendingRole("member");
+  };
+
+  const generateInviteForPending = () => {
+    const value = pendingMember.trim();
+    if (!validatePendingMember(value)) return;
+    const code = crypto.randomUUID();
+    const next = { code, addressOrEmail: value, status: 'sent' as const };
+    setInvites(prev => {
+      const updated = [next, ...prev];
+      try {
+        localStorage.setItem('tsarosafe_invites', JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+  };
+
+  const copyInviteLink = async (code: string) => {
+    const origin = typeof window !== 'undefined' ? window.location.origin : '';
+    const link = `${origin}/join-group?invite=${encodeURIComponent(code)}`;
+    try {
+      await navigator.clipboard.writeText(link);
+      alert('Invite link copied to clipboard');
+    } catch {
+      alert(link);
+    }
   };
 
   const removeMember = (id: string) => {
@@ -271,6 +297,13 @@ const CreateGroupPage = () => {
                   >
                     Add
                   </button>
+                  <button
+                    type="button"
+                    onClick={generateInviteForPending}
+                    className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700"
+                  >
+                    Generate Invite
+                  </button>
                 </div>
                 <p className="text-xs text-gray-500 mt-1">Add at least one member.</p>
               </div>
@@ -295,6 +328,34 @@ const CreateGroupPage = () => {
                   <li className="p-3 text-sm text-gray-500">No members added yet.</li>
                 )}
               </ul>
+
+              {/* Invites generated */}
+              <div>
+                <h3 className="text-sm font-semibold text-gray-900 mt-4">Invites</h3>
+                {invites.length === 0 ? (
+                  <p className="text-xs text-gray-500 mt-1">No invites generated yet.</p>
+                ) : (
+                  <ul className="mt-2 space-y-2">
+                    {invites.map((inv) => (
+                      <li key={inv.code} className="flex items-center justify-between text-sm bg-gray-50 rounded p-2">
+                        <div className="truncate mr-3">
+                          <span className="font-medium">{inv.addressOrEmail}</span>
+                          <span className="ml-2 text-gray-600">[{inv.status}]</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => copyInviteLink(inv.code)}
+                            className="px-2 py-1 rounded border text-xs"
+                          >
+                            Copy Link
+                          </button>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
             </div>
           )}
 

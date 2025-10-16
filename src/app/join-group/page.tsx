@@ -26,6 +26,23 @@ const JoinGroupPage = () => {
   const [page, setPage] = useState(1);
   const [inviteCode, setInviteCode] = useState("");
   const [message, setMessage] = useState<string | null>(null);
+  const [invites, setInvites] = useState<Array<{ code: string; addressOrEmail: string; status: 'sent' | 'accepted' | 'declined' }>>([]);
+
+  // Load invites from localStorage for basic status tracking
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('tsarosafe_invites');
+      if (raw) setInvites(JSON.parse(raw));
+    } catch {}
+  }, []);
+
+  // If invite exists in URL, prefill
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const url = new URL(window.location.href);
+    const code = url.searchParams.get('invite');
+    if (code) setInviteCode(code);
+  }, []);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -55,9 +72,28 @@ const JoinGroupPage = () => {
       setTimeout(() => setMessage(null), 2500);
       return;
     }
+    // Update local status if we have a matching invite
+    setInvites(prev => {
+      const updated = prev.map(i => i.code === code ? { ...i, status: 'accepted' as const } : i);
+      try { localStorage.setItem('tsarosafe_invites', JSON.stringify(updated)); } catch {}
+      return updated;
+    });
     setMessage("Invite accepted. You have joined the group.");
     setInviteCode("");
     setTimeout(() => setMessage(null), 2500);
+  };
+
+  const handleInviteDecline = () => {
+    const code = inviteCode.trim();
+    if (!code) return;
+    setInvites(prev => {
+      const updated = prev.map(i => i.code === code ? { ...i, status: 'declined' as const } : i);
+      try { localStorage.setItem('tsarosafe_invites', JSON.stringify(updated)); } catch {}
+      return updated;
+    });
+    setMessage("Invite declined.");
+    setInviteCode("");
+    setTimeout(() => setMessage(null), 2000);
   };
 
   return (
@@ -86,6 +122,13 @@ const JoinGroupPage = () => {
               className="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700"
             >
               Join
+            </button>
+            <button
+              type="button"
+              onClick={handleInviteDecline}
+              className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300"
+            >
+              Decline
             </button>
           </div>
         </div>
