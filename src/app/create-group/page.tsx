@@ -1,8 +1,333 @@
-export default function CreateGroupPage() {
+"use client";
+import { useMemo, useState } from "react";
+
+type Privacy = "public" | "private";
+type MemberRole = "admin" | "member";
+
+interface Member {
+  id: string;
+  addressOrEmail: string;
+  role: MemberRole;
+}
+
+interface GroupSettings {
+  name: string;
+  description: string;
+  privacy: Privacy;
+}
+
+interface SavingsGoal {
+  targetAmount: number;
+  cadence: "daily" | "weekly" | "monthly";
+  startDate: string; // yyyy-mm-dd
+  endDate?: string; // yyyy-mm-dd
+}
+
+const initialSettings: GroupSettings = {
+  name: "",
+  description: "",
+  privacy: "private",
+};
+
+const initialGoal: SavingsGoal = {
+  targetAmount: 0,
+  cadence: "monthly",
+  startDate: "",
+  endDate: "",
+};
+
+const steps = ["Settings", "Members", "Goals", "Review"] as const;
+
+const CreateGroupPage = () => {
+  const [activeStep, setActiveStep] = useState(0);
+  const [settings, setSettings] = useState<GroupSettings>(initialSettings);
+  const [members, setMembers] = useState<Member[]>([]);
+  const [pendingMember, setPendingMember] = useState("");
+  const [pendingRole, setPendingRole] = useState<MemberRole>("member");
+  const [goal, setGoal] = useState<SavingsGoal>(initialGoal);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const canContinue = useMemo(() => {
+    if (activeStep === 0) {
+      return settings.name.trim().length >= 3;
+    }
+    if (activeStep === 1) {
+      return members.length >= 1; // at least one member besides creator
+    }
+    if (activeStep === 2) {
+      return goal.targetAmount > 0 && !!goal.startDate;
+    }
+    return true;
+  }, [activeStep, settings, members, goal]);
+
+  const addMember = () => {
+    const value = pendingMember.trim();
+    if (!value) return;
+    setMembers(prev => [
+      ...prev,
+      { id: crypto.randomUUID(), addressOrEmail: value, role: pendingRole },
+    ]);
+    setPendingMember("");
+    setPendingRole("member");
+  };
+
+  const removeMember = (id: string) => {
+    setMembers(prev => prev.filter(m => m.id !== id));
+  };
+
+  const next = () => setActiveStep(s => Math.min(s + 1, steps.length - 1));
+  const back = () => setActiveStep(s => Math.max(s - 1, 0));
+
+  const handleSubmit = async () => {
+    setSubmitting(true);
+    // Simulate API call
+    await new Promise(r => setTimeout(r, 1000));
+    setSubmitting(false);
+    setSubmitted(true);
+  };
+
   return (
-    <div>
-      <h1>Create New Group Page</h1>
-      <p>This is a placeholder for creating a new group.</p>
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-4xl mx-auto px-4">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Create New Group</h1>
+        <p className="text-gray-600 mb-6">Build your savings group in a few steps.</p>
+
+        {/* Steps */}
+        <ol className="flex items-center w-full mb-8">
+          {steps.map((label, idx) => (
+            <li key={label} className="flex-1">
+              <div className="flex items-center">
+                <div
+                  className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                    idx <= activeStep ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"
+                  }`}
+                >
+                  {idx + 1}
+                </div>
+                <span className="ml-2 text-sm font-medium text-gray-800">{label}</span>
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        {/* Panels */}
+        <div className="bg-white rounded-lg shadow p-6">
+          {activeStep === 0 && (
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Group Name</label>
+                <input
+                  value={settings.name}
+                  onChange={e => setSettings({ ...settings, name: e.target.value })}
+                  placeholder="e.g., Family Savings Circle"
+                  className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                />
+                <p className="text-xs text-gray-500 mt-1">Minimum 3 characters.</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Description</label>
+                <textarea
+                  value={settings.description}
+                  onChange={e => setSettings({ ...settings, description: e.target.value })}
+                  placeholder="What is this group for?"
+                  className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 h-24 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Privacy</label>
+                <div className="mt-2 flex gap-4">
+                  <label className="inline-flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name="privacy"
+                      checked={settings.privacy === "private"}
+                      onChange={() => setSettings({ ...settings, privacy: "private" })}
+                    />
+                    <span>Private</span>
+                  </label>
+                  <label className="inline-flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name="privacy"
+                      checked={settings.privacy === "public"}
+                      onChange={() => setSettings({ ...settings, privacy: "public" })}
+                    />
+                    <span>Public</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeStep === 1 && (
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Add Member (email or wallet)</label>
+                <div className="mt-1 flex gap-2">
+                  <input
+                    value={pendingMember}
+                    onChange={e => setPendingMember(e.target.value)}
+                    placeholder="0x... or name@example.com"
+                    className="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  />
+                  <select
+                    value={pendingRole}
+                    onChange={e => setPendingRole(e.target.value as MemberRole)}
+                    className="border border-gray-300 rounded-lg px-3 py-2"
+                  >
+                    <option value="member">Member</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                  <button
+                    type="button"
+                    onClick={addMember}
+                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                  >
+                    Add
+                  </button>
+                </div>
+                <p className="text-xs text-gray-500 mt-1">Add at least one member.</p>
+              </div>
+
+              <ul className="divide-y divide-gray-200 rounded-lg border border-gray-200">
+                {members.map(m => (
+                  <li key={m.id} className="flex items-center justify-between p-3">
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">{m.addressOrEmail}</p>
+                      <p className="text-xs text-gray-500">Role: {m.role}</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removeMember(m.id)}
+                      className="text-red-600 text-sm hover:text-red-700"
+                    >
+                      Remove
+                    </button>
+                  </li>
+                ))}
+                {members.length === 0 && (
+                  <li className="p-3 text-sm text-gray-500">No members added yet.</li>
+                )}
+              </ul>
+            </div>
+          )}
+
+          {activeStep === 2 && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Target Amount (USD)</label>
+                  <input
+                    type="number"
+                    min={0}
+                    value={goal.targetAmount}
+                    onChange={e => setGoal({ ...goal, targetAmount: Number(e.target.value) })}
+                    className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Cadence</label>
+                  <select
+                    value={goal.cadence}
+                    onChange={e => setGoal({ ...goal, cadence: e.target.value as SavingsGoal["cadence"] })}
+                    className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2"
+                  >
+                    <option value="daily">Daily</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Start Date</label>
+                  <input
+                    type="date"
+                    value={goal.startDate}
+                    onChange={e => setGoal({ ...goal, startDate: e.target.value })}
+                    className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">End Date (optional)</label>
+                  <input
+                    type="date"
+                    value={goal.endDate}
+                    onChange={e => setGoal({ ...goal, endDate: e.target.value })}
+                    className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeStep === 3 && (
+            <div className="space-y-4">
+              <h2 className="text-lg font-semibold">Review</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div className="p-3 rounded border">
+                  <p className="font-medium">Settings</p>
+                  <p>Name: {settings.name}</p>
+                  <p>Privacy: {settings.privacy}</p>
+                  {settings.description && <p>Description: {settings.description}</p>}
+                </div>
+                <div className="p-3 rounded border">
+                  <p className="font-medium">Members ({members.length})</p>
+                  <ul className="list-disc ml-5">
+                    {members.map(m => (
+                      <li key={m.id}>{m.addressOrEmail} — {m.role}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="p-3 rounded border">
+                  <p className="font-medium">Goal</p>
+                  <p>Target: ${goal.targetAmount.toLocaleString()}</p>
+                  <p>Cadence: {goal.cadence}</p>
+                  <p>Start: {goal.startDate || "-"}</p>
+                  <p>End: {goal.endDate || "-"}</p>
+                </div>
+              </div>
+              {submitted ? (
+                <div className="p-4 rounded bg-green-50 text-green-700">
+                  Group created successfully (mock). You can now proceed to manage it.
+                </div>
+              ) : null}
+            </div>
+          )}
+        </div>
+
+        {/* Controls */}
+        <div className="mt-6 flex items-center justify-between">
+          <button
+            type="button"
+            onClick={back}
+            disabled={activeStep === 0}
+            className="px-4 py-2 rounded border border-gray-300 text-gray-700 disabled:opacity-50"
+          >
+            Back
+          </button>
+          {activeStep < steps.length - 1 ? (
+            <button
+              type="button"
+              onClick={next}
+              disabled={!canContinue}
+              className="px-4 py-2 rounded bg-blue-600 text-white disabled:opacity-50"
+            >
+              Continue
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={handleSubmit}
+              disabled={submitting}
+              className="px-4 py-2 rounded bg-green-600 text-white disabled:opacity-50"
+            >
+              {submitting ? "Creating…" : "Create Group"}
+            </button>
+          )}
+        </div>
+      </div>
     </div>
   );
-}
+};
+
+export default CreateGroupPage;
