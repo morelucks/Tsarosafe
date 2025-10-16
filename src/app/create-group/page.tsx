@@ -399,7 +399,7 @@ const CreateGroupPage = () => {
                     <p className="text-xs text-red-600 mt-1">{errors.startDate}</p>
                   )}
                 </div>
-                <div>
+    <div>
                   <label className="block text-sm font-medium text-gray-700">End Date (optional)</label>
                   <input
                     type="date"
