@@ -121,7 +121,7 @@ const CreateGroupPage = () => {
                   value={settings.name}
                   onChange={e => setSettings({ ...settings, name: e.target.value })}
                   placeholder="e.g., Family Savings Circle"
-                  className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900 bg-white placeholder-gray-400"
                 />
                 <p className="text-xs text-gray-500 mt-1">Minimum 3 characters.</p>
               </div>
@@ -131,29 +131,37 @@ const CreateGroupPage = () => {
                   value={settings.description}
                   onChange={e => setSettings({ ...settings, description: e.target.value })}
                   placeholder="What is this group for?"
-                  className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 h-24 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 h-24 focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900 bg-white placeholder-gray-400"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700">Privacy</label>
-                <div className="mt-2 flex gap-4">
-                  <label className="inline-flex items-center gap-2">
+                <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <label className="flex items-start gap-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
                     <input
                       type="radio"
                       name="privacy"
+                      className="mt-1"
                       checked={settings.privacy === "private"}
                       onChange={() => setSettings({ ...settings, privacy: "private" })}
                     />
-                    <span>Private</span>
+                    <span>
+                      <span className="block text-sm font-medium text-gray-900">Invite-only (Private)</span>
+                      <span className="block text-xs text-gray-500">Only invited members can find and join. Group is hidden from search.</span>
+                    </span>
                   </label>
-                  <label className="inline-flex items-center gap-2">
+                  <label className="flex items-start gap-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
                     <input
                       type="radio"
                       name="privacy"
+                      className="mt-1"
                       checked={settings.privacy === "public"}
                       onChange={() => setSettings({ ...settings, privacy: "public" })}
                     />
-                    <span>Public</span>
+                    <span>
+                      <span className="block text-sm font-medium text-gray-900">Discoverable (Public)</span>
+                      <span className="block text-xs text-gray-500">Group is visible in search/browse. Admin approval may still be required to join.</span>
+                    </span>
                   </label>
                 </div>
               </div>
@@ -169,12 +177,12 @@ const CreateGroupPage = () => {
                     value={pendingMember}
                     onChange={e => setPendingMember(e.target.value)}
                     placeholder="0x... or name@example.com"
-                    className="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    className="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900 bg-white placeholder-gray-400"
                   />
                   <select
                     value={pendingRole}
                     onChange={e => setPendingRole(e.target.value as MemberRole)}
-                    className="border border-gray-300 rounded-lg px-3 py-2"
+                    className="border border-gray-300 rounded-lg px-3 py-2 text-gray-900 bg-white"
                   >
                     <option value="member">Member</option>
                     <option value="admin">Admin</option>
@@ -223,7 +231,7 @@ const CreateGroupPage = () => {
                     min={0}
                     value={goal.targetAmount}
                     onChange={e => setGoal({ ...goal, targetAmount: Number(e.target.value) })}
-                    className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900 bg-white"
                   />
                 </div>
                 <div>
@@ -231,7 +239,7 @@ const CreateGroupPage = () => {
                   <select
                     value={goal.cadence}
                     onChange={e => setGoal({ ...goal, cadence: e.target.value as SavingsGoal["cadence"] })}
-                    className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2"
+                    className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900 bg-white"
                   >
                     <option value="daily">Daily</option>
                     <option value="weekly">Weekly</option>
@@ -244,7 +252,7 @@ const CreateGroupPage = () => {
                     type="date"
                     value={goal.startDate}
                     onChange={e => setGoal({ ...goal, startDate: e.target.value })}
-                    className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2"
+                    className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900 bg-white"
                   />
                 </div>
                 <div>
@@ -253,7 +261,7 @@ const CreateGroupPage = () => {
                     type="date"
                     value={goal.endDate}
                     onChange={e => setGoal({ ...goal, endDate: e.target.value })}
-                    className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2"
+                    className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-900 bg-white"
                   />
                 </div>
               </div>
