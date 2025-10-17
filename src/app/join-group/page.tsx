@@ -18,6 +18,18 @@ const mockGroups: GroupRow[] = [
   { id: "g4", name: "Investors Guild", privacy: "private", members: 12, description: "Invite-only investing club." },
 ];
 
+interface StoredGroup {
+  id: string;
+  name: string;
+  description: string;
+  privacy: Privacy;
+  members: Array<{ id: string; addressOrEmail: string; role: string }>;
+  goal: { targetAmount: number; cadence: string; startDate: string; endDate?: string };
+  invites: Array<{ code: string; addressOrEmail: string; status: string }>;
+  createdAt: string;
+  createdBy: string;
+}
+
 const PAGE_SIZE = 3;
 
 const JoinGroupPage = () => {
@@ -27,12 +39,16 @@ const JoinGroupPage = () => {
   const [inviteCode, setInviteCode] = useState("");
   const [message, setMessage] = useState<string | null>(null);
   const [invites, setInvites] = useState<Array<{ code: string; addressOrEmail: string; status: 'sent' | 'accepted' | 'declined' }>>([]);
+  const [storedGroups, setStoredGroups] = useState<StoredGroup[]>([]);
 
-  // Load invites from localStorage for basic status tracking
+  // Load invites and groups from localStorage
   useEffect(() => {
     try {
-      const raw = localStorage.getItem('tsarosafe_invites');
-      if (raw) setInvites(JSON.parse(raw));
+      const rawInvites = localStorage.getItem('tsarosafe_invites');
+      if (rawInvites) setInvites(JSON.parse(rawInvites));
+      
+      const rawGroups = localStorage.getItem('tsarosafe_groups');
+      if (rawGroups) setStoredGroups(JSON.parse(rawGroups));
     } catch {}
   }, []);
 
@@ -46,12 +62,25 @@ const JoinGroupPage = () => {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    let rows = mockGroups.filter(g =>
+    
+    // Convert stored groups to GroupRow format
+    const storedGroupRows: GroupRow[] = storedGroups.map(g => ({
+      id: g.id,
+      name: g.name,
+      privacy: g.privacy,
+      members: g.members.length,
+      description: g.description
+    }));
+    
+    // Combine mock groups with stored groups
+    const allGroups = [...mockGroups, ...storedGroupRows];
+    
+    let rows = allGroups.filter(g =>
       g.name.toLowerCase().includes(q) || g.description?.toLowerCase().includes(q)
     );
     if (privacy !== "all") rows = rows.filter(g => g.privacy === privacy);
     return rows;
-  }, [query, privacy]);
+  }, [query, privacy, storedGroups]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   useEffect(() => { setPage(1); }, [query, privacy]);

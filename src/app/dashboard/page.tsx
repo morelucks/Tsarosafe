@@ -53,20 +53,51 @@ const DashboardPage = () => {
   ]);
 
   const [isLoading, setIsLoading] = useState(true);
+  const [userGroups, setUserGroups] = useState<Array<{
+    id: string;
+    name: string;
+    description: string;
+    privacy: string;
+    members: Array<{ id: string; addressOrEmail: string; role: string }>;
+    goal: { targetAmount: number; cadence: string; startDate: string; endDate?: string };
+    invites: Array<{ code: string; addressOrEmail: string; status: string }>;
+    createdAt: string;
+    createdBy: string;
+  }>>([]);
 
   useEffect(() => {
-    // Simulate loading user data
+    // Load user data from localStorage
     const loadDashboardData = async () => {
       setIsLoading(true);
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
       
-      setStats({
-        totalSavings: 2450.75,
-        activeGroups: 3,
-        totalInvestments: 1200.50,
-        monthlyGoal: 1000
-      });
+      try {
+        // Load groups from localStorage
+        const storedGroups = JSON.parse(localStorage.getItem('tsarosafe_groups') || '[]');
+        setUserGroups(storedGroups);
+        
+        // Calculate stats from real data
+        const totalSavings = storedGroups.reduce((sum: number, group: {
+          goal?: { targetAmount?: number };
+        }) => 
+          sum + (group.goal?.targetAmount || 0), 0
+        );
+        
+        setStats({
+          totalSavings: totalSavings || 2450.75, // fallback to mock data
+          activeGroups: storedGroups.length || 3,
+          totalInvestments: 1200.50, // TODO: implement investment tracking
+          monthlyGoal: 1000
+        });
+      } catch (error) {
+        console.error('Failed to load dashboard data:', error);
+        // Fallback to mock data
+        setStats({
+          totalSavings: 2450.75,
+          activeGroups: 3,
+          totalInvestments: 1200.50,
+          monthlyGoal: 1000
+        });
+      }
       
       setIsLoading(false);
     };
@@ -268,6 +299,36 @@ const DashboardPage = () => {
             </div>
           </div>
         </div>
+
+        {/* Your Groups */}
+        {userGroups.length > 0 && (
+          <div className="mt-8">
+            <div className="bg-white rounded-lg shadow p-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">Your Groups</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {userGroups.map((group) => (
+                  <div key={group.id} className="border border-gray-200 rounded-lg p-4">
+                    <h3 className="font-semibold text-gray-900">{group.name}</h3>
+                    <p className="text-sm text-gray-600 mt-1">{group.description}</p>
+                    <div className="mt-3 flex justify-between items-center text-sm">
+                      <span className="text-gray-500">{group.members.length} members</span>
+                      <span className={`px-2 py-1 rounded text-xs ${
+                        group.privacy === 'public' 
+                          ? 'bg-green-100 text-green-800' 
+                          : 'bg-blue-100 text-blue-800'
+                      }`}>
+                        {group.privacy}
+                      </span>
+                    </div>
+                    <div className="mt-2 text-sm text-gray-600">
+                      Goal: ${group.goal?.targetAmount?.toLocaleString() || 0}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Quick Actions */}
         <div className="mt-8">

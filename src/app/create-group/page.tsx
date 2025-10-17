@@ -176,8 +176,35 @@ const CreateGroupPage = () => {
   };
   const back = () => setActiveStep(s => Math.max(s - 1, 0));
 
+  const saveGroupToLocalStorage = () => {
+    const groupData = {
+      id: crypto.randomUUID(),
+      name: settings.name,
+      description: settings.description,
+      privacy: settings.privacy,
+      members: members,
+      goal: goal,
+      invites: invites,
+      createdAt: new Date().toISOString(),
+      createdBy: "current-user", // In real app, this would be the actual user ID
+    };
+
+    try {
+      const existingGroups = JSON.parse(localStorage.getItem('tsarosafe_groups') || '[]');
+      const updatedGroups = [...existingGroups, groupData];
+      localStorage.setItem('tsarosafe_groups', JSON.stringify(updatedGroups));
+      console.log('Group saved to localStorage:', groupData);
+    } catch (error) {
+      console.error('Failed to save group to localStorage:', error);
+    }
+  };
+
   const handleSubmit = async () => {
     setSubmitting(true);
+    
+    // Save to localStorage
+    saveGroupToLocalStorage();
+    
     // Simulate API call
     await new Promise(r => setTimeout(r, 1000));
     setSubmitting(false);
