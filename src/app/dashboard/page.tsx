@@ -232,7 +232,7 @@ const DashboardPage = () => {
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-3">
                   <div 
-                    className="bg-blue-600 h-3 rounded-full transition-all duration-300"
+                    className="bg-[#0f2a56] h-3 rounded-full transition-all duration-300"
                     style={{ width: `${Math.min(savingsProgress, 100)}%` }}
                   ></div>
                 </div>
@@ -245,13 +245,13 @@ const DashboardPage = () => {
               <div className="grid grid-cols-2 gap-4 mt-6">
                 <Link 
                   href="/savings"
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg text-center hover:bg-blue-700 transition-colors"
+                  className="bg-[#0f2a56] text-white px-4 py-2 rounded-lg text-center hover:bg-[#0f2a56]/90 transition-colors"
                 >
                   Add Savings
                 </Link>
                 <Link 
                   href="/create-group"
-                  className="bg-green-600 text-white px-4 py-2 rounded-lg text-center hover:bg-green-700 transition-colors"
+                  className="bg-[#0f2a56] text-white px-4 py-2 rounded-lg text-center hover:bg-[#0f2a56]/90 transition-colors"
                 >
                   Create Group
                 </Link>

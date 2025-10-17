@@ -1,5 +1,6 @@
 "use client";
 import { useMemo, useState } from "react";
+import VerifyWithSelf from "../components/VerifyWithSelf";
 
 type Privacy = "public" | "private";
 type MemberRole = "admin" | "member";
@@ -48,6 +49,12 @@ const CreateGroupPage = () => {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [invites, setInvites] = useState<Array<{ code: string; addressOrEmail: string; status: 'sent' | 'accepted' | 'declined'; }>>([]);
+  // Verification state
+  const [isVerified, setIsVerified] = useState(false);
+  const [verifiedAt, setVerifiedAt] = useState<string | null>(null);
+  const [expiresAt, setExpiresAt] = useState<string | null>(null);
+  const [showVerification, setShowVerification] = useState(false);
+  const [verifyError, setVerifyError] = useState<string | null>(null);
 
   const [errors, setErrors] = useState<{ 
     name?: string;
@@ -125,6 +132,12 @@ const CreateGroupPage = () => {
     return true;
   }, [activeStep, settings, members, goal]);
 
+  const isVerificationFresh = useMemo(() => {
+    if (!isVerified) return false;
+    if (!expiresAt) return true;
+    return new Date(expiresAt) > new Date();
+  }, [isVerified, expiresAt]);
+
   const addMember = () => {
     const value = pendingMember.trim();
     if (!validatePendingMember(value)) return;
@@ -200,11 +213,15 @@ const CreateGroupPage = () => {
   };
 
   const handleSubmit = async () => {
+    if (!isVerificationFresh) {
+      setShowVerification(true);
+      setVerifyError("Verification required before creating the group.");
+      return;
+    }
+
     setSubmitting(true);
-    
     // Save to localStorage
     saveGroupToLocalStorage();
-    
     // Simulate API call
     await new Promise(r => setTimeout(r, 1000));
     setSubmitting(false);
@@ -446,28 +463,75 @@ const CreateGroupPage = () => {
             <div className="space-y-4">
               <h2 className="text-lg font-semibold">Review</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                <div className="p-3 rounded border">
-                  <p className="font-medium">Settings</p>
-                  <p>Name: {settings.name}</p>
-                  <p>Privacy: {settings.privacy}</p>
-                  {settings.description && <p>Description: {settings.description}</p>}
+                <div className="p-3 rounded border text-gray-900">
+                  <p className="font-semibold">Settings</p>
+                  <p className="mt-1 text-gray-800">Name: <span className="font-medium">{settings.name}</span></p>
+                  <p className="mt-1 text-gray-800">Privacy: <span className="font-medium">{settings.privacy}</span></p>
+                  {settings.description && <p className="mt-1 text-gray-800">Description: <span className="font-medium">{settings.description}</span></p>}
                 </div>
-                <div className="p-3 rounded border">
-                  <p className="font-medium">Members ({members.length})</p>
-                  <ul className="list-disc ml-5">
+                <div className="p-3 rounded border text-gray-900">
+                  <p className="font-semibold">Members ({members.length})</p>
+                  <ul className="list-disc ml-5 mt-1 text-gray-800">
                     {members.map(m => (
                       <li key={m.id}>{m.addressOrEmail} — {m.role}</li>
                     ))}
                   </ul>
                 </div>
-                <div className="p-3 rounded border">
-                  <p className="font-medium">Goal</p>
-                  <p>Target: ${goal.targetAmount.toLocaleString()}</p>
-                  <p>Cadence: {goal.cadence}</p>
-                  <p>Start: {goal.startDate || "-"}</p>
-                  <p>End: {goal.endDate || "-"}</p>
+                <div className="p-3 rounded border text-gray-900">
+                  <p className="font-semibold">Goal</p>
+                  <p className="mt-1 text-gray-800">Target: <span className="font-medium">${goal.targetAmount.toLocaleString()}</span></p>
+                  <p className="mt-1 text-gray-800">Cadence: <span className="font-medium">{goal.cadence}</span></p>
+                  <p className="mt-1 text-gray-800">Start: <span className="font-medium">{goal.startDate || "-"}</span></p>
+                  <p className="mt-1 text-gray-800">End: <span className="font-medium">{goal.endDate || "-"}</span></p>
                 </div>
               </div>
+              {/* Verification status */}
+              <div className="p-4 rounded border flex items-start justify-between">
+                <div>
+                  <p className="font-medium">Identity Verification</p>
+                  <p className={`mt-1 text-sm ${isVerificationFresh ? "text-green-700" : "text-red-700"}`}>
+                    {isVerificationFresh ? `Verified${verifiedAt ? ` on ${new Date(verifiedAt).toLocaleString()}` : ""}` : "Not verified or expired"}
+                  </p>
+                  {verifyError && (
+                    <p className="mt-1 text-xs text-red-600">{verifyError}</p>
+                  )}
+                  {expiresAt && (
+                    <p className="mt-1 text-xs text-gray-500">Expires: {new Date(expiresAt).toLocaleString()}</p>
+                  )}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => { setShowVerification(true); setVerifyError(null); }}
+                  className="px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+                >
+                  {isVerificationFresh ? "Re-verify" : "Verify now"}
+                </button>
+              </div>
+
+              {showVerification && (
+                <div className="border rounded-lg p-4">
+                  <VerifyWithSelf
+                    onSuccess={() => {
+                      setIsVerified(true);
+                      const now = new Date();
+                      setVerifiedAt(now.toISOString());
+                      const expiry = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+                      setExpiresAt(expiry.toISOString());
+                      setVerifyError(null);
+                      setShowVerification(false);
+                    }}
+                    onError={() => {
+                      setIsVerified(false);
+                      setVerifyError("Verification failed. Please try again.");
+                    }}
+                    onCancel={() => setShowVerification(false)}
+                    requiredDisclosures={{ minimumAge: 18, nationality: true }}
+                    appName="Tsarosafe"
+                    scope="tsarosafe-verification"
+                  />
+                </div>
+              )}
+
               {submitted ? (
                 <div className="p-4 rounded bg-green-50 text-green-700">
                   Group created successfully (mock). You can now proceed to manage it.
@@ -500,10 +564,10 @@ const CreateGroupPage = () => {
             <button
               type="button"
               onClick={handleSubmit}
-              disabled={submitting}
+              disabled={submitting || !isVerificationFresh}
               className="px-4 py-2 rounded bg-green-600 text-white disabled:opacity-50"
             >
-              {submitting ? "Creating…" : "Create Group"}
+              {submitting ? "Creating…" : (isVerificationFresh ? "Create Group" : "Verify to Create")}
             </button>
           )}
         </div>
