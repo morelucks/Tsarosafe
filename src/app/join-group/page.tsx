@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
+import VerifyWithSelf from "../components/VerifyWithSelf";
 
 type Privacy = "public" | "private";
 
@@ -30,6 +31,12 @@ interface StoredGroup {
   createdBy: string;
 }
 
+interface VerificationData {
+  isHuman: boolean;
+  verifiedAt: string;
+  expiresAt: string;
+}
+
 const PAGE_SIZE = 3;
 
 const JoinGroupPage = () => {
@@ -40,6 +47,11 @@ const JoinGroupPage = () => {
   const [message, setMessage] = useState<string | null>(null);
   const [invites, setInvites] = useState<Array<{ code: string; addressOrEmail: string; status: 'sent' | 'accepted' | 'declined' }>>([]);
   const [storedGroups, setStoredGroups] = useState<StoredGroup[]>([]);
+  
+  // Verification state
+  const [isVerified, setIsVerified] = useState(false);
+  const [verificationData, setVerificationData] = useState<VerificationData | null>(null);
+  const [showVerification, setShowVerification] = useState(false);
 
   // Load invites and groups from localStorage
   useEffect(() => {
@@ -49,6 +61,17 @@ const JoinGroupPage = () => {
       
       const rawGroups = localStorage.getItem('tsarosafe_groups');
       if (rawGroups) setStoredGroups(JSON.parse(rawGroups));
+      
+      // Load verification data
+      const rawVerification = localStorage.getItem('tsarosafe_verification');
+      if (rawVerification) {
+        const data = JSON.parse(rawVerification);
+        setVerificationData(data);
+        // Check if verification is still valid (not expired)
+        const now = new Date().getTime();
+        const expiresAt = new Date(data.expiresAt).getTime();
+        setIsVerified(data.isHuman && now < expiresAt);
+      }
     } catch {}
   }, []);
 
@@ -89,7 +112,42 @@ const JoinGroupPage = () => {
     return filtered.slice(start, start + PAGE_SIZE);
   }, [filtered, page]);
 
+  const handleVerificationSuccess = () => {
+    // Create verification data with current timestamp and 30-day expiry
+    const now = new Date();
+    const expiresAt = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days
+    
+    const data: VerificationData = {
+      isHuman: true,
+      verifiedAt: now.toISOString(),
+      expiresAt: expiresAt.toISOString()
+    };
+    
+    setVerificationData(data);
+    setIsVerified(true);
+    setShowVerification(false);
+    try {
+      localStorage.setItem('tsarosafe_verification', JSON.stringify(data));
+    } catch {}
+    setMessage("Identity verified! You can now join groups.");
+    setTimeout(() => setMessage(null), 3000);
+  };
+
+  const handleVerificationError = () => {
+    setMessage("Verification failed. Please try again.");
+    setTimeout(() => setMessage(null), 3000);
+  };
+
+  const handleVerificationCancel = () => {
+    setShowVerification(false);
+  };
+
   const handleJoinRequest = (groupId: string) => {
+    if (!isVerified) {
+      setMessage("Please verify your identity first before joining groups.");
+      setTimeout(() => setMessage(null), 3000);
+      return;
+    }
     setMessage(`Join request sent to group ${groupId}. Awaiting approval.`);
     setTimeout(() => setMessage(null), 2500);
   };
@@ -101,6 +159,13 @@ const JoinGroupPage = () => {
       setTimeout(() => setMessage(null), 2500);
       return;
     }
+    
+    if (!isVerified) {
+      setMessage("Please verify your identity first before joining groups.");
+      setTimeout(() => setMessage(null), 3000);
+      return;
+    }
+    
     // Update local status if we have a matching invite
     setInvites(prev => {
       const updated = prev.map(i => i.code === code ? { ...i, status: 'accepted' as const } : i);
@@ -134,6 +199,37 @@ const JoinGroupPage = () => {
         {message && (
           <div className="mb-4 p-3 rounded bg-blue-50 text-blue-700">{message}</div>
         )}
+
+        {/* Verification Status */}
+        <div className="mb-6 bg-white p-4 rounded-lg shadow">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900">Identity Verification</h2>
+              <p className="text-sm text-gray-600">
+                {isVerified ? (
+                  <span className="text-green-600">✓ Verified Human</span>
+                ) : (
+                  <span className="text-red-600">✗ Not Verified</span>
+                )}
+              </p>
+              {verificationData && (
+                <p className="text-xs text-gray-500 mt-1">
+                  Verified: {new Date(verificationData.verifiedAt).toLocaleDateString()}
+                  {verificationData.expiresAt && (
+                    <span> • Expires: {new Date(verificationData.expiresAt).toLocaleDateString()}</span>
+                  )}
+                </p>
+              )}
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowVerification(true)}
+              className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+            >
+              {isVerified ? "Re-verify" : "Verify Identity"}
+            </button>
+          </div>
+        </div>
 
         {/* Invite code */}
         <div className="mb-8 bg-white p-4 rounded-lg shadow">
@@ -202,9 +298,14 @@ const JoinGroupPage = () => {
                       <button
                         type="button"
                         onClick={() => handleJoinRequest(g.id)}
-                        className="px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 text-sm"
+                        disabled={!isVerified}
+                        className={`px-3 py-2 rounded text-sm ${
+                          isVerified 
+                            ? "bg-blue-600 text-white hover:bg-blue-700" 
+                            : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        }`}
                       >
-                        Request to Join
+                        {isVerified ? "Request to Join" : "Verify to Join"}
                       </button>
                     ) : (
                       <span className="text-xs text-gray-500">Invite required</span>
@@ -238,6 +339,30 @@ const JoinGroupPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Verification Modal */}
+      {showVerification && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-lg font-semibold mb-4">Verify Your Identity</h3>
+            <p className="text-sm text-gray-600 mb-4">
+              You need to verify your identity to join groups. This helps ensure all members are verified humans.
+            </p>
+            <VerifyWithSelf
+              requiredDisclosures={{
+                minimumAge: 18,
+                nationality: true,
+                gender: true,
+                excludedCountries: [],
+                ofac: false
+              }}
+              onSuccess={handleVerificationSuccess}
+              onError={handleVerificationError}
+              onCancel={handleVerificationCancel}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
