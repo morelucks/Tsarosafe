@@ -2,7 +2,7 @@
 pragma solidity 0.8.28;
 
 import {Test, console} from "forge-std/Test.sol";
-import {TsaroSafe} from "../src/TsaroSafe.sol";
+import {TsaroSafe} from "../src/core/TsaroSafe.sol";
 
 /**
  * @title TsaroSafeTest
