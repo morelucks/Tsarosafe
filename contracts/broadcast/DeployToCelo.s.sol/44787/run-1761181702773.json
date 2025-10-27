@@ -1,0 +1,29 @@
+{
+  "transactions": [
+    {
+      "hash": null,
+      "transactionType": "CREATE",
+      "contractName": "TsaroSafe",
+      "contractAddress": "0x3d15251e40a631793637b2dfd6433eadec821853",
+      "function": null,
+      "arguments": null,
+      "transaction": {
+        "from": "0xe403f79171b7050c78479f52e49e753d43e72c1a",
+        "gas": "0x14ddf",
+        "value": "0x0",
+        "input": "0x608080604052346013576039908160188239f35b5f80fdfe5f80fdfea2646970667358221220c9eb4c0a493d17bcc7d8deb93b14a682e59d7a1d1ddfbd53de08d4f54fd45ec264736f6c634300081c0033",
+        "nonce": "0x0",
+        "chainId": "0xaef3"
+      },
+      "additionalContracts": [],
+      "isFixedGasLimit": false
+    }
+  ],
+  "receipts": [],
+  "libraries": [],
+  "pending": [],
+  "returns": {},
+  "timestamp": 1761181702773,
+  "chain": 44787,
+  "commit": "0ce854b"
+}
