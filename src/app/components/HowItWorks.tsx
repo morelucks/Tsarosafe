@@ -1,31 +1,40 @@
-const HowItWorks = () => {
-  return (
-    <div className="mb-6 relative">
-      <div className="md:w-[60%]">
-        <h2 className="font-semibold text-5xl leading-10 font-wix">
-        How It Works
-        </h2>
-        <p className="text-lg leading-6 mt-4 w-[80%] font-montserrat">
-        A simple, step-by-step process to start saving securely..
-        </p>
-      </div>
-      {/* description */}
-       <div>
-        <div>
-            <ul>
-                <li className="flex flex-row items-center">
-                    <span className="bg-blue-700 rounded-full p-3 text-white ">1</span>
-                    <div className="font-wix border-2 rounded-xl shadow-md px-3 py-2 ml-2">
-                        <span className="text-xs leading-3 font-medium">Step 1</span>
-                        <h2 className="font-semibold  text-sm">Connect Your Account</h2>
-                        <p className="font-normal text-sm">Link your  wallet to the platform.</p>
-                    </div>
-                </li>
-            </ul>
+const steps = [
+  {
+    icon: "🪪",
+    title: "Connect or Create Account",
+    desc: "Easily sign up with wallet or email in seconds.",
+  },
+  {
+    icon: "👥",
+    title: "Solo or Group Plan",
+    desc: "Start a personal saving plan or invite friends & family for group savings.",
+  },
+  {
+    icon: "💸",
+    title: "Save & Grow",
+    desc: "Automate contributions and watch your money multiply, securely!",
+  },
+];
+
+const HowItWorks = () => (
+  <section className="py-16 w-full flex flex-col items-center px-2 fade-in bg-white" style={{ animationDelay: '0.2s' }}>
+    <h2 className="font-extrabold text-3xl md:text-5xl mb-6 text-gray-900 text-center drop-shadow">How it Works</h2>
+    <p className="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto opacity-80">Start your savings journey in just three simple steps—designed for everyone, from solo savers to group planners.</p>
+    <div className="flex flex-col md:flex-row gap-8 md:gap-0 justify-center items-stretch w-full max-w-5xl">
+      {steps.map((step, i) => (
+        <div key={i} className="flex flex-col items-center flex-1 relative md:px-10">
+          {/* Number bubble */}
+          <div className="w-16 h-16 bg-white text-gray-900 flex items-center justify-center text-3xl md:text-4xl rounded-full border-4 border-gray-200 shadow mb-4 scale-105 hover:scale-110 transition-transform">{step.icon}</div>
+          <div className="text-xl md:text-2xl font-bold mb-2 text-gray-900 text-center">{step.title}</div>
+          <p className="text-base md:text-lg text-gray-600 font-normal text-center opacity-80 mb-2">{step.desc}</p>
+          {/* Connector line, except last */}
+          {i < steps.length - 1 && (
+            <div className="hidden md:block absolute right-0 top-1/2 w-8 h-1 bg-gray-200"></div>
+          )}
         </div>
-       </div>
+      ))}
     </div>
-  );
-};
+  </section>
+);
 
 export default HowItWorks;
