@@ -34,19 +34,59 @@ interface ITsaroSafeData {
         address member;
         uint256 amount;
         uint256 timestamp;
+        string description;
+        bool isVerified;
     }
 
-    // Savings Goals Structures
-    struct SavingsGoal {
-        uint256 id;
-        string name;
+    struct ContributionHistory {
+        uint256 contributionId;
+        address member;
+        uint256 groupId;
+        uint256 amount;
+        uint256 timestamp;
         string description;
+        bool isVerified;
+    }
+
+    struct GroupContributionSummary {
+        uint256 groupId;
+        uint256 totalContributions;
+        uint256 totalAmount;
+        uint256 memberCount;
+        uint256 lastContributionTime;
+        mapping(address => uint256) memberContributions;
+    }
+
+    // Goal Setting Structures
+    struct GroupGoal {
+        uint256 groupId;
         uint256 targetAmount;
         uint256 currentAmount;
         uint256 deadline;
-        bool isActive;
+        bool isCompleted;
         uint256 createdAt;
-        address owner;
+        uint256 completedAt;
+        uint256 progressPercentage;
+    }
+
+    struct GoalMilestone {
+        uint256 milestoneId;
+        uint256 groupId;
+        uint256 targetAmount;
+        string description;
+        bool isReached;
+        uint256 reachedAt;
+        uint256 createdAt;
+    }
+
+    struct GoalProgress {
+        uint256 groupId;
+        uint256 currentAmount;
+        uint256 targetAmount;
+        uint256 progressPercentage;
+        uint256 daysRemaining;
+        uint256 averageDailyContribution;
+        bool isOnTrack;
     }
 
     // Investment Portfolio Structures
@@ -68,3 +108,4 @@ interface ITsaroSafeData {
         uint256 completedGoals;
     }
 }
+
