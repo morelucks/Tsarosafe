@@ -1,23 +1,23 @@
 {
   "pages": {
     "/page": [
-      "static/chunks/node_modules_next_dist_8db7fb1f._.js",
-      "static/chunks/src_app_favicon_ico_mjs_243aa161._.js",
-      "static/chunks/[root-of-the-server]__0f0ba101._.css",
-      "static/chunks/_8256e71f._.js",
-      "static/chunks/src_app_layout_tsx_0a548d63._.js",
-      "static/chunks/node_modules_next_dist_client_components_builtin_global-error_de66cbe3.js",
-      "static/chunks/node_modules_next_dist_619bb38e._.js",
-      "static/chunks/src_app_page_tsx_de66cbe3._.js",
-      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_57d40746._.js",
-      "static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js",
-      "static/chunks/node_modules_next_dist_compiled_next-devtools_index_a9cb0712.js",
-      "static/chunks/node_modules_next_dist_compiled_5150ccfd._.js",
-      "static/chunks/node_modules_next_dist_client_cf1d9188._.js",
-      "static/chunks/node_modules_next_dist_b0daae9a._.js",
-      "static/chunks/node_modules_@swc_helpers_cjs_b3dc30d6._.js",
-      "static/chunks/_a0ff3932._.js",
-      "static/chunks/turbopack-_cdba956c._.js"
+      "static/chunks/9a08a_next_dist_abd9178d._.js",
+      "static/chunks/tsarosafe_ui_src_app_favicon_ico_mjs_663c6866._.js",
+      "static/chunks/[root-of-the-server]__0d40344b._.css",
+      "static/chunks/tsarosafe_9b3a7df3._.js",
+      "static/chunks/tsarosafe_ui_src_app_layout_tsx_ef87dd43._.js",
+      "static/chunks/9a08a_next_dist_client_components_builtin_global-error_21543651.js",
+      "static/chunks/9a08a_next_dist_422a8099._.js",
+      "static/chunks/tsarosafe_ui_src_app_page_tsx_21543651._.js",
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_c365f39c._.js",
+      "static/chunks/9a08a_next_dist_compiled_react-dom_a0abbf3b._.js",
+      "static/chunks/9a08a_next_dist_compiled_next-devtools_index_9b737c45.js",
+      "static/chunks/9a08a_next_dist_compiled_b66a0218._.js",
+      "static/chunks/9a08a_next_dist_client_35e6c51f._.js",
+      "static/chunks/9a08a_next_dist_30802006._.js",
+      "static/chunks/9a08a_@swc_helpers_cjs_d162d1de._.js",
+      "static/chunks/tsarosafe_ui_a0ff3932._.js",
+      "static/chunks/turbopack-tsarosafe_ui_1be5cb4e._.js"
     ]
   }
 }
