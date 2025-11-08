@@ -1,0 +1,31 @@
+{
+  "frame": {
+    "name": "TsaroSafe",
+    "version": "1",
+    "iconUrl": "https://tsarosafe.vercel.app/logo.jpeg",
+    "homeUrl": "https://tsarosafe.vercel.app",
+    "imageUrl": "https://tsarosafe.vercel.app/screenshot1.png",
+    "buttonTitle": "Start Saving",
+    "splashImageUrl": "https://tsarosafe.vercel.app/logo.jpeg",
+    "splashBackgroundColor": "#2086e9",
+    "webhookUrl": "https://tsarosafe.vercel.app/api/webhook",
+    "primaryCategory": "finance",
+    "subtitle": "Save Smarter, Together or Individually",
+    "description": "TsaroSafe is a decentralized, blockchain-powered platform that transforms traditional community savings and lending systems, such as Rotating Savings and Credit Associations (ROSCA), into a modern, efficient, and secure solution. By leveraging blockchain technology, TsaroSafe empowers individuals and communities to pool resources, save, earn interest, and access loans with unparalleled transparency, security, and automation.  Through smart contracts, TsaroSafe automates transactions and eliminates the need for intermediaries, ensuring that contributions, loans, and interest payouts are handled transparently, efficiently, and trustlessly. Whether saving for personal goals, investing with others, or borrowing funds, TsaroSafe offers a seamless and secure financial ecosystem.",
+    "heroImageUrl": "https://tsarosafe.vercel.app/logo.jpeg",
+    "screenshotUrls": [
+      "https://tsarosafe.vercel.app/screenshot1.png",
+      "https://tsarosafe.vercel.app/screenshot2.png",
+      "https://tsarosafe.vercel.app/screenshot3.png"
+    ],
+    "tags": [
+      "saving",
+      "finance",
+      "community"
+    ],
+    "tagline": "Save Smarter, Together ",
+    "ogTitle": "Tsasosafe - Save Smarter",
+    "ogDescription": "Save Smarter, Together or Individually",
+    "ogImageUrl": "https://tsarosafe.vercel.app/logo.jpeg"
+  }
+}
