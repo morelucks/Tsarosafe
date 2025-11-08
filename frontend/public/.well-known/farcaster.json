@@ -11,7 +11,7 @@
     "webhookUrl": "https://tsarosafe.vercel.app/api/webhook",
     "primaryCategory": "finance",
     "subtitle": "Save Smarter, Together",
-    "description": "TsaroSafe is a decentralized, blockchain-powered platform that transforms traditional community savings and lending systems, such as Rotating Savings and Credit Associations (ROSCA), into a modern, efficient, and secure solution.",
+    "description": "TsaroSafe is a decentralized, blockchain-powered platform that transforms traditional community savings and lending systems",
     "heroImageUrl": "https://tsarosafe.vercel.app/logo.jpeg",
     "screenshotUrls": [
       "https://tsarosafe.vercel.app/screenshot1.png",
