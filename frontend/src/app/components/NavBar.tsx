@@ -14,6 +14,7 @@ type EthereumProvider = {
 const NavBar = () => {
   const [account, setAccount] = useState<string | null>(null);
   const [isConnecting, setIsConnecting] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const ethereum = useMemo<EthereumProvider | undefined>(() => {
     if (typeof window === "undefined") return undefined;
@@ -150,48 +151,81 @@ const NavBar = () => {
             </div>
             <button
               type="button"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
               aria-controls="navbar-user"
-              aria-expanded="false"
+              aria-expanded={isMobileMenuOpen}
             >
               <span className="sr-only">Open main menu</span>
-              <svg
-                className="w-5 h-5"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 17 14"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M1 1h15M1 7h15M1 13h15"
-                />
-              </svg>
+              {isMobileMenuOpen ? (
+                <svg
+                  className="w-5 h-5"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 14 14"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  className="w-5 h-5"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 17 14"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M1 1h15M1 7h15M1 13h15"
+                  />
+                </svg>
+              )}
             </button>
           </div>
           
           <div
-            className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
+            className={`items-center justify-between w-full md:flex md:w-auto md:order-1 ${
+              isMobileMenuOpen ? "block" : "hidden"
+            }`}
             id="navbar-user"
           >
             <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
          
-                <Link href={"/dashboard"} className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white dark:border-gray-700">
+                <Link 
+                  href={"/dashboard"} 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white dark:border-gray-700">
                    Dashboard
                 </Link>
          
               
-                <Link href={'/create-group'} className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white dark:border-gray-700">
+                <Link 
+                  href={'/create-group'} 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white dark:border-gray-700">
                   Create New Group
               
                 </Link>
-                 <Link href={"/join-group"} className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white dark:border-gray-700">
+                 <Link 
+                   href={"/join-group"} 
+                   onClick={() => setIsMobileMenuOpen(false)}
+                   className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white dark:border-gray-700">
                      Join Group
                 </Link>
-                <Link href={"/savings"} className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white dark:border-gray-700">
+                <Link 
+                  href={"/savings"} 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white dark:border-gray-700">
                      
                      Savings
                 </Link>
@@ -200,6 +234,7 @@ const NavBar = () => {
               <li>
                 <Link
                   href={"/invest"}
+                  onClick={() => setIsMobileMenuOpen(false)}
                   className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white dark:border-gray-700"
                 >
                    Invest
