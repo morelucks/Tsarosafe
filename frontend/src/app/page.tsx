@@ -5,6 +5,7 @@ import Pointer from "./assets/Group.png";
 import WhyUs from "./components/WhyUs";
 import HowItWorks from "./components/HowItWorks";
 
+
 const Hero = () => (
   <section className="relative w-full flex flex-col md:flex-row items-center gap-8 py-16 bg-gradient-to-tr from-[#0f2a56] via-blue-900 to-[#2086e9] min-h-[75vh] shadow-2xl fade-in" style={{ animationDelay: '0.1s' }}>
     <div className="w-full max-w-6xl mx-auto px-4 flex flex-col md:flex-row gap-8 items-center justify-between">
