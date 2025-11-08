@@ -229,31 +229,31 @@ const CreateGroupPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4">
+    <div className="min-h-screen bg-gray-50 py-4 md:py-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Create New Group</h1>
         <p className="text-gray-600 mb-6">Build your savings group in a few steps.</p>
 
         {/* Steps */}
-        <ol className="flex items-center w-full mb-8">
+        <ol className="flex items-center w-full mb-6 md:mb-8 overflow-x-auto pb-2">
           {steps.map((label, idx) => (
-            <li key={label} className="flex-1">
+            <li key={label} className="flex-1 min-w-0">
               <div className="flex items-center">
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                  className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium flex-shrink-0 ${
                     idx <= activeStep ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"
                   }`}
                 >
                   {idx + 1}
                 </div>
-                <span className="ml-2 text-sm font-medium text-gray-800">{label}</span>
+                <span className="ml-2 text-xs md:text-sm font-medium text-gray-800 truncate hidden sm:inline">{label}</span>
               </div>
             </li>
           ))}
         </ol>
 
         {/* Panels */}
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white rounded-lg shadow p-4 md:p-6">
           {activeStep === 0 && (
             <div className="space-y-4">
               <div>
@@ -316,39 +316,41 @@ const CreateGroupPage = () => {
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700">Add Member (email or wallet)</label>
-                <div className="mt-1 flex gap-2">
+                <div className="mt-1 flex flex-col md:flex-row gap-2">
                   <input
                     value={pendingMember}
                     onChange={e => setPendingMember(e.target.value)}
                     placeholder="0x... or name@example.com"
-                    className="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900 bg-white placeholder-gray-400"
+                    className="flex-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900 bg-white placeholder-gray-400"
                   />
-                  {errors.pendingMember && (
-                    <p className="text-xs text-red-600 mt-1">{errors.pendingMember}</p>
-                  )}
                   <select
                     value={pendingRole}
                     onChange={e => setPendingRole(e.target.value as MemberRole)}
-                    className="border border-gray-300 rounded-lg px-3 py-2 text-gray-900 bg-white"
+                    className="w-full md:w-auto border border-gray-300 rounded-lg px-3 py-2 text-gray-900 bg-white"
                   >
                     <option value="member">Member</option>
                     <option value="admin">Admin</option>
                   </select>
-                  <button
-                    type="button"
-                    onClick={addMember}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-                  >
-                    Add
-                  </button>
-                  <button
-                    type="button"
-                    onClick={generateInviteForPending}
-                    className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700"
-                  >
-                    Generate Invite
-                  </button>
+                  <div className="flex gap-2 w-full md:w-auto">
+                    <button
+                      type="button"
+                      onClick={addMember}
+                      className="flex-1 md:flex-none bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 whitespace-nowrap"
+                    >
+                      Add
+                    </button>
+                    <button
+                      type="button"
+                      onClick={generateInviteForPending}
+                      className="flex-1 md:flex-none bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 whitespace-nowrap"
+                    >
+                      Generate Invite
+                    </button>
+                  </div>
                 </div>
+                {errors.pendingMember && (
+                  <p className="text-xs text-red-600 mt-1">{errors.pendingMember}</p>
+                )}
                 <p className="text-xs text-gray-500 mt-1">Add at least one member.</p>
               </div>
 
@@ -542,7 +544,7 @@ const CreateGroupPage = () => {
         </div>
 
         {/* Controls */}
-        <div className="mt-6 flex items-center justify-between">
+        <div className="mt-6 flex items-center justify-between gap-2">
           <button
             type="button"
             onClick={back}
