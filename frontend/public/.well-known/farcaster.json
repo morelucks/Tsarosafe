@@ -18,14 +18,16 @@
       "https://tsarosafe.vercel.app/screenshot2.png",
       "https://tsarosafe.vercel.app/screenshot3.png"
     ],
-    "tags": [
-      "saving",
-      "finance",
-      "community"
-    ],
+    "tags": ["saving", "finance", "community"],
     "tagline": "Save Smarter, Together ",
     "ogTitle": "Tsasosafe - Save Smarter",
     "ogDescription": "Save Smarter, Together or Individually",
     "ogImageUrl": "https://tsarosafe.vercel.app/logo.jpeg"
+  },
+
+  "accountAssociation": {
+    "header": "eyJmaWQiOjExMDQzMzgsInR5cGUiOiJjdXN0b2R5Iiwia2V5IjoiMHhBODQwMmE3ZkMxOTQ4ODU5MjhlMjNkNzNBOGViMEFBYjA5NjEzNzlFIn0",
+    "payload": "eyJkb21haW4iOiJ0c2Fyb3NhZmUudmVyY2VsLmFwcCJ9",
+    "signature": "ISosgLqvAIcBJh+1dwsiaXo2fV6+QtGnbtWIf2HCUy9hpNV0j25+mWZj3jAIqOl+FlLB36/voytLXBiq9c9MPBw="
   }
 }
