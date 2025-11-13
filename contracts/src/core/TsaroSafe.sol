@@ -117,7 +117,7 @@ contract TsaroSafe is ITsaroSafeData {
     }
     
     // ========================================
-    // MILESTONE 1: CREATE GROUPS
+    //   CREATE GROUPS
     // ========================================
     
     /**
@@ -279,7 +279,7 @@ contract TsaroSafe is ITsaroSafeData {
     }
     
     // ========================================
-    // MILESTONE 2: JOIN/LEAVE GROUPS
+    //  JOIN/LEAVE GROUPS
     // ========================================
     
     /**
@@ -394,7 +394,7 @@ contract TsaroSafe is ITsaroSafeData {
     }
     
     // ========================================
-    // MILESTONE 3: CONTRIBUTION TRACKING
+    //  CONTRIBUTION TRACKING
     // ========================================
     
     /**
@@ -616,7 +616,7 @@ contract TsaroSafe is ITsaroSafeData {
     }
     
     // ========================================
-    // MILESTONE 4: GOAL SETTING
+    //   GOAL SETTING
     // ========================================
     
     /**
