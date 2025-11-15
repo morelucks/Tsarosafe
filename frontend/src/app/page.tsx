@@ -12,7 +12,7 @@ const Hero = () => (
       {/* Left: Headline and CTA */}
       <div className="flex-1 z-10 flex flex-col justify-center items-start text-white max-w-[520px] md:py-10">
         <h1 className="font-extrabold text-4xl md:text-6xl leading-tight mb-6 drop-shadow-xl">Save Smarter,<br className="hidden md:inline"/> Together or Individually.</h1>
-        <p className="text-lg md:text-xl font-light mb-8 opacity-90">Empower your financial journey with flexible, secure, and rewarding savings plans—whether you’re growing wealth solo or with a trusted group.</p>
+        <p className="text-lg md:text-xl font-light mb-8 opacity-90">Empower your financial journey with flexible, secure, and rewarding savings plans—whether you&apos;re growing wealth solo or with a trusted group.</p>
         <div className="flex gap-5 mb-10">
           <a href="/savings" className="bg-[#fff] text-blue-900 font-semibold py-3 px-7 rounded-full text-lg shadow hover:bg-blue-50 border border-white transition-all">Start Saving</a>
           <a href="#howitworks" className="bg-blue-900/80 text-white font-semibold py-3 px-7 rounded-full text-lg border-2 border-[#fff] hover:bg-[#fff] hover:text-blue-900 transition-all">Learn More</a>
