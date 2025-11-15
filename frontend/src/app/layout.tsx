@@ -4,6 +4,7 @@ import "./globals.css";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import { FarcasterProvider } from "./components/farcaster-provider"
+import { AppKitProvider } from "./components/AppKitProvider"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,11 +31,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased mx-auto`}
       >
-        <FarcasterProvider>
-        <NavBar />
-        {children}
-        <Footer />
-        </FarcasterProvider>
+        <AppKitProvider>
+          <FarcasterProvider>
+            <NavBar />
+            {children}
+            <Footer />
+          </FarcasterProvider>
+        </AppKitProvider>
       </body>
     </html>
   );

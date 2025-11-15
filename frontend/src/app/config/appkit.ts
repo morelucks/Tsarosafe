@@ -1,13 +1,20 @@
+"use client";
+
 import { createAppKit } from '@reown/appkit/react'
 import { mainnet, arbitrum, base, optimism, polygon, AppKitNetwork } from '@reown/appkit/networks'
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi'
 import { cookieStorage, createStorage } from '@wagmi/core'
 
 // 1. Get projectId from https://cloud.reown.com
-const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || ''
+// Using a placeholder if not set - wallet connection won't work but app will load
+const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || '00000000000000000000000000000000'
 
-if (!projectId) {
-  throw new Error('NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID is not set')
+if (!process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID) {
+  console.warn(
+    '⚠️ NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID is not set. ' +
+    'Wallet connection will not work. ' +
+    'Get your project ID from https://cloud.reown.com and add it to your .env.local file'
+  )
 }
 
 export const networks: [AppKitNetwork, ...AppKitNetwork[]] = [mainnet, arbitrum, base, optimism, polygon]

@@ -3,7 +3,11 @@
 import { ReactNode } from 'react'
 import { WagmiProvider } from 'wagmi'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { config } from '../config/appkit'
+import { config, modal } from '../config/appkit'
+
+// Import modal to ensure it's initialized before useAppKit is called
+// The modal variable is used to ensure the module is evaluated
+void modal
 
 const queryClient = new QueryClient()
 
