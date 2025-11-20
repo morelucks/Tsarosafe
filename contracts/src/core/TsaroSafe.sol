@@ -1010,6 +1010,94 @@ contract TsaroSafe is ITsaroSafeData {
     }
 
     // ========================================
+    //  ROUND PAYMENT HELPERS
+    // ========================================
+
+    /**
+     * @notice Set the active round id for a group (only by creator)
+     * @param _groupId Group ID
+     * @param _roundId Round ID to mark as active
+     */
+    function setActiveRound(
+        uint256 _groupId,
+        uint256 _roundId
+    ) external groupExists(_groupId) onlyGroupCreator(_groupId) {
+        groupActiveRound[_groupId] = _roundId;
+    }
+
+    /**
+     * @notice Get active round id for a group
+     * @param _groupId Group ID
+     */
+    function getActiveRound(
+        uint256 _groupId
+    ) external view groupExists(_groupId) returns (uint256) {
+        return groupActiveRound[_groupId];
+    }
+
+    /**
+     * @notice Check if a member has paid for a given round
+     * @param _groupId Group ID
+     * @param _roundId Round ID
+     * @param _member Member address
+     */
+    function isMemberPaid(
+        uint256 _groupId,
+        uint256 _roundId,
+        address _member
+    ) external view groupExists(_groupId) returns (bool) {
+        return roundPayments[_groupId][_roundId][_member];
+    }
+
+    /**
+     * @notice Get payment statuses for all members in a round
+     * @param _groupId Group ID
+     * @param _roundId Round ID
+     * @return members Array of member addresses
+     * @return statuses Array of booleans indicating paid status for each member
+     */
+    function getRoundPaymentStatuses(
+        uint256 _groupId,
+        uint256 _roundId
+    )
+        external
+        view
+        groupExists(_groupId)
+        returns (address[] memory, bool[] memory)
+    {
+        address[] storage members = groupMemberList[_groupId];
+        uint256 len = members.length;
+        address[] memory addrs = new address[](len);
+        bool[] memory statuses = new bool[](len);
+
+        for (uint256 i = 0; i < len; i++) {
+            addrs[i] = members[i];
+            statuses[i] = roundPayments[_groupId][_roundId][members[i]];
+        }
+
+        return (addrs, statuses);
+    }
+
+    /**
+     * @notice Count how many members have paid in a given round
+     * @param _groupId Group ID
+     * @param _roundId Round ID
+     */
+    function getRoundPaidCount(
+        uint256 _groupId,
+        uint256 _roundId
+    ) external view groupExists(_groupId) returns (uint256) {
+        address[] storage members = groupMemberList[_groupId];
+        uint256 count = 0;
+        for (uint256 i = 0; i < members.length; i++) {
+            if (roundPayments[_groupId][_roundId][members[i]]) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    // ========================================
     // QUERY FUNCTIONS
     // ========================================
 
