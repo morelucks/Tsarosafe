@@ -14,7 +14,45 @@ contract TsaroSafe is ITsaroSafeData {
         CircleSavings
     }
 
+      enum ContributionFrequency {
+        Daily,
+        Weekly,
+        BiWeekly,
+        Monthly
+    }
+
     mapping(uint256 => GroupType) public groupTypes;
+
+    // ========================================
+    // CIRCLE ROSTER MANAGEMENT
+    // ========================================
+
+      struct CircleRoster {
+        uint256 groupId;
+        address[] memberOrder;
+        uint256 currentRoundIndex;
+        uint256 nextPayoutTimestamp;
+        ContributionFrequency frequency;
+        uint256 contributionAmount;
+        bool isActive;
+    }
+
+    struct RosterChange {
+        uint256 changeId;
+        uint256 groupId;
+        address member;
+        string changeType; // "added", "removed", "reordered"
+        uint256 timestamp;
+    }
+
+
+// Circle roster mappings
+    mapping(uint256 => CircleRoster) public circleRosters;
+    mapping(uint256 => RosterChange[]) public rosterChangeHistory;
+    mapping(uint256 => uint256) public rosterChangeCount;
+    mapping(uint256 => mapping(address => uint256)) public memberRosterPosition;
+    mapping(uint256 => uint256) public circlePayoutHistory;
+    mapping(uint256 => uint256) public lastPayoutTimestamp;
 
     // State variables
     uint256 public nextGroupId = 1;
@@ -103,6 +141,65 @@ contract TsaroSafe is ITsaroSafeData {
         uint256 progressPercentage
     );
 
+
+  event CircleCreated(
+        uint256 indexed groupId,
+        address[] roster,
+        uint256 contributionAmount,
+        uint8 frequency,
+        uint256 nextPayoutTimestamp
+    );
+
+    event RosterUpdated(
+        uint256 indexed groupId,
+        uint256 indexed changeId,
+        address[] newRoster,
+        uint256 currentRoundIndex,
+        uint256 timestamp
+    );
+
+    event RosterMemberAdded(
+        uint256 indexed groupId,
+        address indexed member,
+        uint256 position,
+        uint256 timestamp
+    );
+
+    event RosterMemberRemoved(
+        uint256 indexed groupId,
+        address indexed member,
+        uint256 timestamp
+    );
+
+    event ScheduleUpdated(
+        uint256 indexed groupId,
+        uint256 contributionAmount,
+        uint8 frequency,
+        uint256 nextPayoutTimestamp,
+        address indexed updatedBy
+    );
+
+ event RosterReordered(
+        uint256 indexed groupId,
+        address[] newOrder,
+        uint256 timestamp
+    );
+
+    event PayoutScheduled(
+        uint256 indexed groupId,
+        address indexed recipient,
+        uint256 amount,
+        uint256 scheduledTime,
+        uint256 roundIndex
+    );
+
+    event ContributionRoundProgressed(
+        uint256 indexed groupId,
+        uint256 previousRound,
+        uint256 newRound,
+        address indexed nextRecipient,
+        uint256 timestamp
+    );
     // Modifiers
     modifier onlyGroupCreator(uint256 _groupId) {
         require(
@@ -1124,4 +1221,5 @@ contract TsaroSafe is ITsaroSafeData {
 
         return publicGroups;
     }
+
 }
