@@ -78,7 +78,7 @@ contract TsaroSafeTest is Test {
         tsaroSafe = new TsaroSafe();
     }
 
-    function testContractDeployment() public {
+    function testContractDeployment() public view {
         assertTrue(address(tsaroSafe) != address(0));
         assertEq(tsaroSafe.nextGroupId(), 1);
         assertEq(tsaroSafe.nextContributionId(), 1);
@@ -223,7 +223,7 @@ contract TsaroSafeTest is Test {
         vm.stopPrank();
     }
 
-    function testCreateGroupEmitsAllRequiredEvents() public {
+        function testCreateGroupEmitsAllRequiredEvents() public {
         // Setup
         vm.startPrank(user1);
         string memory groupName = "Event Test Group";
