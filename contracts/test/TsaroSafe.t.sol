@@ -3,12 +3,13 @@ pragma solidity 0.8.28;
 
 import {Test, console} from "forge-std/Test.sol";
 import {TsaroSafe} from "../src/core/TsaroSafe.sol";
+import {ITsaroSafeData} from "../src/interfaces/ITsaroSafeData.sol";
 
 /**
  * @title TsaroSafeTest
  * @notice Test suite for TsaroSafe contract
  */
-contract TsaroSafeTest is Test {
+contract TsaroSafeDeploymentTest is Test {
     TsaroSafe public tsaroSafe;
     address public user1;
     address public user2;
@@ -59,12 +60,6 @@ contract TsaroSafeTest is Test {
     }
 }
 
-// SPDX-License-Identifier: MIT
-pragma solidity 0.8.28;
-
-import {Test, console} from "forge-std/Test.sol";
-import {TsaroSafe} from "../src/core/TsaroSafe.sol";
-import {ITsaroSafeData} from "../src/interfaces/ITsaroSafeData.sol";
 
 /**
  * @title TsaroSafeTest
