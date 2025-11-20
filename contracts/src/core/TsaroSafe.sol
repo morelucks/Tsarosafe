@@ -943,7 +943,6 @@ contract TsaroSafe is ITsaroSafeData {
         uint256 _groupId
     ) external view groupExists(_groupId) returns (GoalProgress memory) {
         GroupGoal storage goal = groupGoals[_groupId];
-        Group memory group = groups[_groupId];
 
         uint256 daysRemaining = 0;
         if (goal.deadline > block.timestamp) {
