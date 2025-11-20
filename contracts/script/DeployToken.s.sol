@@ -5,17 +5,15 @@ import {Script, console} from "forge-std/Script.sol";
 
 import {TsaroToken} from "../src/tokens/TsaroToken.sol";
 
-
-
 contract DeployTokenScript is Script {
     function run() public {
         // Get deployment parameters from environment
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         string memory network = vm.envOr("NETWORK", string("localhost"));
-        
+
         console.log("Deploying TsaroToken to network:", network);
         console.log("Deployer address:", vm.addr(deployerPrivateKey));
-        
+
         vm.startBroadcast(deployerPrivateKey);
 
         // Deploy TsaroToken

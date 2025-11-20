@@ -17,50 +17,31 @@ contract TsaroSafeDeploymentTest is Test {
     address public user3;
 
     event GroupCreated(
-        uint256 indexed groupId,
-        address indexed creator,
-        string name,
-        uint256 targetAmount,
-        bool isPrivate
+        uint256 indexed groupId, address indexed creator, string name, uint256 targetAmount, bool isPrivate
     );
-    
-    event MemberJoined(
-        uint256 indexed groupId,
-        address indexed member
-    );
-    
-    event ContributionMade(
-        uint256 indexed groupId,
-        address indexed member,
-        uint256 amount
-    );
-    
-    event GroupCompleted(
-        uint256 indexed groupId,
-        uint256 totalAmount
-    );
-    
-    event UserVerified(
-        address indexed user,
-        uint256 timestamp
-    );
+
+    event MemberJoined(uint256 indexed groupId, address indexed member);
+
+    event ContributionMade(uint256 indexed groupId, address indexed member, uint256 amount);
+
+    event GroupCompleted(uint256 indexed groupId, uint256 totalAmount);
+
+    event UserVerified(address indexed user, uint256 timestamp);
 
     function setUp() public {
         // Create test users
         user1 = makeAddr("user1");
         user2 = makeAddr("user2");
         user3 = makeAddr("user3");
-        
+
         // Deploy contract
         tsaroSafe = new TsaroSafe();
     }
 
     function testContractDeployment() public {
         assertTrue(address(tsaroSafe) != address(0));
-        
     }
 }
-
 
 /**
  * @title TsaroSafeTest
@@ -82,22 +63,17 @@ contract TsaroSafeTest is Test {
         uint256 memberLimit,
         uint256 endDate
     );
-    
+
     event MemberJoined(uint256 indexed groupId, address indexed member);
-    
-    event GoalSet(
-        uint256 indexed groupId,
-        uint256 targetAmount,
-        uint256 deadline,
-        uint256 createdAt
-    );
+
+    event GoalSet(uint256 indexed groupId, uint256 targetAmount, uint256 deadline, uint256 createdAt);
 
     function setUp() public {
         // Create test users
         user1 = makeAddr("user1");
         user2 = makeAddr("user2");
         user3 = makeAddr("user3");
-        
+
         // Deploy contract
         tsaroSafe = new TsaroSafe();
     }
@@ -108,7 +84,6 @@ contract TsaroSafeTest is Test {
         assertEq(tsaroSafe.nextContributionId(), 1);
         assertEq(tsaroSafe.nextMilestoneId(), 1);
     }
-
 
     function testCreateGroupSuccess() public {
         // Setup
@@ -123,22 +98,15 @@ contract TsaroSafeTest is Test {
         // Expect events
         vm.expectEmit(true, true, false, true);
         emit GroupCreated(1, user1, groupName, isPrivate, targetAmount, memberLimit, endDate);
-        
+
         vm.expectEmit(true, true, false, false);
         emit MemberJoined(1, user1);
-        
+
         vm.expectEmit(true, false, false, false);
         emit GoalSet(1, targetAmount, endDate, block.timestamp);
 
         // Execute
-        uint256 groupId = tsaroSafe.createGroup(
-            groupName,
-            description,
-            isPrivate,
-            targetAmount,
-            memberLimit,
-            endDate
-        );
+        uint256 groupId = tsaroSafe.createGroup(groupName, description, isPrivate, targetAmount, memberLimit, endDate);
 
         // Assertions
         assertEq(groupId, 1, "Group ID should be 1");
@@ -158,14 +126,7 @@ contract TsaroSafeTest is Test {
         uint256 endDate = block.timestamp + 60 days;
 
         // Execute
-        uint256 groupId = tsaroSafe.createGroup(
-            groupName,
-            description,
-            isPrivate,
-            targetAmount,
-            memberLimit,
-            endDate
-        );
+        uint256 groupId = tsaroSafe.createGroup(groupName, description, isPrivate, targetAmount, memberLimit, endDate);
 
         // Get group data
         ITsaroSafeData.Group memory group = tsaroSafe.getGroup(groupId);
@@ -193,14 +154,7 @@ contract TsaroSafeTest is Test {
         uint256 endDate = block.timestamp + 30 days;
 
         // Execute
-        uint256 groupId = tsaroSafe.createGroup(
-            "Test Group",
-            "Description",
-            false,
-            1000 ether,
-            10,
-            endDate
-        );
+        uint256 groupId = tsaroSafe.createGroup("Test Group", "Description", false, 1000 ether, 10, endDate);
 
         // Get member info
         ITsaroSafeData.Member memory member = tsaroSafe.getMemberInfo(groupId, user1);
@@ -212,10 +166,10 @@ contract TsaroSafeTest is Test {
         assertEq(member.lastContribution, 0, "Last contribution should be 0");
         assertTrue(member.isActive, "Member should be active");
         assertEq(member.joinedAt, block.timestamp, "Join timestamp should match");
-        
+
         assertEq(members.length, 1, "Should have exactly 1 member");
         assertEq(members[0], user1, "First member should be user1");
-        
+
         assertTrue(tsaroSafe.isGroupMember(groupId, user1), "User1 should be a group member");
 
         vm.stopPrank();
@@ -228,14 +182,8 @@ contract TsaroSafeTest is Test {
         uint256 endDate = block.timestamp + 90 days;
 
         // Execute
-        uint256 groupId = tsaroSafe.createGroup(
-            "Goal Test Group",
-            "Testing goal initialization",
-            false,
-            targetAmount,
-            15,
-            endDate
-        );
+        uint256 groupId =
+            tsaroSafe.createGroup("Goal Test Group", "Testing goal initialization", false, targetAmount, 15, endDate);
 
         // Get goal data
         ITsaroSafeData.GroupGoal memory goal = tsaroSafe.getGroupGoal(groupId);
@@ -259,24 +207,10 @@ contract TsaroSafeTest is Test {
         uint256 endDate = block.timestamp + 30 days;
 
         // Execute - create first group
-        uint256 groupId1 = tsaroSafe.createGroup(
-            "First Group",
-            "Description 1",
-            false,
-            1000 ether,
-            10,
-            endDate
-        );
+        uint256 groupId1 = tsaroSafe.createGroup("First Group", "Description 1", false, 1000 ether, 10, endDate);
 
         // Execute - create second group
-        uint256 groupId2 = tsaroSafe.createGroup(
-            "Second Group",
-            "Description 2",
-            true,
-            2000 ether,
-            5,
-            endDate
-        );
+        uint256 groupId2 = tsaroSafe.createGroup("Second Group", "Description 2", true, 2000 ether, 5, endDate);
 
         // Get user groups
         uint256[] memory userGroupIds = tsaroSafe.getUserGroups(user1);
@@ -301,14 +235,7 @@ contract TsaroSafeTest is Test {
         vm.recordLogs();
 
         // Execute
-        uint256 groupId = tsaroSafe.createGroup(
-            groupName,
-            "Testing events",
-            false,
-            targetAmount,
-            memberLimit,
-            endDate
-        );
+        uint256 groupId = tsaroSafe.createGroup(groupName, "Testing events", false, targetAmount, memberLimit, endDate);
 
         // Get logs
         Vm.Log[] memory logs = vm.getRecordedLogs();
@@ -317,7 +244,11 @@ contract TsaroSafeTest is Test {
         assertEq(logs.length, 3, "Should emit exactly 3 events");
 
         // Verify GroupCreated event
-        assertEq(logs[0].topics[0], keccak256("GroupCreated(uint256,address,string,bool,uint256,uint256,uint256)"), "First event should be GroupCreated");
+        assertEq(
+            logs[0].topics[0],
+            keccak256("GroupCreated(uint256,address,string,bool,uint256,uint256,uint256)"),
+            "First event should be GroupCreated"
+        );
         assertEq(uint256(logs[0].topics[1]), groupId, "GroupCreated groupId should match");
         assertEq(address(uint160(uint256(logs[0].topics[2]))), user1, "GroupCreated creator should match");
 
@@ -327,7 +258,9 @@ contract TsaroSafeTest is Test {
         assertEq(address(uint160(uint256(logs[1].topics[2]))), user1, "MemberJoined member should match");
 
         // Verify GoalSet event
-        assertEq(logs[2].topics[0], keccak256("GoalSet(uint256,uint256,uint256,uint256)"), "Third event should be GoalSet");
+        assertEq(
+            logs[2].topics[0], keccak256("GoalSet(uint256,uint256,uint256,uint256)"), "Third event should be GoalSet"
+        );
         assertEq(uint256(logs[2].topics[1]), groupId, "GoalSet groupId should match");
 
         vm.stopPrank();
@@ -342,14 +275,7 @@ contract TsaroSafeTest is Test {
         uint256 endDate = block.timestamp + 30 days;
 
         vm.expectRevert("Group name cannot be empty");
-        tsaroSafe.createGroup(
-            "",
-            "Description",
-            false,
-            1000 ether,
-            10,
-            endDate
-        );
+        tsaroSafe.createGroup("", "Description", false, 1000 ether, 10, endDate);
 
         vm.stopPrank();
     }
@@ -357,19 +283,13 @@ contract TsaroSafeTest is Test {
     function testCreateGroupRevertsWithNameTooLong() public {
         vm.startPrank(user1);
         uint256 endDate = block.timestamp + 30 days;
-        
+
         // Create a name that's 101 characters long
-        string memory longName = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+        string memory longName =
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 
         vm.expectRevert("Group name too long");
-        tsaroSafe.createGroup(
-            longName,
-            "Description",
-            false,
-            1000 ether,
-            10,
-            endDate
-        );
+        tsaroSafe.createGroup(longName, "Description", false, 1000 ether, 10, endDate);
 
         vm.stopPrank();
     }
@@ -377,19 +297,13 @@ contract TsaroSafeTest is Test {
     function testCreateGroupRevertsWithDescriptionTooLong() public {
         vm.startPrank(user1);
         uint256 endDate = block.timestamp + 30 days;
-        
+
         // Create a description that's 501 characters long
-        string memory longDescription = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+        string memory longDescription =
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 
         vm.expectRevert("Description too long");
-        tsaroSafe.createGroup(
-            "Test Group",
-            longDescription,
-            false,
-            1000 ether,
-            10,
-            endDate
-        );
+        tsaroSafe.createGroup("Test Group", longDescription, false, 1000 ether, 10, endDate);
 
         vm.stopPrank();
     }
@@ -399,14 +313,7 @@ contract TsaroSafeTest is Test {
         uint256 endDate = block.timestamp + 30 days;
 
         vm.expectRevert("Target amount must be greater than 0");
-        tsaroSafe.createGroup(
-            "Test Group",
-            "Description",
-            false,
-            0,
-            10,
-            endDate
-        );
+        tsaroSafe.createGroup("Test Group", "Description", false, 0, 10, endDate);
 
         vm.stopPrank();
     }
@@ -416,14 +323,7 @@ contract TsaroSafeTest is Test {
         uint256 endDate = block.timestamp + 30 days;
 
         vm.expectRevert("Member limit must be greater than 0");
-        tsaroSafe.createGroup(
-            "Test Group",
-            "Description",
-            false,
-            1000 ether,
-            0,
-            endDate
-        );
+        tsaroSafe.createGroup("Test Group", "Description", false, 1000 ether, 0, endDate);
 
         vm.stopPrank();
     }
@@ -433,14 +333,7 @@ contract TsaroSafeTest is Test {
         uint256 endDate = block.timestamp + 30 days;
 
         vm.expectRevert("Member limit cannot exceed 100");
-        tsaroSafe.createGroup(
-            "Test Group",
-            "Description",
-            false,
-            1000 ether,
-            101,
-            endDate
-        );
+        tsaroSafe.createGroup("Test Group", "Description", false, 1000 ether, 101, endDate);
 
         vm.stopPrank();
     }
@@ -450,14 +343,7 @@ contract TsaroSafeTest is Test {
         uint256 pastDate = block.timestamp - 1 days;
 
         vm.expectRevert("End date must be in the future");
-        tsaroSafe.createGroup(
-            "Test Group",
-            "Description",
-            false,
-            1000 ether,
-            10,
-            pastDate
-        );
+        tsaroSafe.createGroup("Test Group", "Description", false, 1000 ether, 10, pastDate);
 
         vm.stopPrank();
     }
@@ -467,14 +353,7 @@ contract TsaroSafeTest is Test {
         uint256 farFutureDate = block.timestamp + 366 days;
 
         vm.expectRevert("End date cannot exceed 1 year");
-        tsaroSafe.createGroup(
-            "Test Group",
-            "Description",
-            false,
-            1000 ether,
-            10,
-            farFutureDate
-        );
+        tsaroSafe.createGroup("Test Group", "Description", false, 1000 ether, 10, farFutureDate);
 
         vm.stopPrank();
     }
@@ -493,7 +372,7 @@ contract TsaroSafeTest is Test {
         );
 
         ITsaroSafeData.Group memory group = tsaroSafe.getGroup(groupId);
-        
+
         assertEq(group.name, "A", "Name should be 'A'");
         assertEq(group.targetAmount, 1, "Target should be 1");
         assertEq(group.memberLimit, 1, "Member limit should be 1");
@@ -503,13 +382,15 @@ contract TsaroSafeTest is Test {
 
     function testCreateGroupWithMaximumValidValues() public {
         vm.startPrank(user1);
-        
+
         // Create a 100-character name
-        string memory maxName = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-        
+        string memory maxName =
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+
         // Create a 500-character description
-        string memory maxDescription = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-        
+        string memory maxDescription =
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+
         uint256 endDate = block.timestamp + 365 days; // Maximum 1 year
 
         uint256 groupId = tsaroSafe.createGroup(
@@ -522,7 +403,7 @@ contract TsaroSafeTest is Test {
         );
 
         ITsaroSafeData.Group memory group = tsaroSafe.getGroup(groupId);
-        
+
         assertEq(bytes(group.name).length, 100, "Name should be 100 characters");
         assertEq(bytes(group.description).length, 500, "Description should be 500 characters");
         assertEq(group.memberLimit, 100, "Member limit should be 100");
@@ -535,38 +416,17 @@ contract TsaroSafeTest is Test {
 
         // User1 creates a group
         vm.startPrank(user1);
-        uint256 groupId1 = tsaroSafe.createGroup(
-            "User1 Group",
-            "Description",
-            false,
-            1000 ether,
-            10,
-            endDate
-        );
+        uint256 groupId1 = tsaroSafe.createGroup("User1 Group", "Description", false, 1000 ether, 10, endDate);
         vm.stopPrank();
 
         // User2 creates a group
         vm.startPrank(user2);
-        uint256 groupId2 = tsaroSafe.createGroup(
-            "User2 Group",
-            "Description",
-            true,
-            2000 ether,
-            5,
-            endDate
-        );
+        uint256 groupId2 = tsaroSafe.createGroup("User2 Group", "Description", true, 2000 ether, 5, endDate);
         vm.stopPrank();
 
         // User3 creates a group
         vm.startPrank(user3);
-        uint256 groupId3 = tsaroSafe.createGroup(
-            "User3 Group",
-            "Description",
-            false,
-            3000 ether,
-            15,
-            endDate
-        );
+        uint256 groupId3 = tsaroSafe.createGroup("User3 Group", "Description", false, 3000 ether, 15, endDate);
         vm.stopPrank();
 
         // Assertions
@@ -579,7 +439,7 @@ contract TsaroSafeTest is Test {
         assertTrue(tsaroSafe.isGroupMember(groupId1, user1), "User1 should be member of group1");
         assertTrue(tsaroSafe.isGroupMember(groupId2, user2), "User2 should be member of group2");
         assertTrue(tsaroSafe.isGroupMember(groupId3, user3), "User3 should be member of group3");
-        
+
         // Verify users are not members of other groups
         assertFalse(tsaroSafe.isGroupMember(groupId1, user2), "User2 should not be member of group1");
         assertFalse(tsaroSafe.isGroupMember(groupId2, user3), "User3 should not be member of group2");
@@ -599,7 +459,7 @@ contract TsaroSafeTest is Test {
         );
 
         ITsaroSafeData.Group memory group = tsaroSafe.getGroup(groupId);
-        
+
         assertFalse(group.isPrivate, "Group should be public");
 
         vm.stopPrank();
@@ -619,7 +479,7 @@ contract TsaroSafeTest is Test {
         );
 
         ITsaroSafeData.Group memory group = tsaroSafe.getGroup(groupId);
-        
+
         assertTrue(group.isPrivate, "Group should be private");
 
         vm.stopPrank();

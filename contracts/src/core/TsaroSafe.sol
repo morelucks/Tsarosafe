@@ -31,8 +31,7 @@ contract TsaroSafe is ITsaroSafeData {
     mapping(uint256 => ContributionHistory[]) public groupContributions;
     mapping(uint256 => uint256) public groupTotalContributions;
     mapping(uint256 => uint256) public groupTotalAmount;
-    mapping(address => mapping(uint256 => uint256))
-        public memberTotalContributions;
+    mapping(address => mapping(uint256 => uint256)) public memberTotalContributions;
     mapping(address => mapping(uint256 => uint256)) public memberTotalAmount;
 
     // Round payment tracking
@@ -71,58 +70,28 @@ contract TsaroSafe is ITsaroSafeData {
         uint256 timestamp
     );
     event ContributionVerified(
-        uint256 indexed contributionId,
-        uint256 indexed groupId,
-        address indexed member,
-        bool verified
+        uint256 indexed contributionId, uint256 indexed groupId, address indexed member, bool verified
     );
 
     // Goal setting events
-    event GoalSet(
-        uint256 indexed groupId,
-        uint256 targetAmount,
-        uint256 deadline,
-        uint256 createdAt
-    );
-    event GoalUpdated(
-        uint256 indexed groupId,
-        uint256 oldTarget,
-        uint256 newTarget,
-        address indexed updater
-    );
-    event GoalCompleted(
-        uint256 indexed groupId,
-        uint256 targetAmount,
-        uint256 actualAmount,
-        uint256 completedAt
-    );
+    event GoalSet(uint256 indexed groupId, uint256 targetAmount, uint256 deadline, uint256 createdAt);
+    event GoalUpdated(uint256 indexed groupId, uint256 oldTarget, uint256 newTarget, address indexed updater);
+    event GoalCompleted(uint256 indexed groupId, uint256 targetAmount, uint256 actualAmount, uint256 completedAt);
     event MilestoneReached(
-        uint256 indexed milestoneId,
-        uint256 indexed groupId,
-        uint256 targetAmount,
-        uint256 reachedAt
+        uint256 indexed milestoneId, uint256 indexed groupId, uint256 targetAmount, uint256 reachedAt
     );
     event ProgressUpdated(
-        uint256 indexed groupId,
-        uint256 currentAmount,
-        uint256 targetAmount,
-        uint256 progressPercentage
+        uint256 indexed groupId, uint256 currentAmount, uint256 targetAmount, uint256 progressPercentage
     );
 
     // Modifiers
     modifier onlyGroupCreator(uint256 _groupId) {
-        require(
-            groups[_groupId].creator == msg.sender,
-            "Only group creator can perform this action"
-        );
+        require(groups[_groupId].creator == msg.sender, "Only group creator can perform this action");
         _;
     }
 
     modifier onlyGroupMember(uint256 _groupId) {
-        require(
-            groupMembers[_groupId][msg.sender].isActive,
-            "Not a group member"
-        );
+        require(groupMembers[_groupId][msg.sender].isActive, "Not a group member");
         _;
     }
 
@@ -165,10 +134,7 @@ contract TsaroSafe is ITsaroSafeData {
         require(_memberLimit > 0, "Member limit must be greater than 0");
         require(_memberLimit <= 100, "Member limit cannot exceed 100");
         require(_endDate > block.timestamp, "End date must be in the future");
-        require(
-            _endDate <= block.timestamp + 365 days,
-            "End date cannot exceed 1 year"
-        );
+        require(_endDate <= block.timestamp + 365 days, "End date cannot exceed 1 year");
 
         uint256 groupId = nextGroupId++;
 
@@ -189,13 +155,8 @@ contract TsaroSafe is ITsaroSafeData {
         });
 
         // Add creator as first member
-        groupMembers[groupId][msg.sender] = Member({
-            user: msg.sender,
-            contribution: 0,
-            lastContribution: 0,
-            isActive: true,
-            joinedAt: block.timestamp
-        });
+        groupMembers[groupId][msg.sender] =
+            Member({user: msg.sender, contribution: 0, lastContribution: 0, isActive: true, joinedAt: block.timestamp});
 
         groupMemberList[groupId].push(msg.sender);
         userGroups[msg.sender].push(groupId);
@@ -214,15 +175,7 @@ contract TsaroSafe is ITsaroSafeData {
 
         groupGoalDeadlines[groupId] = _endDate;
 
-        emit GroupCreated(
-            groupId,
-            msg.sender,
-            _name,
-            _isPrivate,
-            _targetAmount,
-            _memberLimit,
-            _endDate
-        );
+        emit GroupCreated(groupId, msg.sender, _name, _isPrivate, _targetAmount, _memberLimit, _endDate);
         emit MemberJoined(groupId, msg.sender);
         emit GoalSet(groupId, _targetAmount, _endDate, block.timestamp);
 
@@ -235,11 +188,7 @@ contract TsaroSafe is ITsaroSafeData {
      * @param _name New group name
      * @param _description New group description
      */
-    function updateGroupMetadata(
-        uint256 _groupId,
-        string memory _name,
-        string memory _description
-    )
+    function updateGroupMetadata(uint256 _groupId, string memory _name, string memory _description)
         external
         groupExists(_groupId)
         onlyGroupCreator(_groupId)
@@ -260,10 +209,7 @@ contract TsaroSafe is ITsaroSafeData {
      * @param _groupId Group ID
      * @param _newLimit New member limit
      */
-    function updateMemberLimit(
-        uint256 _groupId,
-        uint256 _newLimit
-    )
+    function updateMemberLimit(uint256 _groupId, uint256 _newLimit)
         external
         groupExists(_groupId)
         onlyGroupCreator(_groupId)
@@ -271,10 +217,7 @@ contract TsaroSafe is ITsaroSafeData {
     {
         require(_newLimit > 0, "Member limit must be greater than 0");
         require(_newLimit <= 100, "Member limit cannot exceed 100");
-        require(
-            _newLimit >= groupMemberList[_groupId].length,
-            "New limit cannot be less than current members"
-        );
+        require(_newLimit >= groupMemberList[_groupId].length, "New limit cannot be less than current members");
 
         groups[_groupId].memberLimit = _newLimit;
         emit GroupUpdated(_groupId, "memberLimit", "updated");
@@ -285,23 +228,14 @@ contract TsaroSafe is ITsaroSafeData {
      * @param _groupId Group ID
      * @param _newEndDate New end date
      */
-    function updateEndDate(
-        uint256 _groupId,
-        uint256 _newEndDate
-    )
+    function updateEndDate(uint256 _groupId, uint256 _newEndDate)
         external
         groupExists(_groupId)
         onlyGroupCreator(_groupId)
         groupActive(_groupId)
     {
-        require(
-            _newEndDate > block.timestamp,
-            "End date must be in the future"
-        );
-        require(
-            _newEndDate <= block.timestamp + 365 days,
-            "End date cannot exceed 1 year"
-        );
+        require(_newEndDate > block.timestamp, "End date must be in the future");
+        require(_newEndDate <= block.timestamp + 365 days, "End date cannot exceed 1 year");
 
         groups[_groupId].endDate = _newEndDate;
         emit GroupUpdated(_groupId, "endDate", "updated");
@@ -311,29 +245,21 @@ contract TsaroSafe is ITsaroSafeData {
      * @notice Toggle group privacy (only by creator)
      * @param _groupId Group ID
      */
-    function toggleGroupPrivacy(
-        uint256 _groupId
-    )
+    function toggleGroupPrivacy(uint256 _groupId)
         external
         groupExists(_groupId)
         onlyGroupCreator(_groupId)
         groupActive(_groupId)
     {
         groups[_groupId].isPrivate = !groups[_groupId].isPrivate;
-        emit GroupUpdated(
-            _groupId,
-            "privacy",
-            groups[_groupId].isPrivate ? "private" : "public"
-        );
+        emit GroupUpdated(_groupId, "privacy", groups[_groupId].isPrivate ? "private" : "public");
     }
 
     /**
      * @notice Deactivate group (only by creator)
      * @param _groupId Group ID
      */
-    function deactivateGroup(
-        uint256 _groupId
-    )
+    function deactivateGroup(uint256 _groupId)
         external
         groupExists(_groupId)
         onlyGroupCreator(_groupId)
@@ -351,22 +277,14 @@ contract TsaroSafe is ITsaroSafeData {
      * @notice Join an existing group
      * @param _groupId Group ID to join
      */
-    function joinGroup(
-        uint256 _groupId
-    ) external groupExists(_groupId) groupActive(_groupId) {
+    function joinGroup(uint256 _groupId) external groupExists(_groupId) groupActive(_groupId) {
         Group storage group = groups[_groupId];
 
         // Check if user is already a member
-        require(
-            !groupMembers[_groupId][msg.sender].isActive,
-            "Already a member of this group"
-        );
+        require(!groupMembers[_groupId][msg.sender].isActive, "Already a member of this group");
 
         // Check group capacity
-        require(
-            groupMemberList[_groupId].length < group.memberLimit,
-            "Group is at capacity"
-        );
+        require(groupMemberList[_groupId].length < group.memberLimit, "Group is at capacity");
 
         // Check if group has ended
         require(block.timestamp < group.endDate, "Group has ended");
@@ -375,13 +293,8 @@ contract TsaroSafe is ITsaroSafeData {
         require(!group.isCompleted, "Group is already completed");
 
         // Add user as member
-        groupMembers[_groupId][msg.sender] = Member({
-            user: msg.sender,
-            contribution: 0,
-            lastContribution: 0,
-            isActive: true,
-            joinedAt: block.timestamp
-        });
+        groupMembers[_groupId][msg.sender] =
+            Member({user: msg.sender, contribution: 0, lastContribution: 0, isActive: true, joinedAt: block.timestamp});
 
         groupMemberList[_groupId].push(msg.sender);
         userGroups[msg.sender].push(_groupId);
@@ -393,22 +306,14 @@ contract TsaroSafe is ITsaroSafeData {
      * @notice Leave a group
      * @param _groupId Group ID to leave
      */
-    function leaveGroup(
-        uint256 _groupId
-    ) external groupExists(_groupId) onlyGroupMember(_groupId) {
+    function leaveGroup(uint256 _groupId) external groupExists(_groupId) onlyGroupMember(_groupId) {
         Group storage group = groups[_groupId];
 
         // Prevent creator from leaving (they must deactivate group instead)
-        require(
-            msg.sender != group.creator,
-            "Creator cannot leave group. Use deactivateGroup() instead"
-        );
+        require(msg.sender != group.creator, "Creator cannot leave group. Use deactivateGroup() instead");
 
         // Check if group has ended
-        require(
-            block.timestamp < group.endDate,
-            "Cannot leave group after it has ended"
-        );
+        require(block.timestamp < group.endDate, "Cannot leave group after it has ended");
 
         // Check if group is completed
         require(!group.isCompleted, "Cannot leave completed group");
@@ -444,20 +349,14 @@ contract TsaroSafe is ITsaroSafeData {
      * @param _groupId Group ID
      * @param _member Member address to remove
      */
-    function removeMember(
-        uint256 _groupId,
-        address _member
-    )
+    function removeMember(uint256 _groupId, address _member)
         external
         groupExists(_groupId)
         onlyGroupCreator(_groupId)
         groupActive(_groupId)
     {
         require(_member != msg.sender, "Cannot remove yourself");
-        require(
-            groupMembers[_groupId][_member].isActive,
-            "Member is not active"
-        );
+        require(groupMembers[_groupId][_member].isActive, "Member is not active");
 
         // Mark member as inactive
         groupMembers[_groupId][_member].isActive = false;
@@ -495,11 +394,7 @@ contract TsaroSafe is ITsaroSafeData {
      * @param _amount Contribution amount
      * @param _description Contribution description
      */
-    function makeContribution(
-        uint256 _groupId,
-        uint256 _amount,
-        string memory _description
-    )
+    function makeContribution(uint256 _groupId, uint256 _amount, string memory _description)
         external
         groupExists(_groupId)
         onlyGroupMember(_groupId)
@@ -552,37 +447,18 @@ contract TsaroSafe is ITsaroSafeData {
         // Update goal progress
         GroupGoal storage goal = groupGoals[_groupId];
         goal.currentAmount += _amount;
-        goal.progressPercentage =
-            (goal.currentAmount * 100) /
-            goal.targetAmount;
+        goal.progressPercentage = (goal.currentAmount * 100) / goal.targetAmount;
 
         // Check if group target is reached
         if (group.currentAmount >= group.targetAmount) {
             group.isCompleted = true;
             goal.isCompleted = true;
             goal.completedAt = block.timestamp;
-            emit GoalCompleted(
-                _groupId,
-                goal.targetAmount,
-                goal.currentAmount,
-                block.timestamp
-            );
+            emit GoalCompleted(_groupId, goal.targetAmount, goal.currentAmount, block.timestamp);
         }
 
-        emit ContributionMade(
-            contributionId,
-            _groupId,
-            msg.sender,
-            _amount,
-            _description,
-            block.timestamp
-        );
-        emit ProgressUpdated(
-            _groupId,
-            goal.currentAmount,
-            goal.targetAmount,
-            goal.progressPercentage
-        );
+        emit ContributionMade(contributionId, _groupId, msg.sender, _amount, _description, block.timestamp);
+        emit ProgressUpdated(_groupId, goal.currentAmount, goal.targetAmount, goal.progressPercentage);
     }
 
     /**
@@ -591,24 +467,17 @@ contract TsaroSafe is ITsaroSafeData {
      * @param _contributionId Contribution ID to verify
      * @param _verified Whether to verify or unverify
      */
-    function verifyContribution(
-        uint256 _groupId,
-        uint256 _contributionId,
-        bool _verified
-    ) external groupExists(_groupId) onlyGroupCreator(_groupId) {
-        ContributionHistory[] storage contributions = groupContributions[
-            _groupId
-        ];
+    function verifyContribution(uint256 _groupId, uint256 _contributionId, bool _verified)
+        external
+        groupExists(_groupId)
+        onlyGroupCreator(_groupId)
+    {
+        ContributionHistory[] storage contributions = groupContributions[_groupId];
 
         for (uint256 i = 0; i < contributions.length; i++) {
             if (contributions[i].contributionId == _contributionId) {
                 contributions[i].isVerified = _verified;
-                emit ContributionVerified(
-                    _contributionId,
-                    _groupId,
-                    contributions[i].member,
-                    _verified
-                );
+                emit ContributionVerified(_contributionId, _groupId, contributions[i].member, _verified);
                 return;
             }
         }
@@ -622,11 +491,7 @@ contract TsaroSafe is ITsaroSafeData {
      * @param _offset Starting index
      * @param _limit Maximum number of contributions to return
      */
-    function getGroupContributions(
-        uint256 _groupId,
-        uint256 _offset,
-        uint256 _limit
-    )
+    function getGroupContributions(uint256 _groupId, uint256 _offset, uint256 _limit)
         external
         view
         groupExists(_groupId)
@@ -634,9 +499,7 @@ contract TsaroSafe is ITsaroSafeData {
     {
         require(_limit > 0 && _limit <= 100, "Invalid limit");
 
-        ContributionHistory[] storage contributions = groupContributions[
-            _groupId
-        ];
+        ContributionHistory[] storage contributions = groupContributions[_groupId];
         uint256 totalContributions = contributions.length;
 
         if (_offset >= totalContributions) {
@@ -649,9 +512,7 @@ contract TsaroSafe is ITsaroSafeData {
         }
 
         uint256 resultLength = endIndex - _offset;
-        ContributionHistory[] memory result = new ContributionHistory[](
-            resultLength
-        );
+        ContributionHistory[] memory result = new ContributionHistory[](resultLength);
 
         for (uint256 i = 0; i < resultLength; i++) {
             result[i] = contributions[_offset + i];
@@ -667,12 +528,7 @@ contract TsaroSafe is ITsaroSafeData {
      * @param _offset Starting index
      * @param _limit Maximum number of contributions to return
      */
-    function getMemberContributions(
-        uint256 _groupId,
-        address _member,
-        uint256 _offset,
-        uint256 _limit
-    )
+    function getMemberContributions(uint256 _groupId, address _member, uint256 _offset, uint256 _limit)
         external
         view
         groupExists(_groupId)
@@ -680,13 +536,8 @@ contract TsaroSafe is ITsaroSafeData {
     {
         require(_limit > 0 && _limit <= 100, "Invalid limit");
 
-        ContributionHistory[] storage contributions = groupContributions[
-            _groupId
-        ];
-        ContributionHistory[]
-            memory memberContributions = new ContributionHistory[](
-                contributions.length
-            );
+        ContributionHistory[] storage contributions = groupContributions[_groupId];
+        ContributionHistory[] memory memberContributions = new ContributionHistory[](contributions.length);
 
         uint256 memberCount = 0;
         for (uint256 i = 0; i < contributions.length; i++) {
@@ -706,9 +557,7 @@ contract TsaroSafe is ITsaroSafeData {
         }
 
         uint256 resultLength = endIndex - _offset;
-        ContributionHistory[] memory result = new ContributionHistory[](
-            resultLength
-        );
+        ContributionHistory[] memory result = new ContributionHistory[](resultLength);
 
         for (uint256 i = 0; i < resultLength; i++) {
             result[i] = memberContributions[_offset + i];
@@ -721,9 +570,7 @@ contract TsaroSafe is ITsaroSafeData {
      * @notice Get group contribution summary
      * @param _groupId Group ID
      */
-    function getGroupContributionSummary(
-        uint256 _groupId
-    )
+    function getGroupContributionSummary(uint256 _groupId)
         external
         view
         groupExists(_groupId)
@@ -739,12 +586,9 @@ contract TsaroSafe is ITsaroSafeData {
         totalAmount = groupTotalAmount[_groupId];
         memberCount = groupMemberList[_groupId].length;
 
-        ContributionHistory[] storage contributions = groupContributions[
-            _groupId
-        ];
+        ContributionHistory[] storage contributions = groupContributions[_groupId];
         if (contributions.length > 0) {
-            lastContributionTime = contributions[contributions.length - 1]
-                .timestamp;
+            lastContributionTime = contributions[contributions.length - 1].timestamp;
         }
 
         averageContribution = memberCount > 0 ? totalAmount / memberCount : 0;
@@ -755,10 +599,7 @@ contract TsaroSafe is ITsaroSafeData {
      * @param _groupId Group ID
      * @param _member Member address
      */
-    function getMemberContributionSummary(
-        uint256 _groupId,
-        address _member
-    )
+    function getMemberContributionSummary(uint256 _groupId, address _member)
         external
         view
         groupExists(_groupId)
@@ -772,9 +613,7 @@ contract TsaroSafe is ITsaroSafeData {
         totalContributions = memberTotalContributions[_member][_groupId];
         totalAmount = memberTotalAmount[_member][_groupId];
 
-        ContributionHistory[] storage contributions = groupContributions[
-            _groupId
-        ];
+        ContributionHistory[] storage contributions = groupContributions[_groupId];
         for (uint256 i = contributions.length; i > 0; i--) {
             if (contributions[i - 1].member == _member) {
                 lastContributionTime = contributions[i - 1].timestamp;
@@ -782,9 +621,7 @@ contract TsaroSafe is ITsaroSafeData {
             }
         }
 
-        averageContribution = totalContributions > 0
-            ? totalAmount / totalContributions
-            : 0;
+        averageContribution = totalContributions > 0 ? totalAmount / totalContributions : 0;
     }
 
     // ========================================
@@ -796,20 +633,14 @@ contract TsaroSafe is ITsaroSafeData {
      * @param _groupId Group ID
      * @param _newTarget New target amount
      */
-    function updateGroupTarget(
-        uint256 _groupId,
-        uint256 _newTarget
-    )
+    function updateGroupTarget(uint256 _groupId, uint256 _newTarget)
         external
         groupExists(_groupId)
         onlyGroupCreator(_groupId)
         groupActive(_groupId)
     {
         require(_newTarget > 0, "Target must be greater than 0");
-        require(
-            _newTarget > groups[_groupId].currentAmount,
-            "New target must be greater than current amount"
-        );
+        require(_newTarget > groups[_groupId].currentAmount, "New target must be greater than current amount");
 
         Group storage group = groups[_groupId];
         GroupGoal storage goal = groupGoals[_groupId];
@@ -819,17 +650,10 @@ contract TsaroSafe is ITsaroSafeData {
         goal.targetAmount = _newTarget;
 
         // Recalculate progress percentage
-        goal.progressPercentage =
-            (goal.currentAmount * 100) /
-            goal.targetAmount;
+        goal.progressPercentage = (goal.currentAmount * 100) / goal.targetAmount;
 
         emit GoalUpdated(_groupId, oldTarget, _newTarget, msg.sender);
-        emit ProgressUpdated(
-            _groupId,
-            goal.currentAmount,
-            goal.targetAmount,
-            goal.progressPercentage
-        );
+        emit ProgressUpdated(_groupId, goal.currentAmount, goal.targetAmount, goal.progressPercentage);
     }
 
     /**
@@ -837,23 +661,14 @@ contract TsaroSafe is ITsaroSafeData {
      * @param _groupId Group ID
      * @param _newDeadline New deadline timestamp
      */
-    function updateGroupDeadline(
-        uint256 _groupId,
-        uint256 _newDeadline
-    )
+    function updateGroupDeadline(uint256 _groupId, uint256 _newDeadline)
         external
         groupExists(_groupId)
         onlyGroupCreator(_groupId)
         groupActive(_groupId)
     {
-        require(
-            _newDeadline > block.timestamp,
-            "Deadline must be in the future"
-        );
-        require(
-            _newDeadline <= block.timestamp + 365 days,
-            "Deadline cannot exceed 1 year"
-        );
+        require(_newDeadline > block.timestamp, "Deadline must be in the future");
+        require(_newDeadline <= block.timestamp + 365 days, "Deadline cannot exceed 1 year");
 
         Group storage group = groups[_groupId];
         GroupGoal storage goal = groupGoals[_groupId];
@@ -871,21 +686,14 @@ contract TsaroSafe is ITsaroSafeData {
      * @param _targetAmount Milestone target amount
      * @param _description Milestone description
      */
-    function addGroupMilestone(
-        uint256 _groupId,
-        uint256 _targetAmount,
-        string memory _description
-    )
+    function addGroupMilestone(uint256 _groupId, uint256 _targetAmount, string memory _description)
         external
         groupExists(_groupId)
         onlyGroupCreator(_groupId)
         groupActive(_groupId)
     {
         require(_targetAmount > 0, "Milestone target must be greater than 0");
-        require(
-            _targetAmount <= groups[_groupId].targetAmount,
-            "Milestone cannot exceed group target"
-        );
+        require(_targetAmount <= groups[_groupId].targetAmount, "Milestone cannot exceed group target");
         require(bytes(_description).length <= 200, "Description too long");
 
         uint256 milestoneId = nextMilestoneId++;
@@ -908,27 +716,16 @@ contract TsaroSafe is ITsaroSafeData {
      * @param _groupId Group ID
      * @param _milestoneId Milestone ID
      */
-    function checkMilestoneStatus(
-        uint256 _groupId,
-        uint256 _milestoneId
-    ) external groupExists(_groupId) {
+    function checkMilestoneStatus(uint256 _groupId, uint256 _milestoneId) external groupExists(_groupId) {
         GoalMilestone[] storage milestones = groupMilestones[_groupId];
         GroupGoal storage goal = groupGoals[_groupId];
 
         for (uint256 i = 0; i < milestones.length; i++) {
             if (milestones[i].milestoneId == _milestoneId) {
-                if (
-                    !milestones[i].isReached &&
-                    goal.currentAmount >= milestones[i].targetAmount
-                ) {
+                if (!milestones[i].isReached && goal.currentAmount >= milestones[i].targetAmount) {
                     milestones[i].isReached = true;
                     milestones[i].reachedAt = block.timestamp;
-                    emit MilestoneReached(
-                        _milestoneId,
-                        _groupId,
-                        milestones[i].targetAmount,
-                        block.timestamp
-                    );
+                    emit MilestoneReached(_milestoneId, _groupId, milestones[i].targetAmount, block.timestamp);
                 }
                 return;
             }
@@ -941,9 +738,7 @@ contract TsaroSafe is ITsaroSafeData {
      * @notice Get group goal information
      * @param _groupId Group ID
      */
-    function getGroupGoal(
-        uint256 _groupId
-    ) external view groupExists(_groupId) returns (GroupGoal memory) {
+    function getGroupGoal(uint256 _groupId) external view groupExists(_groupId) returns (GroupGoal memory) {
         return groupGoals[_groupId];
     }
 
@@ -951,9 +746,7 @@ contract TsaroSafe is ITsaroSafeData {
      * @notice Get group progress information
      * @param _groupId Group ID
      */
-    function getGroupProgress(
-        uint256 _groupId
-    ) external view groupExists(_groupId) returns (GoalProgress memory) {
+    function getGroupProgress(uint256 _groupId) external view groupExists(_groupId) returns (GoalProgress memory) {
         GroupGoal storage goal = groupGoals[_groupId];
 
         uint256 daysRemaining = 0;
@@ -971,30 +764,26 @@ contract TsaroSafe is ITsaroSafeData {
 
         bool isOnTrack = true;
         if (daysRemaining > 0 && averageDailyContribution > 0) {
-            uint256 requiredDailyContribution = (goal.targetAmount -
-                goal.currentAmount) / daysRemaining;
+            uint256 requiredDailyContribution = (goal.targetAmount - goal.currentAmount) / daysRemaining;
             isOnTrack = averageDailyContribution >= requiredDailyContribution;
         }
 
-        return
-            GoalProgress({
-                groupId: _groupId,
-                currentAmount: goal.currentAmount,
-                targetAmount: goal.targetAmount,
-                progressPercentage: goal.progressPercentage,
-                daysRemaining: daysRemaining,
-                averageDailyContribution: averageDailyContribution,
-                isOnTrack: isOnTrack
-            });
+        return GoalProgress({
+            groupId: _groupId,
+            currentAmount: goal.currentAmount,
+            targetAmount: goal.targetAmount,
+            progressPercentage: goal.progressPercentage,
+            daysRemaining: daysRemaining,
+            averageDailyContribution: averageDailyContribution,
+            isOnTrack: isOnTrack
+        });
     }
 
     /**
      * @notice Get group milestones
      * @param _groupId Group ID
      */
-    function getGroupMilestones(
-        uint256 _groupId
-    ) external view groupExists(_groupId) returns (GoalMilestone[] memory) {
+    function getGroupMilestones(uint256 _groupId) external view groupExists(_groupId) returns (GoalMilestone[] memory) {
         return groupMilestones[_groupId];
     }
 
@@ -1002,9 +791,7 @@ contract TsaroSafe is ITsaroSafeData {
      * @notice Calculate progress percentage
      * @param _groupId Group ID
      */
-    function calculateProgressPercentage(
-        uint256 _groupId
-    ) external view groupExists(_groupId) returns (uint256) {
+    function calculateProgressPercentage(uint256 _groupId) external view groupExists(_groupId) returns (uint256) {
         GroupGoal storage goal = groupGoals[_groupId];
         return (goal.currentAmount * 100) / goal.targetAmount;
     }
@@ -1018,10 +805,11 @@ contract TsaroSafe is ITsaroSafeData {
      * @param _groupId Group ID
      * @param _roundId Round ID to mark as active
      */
-    function setActiveRound(
-        uint256 _groupId,
-        uint256 _roundId
-    ) external groupExists(_groupId) onlyGroupCreator(_groupId) {
+    function setActiveRound(uint256 _groupId, uint256 _roundId)
+        external
+        groupExists(_groupId)
+        onlyGroupCreator(_groupId)
+    {
         groupActiveRound[_groupId] = _roundId;
     }
 
@@ -1029,9 +817,7 @@ contract TsaroSafe is ITsaroSafeData {
      * @notice Get active round id for a group
      * @param _groupId Group ID
      */
-    function getActiveRound(
-        uint256 _groupId
-    ) external view groupExists(_groupId) returns (uint256) {
+    function getActiveRound(uint256 _groupId) external view groupExists(_groupId) returns (uint256) {
         return groupActiveRound[_groupId];
     }
 
@@ -1041,11 +827,12 @@ contract TsaroSafe is ITsaroSafeData {
      * @param _roundId Round ID
      * @param _member Member address
      */
-    function isMemberPaid(
-        uint256 _groupId,
-        uint256 _roundId,
-        address _member
-    ) external view groupExists(_groupId) returns (bool) {
+    function isMemberPaid(uint256 _groupId, uint256 _roundId, address _member)
+        external
+        view
+        groupExists(_groupId)
+        returns (bool)
+    {
         return roundPayments[_groupId][_roundId][_member];
     }
 
@@ -1056,10 +843,7 @@ contract TsaroSafe is ITsaroSafeData {
      * @return members Array of member addresses
      * @return statuses Array of booleans indicating paid status for each member
      */
-    function getRoundPaymentStatuses(
-        uint256 _groupId,
-        uint256 _roundId
-    )
+    function getRoundPaymentStatuses(uint256 _groupId, uint256 _roundId)
         external
         view
         groupExists(_groupId)
@@ -1083,10 +867,12 @@ contract TsaroSafe is ITsaroSafeData {
      * @param _groupId Group ID
      * @param _roundId Round ID
      */
-    function getRoundPaidCount(
-        uint256 _groupId,
-        uint256 _roundId
-    ) external view groupExists(_groupId) returns (uint256) {
+    function getRoundPaidCount(uint256 _groupId, uint256 _roundId)
+        external
+        view
+        groupExists(_groupId)
+        returns (uint256)
+    {
         address[] storage members = groupMemberList[_groupId];
         uint256 count = 0;
         for (uint256 i = 0; i < members.length; i++) {
@@ -1105,9 +891,7 @@ contract TsaroSafe is ITsaroSafeData {
      * @notice Get group information
      * @param _groupId Group ID
      */
-    function getGroup(
-        uint256 _groupId
-    ) external view groupExists(_groupId) returns (Group memory) {
+    function getGroup(uint256 _groupId) external view groupExists(_groupId) returns (Group memory) {
         return groups[_groupId];
     }
 
@@ -1115,9 +899,7 @@ contract TsaroSafe is ITsaroSafeData {
      * @notice Get group members
      * @param _groupId Group ID
      */
-    function getGroupMembers(
-        uint256 _groupId
-    ) external view groupExists(_groupId) returns (address[] memory) {
+    function getGroupMembers(uint256 _groupId) external view groupExists(_groupId) returns (address[] memory) {
         return groupMemberList[_groupId];
     }
 
@@ -1126,10 +908,12 @@ contract TsaroSafe is ITsaroSafeData {
      * @param _groupId Group ID
      * @param _member Member address
      */
-    function getMemberInfo(
-        uint256 _groupId,
-        address _member
-    ) external view groupExists(_groupId) returns (Member memory) {
+    function getMemberInfo(uint256 _groupId, address _member)
+        external
+        view
+        groupExists(_groupId)
+        returns (Member memory)
+    {
         return groupMembers[_groupId][_member];
     }
 
@@ -1137,9 +921,7 @@ contract TsaroSafe is ITsaroSafeData {
      * @notice Get user's groups
      * @param _user User address
      */
-    function getUserGroups(
-        address _user
-    ) external view returns (uint256[] memory) {
+    function getUserGroups(address _user) external view returns (uint256[] memory) {
         return userGroups[_user];
     }
 
@@ -1148,10 +930,7 @@ contract TsaroSafe is ITsaroSafeData {
      * @param _groupId Group ID
      * @param _user User address
      */
-    function isGroupMember(
-        uint256 _groupId,
-        address _user
-    ) external view groupExists(_groupId) returns (bool) {
+    function isGroupMember(uint256 _groupId, address _user) external view groupExists(_groupId) returns (bool) {
         return groupMembers[_groupId][_user].isActive;
     }
 
@@ -1159,9 +938,7 @@ contract TsaroSafe is ITsaroSafeData {
      * @notice Get group statistics
      * @param _groupId Group ID
      */
-    function getGroupStats(
-        uint256 _groupId
-    )
+    function getGroupStats(uint256 _groupId)
         external
         view
         groupExists(_groupId)
@@ -1178,9 +955,7 @@ contract TsaroSafe is ITsaroSafeData {
         memberCount = groupMemberList[_groupId].length;
         currentAmount = group.currentAmount;
         targetAmount = group.targetAmount;
-        progressPercentage = targetAmount > 0
-            ? (currentAmount * 100) / targetAmount
-            : 0;
+        progressPercentage = targetAmount > 0 ? (currentAmount * 100) / targetAmount : 0;
         isActive = group.isActive;
         isCompleted = group.isCompleted;
     }
@@ -1190,10 +965,7 @@ contract TsaroSafe is ITsaroSafeData {
      * @param _offset Starting index
      * @param _limit Maximum number of groups to return
      */
-    function getPublicGroups(
-        uint256 _offset,
-        uint256 _limit
-    ) external view returns (Group[] memory) {
+    function getPublicGroups(uint256 _offset, uint256 _limit) external view returns (Group[] memory) {
         require(_limit > 0 && _limit <= 50, "Invalid limit");
 
         uint256 totalGroups = nextGroupId - 1;
