@@ -9,10 +9,10 @@ contract DeployTsaroSafeScript is Script {
         // Get deployment parameters from environment
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         string memory network = vm.envOr("NETWORK", string("celo-alfajores"));
-        
+
         console.log("Deploying TsaroSafe to network:", network);
         console.log("Deployer address:", vm.addr(deployerPrivateKey));
-        
+
         vm.startBroadcast(deployerPrivateKey);
 
         // Deploy TsaroSafe
@@ -29,5 +29,4 @@ contract DeployTsaroSafeScript is Script {
         console.log("Deployer:", vm.addr(deployerPrivateKey));
         console.log("========================\n");
     }
-
 }

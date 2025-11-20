@@ -44,3 +44,8 @@ frontend/.env
 frontend/node_modules
 frontend/.next/
 frontend/out/
+
+
+contracts/broadcast/
+contracts/cache/
+contracts/out/
