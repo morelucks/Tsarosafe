@@ -35,6 +35,12 @@ contract TsaroSafe is ITsaroSafeData {
         public memberTotalContributions;
     mapping(address => mapping(uint256 => uint256)) public memberTotalAmount;
 
+    // Round payment tracking
+    // groupId => active round id
+    mapping(uint256 => uint256) public groupActiveRound;
+    // groupId => roundId => member => paid
+    mapping(uint256 => mapping(uint256 => mapping(address => bool))) private roundPayments;
+
     // Goal setting mappings
     mapping(uint256 => GroupGoal) public groupGoals;
     mapping(uint256 => GoalMilestone[]) public groupMilestones;
@@ -537,6 +543,12 @@ contract TsaroSafe is ITsaroSafeData {
         groupMembers[_groupId][msg.sender].contribution += _amount;
         groupMembers[_groupId][msg.sender].lastContribution = block.timestamp;
 
+        // Mark member as paid for the active round (if one is set)
+        uint256 activeRound = groupActiveRound[_groupId];
+        if (activeRound != 0) {
+            roundPayments[_groupId][activeRound][msg.sender] = true;
+        }
+
         // Update goal progress
         GroupGoal storage goal = groupGoals[_groupId];
         goal.currentAmount += _amount;
@@ -943,7 +955,6 @@ contract TsaroSafe is ITsaroSafeData {
         uint256 _groupId
     ) external view groupExists(_groupId) returns (GoalProgress memory) {
         GroupGoal storage goal = groupGoals[_groupId];
-        Group memory group = groups[_groupId];
 
         uint256 daysRemaining = 0;
         if (goal.deadline > block.timestamp) {
