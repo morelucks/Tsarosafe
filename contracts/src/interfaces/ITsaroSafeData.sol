@@ -107,5 +107,15 @@ interface ITsaroSafeData {
         uint256 activeGoals;
         uint256 completedGoals;
     }
+
+    // Round payment helper function signatures
+    function isMemberPaid(uint256 groupId, uint256 roundId, address member) external view returns (bool);
+    function getRoundPaymentStatuses(uint256 groupId, uint256 roundId)
+        external
+        view
+        returns (address[] memory, bool[] memory);
+    function getRoundPaidCount(uint256 groupId, uint256 roundId) external view returns (uint256);
+    function getActiveRound(uint256 groupId) external view returns (uint256);
+    function setActiveRound(uint256 groupId, uint256 roundId) external;
 }
 
