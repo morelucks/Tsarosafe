@@ -2,6 +2,7 @@
 pragma solidity 0.8.28;
 
 import {Test, console} from "forge-std/Test.sol";
+import {Vm} from "forge-std/Vm.sol";
 import {TsaroSafe} from "../src/core/TsaroSafe.sol";
 import {ITsaroSafeData} from "../src/interfaces/ITsaroSafeData.sol";
 
