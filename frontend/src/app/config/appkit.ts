@@ -17,7 +17,32 @@ if (!process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID) {
   )
 }
 
-export const networks: [AppKitNetwork, ...AppKitNetwork[]] = [mainnet, arbitrum, base, optimism, polygon]
+// Celo Mainnet network configuration
+// Using type assertion with unknown first to satisfy TypeScript
+const celo = {
+  id: 42220,
+  name: 'Celo',
+  explorerUrl: 'https://celoscan.io',
+  rpcUrl: 'https://forno.celo.org'
+} as unknown as AppKitNetwork
+
+// Celo Alfajores Testnet network configuration
+const celoAlfajores = {
+  id: 44787,
+  name: 'Celo Alfajores',
+  explorerUrl: 'https://alfajores.celoscan.io',
+  rpcUrl: 'https://alfajores-forno.celo-testnet.org'
+} as unknown as AppKitNetwork
+
+export const networks: [AppKitNetwork, ...AppKitNetwork[]] = [
+  celo,
+  celoAlfajores,
+  mainnet,
+  arbitrum,
+  base,
+  optimism,
+  polygon
+]
 export const wagmiAdapter = new WagmiAdapter({
   storage: createStorage({
     storage: cookieStorage
@@ -32,7 +57,7 @@ export const modal = createAppKit({
   adapters: [wagmiAdapter],
   projectId,
   networks,
-  defaultNetwork: mainnet,
+  defaultNetwork: celo, // Set Celo as default network
   metadata: {
     name: 'Tsarosafe',
     description: 'Save smarter, together or individually',
