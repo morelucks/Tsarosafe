@@ -49,3 +49,7 @@ frontend/out/
 contracts/broadcast/
 contracts/cache/
 contracts/out/
+# Integration checklist (local development)
+INTEGRATION_CHECKLIST.md
+# Interaction scripts (local testing only)
+contracts/script/Interact*.s.sol

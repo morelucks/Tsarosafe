@@ -9,50 +9,38 @@ import "../interfaces/ITsaroSafeData.sol";
  * @dev Implements Create Groups and Join/Leave Groups milestones
  */
 contract TsaroSafe is ITsaroSafeData {
+    // Custom Errors (saves gas and contract size)
+    error EmptyName();
+    error NameTooLong();
+    error DescriptionTooLong();
+    error InvalidTarget();
+    error InvalidMemberLimit();
+    error MemberLimitExceeded();
+    error InvalidEndDate();
+    error EndDateTooFar();
+    error NotCreator();
+    error NotMember();
+    error GroupNotExists();
+    error GroupNotActive();
+    error AlreadyMember();
+    error GroupAtCapacity();
+    error GroupEnded();
+    error GroupCompleted();
+    error CreatorCannotLeave();
+    error InvalidAmount();
+    error ContributionNotFound();
+    error InvalidLimit();
+    error InvalidDeadline();
+    error InvalidMilestone();
+    error MilestoneNotFound();
+    error CannotRemoveSelf();
+
     enum GroupType {
         ProjectPool,
         CircleSavings
     }
 
-      enum ContributionFrequency {
-        Daily,
-        Weekly,
-        BiWeekly,
-        Monthly
-    }
-
     mapping(uint256 => GroupType) public groupTypes;
-
-    // ========================================
-    // CIRCLE ROSTER MANAGEMENT
-    // ========================================
-
-      struct CircleRoster {
-        uint256 groupId;
-        address[] memberOrder;
-        uint256 currentRoundIndex;
-        uint256 nextPayoutTimestamp;
-        ContributionFrequency frequency;
-        uint256 contributionAmount;
-        bool isActive;
-    }
-
-    struct RosterChange {
-        uint256 changeId;
-        uint256 groupId;
-        address member;
-        string changeType; // "added", "removed", "reordered"
-        uint256 timestamp;
-    }
-
-
-// Circle roster mappings
-    mapping(uint256 => CircleRoster) public circleRosters;
-    mapping(uint256 => RosterChange[]) public rosterChangeHistory;
-    mapping(uint256 => uint256) public rosterChangeCount;
-    mapping(uint256 => mapping(address => uint256)) public memberRosterPosition;
-    mapping(uint256 => uint256) public circlePayoutHistory;
-    mapping(uint256 => uint256) public lastPayoutTimestamp;
 
     // State variables
     uint256 public nextGroupId = 1;
@@ -123,82 +111,24 @@ contract TsaroSafe is ITsaroSafeData {
     );
 
 
-  event CircleCreated(
-        uint256 indexed groupId,
-        address[] roster,
-        uint256 contributionAmount,
-        uint8 frequency,
-        uint256 nextPayoutTimestamp
-    );
-
-    event RosterUpdated(
-        uint256 indexed groupId,
-        uint256 indexed changeId,
-        address[] newRoster,
-        uint256 currentRoundIndex,
-        uint256 timestamp
-    );
-
-    event RosterMemberAdded(
-        uint256 indexed groupId,
-        address indexed member,
-        uint256 position,
-        uint256 timestamp
-    );
-
-    event RosterMemberRemoved(
-        uint256 indexed groupId,
-        address indexed member,
-        uint256 timestamp
-    );
-
-    event ScheduleUpdated(
-        uint256 indexed groupId,
-        uint256 contributionAmount,
-        uint8 frequency,
-        uint256 nextPayoutTimestamp,
-        address indexed updatedBy
-    );
-
- event RosterReordered(
-        uint256 indexed groupId,
-        address[] newOrder,
-        uint256 timestamp
-    );
-
-    event PayoutScheduled(
-        uint256 indexed groupId,
-        address indexed recipient,
-        uint256 amount,
-        uint256 scheduledTime,
-        uint256 roundIndex
-    );
-
-    event ContributionRoundProgressed(
-        uint256 indexed groupId,
-        uint256 previousRound,
-        uint256 newRound,
-        address indexed nextRecipient,
-        uint256 timestamp
-    );
     // Modifiers
     modifier onlyGroupCreator(uint256 _groupId) {
-        require(groups[_groupId].creator == msg.sender, "Only group creator can perform this action");
+        if (groups[_groupId].creator != msg.sender) revert NotCreator();
         _;
     }
 
     modifier onlyGroupMember(uint256 _groupId) {
-        require(groupMembers[_groupId][msg.sender].isActive, "Not a group member");
+        if (!groupMembers[_groupId][msg.sender].isActive) revert NotMember();
         _;
     }
 
     modifier groupExists(uint256 _groupId) {
-        require(groups[_groupId].id != 0, "Group does not exist");
+        if (groups[_groupId].id == 0) revert GroupNotExists();
         _;
     }
 
     modifier groupActive(uint256 _groupId) {
-        require(groups[_groupId].isActive, "Group is not active");
+        if (!groups[_groupId].isActive) revert GroupNotActive();
         _;
     }
 
@@ -224,14 +154,14 @@ contract TsaroSafe is ITsaroSafeData {
         uint256 _endDate
     ) external returns (uint256) {
         // Validation
-        require(bytes(_name).length > 0, "Group name cannot be empty");
-        require(bytes(_name).length <= 100, "Group name too long");
-        require(bytes(_description).length <= 500, "Description too long");
-        require(_targetAmount > 0, "Target amount must be greater than 0");
-        require(_memberLimit > 0, "Member limit must be greater than 0");
-        require(_memberLimit <= 100, "Member limit cannot exceed 100");
-        require(_endDate > block.timestamp, "End date must be in the future");
-        require(_endDate <= block.timestamp + 365 days, "End date cannot exceed 1 year");
+        if (bytes(_name).length == 0) revert EmptyName();
+        if (bytes(_name).length > 100) revert NameTooLong();
+        if (bytes(_description).length > 500) revert DescriptionTooLong();
+        if (_targetAmount == 0) revert InvalidTarget();
+        if (_memberLimit == 0) revert InvalidMemberLimit();
+        if (_memberLimit > 100) revert MemberLimitExceeded();
+        if (_endDate <= block.timestamp) revert InvalidEndDate();
+        if (_endDate > block.timestamp + 365 days) revert EndDateTooFar();
 
         uint256 groupId = nextGroupId++;
 
@@ -291,9 +221,9 @@ contract TsaroSafe is ITsaroSafeData {
         onlyGroupCreator(_groupId)
         groupActive(_groupId)
     {
-        require(bytes(_name).length > 0, "Group name cannot be empty");
-        require(bytes(_name).length <= 100, "Group name too long");
-        require(bytes(_description).length <= 500, "Description too long");
+        if (bytes(_name).length == 0) revert EmptyName();
+        if (bytes(_name).length > 100) revert NameTooLong();
+        if (bytes(_description).length > 500) revert DescriptionTooLong();
 
         groups[_groupId].name = _name;
         groups[_groupId].description = _description;
@@ -312,9 +242,9 @@ contract TsaroSafe is ITsaroSafeData {
         onlyGroupCreator(_groupId)
         groupActive(_groupId)
     {
-        require(_newLimit > 0, "Member limit must be greater than 0");
-        require(_newLimit <= 100, "Member limit cannot exceed 100");
-        require(_newLimit >= groupMemberList[_groupId].length, "New limit cannot be less than current members");
+        if (_newLimit == 0) revert InvalidMemberLimit();
+        if (_newLimit > 100) revert MemberLimitExceeded();
+        if (_newLimit < groupMemberList[_groupId].length) revert InvalidMemberLimit();
 
         groups[_groupId].memberLimit = _newLimit;
         emit GroupUpdated(_groupId, "memberLimit", "updated");
@@ -331,8 +261,8 @@ contract TsaroSafe is ITsaroSafeData {
         onlyGroupCreator(_groupId)
         groupActive(_groupId)
     {
-        require(_newEndDate > block.timestamp, "End date must be in the future");
-        require(_newEndDate <= block.timestamp + 365 days, "End date cannot exceed 1 year");
+        if (_newEndDate <= block.timestamp) revert InvalidEndDate();
+        if (_newEndDate > block.timestamp + 365 days) revert EndDateTooFar();
 
         groups[_groupId].endDate = _newEndDate;
         emit GroupUpdated(_groupId, "endDate", "updated");
@@ -378,16 +308,16 @@ contract TsaroSafe is ITsaroSafeData {
         Group storage group = groups[_groupId];
 
         // Check if user is already a member
-        require(!groupMembers[_groupId][msg.sender].isActive, "Already a member of this group");
+        if (groupMembers[_groupId][msg.sender].isActive) revert AlreadyMember();
 
         // Check group capacity
-        require(groupMemberList[_groupId].length < group.memberLimit, "Group is at capacity");
+        if (groupMemberList[_groupId].length >= group.memberLimit) revert GroupAtCapacity();
 
         // Check if group has ended
-        require(block.timestamp < group.endDate, "Group has ended");
+        if (block.timestamp >= group.endDate) revert GroupEnded();
 
         // Check if group is completed
-        require(!group.isCompleted, "Group is already completed");
+        if (group.isCompleted) revert GroupCompleted();
 
         // Add user as member
         groupMembers[_groupId][msg.sender] =
@@ -407,13 +337,13 @@ contract TsaroSafe is ITsaroSafeData {
         Group storage group = groups[_groupId];
 
         // Prevent creator from leaving (they must deactivate group instead)
-        require(msg.sender != group.creator, "Creator cannot leave group. Use deactivateGroup() instead");
+        if (msg.sender == group.creator) revert CreatorCannotLeave();
 
         // Check if group has ended
-        require(block.timestamp < group.endDate, "Cannot leave group after it has ended");
+        if (block.timestamp >= group.endDate) revert GroupEnded();
 
         // Check if group is completed
-        require(!group.isCompleted, "Cannot leave completed group");
+        if (group.isCompleted) revert GroupCompleted();
 
         // Mark member as inactive
         groupMembers[_groupId][msg.sender].isActive = false;
@@ -452,8 +382,8 @@ contract TsaroSafe is ITsaroSafeData {
         onlyGroupCreator(_groupId)
         groupActive(_groupId)
     {
-        require(_member != msg.sender, "Cannot remove yourself");
-        require(groupMembers[_groupId][_member].isActive, "Member is not active");
+        if (_member == msg.sender) revert CannotRemoveSelf();
+        if (!groupMembers[_groupId][_member].isActive) revert NotMember();
 
         // Mark member as inactive
         groupMembers[_groupId][_member].isActive = false;
@@ -497,12 +427,12 @@ contract TsaroSafe is ITsaroSafeData {
         onlyGroupMember(_groupId)
         groupActive(_groupId)
     {
-        require(_amount > 0, "Contribution amount must be greater than 0");
-        require(bytes(_description).length <= 200, "Description too long");
+        if (_amount == 0) revert InvalidAmount();
+        if (bytes(_description).length > 200) revert DescriptionTooLong();
 
         Group storage group = groups[_groupId];
-        require(block.timestamp < group.endDate, "Group has ended");
-        require(!group.isCompleted, "Group is already completed");
+        if (block.timestamp >= group.endDate) revert GroupEnded();
+        if (group.isCompleted) revert GroupCompleted();
 
         uint256 contributionId = nextContributionId++;
 
@@ -579,7 +509,7 @@ contract TsaroSafe is ITsaroSafeData {
             }
         }
 
-        revert("Contribution not found");
+        revert ContributionNotFound();
     }
 
     /**
@@ -594,7 +524,7 @@ contract TsaroSafe is ITsaroSafeData {
         groupExists(_groupId)
         returns (ContributionHistory[] memory)
     {
-        require(_limit > 0 && _limit <= 100, "Invalid limit");
+        if (_limit == 0 || _limit > 100) revert InvalidLimit();
 
         ContributionHistory[] storage contributions = groupContributions[_groupId];
         uint256 totalContributions = contributions.length;
@@ -631,7 +561,7 @@ contract TsaroSafe is ITsaroSafeData {
         groupExists(_groupId)
         returns (ContributionHistory[] memory)
     {
-        require(_limit > 0 && _limit <= 100, "Invalid limit");
+        if (_limit == 0 || _limit > 100) revert InvalidLimit();
 
         ContributionHistory[] storage contributions = groupContributions[_groupId];
         ContributionHistory[] memory memberContributions = new ContributionHistory[](contributions.length);
@@ -736,8 +666,8 @@ contract TsaroSafe is ITsaroSafeData {
         onlyGroupCreator(_groupId)
         groupActive(_groupId)
     {
-        require(_newTarget > 0, "Target must be greater than 0");
-        require(_newTarget > groups[_groupId].currentAmount, "New target must be greater than current amount");
+        if (_newTarget == 0) revert InvalidTarget();
+        if (_newTarget <= groups[_groupId].currentAmount) revert InvalidTarget();
 
         Group storage group = groups[_groupId];
         GroupGoal storage goal = groupGoals[_groupId];
@@ -764,8 +694,8 @@ contract TsaroSafe is ITsaroSafeData {
         onlyGroupCreator(_groupId)
         groupActive(_groupId)
     {
-        require(_newDeadline > block.timestamp, "Deadline must be in the future");
-        require(_newDeadline <= block.timestamp + 365 days, "Deadline cannot exceed 1 year");
+        if (_newDeadline <= block.timestamp) revert InvalidDeadline();
+        if (_newDeadline > block.timestamp + 365 days) revert EndDateTooFar();
 
         Group storage group = groups[_groupId];
         GroupGoal storage goal = groupGoals[_groupId];
@@ -789,9 +719,9 @@ contract TsaroSafe is ITsaroSafeData {
         onlyGroupCreator(_groupId)
         groupActive(_groupId)
     {
-        require(_targetAmount > 0, "Milestone target must be greater than 0");
-        require(_targetAmount <= groups[_groupId].targetAmount, "Milestone cannot exceed group target");
-        require(bytes(_description).length <= 200, "Description too long");
+        if (_targetAmount == 0) revert InvalidMilestone();
+        if (_targetAmount > groups[_groupId].targetAmount) revert InvalidMilestone();
+        if (bytes(_description).length > 200) revert DescriptionTooLong();
 
         uint256 milestoneId = nextMilestoneId++;
 
@@ -828,7 +758,7 @@ contract TsaroSafe is ITsaroSafeData {
             }
         }
 
-        revert("Milestone not found");
+        revert MilestoneNotFound();
     }
 
     /**
@@ -1062,8 +992,8 @@ contract TsaroSafe is ITsaroSafeData {
      * @param _offset Starting index
      * @param _limit Maximum number of groups to return
      */
-    function getPublicGroups(uint256 _offset, uint256 _limit) external view returns (Group[] memory) {
-        require(_limit > 0 && _limit <= 50, "Invalid limit");
+    function getPublicGroups(uint256 _offset, uint256 _limit) external view returns (Group[] memory)     {
+        if (_limit == 0 || _limit > 50) revert InvalidLimit();
 
         uint256 totalGroups = nextGroupId - 1;
         if (_offset >= totalGroups) {
@@ -1092,396 +1022,5 @@ contract TsaroSafe is ITsaroSafeData {
         }
 
         return publicGroups;
-    }
-
-
-    /**
-     * @notice Initialize circle roster for a group
-     * @param _groupId Group ID
-     * @param _roster Initial member order
-     * @param _contributionAmount Fixed contribution amount per cycle
-     * @param _frequency Contribution frequency
-     * @param _firstPayoutTime Timestamp of first payout
-     */
-    function initializeCircleRoster(
-        uint256 _groupId,
-        address[] memory _roster,
-        uint256 _contributionAmount,
-        ContributionFrequency _frequency,
-        uint256 _firstPayoutTime
-    )
-        external
-        groupExists(_groupId)
-        onlyGroupCreator(_groupId)
-        groupActive(_groupId)
-    {
-        require(_roster.length > 0, "Roster cannot be empty");
-        require(_roster.length <= 100, "Roster exceeds maximum size");
-        require(_contributionAmount > 0, "Contribution amount must be greater than 0");
-        require(_firstPayoutTime > block.timestamp, "First payout time must be in future");
-
-        // Validate all roster members are group members
-        for (uint256 i = 0; i < _roster.length; i++) {
-            require(
-                groupMembers[_groupId][_roster[i]].isActive,
-                "All roster members must be active group members"
-            );
-        }
-
-        // Create circle roster
-        circleRosters[_groupId] = CircleRoster({
-            groupId: _groupId,
-            memberOrder: _roster,
-            currentRoundIndex: 0,
-            nextPayoutTimestamp: _firstPayoutTime,
-            frequency: _frequency,
-            contributionAmount: _contributionAmount,
-            isActive: true
-        });
-
-        // Set member positions
-        for (uint256 i = 0; i < _roster.length; i++) {
-            memberRosterPosition[_groupId][_roster[i]] = i;
-        }
-
-        emit CircleCreated(
-            _groupId,
-            _roster,
-            _contributionAmount,
-            uint8(_frequency),
-            _firstPayoutTime
-        );
-    }
-
-    /**
-     * @notice Update circle schedule (contribution amount and frequency)
-     * @param _groupId Group ID
-     * @param _newContributionAmount New contribution amount
-     * @param _newFrequency New contribution frequency
-     */
-    function updateCircleSchedule(
-        uint256 _groupId,
-        uint256 _newContributionAmount,
-        ContributionFrequency _newFrequency
-    )
-        external
-        groupExists(_groupId)
-        onlyGroupCreator(_groupId)
-        groupActive(_groupId)
-    {
-        require(circleRosters[_groupId].isActive, "Circle roster not initialized");
-        require(_newContributionAmount > 0, "Contribution amount must be greater than 0");
-
-        CircleRoster storage roster = circleRosters[_groupId];
-        roster.contributionAmount = _newContributionAmount;
-        roster.frequency = _newFrequency;
-
-        // Calculate next payout based on frequency
-        uint256 frequencyDuration = _getFrequencyDuration(_newFrequency);
-        roster.nextPayoutTimestamp = block.timestamp + frequencyDuration;
-
-        emit ScheduleUpdated(
-            _groupId,
-            _newContributionAmount,
-            uint8(_newFrequency),
-            roster.nextPayoutTimestamp,
-            msg.sender
-        );
-    }
-
-    /**
-     * @notice Add member to circle roster
-     * @param _groupId Group ID
-     * @param _member Member address to add
-     * @param _position Position in roster (optional, defaults to end)
-     */
-    function addMemberToRoster(
-        uint256 _groupId,
-        address _member,
-        uint256 _position
-    )
-        external
-        groupExists(_groupId)
-        onlyGroupCreator(_groupId)
-        groupActive(_groupId)
-    {
-        require(circleRosters[_groupId].isActive, "Circle roster not initialized");
-        require(groupMembers[_groupId][_member].isActive, "Member must be active group member");
-        require(
-            memberRosterPosition[_groupId][_member] == 0 || circleRosters[_groupId].memberOrder[0] != _member,
-            "Member already in roster"
-        );
-
-        CircleRoster storage roster = circleRosters[_groupId];
-        uint256 insertPosition = _position < roster.memberOrder.length ? _position : roster.memberOrder.length;
-
-        // Insert member at position
-        roster.memberOrder.push();
-        for (uint256 i = roster.memberOrder.length - 1; i > insertPosition; i--) {
-            roster.memberOrder[i] = roster.memberOrder[i - 1];
-            memberRosterPosition[_groupId][roster.memberOrder[i]] = i;
-        }
-        roster.memberOrder[insertPosition] = _member;
-        memberRosterPosition[_groupId][_member] = insertPosition;
-
-        // Record change
-        uint256 changeId = rosterChangeCount[_groupId]++;
-        rosterChangeHistory[_groupId].push(RosterChange({
-            changeId: changeId,
-            groupId: _groupId,
-            member: _member,
-            changeType: "added",
-            timestamp: block.timestamp
-        }));
-
-        emit RosterMemberAdded(_groupId, _member, insertPosition, block.timestamp);
-        emit RosterUpdated(
-            _groupId,
-            changeId,
-            roster.memberOrder,
-            roster.currentRoundIndex,
-            block.timestamp
-        );
-    }
-
-    /**
-     * @notice Remove member from circle roster
-     * @param _groupId Group ID
-     * @param _member Member address to remove
-     */
-    function removeMemberFromRoster(
-        uint256 _groupId,
-        address _member
-    )
-        external
-        groupExists(_groupId)
-        onlyGroupCreator(_groupId)
-        groupActive(_groupId)
-    {
-        require(circleRosters[_groupId].isActive, "Circle roster not initialized");
-
-        CircleRoster storage roster = circleRosters[_groupId];
-        // uint256 position = memberRosterPosition[_groupId][_member];
-
-        // Find and remove member
-        bool found = false;
-        for (uint256 i = 0; i < roster.memberOrder.length; i++) {
-            if (roster.memberOrder[i] == _member) {
-                // Remove from array
-                roster.memberOrder[i] = roster.memberOrder[roster.memberOrder.length - 1];
-                roster.memberOrder.pop();
-                
-                // Update positions
-                for (uint256 j = i; j < roster.memberOrder.length; j++) {
-                    memberRosterPosition[_groupId][roster.memberOrder[j]] = j;
-                }
-                
-                memberRosterPosition[_groupId][_member] = 0;
-                found = true;
-                break;
-            }
-        }
-
-        require(found, "Member not found in roster");
-
-        // Record change
-        uint256 changeId = rosterChangeCount[_groupId]++;
-        rosterChangeHistory[_groupId].push(RosterChange({
-            changeId: changeId,
-            groupId: _groupId,
-            member: _member,
-            changeType: "removed",
-            timestamp: block.timestamp
-        }));
-
-        emit RosterMemberRemoved(_groupId, _member, block.timestamp);
-        emit RosterUpdated(
-            _groupId,
-            changeId,
-            roster.memberOrder,
-            roster.currentRoundIndex,
-            block.timestamp
-        );
-    }
-
-    /**
-     * @notice Reorder roster members
-     * @param _groupId Group ID
-     * @param _newOrder New member order
-     */
-    function reorderRoster(
-        uint256 _groupId,
-        address[] memory _newOrder
-    )
-        external
-        groupExists(_groupId)
-        onlyGroupCreator(_groupId)
-        groupActive(_groupId)
-    {
-        require(circleRosters[_groupId].isActive, "Circle roster not initialized");
-        require(_newOrder.length == circleRosters[_groupId].memberOrder.length, "Order length mismatch");
-
-        CircleRoster storage roster = circleRosters[_groupId];
-
-        // Validate all members are present
-        for (uint256 i = 0; i < _newOrder.length; i++) {
-            require(groupMembers[_groupId][_newOrder[i]].isActive, "Invalid member in new order");
-        }
-
-        roster.memberOrder = _newOrder;
-
-        // Update positions
-        for (uint256 i = 0; i < _newOrder.length; i++) {
-            memberRosterPosition[_groupId][_newOrder[i]] = i;
-        }
-
-        // Record change
-        uint256 changeId = rosterChangeCount[_groupId]++;
-        rosterChangeHistory[_groupId].push(RosterChange({
-            changeId: changeId,
-            groupId: _groupId,
-            member: address(0),
-            changeType: "reordered",
-            timestamp: block.timestamp
-        }));
-
-        emit RosterReordered(_groupId, _newOrder, block.timestamp);
-        emit RosterUpdated(
-            _groupId,
-            changeId,
-            _newOrder,
-            roster.currentRoundIndex,
-            block.timestamp
-        );
-    }
-
-    /**
-     * @notice Progress to next round in circle
-     * @param _groupId Group ID
-     */
-    function progressRound(uint256 _groupId)
-        external
-        groupExists(_groupId)
-        onlyGroupCreator(_groupId)
-    {
-        require(circleRosters[_groupId].isActive, "Circle roster not initialized");
-        require(
-            block.timestamp >= circleRosters[_groupId].nextPayoutTimestamp,
-            "Payout time has not reached"
-        );
-
-        CircleRoster storage roster = circleRosters[_groupId];
-        uint256 previousRound = roster.currentRoundIndex;
-
-        // Move to next member
-        roster.currentRoundIndex = (roster.currentRoundIndex + 1) % roster.memberOrder.length;
-        address nextRecipient = roster.memberOrder[roster.currentRoundIndex];
-
-        // Update next payout timestamp
-        uint256 frequencyDuration = _getFrequencyDuration(roster.frequency);
-        roster.nextPayoutTimestamp = block.timestamp + frequencyDuration;
-
-        // Update payout history
-        circlePayoutHistory[_groupId]++;
-        lastPayoutTimestamp[_groupId] = block.timestamp;
-
-        emit ContributionRoundProgressed(
-            _groupId,
-            previousRound,
-            roster.currentRoundIndex,
-            nextRecipient,
-            block.timestamp
-        );
-
-        emit PayoutScheduled(
-            _groupId,
-            nextRecipient,
-            roster.contributionAmount,
-            roster.nextPayoutTimestamp,
-            roster.currentRoundIndex
-        );
-    }
-
-    /**
-     * @notice Get circle roster information
-     * @param _groupId Group ID
-     */
-    function getCircleRoster(uint256 _groupId)
-        external
-        view
-        groupExists(_groupId)
-        returns (CircleRoster memory)
-    {
-        return circleRosters[_groupId];
-    }
-
-    /**
-     * @notice Get current recipient in circle
-     * @param _groupId Group ID
-     */
-    function getCurrentCircleRecipient(uint256 _groupId)
-        external
-        view
-        groupExists(_groupId)
-        returns (address)
-    {
-        CircleRoster storage roster = circleRosters[_groupId];
-        require(roster.isActive, "Circle roster not initialized");
-        return roster.memberOrder[roster.currentRoundIndex];
-    }
-
-    /**
-     * @notice Get next recipient in circle
-     * @param _groupId Group ID
-     */
-    function getNextCircleRecipient(uint256 _groupId)
-        external
-        view
-        groupExists(_groupId)
-        returns (address)
-    {
-        CircleRoster storage roster = circleRosters[_groupId];
-        require(roster.isActive, "Circle roster not initialized");
-        uint256 nextIndex = (roster.currentRoundIndex + 1) % roster.memberOrder.length;
-        return roster.memberOrder[nextIndex];
-    }
-
-    /**
-     * @notice Get roster change history
-     * @param _groupId Group ID
-     */
-    function getRosterChangeHistory(uint256 _groupId)
-        external
-        view
-        groupExists(_groupId)
-        returns (RosterChange[] memory)
-    {
-        return rosterChangeHistory[_groupId];
-    }
-
-    // ========================================
-    // HELPER FUNCTIONS
-    // ========================================
-
-    /**
-     * @notice Get frequency duration in seconds
-     * @param _frequency Contribution frequency enum
-     */
-    function _getFrequencyDuration(ContributionFrequency _frequency)
-        internal
-        pure
-        returns (uint256)
-    {
-        if (_frequency == ContributionFrequency.Daily) {
-            return 1 days;
-        } else if (_frequency == ContributionFrequency.Weekly) {
-            return 7 days;
-        } else if (_frequency == ContributionFrequency.BiWeekly) {
-            return 14 days;
-        } else if (_frequency == ContributionFrequency.Monthly) {
-            return 30 days;
-        } else {
-            revert("Invalid frequency");
-        }
     }
 }
