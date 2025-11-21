@@ -1,0 +1,2119 @@
+[
+  {
+    "type": "function",
+    "name": "addGroupMilestone",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_targetAmount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_description",
+        "type": "string",
+        "internalType": "string"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "calculateProgressPercentage",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "checkMilestoneStatus",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_milestoneId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "createGroup",
+    "inputs": [
+      {
+        "name": "_name",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "_description",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "_isPrivate",
+        "type": "bool",
+        "internalType": "bool"
+      },
+      {
+        "name": "_targetAmount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_memberLimit",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_endDate",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "deactivateGroup",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "getActiveRound",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getGroup",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple",
+        "internalType": "struct ITsaroSafeData.Group",
+        "components": [
+          {
+            "name": "id",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "isPrivate",
+            "type": "bool",
+            "internalType": "bool"
+          },
+          {
+            "name": "creator",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "targetAmount",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "currentAmount",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "memberLimit",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "createdAt",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "endDate",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "isActive",
+            "type": "bool",
+            "internalType": "bool"
+          },
+          {
+            "name": "isCompleted",
+            "type": "bool",
+            "internalType": "bool"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getGroupContributionSummary",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "totalContributions",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "totalAmount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "memberCount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "lastContributionTime",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "averageContribution",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getGroupContributions",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_offset",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_limit",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple[]",
+        "internalType": "struct ITsaroSafeData.ContributionHistory[]",
+        "components": [
+          {
+            "name": "contributionId",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "member",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "groupId",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "amount",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "timestamp",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "isVerified",
+            "type": "bool",
+            "internalType": "bool"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getGroupGoal",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple",
+        "internalType": "struct ITsaroSafeData.GroupGoal",
+        "components": [
+          {
+            "name": "groupId",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "targetAmount",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "currentAmount",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "deadline",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "isCompleted",
+            "type": "bool",
+            "internalType": "bool"
+          },
+          {
+            "name": "createdAt",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "completedAt",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "progressPercentage",
+            "type": "uint256",
+            "internalType": "uint256"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getGroupMembers",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address[]",
+        "internalType": "address[]"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getGroupMilestones",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple[]",
+        "internalType": "struct ITsaroSafeData.GoalMilestone[]",
+        "components": [
+          {
+            "name": "milestoneId",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "groupId",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "targetAmount",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "isReached",
+            "type": "bool",
+            "internalType": "bool"
+          },
+          {
+            "name": "reachedAt",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "createdAt",
+            "type": "uint256",
+            "internalType": "uint256"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getGroupProgress",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple",
+        "internalType": "struct ITsaroSafeData.GoalProgress",
+        "components": [
+          {
+            "name": "groupId",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "currentAmount",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "targetAmount",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "progressPercentage",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "daysRemaining",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "averageDailyContribution",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "isOnTrack",
+            "type": "bool",
+            "internalType": "bool"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getGroupStats",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "memberCount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "currentAmount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "targetAmount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "progressPercentage",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "isActive",
+        "type": "bool",
+        "internalType": "bool"
+      },
+      {
+        "name": "isCompleted",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getMemberContributionSummary",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_member",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "totalContributions",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "totalAmount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "lastContributionTime",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "averageContribution",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getMemberContributions",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_member",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "_offset",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_limit",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple[]",
+        "internalType": "struct ITsaroSafeData.ContributionHistory[]",
+        "components": [
+          {
+            "name": "contributionId",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "member",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "groupId",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "amount",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "timestamp",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "isVerified",
+            "type": "bool",
+            "internalType": "bool"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getMemberInfo",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_member",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple",
+        "internalType": "struct ITsaroSafeData.Member",
+        "components": [
+          {
+            "name": "user",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "contribution",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "lastContribution",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "isActive",
+            "type": "bool",
+            "internalType": "bool"
+          },
+          {
+            "name": "joinedAt",
+            "type": "uint256",
+            "internalType": "uint256"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getPublicGroups",
+    "inputs": [
+      {
+        "name": "_offset",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_limit",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple[]",
+        "internalType": "struct ITsaroSafeData.Group[]",
+        "components": [
+          {
+            "name": "id",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "isPrivate",
+            "type": "bool",
+            "internalType": "bool"
+          },
+          {
+            "name": "creator",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "targetAmount",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "currentAmount",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "memberLimit",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "createdAt",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "endDate",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "isActive",
+            "type": "bool",
+            "internalType": "bool"
+          },
+          {
+            "name": "isCompleted",
+            "type": "bool",
+            "internalType": "bool"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getRoundPaidCount",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_roundId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getRoundPaymentStatuses",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_roundId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address[]",
+        "internalType": "address[]"
+      },
+      {
+        "name": "",
+        "type": "bool[]",
+        "internalType": "bool[]"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getUserGroups",
+    "inputs": [
+      {
+        "name": "_user",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256[]",
+        "internalType": "uint256[]"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "groupActiveRound",
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "groupContributions",
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "contributionId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "member",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "timestamp",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "isVerified",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "groupGoalDeadlines",
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "groupGoals",
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "targetAmount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "currentAmount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "deadline",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "isCompleted",
+        "type": "bool",
+        "internalType": "bool"
+      },
+      {
+        "name": "createdAt",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "completedAt",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "progressPercentage",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "groupMemberList",
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "groupMembers",
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "user",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "contribution",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "lastContribution",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "isActive",
+        "type": "bool",
+        "internalType": "bool"
+      },
+      {
+        "name": "joinedAt",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "groupMilestones",
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "milestoneId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "targetAmount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "isReached",
+        "type": "bool",
+        "internalType": "bool"
+      },
+      {
+        "name": "reachedAt",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "createdAt",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "groupTotalAmount",
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "groupTotalContributions",
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "groupTypes",
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint8",
+        "internalType": "enum TsaroSafe.GroupType"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "groups",
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "id",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "isPrivate",
+        "type": "bool",
+        "internalType": "bool"
+      },
+      {
+        "name": "creator",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "targetAmount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "currentAmount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "memberLimit",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "createdAt",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "endDate",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "isActive",
+        "type": "bool",
+        "internalType": "bool"
+      },
+      {
+        "name": "isCompleted",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "isGroupMember",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_user",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "isMemberPaid",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_roundId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_member",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "joinGroup",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "leaveGroup",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "makeContribution",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_amount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_description",
+        "type": "string",
+        "internalType": "string"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "memberTotalAmount",
+    "inputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "memberTotalContributions",
+    "inputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "nextContributionId",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "nextGroupId",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "nextMilestoneId",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "removeMember",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_member",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "setActiveRound",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_roundId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "toggleGroupPrivacy",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "updateEndDate",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_newEndDate",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "updateGroupDeadline",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_newDeadline",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "updateGroupMetadata",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_name",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "_description",
+        "type": "string",
+        "internalType": "string"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "updateGroupTarget",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_newTarget",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "updateMemberLimit",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_newLimit",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "userGroups",
+    "inputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "verifyContribution",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_contributionId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_verified",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "event",
+    "name": "ContributionMade",
+    "inputs": [
+      {
+        "name": "contributionId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "groupId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "member",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "indexed": false,
+        "internalType": "string"
+      },
+      {
+        "name": "timestamp",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "ContributionVerified",
+    "inputs": [
+      {
+        "name": "contributionId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "groupId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "member",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "verified",
+        "type": "bool",
+        "indexed": false,
+        "internalType": "bool"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "GoalCompleted",
+    "inputs": [
+      {
+        "name": "groupId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "targetAmount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "actualAmount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "completedAt",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "GoalSet",
+    "inputs": [
+      {
+        "name": "groupId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "targetAmount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "deadline",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "createdAt",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "GoalUpdated",
+    "inputs": [
+      {
+        "name": "groupId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "oldTarget",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "newTarget",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "updater",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "GroupCreated",
+    "inputs": [
+      {
+        "name": "groupId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "creator",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "indexed": false,
+        "internalType": "string"
+      },
+      {
+        "name": "isPrivate",
+        "type": "bool",
+        "indexed": false,
+        "internalType": "bool"
+      },
+      {
+        "name": "targetAmount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "memberLimit",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "endDate",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "GroupUpdated",
+    "inputs": [
+      {
+        "name": "groupId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "field",
+        "type": "string",
+        "indexed": false,
+        "internalType": "string"
+      },
+      {
+        "name": "value",
+        "type": "string",
+        "indexed": false,
+        "internalType": "string"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "MemberJoined",
+    "inputs": [
+      {
+        "name": "groupId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "member",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "MemberLeft",
+    "inputs": [
+      {
+        "name": "groupId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "member",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "MilestoneReached",
+    "inputs": [
+      {
+        "name": "milestoneId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "groupId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "targetAmount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "reachedAt",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "ProgressUpdated",
+    "inputs": [
+      {
+        "name": "groupId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "currentAmount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "targetAmount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "progressPercentage",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "error",
+    "name": "AlreadyMember",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "CannotRemoveSelf",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ContributionNotFound",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "CreatorCannotLeave",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "DescriptionTooLong",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "EmptyName",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "EndDateTooFar",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "GroupAtCapacity",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "GroupCompleted",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "GroupEnded",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "GroupNotActive",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "GroupNotExists",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "InvalidAmount",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "InvalidDeadline",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "InvalidEndDate",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "InvalidLimit",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "InvalidMemberLimit",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "InvalidMilestone",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "InvalidTarget",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "MemberLimitExceeded",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "MilestoneNotFound",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "NameTooLong",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "NotCreator",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "NotMember",
+    "inputs": []
+  }
+]
