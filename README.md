@@ -8,6 +8,10 @@ TsaroSafe is a decentralized, blockchain-powered platform that transforms tradit
 
 Through smart contracts, TsaroSafe automates transactions and eliminates the need for intermediaries, ensuring that contributions, loans, and interest payouts are handled transparently, efficiently, and trustlessly. Whether saving for personal goals, investing with others, or borrowing funds, TsaroSafe offers a seamless and secure financial ecosystem.
 
+## Try It
+
+- **Farcaster Miniapp**: [https://farcaster.xyz/miniapps/sDESpTl8Yokz/tsarosafe](https://farcaster.xyz/miniapps/sDESpTl8Yokz/tsarosafe)
+
 ## Mission
 
 TsaroSafe's mission is to democratize access to secure, transparent, and interest-generating financial systems by transforming traditional community savings and lending models using blockchain technology. We empower individuals and communities, especially those underserved by traditional finance, to pool resources, earn interest, and access loans through automated, trustless smart contracts.
