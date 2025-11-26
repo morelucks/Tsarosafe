@@ -245,3 +245,82 @@ export function usePublicGroups(offset: bigint = 0n, limit: number = 10) {
   }
 }
 
+/**
+ * Hook to get group contributions
+ */
+export function useGroupContributions(groupId: bigint | undefined, offset: bigint = 0n, limit: number = 20) {
+  const contractAddress = useContractAddress()
+  
+  const { data, isLoading, error, refetch } = useReadContract({
+    address: contractAddress as Address | undefined,
+    abi: TsaroSafeABI,
+    functionName: 'getGroupContributions',
+    args: groupId !== undefined ? [groupId, offset, BigInt(limit)] : undefined,
+    query: {
+      enabled: !!contractAddress && groupId !== undefined,
+    },
+  })
+
+  return {
+    contributions: data,
+    isLoading,
+    error,
+    refetch,
+  }
+}
+
+/**
+ * Hook to get group milestones
+ */
+export function useGroupMilestones(groupId: bigint | undefined) {
+  const contractAddress = useContractAddress()
+  
+  const { data, isLoading, error, refetch } = useReadContract({
+    address: contractAddress as Address | undefined,
+    abi: TsaroSafeABI,
+    functionName: 'getGroupMilestones',
+    args: groupId !== undefined ? [groupId] : undefined,
+    query: {
+      enabled: !!contractAddress && groupId !== undefined,
+    },
+  })
+
+  return {
+    milestones: data,
+    isLoading,
+    error,
+    refetch,
+  }
+}
+
+/**
+ * Hook to get group progress
+ */
+export function useGroupProgress(groupId: bigint | undefined) {
+  const contractAddress = useContractAddress()
+  
+  const { data, isLoading, error, refetch } = useReadContract({
+    address: contractAddress as Address | undefined,
+    abi: TsaroSafeABI,
+    functionName: 'getGroupProgress',
+    args: groupId !== undefined ? [groupId] : undefined,
+    query: {
+      enabled: !!contractAddress && groupId !== undefined,
+    },
+  })
+
+  return {
+    progress: data,
+    isLoading,
+    error,
+    refetch,
+  }
+}
+
+
+
+
+
+
+
+
