@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import VerifyWithSelf from "../components/VerifyWithSelf";
+import { usePublicGroups, useJoinGroup } from "@/hooks/useTsaroSafe";
 
 type Privacy = "public" | "private";
 
@@ -46,21 +47,21 @@ const JoinGroupPage = () => {
   const [inviteCode, setInviteCode] = useState("");
   const [message, setMessage] = useState<string | null>(null);
   const [invites, setInvites] = useState<Array<{ code: string; addressOrEmail: string; status: 'sent' | 'accepted' | 'declined' }>>([]);
-  const [storedGroups, setStoredGroups] = useState<StoredGroup[]>([]);
   
   // Verification state
   const [isVerified, setIsVerified] = useState(false);
   const [verificationData, setVerificationData] = useState<VerificationData | null>(null);
   const [showVerification, setShowVerification] = useState(false);
 
-  // Load invites and groups from localStorage
+  // Load public groups from contract
+  const { groups: publicGroups, isLoading: isLoadingGroups } = usePublicGroups(0n, 50);
+  const { joinGroup, isLoading: isJoining, isConfirmed: isJoined } = useJoinGroup();
+
+  // Load invites and verification from localStorage (these are UI-only, not contract data)
   useEffect(() => {
     try {
       const rawInvites = localStorage.getItem('tsarosafe_invites');
       if (rawInvites) setInvites(JSON.parse(rawInvites));
-      
-      const rawGroups = localStorage.getItem('tsarosafe_groups');
-      if (rawGroups) setStoredGroups(JSON.parse(rawGroups));
       
       // Load verification data
       const rawVerification = localStorage.getItem('tsarosafe_verification');
@@ -86,24 +87,24 @@ const JoinGroupPage = () => {
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     
-    // Convert stored groups to GroupRow format
-    const storedGroupRows: GroupRow[] = storedGroups.map(g => ({
-      id: g.id,
+    // Convert contract groups to GroupRow format
+    const contractGroupRows: GroupRow[] = (publicGroups || []).map(g => ({
+      id: g.id.toString(),
       name: g.name,
-      privacy: g.privacy,
-      members: g.members.length,
+      privacy: g.isPrivate ? 'private' : 'public',
+      members: 0, // Will be fetched separately if needed
       description: g.description
     }));
     
-    // Combine mock groups with stored groups
-    const allGroups = [...mockGroups, ...storedGroupRows];
+    // Combine mock groups with contract groups
+    const allGroups = [...mockGroups, ...contractGroupRows];
     
     let rows = allGroups.filter(g =>
       g.name.toLowerCase().includes(q) || g.description?.toLowerCase().includes(q)
     );
     if (privacy !== "all") rows = rows.filter(g => g.privacy === privacy);
     return rows;
-  }, [query, privacy, storedGroups]);
+  }, [query, privacy, publicGroups]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   useEffect(() => { setPage(1); }, [query, privacy]);
@@ -142,14 +143,22 @@ const JoinGroupPage = () => {
     setShowVerification(false);
   };
 
-  const handleJoinRequest = (groupId: string) => {
+  const handleJoinRequest = async (groupId: string) => {
     if (!isVerified) {
       setMessage("Please verify your identity first before joining groups.");
       setTimeout(() => setMessage(null), 3000);
       return;
     }
-    setMessage(`Join request sent to group ${groupId}. Awaiting approval.`);
-    setTimeout(() => setMessage(null), 2500);
+    
+    try {
+      await joinGroup(BigInt(groupId));
+      setMessage(`Successfully joined group ${groupId}!`);
+      setTimeout(() => setMessage(null), 3000);
+    } catch (error) {
+      console.error('Failed to join group:', error);
+      setMessage(`Failed to join group. Please try again.`);
+      setTimeout(() => setMessage(null), 3000);
+    }
   };
 
   const handleInviteJoin = () => {
@@ -168,9 +177,7 @@ const JoinGroupPage = () => {
     
     // Update local status if we have a matching invite
     setInvites(prev => {
-      const updated = prev.map(i => i.code === code ? { ...i, status: 'accepted' as const } : i);
-      try { localStorage.setItem('tsarosafe_invites', JSON.stringify(updated)); } catch {}
-      return updated;
+      return prev.map(i => i.code === code ? { ...i, status: 'accepted' as const } : i);
     });
     setMessage("Invite accepted. You have joined the group.");
     setInviteCode("");
@@ -181,9 +188,7 @@ const JoinGroupPage = () => {
     const code = inviteCode.trim();
     if (!code) return;
     setInvites(prev => {
-      const updated = prev.map(i => i.code === code ? { ...i, status: 'declined' as const } : i);
-      try { localStorage.setItem('tsarosafe_invites', JSON.stringify(updated)); } catch {}
-      return updated;
+      return prev.map(i => i.code === code ? { ...i, status: 'declined' as const } : i);
     });
     setMessage("Invite declined.");
     setInviteCode("");
@@ -279,7 +284,9 @@ const JoinGroupPage = () => {
 
         {/* Results */}
         <div className="bg-white rounded-lg shadow">
-          {pageRows.length === 0 ? (
+          {isLoadingGroups ? (
+            <div className="p-6 text-sm text-gray-600">Loading groups...</div>
+          ) : pageRows.length === 0 ? (
             <div className="p-6 text-sm text-gray-600">No groups matched your search.</div>
           ) : (
             <ul className="divide-y divide-gray-200">
@@ -298,14 +305,14 @@ const JoinGroupPage = () => {
                       <button
                         type="button"
                         onClick={() => handleJoinRequest(g.id)}
-                        disabled={!isVerified}
+                        disabled={!isVerified || isJoining}
                         className={`px-3 py-2 rounded text-sm ${
-                          isVerified 
+                          isVerified && !isJoining
                             ? "bg-blue-600 text-white hover:bg-blue-700" 
                             : "bg-gray-300 text-gray-500 cursor-not-allowed"
                         }`}
                       >
-                        {isVerified ? "Request to Join" : "Verify to Join"}
+                        {isJoining ? "Joining..." : (isVerified ? "Join Group" : "Verify to Join")}
                       </button>
                     ) : (
                       <span className="text-xs text-gray-500">Invite required</span>

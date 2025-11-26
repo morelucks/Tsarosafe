@@ -1,6 +1,8 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import VerifyWithSelf from "../components/VerifyWithSelf";
+import { useCreateGroup } from "@/hooks/useTsaroSafe";
 
 type Privacy = "public" | "private";
 type MemberRole = "admin" | "member";
@@ -154,13 +156,7 @@ const CreateGroupPage = () => {
     if (!validatePendingMember(value)) return;
     const code = crypto.randomUUID();
     const next = { code, addressOrEmail: value, status: 'sent' as const };
-    setInvites(prev => {
-      const updated = [next, ...prev];
-      try {
-        localStorage.setItem('tsarosafe_invites', JSON.stringify(updated));
-      } catch {}
-      return updated;
-    });
+    setInvites(prev => [next, ...prev]);
   };
 
   const copyInviteLink = async (code: string) => {
@@ -189,28 +185,18 @@ const CreateGroupPage = () => {
   };
   const back = () => setActiveStep(s => Math.max(s - 1, 0));
 
-  const saveGroupToLocalStorage = () => {
-    const groupData = {
-      id: crypto.randomUUID(),
-      name: settings.name,
-      description: settings.description,
-      privacy: settings.privacy,
-      members: members,
-      goal: goal,
-      invites: invites,
-      createdAt: new Date().toISOString(),
-      createdBy: "current-user", // In real app, this would be the actual user ID
-    };
+  const router = useRouter();
+  const { createGroup, isLoading: isCreating, isConfirmed, error: createError } = useCreateGroup();
 
-    try {
-      const existingGroups = JSON.parse(localStorage.getItem('tsarosafe_groups') || '[]');
-      const updatedGroups = [...existingGroups, groupData];
-      localStorage.setItem('tsarosafe_groups', JSON.stringify(updatedGroups));
-      console.log('Group saved to localStorage:', groupData);
-    } catch (error) {
-      console.error('Failed to save group to localStorage:', error);
+  useEffect(() => {
+    if (isConfirmed) {
+      setSubmitted(true);
+      // Redirect to dashboard after a short delay
+      setTimeout(() => {
+        router.push('/dashboard');
+      }, 2000);
     }
-  };
+  }, [isConfirmed, router]);
 
   const handleSubmit = async () => {
     if (!isVerificationFresh) {
@@ -220,12 +206,31 @@ const CreateGroupPage = () => {
     }
 
     setSubmitting(true);
-    // Save to localStorage
-    saveGroupToLocalStorage();
-    // Simulate API call
-    await new Promise(r => setTimeout(r, 1000));
-    setSubmitting(false);
-    setSubmitted(true);
+    
+    try {
+      // Convert goal dates to Unix timestamps
+      const startTimestamp = goal.startDate ? Math.floor(new Date(goal.startDate).getTime() / 1000) : Math.floor(Date.now() / 1000);
+      const endTimestamp = goal.endDate 
+        ? Math.floor(new Date(goal.endDate).getTime() / 1000)
+        : Math.floor((Date.now() + 30 * 24 * 60 * 60 * 1000) / 1000); // Default to 30 days from now
+
+      // Convert target amount to wei (assuming USD, we'll use 18 decimals)
+      const targetAmountWei = BigInt(Math.floor(goal.targetAmount * 1e18));
+
+      // Create group on contract
+      await createGroup(
+        settings.name,
+        settings.description,
+        settings.privacy === 'private',
+        targetAmountWei,
+        members.length + 1, // Include creator
+        BigInt(endTimestamp)
+      );
+    } catch (error) {
+      console.error('Failed to create group:', error);
+      setVerifyError("Failed to create group. Please try again.");
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -536,9 +541,14 @@ const CreateGroupPage = () => {
 
               {submitted ? (
                 <div className="p-4 rounded bg-green-50 text-green-700">
-                  Group created successfully (mock). You can now proceed to manage it.
+                  Group created successfully! Redirecting to dashboard...
                 </div>
               ) : null}
+              {createError && (
+                <div className="p-4 rounded bg-red-50 text-red-700 mt-2">
+                  Error: {createError.message || "Failed to create group"}
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -566,10 +576,10 @@ const CreateGroupPage = () => {
             <button
               type="button"
               onClick={handleSubmit}
-              disabled={submitting || !isVerificationFresh}
+              disabled={submitting || isCreating || !isVerificationFresh}
               className="px-4 py-2 rounded bg-green-600 text-white disabled:opacity-50"
             >
-              {submitting ? "Creating…" : (isVerificationFresh ? "Create Group" : "Verify to Create")}
+              {submitting || isCreating ? "Creating…" : (isVerificationFresh ? "Create Group" : "Verify to Create")}
             </button>
           )}
         </div>
