@@ -1,8 +1,8 @@
 "use client";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import { useAccount } from "wagmi";
-import { useUserGroups, useGroup, useGroupMembers } from "@/hooks/useTsaroSafe";
+import { useUserGroups, useGroup, useGroupMembers, useGroupStats, useGroupContributions } from "@/hooks/useTsaroSafe";
 import { Address } from "viem";
 
 interface DashboardStats {
@@ -19,6 +19,45 @@ interface RecentActivity {
   description: string;
   timestamp: string;
   status: 'completed' | 'pending' | 'failed';
+}
+
+// Component to fetch stats for a single group and report back
+function GroupStatFetcher({ groupId, onAmountUpdate }: { groupId: bigint, onAmountUpdate: (amount: number) => void }) {
+  const { stats } = useGroupStats(groupId);
+  
+  useEffect(() => {
+    if (stats) {
+      const amount = Number(stats.currentAmount) / 1e18;
+      onAmountUpdate(amount);
+    }
+  }, [stats, onAmountUpdate]);
+  
+  return null;
+}
+
+// Component to fetch contributions for recent activity
+function GroupContributionsFetcher({ groupId, groupName, onContributionsUpdate }: { 
+  groupId: bigint, 
+  groupName: string,
+  onContributionsUpdate: (activities: RecentActivity[]) => void 
+}) {
+  const { contributions } = useGroupContributions(groupId, 0n, 10);
+  
+  useEffect(() => {
+    if (contributions && contributions.length > 0) {
+      const activities: RecentActivity[] = contributions.map((contrib: any) => ({
+        id: contrib.contributionId.toString(),
+        type: 'deposit' as const,
+        amount: Number(contrib.amount) / 1e18,
+        description: contrib.description || `Contribution to ${groupName}`,
+        timestamp: new Date(Number(contrib.timestamp) * 1000).toISOString(),
+        status: contrib.isVerified ? 'completed' as const : 'pending' as const
+      }));
+      onContributionsUpdate(activities);
+    }
+  }, [contributions, groupName, onContributionsUpdate]);
+  
+  return null;
 }
 
 // Component to display a single group card
@@ -70,36 +109,51 @@ const DashboardPage = () => {
     monthlyGoal: 1000
   });
 
-  const [recentActivity] = useState<RecentActivity[]>([
-    {
-      id: '1',
-      type: 'deposit',
-      amount: 150,
-      description: 'Monthly savings deposit',
-      timestamp: '2024-01-15T10:30:00Z',
-      status: 'completed'
-    },
-    {
-      id: '2',
-      type: 'group_join',
-      description: 'Joined "Family Savings Group"',
-      timestamp: '2024-01-14T14:20:00Z',
-      status: 'completed'
-    },
-    {
-      id: '3',
-      type: 'investment',
-      amount: 500,
-      description: 'Invested in DeFi yield farming',
-      timestamp: '2024-01-13T09:15:00Z',
-      status: 'completed'
-    }
-  ]);
+  const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([]);
 
   const { address } = useAccount();
   const { groupIds, isLoading: isLoadingGroups } = useUserGroups(address as Address | undefined);
+  
+  const [groupAmounts, setGroupAmounts] = useState<Map<string, number>>(new Map());
+  const [allActivities, setAllActivities] = useState<Map<string, RecentActivity[]>>(new Map());
 
-  // Calculate stats from contract data
+  // Calculate total savings from all groups
+  const totalSavings = useMemo(() => {
+    let total = 0;
+    groupAmounts.forEach((amount) => {
+      total += amount;
+    });
+    return total;
+  }, [groupAmounts]);
+
+  const handleGroupAmountUpdate = useCallback((groupId: bigint, amount: number) => {
+    setGroupAmounts(prev => {
+      const newMap = new Map(prev);
+      newMap.set(groupId.toString(), amount);
+      return newMap;
+    });
+  }, []);
+
+  const handleContributionsUpdate = useCallback((groupId: bigint, activities: RecentActivity[]) => {
+    setAllActivities(prev => {
+      const newMap = new Map(prev);
+      newMap.set(groupId.toString(), activities);
+      return newMap;
+    });
+  }, []);
+
+  // Aggregate all activities and sort by timestamp
+  useEffect(() => {
+    const aggregated: RecentActivity[] = [];
+    allActivities.forEach((activities) => {
+      aggregated.push(...activities);
+    });
+    
+    // Sort by timestamp (newest first) and take top 5
+    aggregated.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+    setRecentActivity(aggregated.slice(0, 5));
+  }, [allActivities]);
+
   useEffect(() => {
     if (!groupIds || groupIds.length === 0) {
       setStats({
@@ -111,13 +165,14 @@ const DashboardPage = () => {
       return;
     }
 
-    setStats({
-      totalSavings: 0, // Will be calculated from groups
+    setStats(prev => ({
+      ...prev,
+      totalSavings,
       activeGroups: groupIds.length,
-      totalInvestments: 0, // TODO: implement investment tracking
-      monthlyGoal: 1000
-    });
-  }, [groupIds]);
+      totalInvestments: 0, // Not tracked in contract yet
+      monthlyGoal: 1000 // User preference, not in contract
+    }));
+  }, [groupIds, totalSavings]);
 
   const isLoading = isLoadingGroups;
 
@@ -279,7 +334,7 @@ const DashboardPage = () => {
           <div className="bg-white rounded-lg shadow p-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Recent Activity</h2>
             <div className="space-y-4">
-              {recentActivity.map((activity) => (
+              {recentActivity.length > 0 ? recentActivity.map((activity) => (
                 <div key={activity.id} className="flex items-start space-x-3">
                   <div className="flex-shrink-0">
                     <span className="text-2xl">{getActivityIcon(activity.type)}</span>
@@ -303,18 +358,53 @@ const DashboardPage = () => {
                     </div>
                   </div>
                 </div>
-              ))}
+              )) : (
+                <div className="text-center py-4 text-gray-500 text-sm">
+                  No recent activity. Make a contribution to see it here!
+                </div>
+              )}
             </div>
-            <div className="mt-4">
-              <Link 
-                href="/dashboard"
-                className="text-blue-600 text-sm hover:text-blue-800"
-              >
-                View all activity →
-              </Link>
-            </div>
+            {recentActivity.length > 0 && (
+              <div className="mt-4">
+                <Link 
+                  href="/dashboard"
+                  className="text-blue-600 text-sm hover:text-blue-800"
+                >
+                  View all activity →
+                </Link>
+              </div>
+            )}
           </div>
         </div>
+
+        {/* Hidden components to fetch group stats and contributions */}
+        {groupIds && groupIds.length > 0 && (
+          <>
+            {groupIds.map((groupId) => {
+              const GroupContributionsWrapper = () => {
+                const { group } = useGroup(groupId);
+                return (
+                  <>
+                    <GroupStatFetcher 
+                      key={`stats-${groupId.toString()}`} 
+                      groupId={groupId} 
+                      onAmountUpdate={(amount) => handleGroupAmountUpdate(groupId, amount)}
+                    />
+                    {group && (
+                      <GroupContributionsFetcher
+                        key={`contribs-${groupId.toString()}`}
+                        groupId={groupId}
+                        groupName={group.name}
+                        onContributionsUpdate={(activities) => handleContributionsUpdate(groupId, activities)}
+                      />
+                    )}
+                  </>
+                );
+              };
+              return <GroupContributionsWrapper key={`wrapper-${groupId.toString()}`} />;
+            })}
+          </>
+        )}
 
         {/* Your Groups */}
         {groupIds && groupIds.length > 0 && (
