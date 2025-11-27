@@ -1,15 +1,44 @@
 "use client";
+import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { useGroup, useGroupMembers, useGroupStats } from "@/hooks/useTsaroSafe";
+import { useAccount } from "wagmi";
+import { useGroup, useGroupMembers, useGroupStats, useMakeContribution } from "@/hooks/useTsaroSafe";
+import { Address } from "viem";
 
 export default function GroupDetailPage() {
   const params = useParams();
+  const { address } = useAccount();
   const groupId = params?.id ? BigInt(params.id as string) : undefined;
 
-  const { group, isLoading: isLoadingGroup } = useGroup(groupId);
+  const { group, isLoading: isLoadingGroup, refetch: refetchGroup } = useGroup(groupId);
   const { members, isLoading: isLoadingMembers } = useGroupMembers(groupId);
   const { stats, isLoading: isLoadingStats } = useGroupStats(groupId);
+  const { makeContribution, isLoading: isSubmitting, isConfirmed, error: contributionError } = useMakeContribution();
+
+  const [showContributionForm, setShowContributionForm] = useState(false);
+  const [contributionAmount, setContributionAmount] = useState("");
+  const [contributionDescription, setContributionDescription] = useState("");
+
+  useEffect(() => {
+    if (isConfirmed) {
+      setShowContributionForm(false);
+      setContributionAmount("");
+      setContributionDescription("");
+      refetchGroup();
+    }
+  }, [isConfirmed, refetchGroup]);
+
+  const handleMakeContribution = async () => {
+    if (!groupId || !contributionAmount) return;
+    
+    try {
+      const amountWei = BigInt(Math.floor(parseFloat(contributionAmount) * 1e18));
+      await makeContribution(groupId, amountWei, contributionDescription || "Contribution");
+    } catch (error) {
+      console.error("Failed to make contribution:", error);
+    }
+  };
 
   const isLoading = isLoadingGroup || isLoadingMembers || isLoadingStats;
 
@@ -40,6 +69,7 @@ export default function GroupDetailPage() {
   const currentAmount = Number(group.currentAmount) / 1e18;
   const progressPercentage = targetAmount > 0 ? (currentAmount / targetAmount) * 100 : 0;
   const memberCount = members?.length || 0;
+  const isMember = address && members?.includes(address as Address);
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -79,7 +109,7 @@ export default function GroupDetailPage() {
         </div>
 
         {/* Progress Bar */}
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white rounded-lg shadow p-6 mb-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Progress</h2>
           <div className="mb-4">
             <div className="flex justify-between text-sm text-gray-600 mb-2">
@@ -98,6 +128,72 @@ export default function GroupDetailPage() {
             </div>
           </div>
         </div>
+
+        {/* Contribution Form */}
+        {isMember && (
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Make Contribution</h2>
+            {!showContributionForm ? (
+              <button
+                onClick={() => setShowContributionForm(true)}
+                className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+              >
+                Add Contribution
+              </button>
+            ) : (
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Amount (USD)
+                  </label>
+                  <input
+                    type="number"
+                    value={contributionAmount}
+                    onChange={(e) => setContributionAmount(e.target.value)}
+                    placeholder="0.00"
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Description (optional)
+                  </label>
+                  <input
+                    type="text"
+                    value={contributionDescription}
+                    onChange={(e) => setContributionDescription(e.target.value)}
+                    placeholder="What is this contribution for?"
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                  />
+                </div>
+                {contributionError && (
+                  <div className="text-red-600 text-sm">
+                    {contributionError.message || "Failed to make contribution"}
+                  </div>
+                )}
+                <div className="flex gap-2">
+                  <button
+                    onClick={handleMakeContribution}
+                    disabled={isSubmitting || !contributionAmount}
+                    className="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                  >
+                    {isSubmitting ? "Submitting..." : "Submit Contribution"}
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowContributionForm(false);
+                      setContributionAmount("");
+                      setContributionDescription("");
+                    }}
+                    className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
