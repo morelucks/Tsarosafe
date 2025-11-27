@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useAccount } from "wagmi";
-import { useGroup, useGroupMembers, useGroupStats, useMakeContribution, useGroupContributions } from "@/hooks/useTsaroSafe";
+import { useGroup, useGroupMembers, useGroupStats, useMakeContribution, useGroupContributions, useGroupMilestones } from "@/hooks/useTsaroSafe";
 import { Address } from "viem";
 
 export default function GroupDetailPage() {
@@ -15,6 +15,7 @@ export default function GroupDetailPage() {
   const { members, isLoading: isLoadingMembers } = useGroupMembers(groupId);
   const { stats, isLoading: isLoadingStats } = useGroupStats(groupId);
   const { contributions, isLoading: isLoadingContributions, refetch: refetchContributions } = useGroupContributions(groupId);
+  const { milestones, isLoading: isLoadingMilestones } = useGroupMilestones(groupId);
   const { makeContribution, isLoading: isSubmitting, isConfirmed, error: contributionError } = useMakeContribution();
 
   const [showContributionForm, setShowContributionForm] = useState(false);
@@ -236,6 +237,36 @@ export default function GroupDetailPage() {
             <div className="text-center py-4 text-gray-500">No contributions yet</div>
           )}
         </div>
+
+        {/* Milestones */}
+        {milestones && milestones.length > 0 && (
+          <div className="bg-white rounded-lg shadow p-6 mt-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Milestones</h2>
+            {isLoadingMilestones ? (
+              <div className="text-center py-4 text-gray-500">Loading milestones...</div>
+            ) : (
+              <div className="space-y-3">
+                {milestones.map((milestone: any) => (
+                  <div key={milestone.milestoneId.toString()} className="border-l-4 border-blue-500 pl-4">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <p className="font-medium text-gray-900">{milestone.description}</p>
+                        <p className="text-sm text-gray-600">
+                          Target: ${(Number(milestone.targetAmount) / 1e18).toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                        </p>
+                      </div>
+                      {milestone.isReached && (
+                        <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">
+                          Reached
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
