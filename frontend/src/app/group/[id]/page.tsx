@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useAccount } from "wagmi";
-import { useGroup, useGroupMembers, useGroupStats, useMakeContribution } from "@/hooks/useTsaroSafe";
+import { useGroup, useGroupMembers, useGroupStats, useMakeContribution, useGroupContributions } from "@/hooks/useTsaroSafe";
 import { Address } from "viem";
 
 export default function GroupDetailPage() {
@@ -14,6 +14,7 @@ export default function GroupDetailPage() {
   const { group, isLoading: isLoadingGroup, refetch: refetchGroup } = useGroup(groupId);
   const { members, isLoading: isLoadingMembers } = useGroupMembers(groupId);
   const { stats, isLoading: isLoadingStats } = useGroupStats(groupId);
+  const { contributions, isLoading: isLoadingContributions, refetch: refetchContributions } = useGroupContributions(groupId);
   const { makeContribution, isLoading: isSubmitting, isConfirmed, error: contributionError } = useMakeContribution();
 
   const [showContributionForm, setShowContributionForm] = useState(false);
@@ -26,8 +27,9 @@ export default function GroupDetailPage() {
       setContributionAmount("");
       setContributionDescription("");
       refetchGroup();
+      refetchContributions();
     }
-  }, [isConfirmed, refetchGroup]);
+  }, [isConfirmed, refetchGroup, refetchContributions]);
 
   const handleMakeContribution = async () => {
     if (!groupId || !contributionAmount) return;
@@ -194,6 +196,46 @@ export default function GroupDetailPage() {
             )}
           </div>
         )}
+
+        {/* Contributions History */}
+        <div className="bg-white rounded-lg shadow p-6 mt-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Contributions</h2>
+          {isLoadingContributions ? (
+            <div className="text-center py-4 text-gray-500">Loading contributions...</div>
+          ) : contributions && contributions.length > 0 ? (
+            <div className="space-y-3">
+              {contributions.map((contribution: any) => (
+                <div key={contribution.contributionId.toString()} className="border-b border-gray-200 pb-3">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <p className="font-medium text-gray-900">
+                        ${(Number(contribution.amount) / 1e18).toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                      </p>
+                      {contribution.description && (
+                        <p className="text-sm text-gray-600 mt-1">{contribution.description}</p>
+                      )}
+                      <p className="text-xs text-gray-500 mt-1">
+                        {new Date(Number(contribution.timestamp) * 1000).toLocaleString()}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xs text-gray-500">
+                        {contribution.member.slice(0, 6)}...{contribution.member.slice(-4)}
+                      </p>
+                      {contribution.isVerified && (
+                        <span className="inline-block mt-1 px-2 py-1 bg-green-100 text-green-800 text-xs rounded">
+                          Verified
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-4 text-gray-500">No contributions yet</div>
+          )}
+        </div>
       </div>
     </div>
   );
