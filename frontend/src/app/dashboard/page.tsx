@@ -42,7 +42,7 @@ function GroupCard({ groupId }: { groupId: bigint }) {
   const targetAmount = Number(group.targetAmount) / 1e18; // Convert from wei
 
   return (
-    <div className="border border-gray-200 rounded-lg p-4">
+    <Link href={`/group/${groupId}`} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow block">
       <h3 className="font-semibold text-gray-900">{group.name}</h3>
       <p className="text-sm text-gray-600 mt-1">{group.description}</p>
       <div className="mt-3 flex justify-between items-center text-sm">
@@ -58,7 +58,7 @@ function GroupCard({ groupId }: { groupId: bigint }) {
       <div className="mt-2 text-sm text-gray-600">
         Goal: ${targetAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })}
       </div>
-    </div>
+    </Link>
   );
 }
 
