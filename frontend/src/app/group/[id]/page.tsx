@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useAccount } from "wagmi";
 import { useGroup, useGroupMembers, useGroupStats, useMakeContribution, useGroupContributions, useGroupMilestones } from "@/hooks/useTsaroSafe";
+import { useGoodDollarBalance } from "@/hooks/useGoodDollar";
 import { Address } from "viem";
 
 export default function GroupDetailPage() {
@@ -21,6 +22,9 @@ export default function GroupDetailPage() {
   const [showContributionForm, setShowContributionForm] = useState(false);
   const [contributionAmount, setContributionAmount] = useState("");
   const [contributionDescription, setContributionDescription] = useState("");
+  const [selectedToken, setSelectedToken] = useState<"CELO" | "G$">("CELO");
+  
+  const { balanceFormatted: gdBalance } = useGoodDollarBalance();
 
   useEffect(() => {
     if (isConfirmed) {
@@ -147,7 +151,41 @@ export default function GroupDetailPage() {
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Amount (USD)
+                    Select Token
+                  </label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedToken("CELO")}
+                      className={`px-4 py-2 rounded-lg border-2 ${
+                        selectedToken === "CELO"
+                          ? "border-blue-600 bg-blue-50 text-blue-700"
+                          : "border-gray-300 bg-white text-gray-700"
+                      }`}
+                    >
+                      CELO
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedToken("G$")}
+                      className={`px-4 py-2 rounded-lg border-2 ${
+                        selectedToken === "G$"
+                          ? "border-green-600 bg-green-50 text-green-700"
+                          : "border-gray-300 bg-white text-gray-700"
+                      }`}
+                    >
+                      GoodDollar (G$)
+                    </button>
+                  </div>
+                  {selectedToken === "G$" && (
+                    <p className="text-xs text-gray-500 mt-1">
+                      Balance: {gdBalance.toLocaleString(undefined, { maximumFractionDigits: 2 })} G$
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Amount ({selectedToken})
                   </label>
                   <input
                     type="number"
