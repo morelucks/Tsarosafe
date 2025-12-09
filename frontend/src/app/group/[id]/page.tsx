@@ -4,7 +4,8 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useAccount } from "wagmi";
 import { useGroup, useGroupMembers, useGroupStats, useMakeContribution, useGroupContributions, useGroupMilestones } from "@/hooks/useTsaroSafe";
-import { useGoodDollarBalance } from "@/hooks/useGoodDollar";
+import { useGoodDollarBalance, useGoodDollarAllowance, useApproveGoodDollar } from "@/hooks/useGoodDollar";
+import { useContractAddress } from "@/hooks/useTsaroSafe";
 import { Address } from "viem";
 
 export default function GroupDetailPage() {
@@ -25,6 +26,9 @@ export default function GroupDetailPage() {
   const [selectedToken, setSelectedToken] = useState<"CELO" | "G$">("CELO");
   
   const { balanceFormatted: gdBalance } = useGoodDollarBalance();
+  const contractAddress = useContractAddress();
+  const { allowanceFormatted: gdAllowance } = useGoodDollarAllowance(contractAddress as Address | undefined);
+  const { approve: approveGd, isLoading: isApproving } = useApproveGoodDollar();
 
   useEffect(() => {
     if (isConfirmed) {
@@ -37,10 +41,23 @@ export default function GroupDetailPage() {
   }, [isConfirmed, refetchGroup, refetchContributions]);
 
   const handleMakeContribution = async () => {
-    if (!groupId || !contributionAmount) return;
+    if (!groupId || !contributionAmount || !contractAddress) return;
     
     try {
       const amountWei = BigInt(Math.floor(parseFloat(contributionAmount) * 1e18));
+      
+      // If using G$, check and request approval first
+      if (selectedToken === "G$") {
+        if (gdAllowance < parseFloat(contributionAmount)) {
+          // Need to approve
+          await approveGd(contractAddress as Address, amountWei * 2n); // Approve 2x for future contributions
+          // Wait a bit for approval to confirm
+          await new Promise(resolve => setTimeout(resolve, 2000));
+        }
+        // TODO: Call contract function that accepts G$ tokens
+        // For now, fall through to regular contribution
+      }
+      
       await makeContribution(groupId, amountWei, contributionDescription || "Contribution");
     } catch (error) {
       console.error("Failed to make contribution:", error);
@@ -178,9 +195,12 @@ export default function GroupDetailPage() {
                     </button>
                   </div>
                   {selectedToken === "G$" && (
-                    <p className="text-xs text-gray-500 mt-1">
-                      Balance: {gdBalance.toLocaleString(undefined, { maximumFractionDigits: 2 })} G$
-                    </p>
+                    <div className="text-xs text-gray-500 mt-1 space-y-1">
+                      <p>Balance: {gdBalance.toLocaleString(undefined, { maximumFractionDigits: 2 })} G$</p>
+                      {contractAddress && (
+                        <p>Allowance: {gdAllowance.toLocaleString(undefined, { maximumFractionDigits: 2 })} G$</p>
+                      )}
+                    </div>
                   )}
                 </div>
                 <div>
@@ -215,10 +235,10 @@ export default function GroupDetailPage() {
                 <div className="flex gap-2">
                   <button
                     onClick={handleMakeContribution}
-                    disabled={isSubmitting || !contributionAmount}
+                    disabled={isSubmitting || isApproving || !contributionAmount}
                     className="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
                   >
-                    {isSubmitting ? "Submitting..." : "Submit Contribution"}
+                    {isApproving ? "Approving..." : isSubmitting ? "Submitting..." : "Submit Contribution"}
                   </button>
                   <button
                     onClick={() => {
