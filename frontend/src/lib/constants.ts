@@ -28,6 +28,21 @@ export const EXPLORER_URLS = {
   44787: 'https://alfajores.celoscan.io',
 } as const
 
+// GoodDollar (G$) Token Addresses
+export const GOODDOLLAR_ADDRESSES = {
+  // Celo Mainnet
+  42220: '0x62B8B11039FcfE5aB0C56E502b1C372A3d2a9c7A',
+  // Celo Alfajores Testnet (if available)
+  44787: '0x62B8B11039FcfE5aB0C56E502b1C372A3d2a9c7A', // Update with testnet address if different
+} as const
+
+/**
+ * Get GoodDollar token address for a given chain ID
+ */
+export function getGoodDollarAddress(chainId: number): string | undefined {
+  return GOODDOLLAR_ADDRESSES[chainId as keyof typeof GOODDOLLAR_ADDRESSES]
+}
+
 /**
  * Get contract address for a given chain ID
  */
@@ -55,4 +70,5 @@ export function getRpcUrl(chainId: number): string | undefined {
 export function getExplorerUrl(chainId: number): string | undefined {
   return EXPLORER_URLS[chainId as keyof typeof EXPLORER_URLS]
 }
+
 
