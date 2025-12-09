@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useAccount } from "wagmi";
 import { useUserGroups, useGroup, useGroupMembers, useGroupStats, useGroupContributions } from "@/hooks/useTsaroSafe";
 import { Address } from "viem";
+import GoodDollarBalance from "../components/GoodDollarBalance";
 
 interface DashboardStats {
   totalSavings: number;
@@ -230,6 +231,11 @@ const DashboardPage = () => {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
           <p className="mt-2 text-gray-600">Welcome back! Here&apos;s your financial overview.</p>
+        </div>
+
+        {/* GoodDollar Balance */}
+        <div className="mb-6">
+          <GoodDollarBalance />
         </div>
 
         {/* Stats Cards */}
