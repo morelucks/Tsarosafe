@@ -69,41 +69,6 @@ export function useApproveGoodDollar() {
 }
 
 /**
- * Hook to transfer G$ tokens
- */
-export function useTransferGoodDollar() {
-  const { chain } = useAccount()
-  const tokenAddress = chain ? getGoodDollarAddress(chain.id) : undefined
-  const { writeContract, data: hash, isPending, error } = useWriteContract()
-  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
-    hash,
-  })
-
-  const transfer = async (to: Address, amount: bigint) => {
-    if (!tokenAddress) {
-      throw new Error('GoodDollar token address not found. Please connect to Celo network.')
-    }
-
-    return writeContract({
-      address: tokenAddress as Address,
-      abi: erc20Abi,
-      functionName: 'transfer',
-      args: [to, amount],
-    })
-  }
-
-  return {
-    transfer,
-    hash,
-    isPending,
-    isConfirming,
-    isConfirmed,
-    error,
-    isLoading: isPending || isConfirming,
-  }
-}
-
-/**
  * Hook to get G$ token allowance for a spender
  */
 export function useGoodDollarAllowance(spender: Address | undefined) {
@@ -128,4 +93,5 @@ export function useGoodDollarAllowance(spender: Address | undefined) {
     refetch,
   }
 }
+
 
