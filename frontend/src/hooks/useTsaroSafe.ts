@@ -32,7 +32,8 @@ export function useCreateGroup() {
     isPrivate: boolean,
     targetAmount: bigint,
     memberLimit: number,
-    endDate: bigint
+    endDate: bigint,
+    tokenType: number = 0 // 0 = CELO, 1 = GSTAR
   ) => {
     if (!contractAddress) {
       throw new Error('Contract address not found. Please connect to Celo network.')
@@ -42,7 +43,7 @@ export function useCreateGroup() {
       address: contractAddress as Address,
       abi: TsaroSafeABI,
       functionName: 'createGroup',
-      args: [name, description, isPrivate, targetAmount, BigInt(memberLimit), endDate],
+      args: [name, description, isPrivate, targetAmount, BigInt(memberLimit), endDate, tokenType],
     })
   }
 
@@ -311,6 +312,54 @@ export function useGroupProgress(groupId: bigint | undefined) {
 
   return {
     progress: data,
+    isLoading,
+    error,
+    refetch,
+  }
+}
+
+/**
+ * Hook to get group token type
+ */
+export function useGroupTokenType(groupId: bigint | undefined) {
+  const contractAddress = useContractAddress()
+  
+  const { data, isLoading, error, refetch } = useReadContract({
+    address: contractAddress as Address | undefined,
+    abi: TsaroSafeABI,
+    functionName: 'getGroupTokenType',
+    args: groupId !== undefined ? [groupId] : undefined,
+    query: {
+      enabled: !!contractAddress && groupId !== undefined,
+    },
+  })
+
+  return {
+    tokenType: data,
+    isLoading,
+    error,
+    refetch,
+  }
+}
+
+/**
+ * Hook to get public groups filtered by token type
+ */
+export function usePublicGroupsByTokenType(tokenType: number, offset: bigint = 0n, limit: number = 10) {
+  const contractAddress = useContractAddress()
+  
+  const { data, isLoading, error, refetch } = useReadContract({
+    address: contractAddress as Address | undefined,
+    abi: TsaroSafeABI,
+    functionName: 'getPublicGroupsByTokenType',
+    args: [tokenType, offset, BigInt(limit)],
+    query: {
+      enabled: !!contractAddress,
+    },
+  })
+
+  return {
+    groups: data,
     isLoading,
     error,
     refetch,

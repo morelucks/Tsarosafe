@@ -6,6 +6,12 @@ pragma solidity ^0.8.28;
  * @notice Interface for core data structures used across TsaroSafe modules
  */
 interface ITsaroSafeData {
+    // Token type enum
+    enum TokenType {
+        CELO,
+        GSTAR
+    }
+
     // Group Management Structures
     struct Group {
         uint256 id;
@@ -20,6 +26,7 @@ interface ITsaroSafeData {
         uint256 endDate;
         bool isActive;
         bool isCompleted;
+        TokenType tokenType;
     }
 
     struct Member {

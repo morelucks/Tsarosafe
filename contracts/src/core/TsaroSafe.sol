@@ -41,6 +41,7 @@ contract TsaroSafe is ITsaroSafeData {
     }
 
     mapping(uint256 => GroupType) public groupTypes;
+    mapping(uint256 => ITsaroSafeData.TokenType) public groupTokenTypes;
 
     // State variables
     uint256 public nextGroupId = 1;
@@ -144,6 +145,7 @@ contract TsaroSafe is ITsaroSafeData {
      * @param _targetAmount Target savings amount
      * @param _memberLimit Maximum number of members
      * @param _endDate Group end date (timestamp)
+     * @param _tokenType Token type (CELO or GSTAR)
      */
     function createGroup(
         string memory _name,
@@ -151,7 +153,8 @@ contract TsaroSafe is ITsaroSafeData {
         bool _isPrivate,
         uint256 _targetAmount,
         uint256 _memberLimit,
-        uint256 _endDate
+        uint256 _endDate,
+        ITsaroSafeData.TokenType _tokenType
     ) external returns (uint256) {
         // Validation
         if (bytes(_name).length == 0) revert EmptyName();
@@ -178,8 +181,12 @@ contract TsaroSafe is ITsaroSafeData {
             createdAt: block.timestamp,
             endDate: _endDate,
             isActive: true,
-            isCompleted: false
+            isCompleted: false,
+            tokenType: _tokenType
         });
+
+        // Store token type
+        groupTokenTypes[groupId] = _tokenType;
 
         // Add creator as first member
         groupMembers[groupId][msg.sender] =
@@ -1022,5 +1029,67 @@ contract TsaroSafe is ITsaroSafeData {
         }
 
         return publicGroups;
+    }
+
+    /**
+     * @notice Get token type for a group
+     * @param _groupId Group ID
+     */
+    function getGroupTokenType(uint256 _groupId) external view groupExists(_groupId) returns (TokenType) {
+        return groups[_groupId].tokenType;
+    }
+
+    /**
+     * @notice Get all public groups filtered by token type
+     * @param _tokenType Token type to filter by (CELO or GSTAR)
+     * @param _offset Starting index
+     * @param _limit Maximum number of groups to return
+     */
+    function getPublicGroupsByTokenType(TokenType _tokenType, uint256 _offset, uint256 _limit)
+        external
+        view
+        returns (Group[] memory)
+    {
+        if (_limit == 0 || _limit > 50) revert InvalidLimit();
+
+        uint256 totalGroups = nextGroupId - 1;
+        if (_offset >= totalGroups) {
+            return new Group[](0);
+        }
+
+        // First pass: count matching groups
+        uint256 matchCount = 0;
+        for (uint256 i = 1; i <= totalGroups; i++) {
+            if (!groups[i].isPrivate && groups[i].isActive && groups[i].tokenType == _tokenType) {
+                matchCount++;
+            }
+        }
+
+        if (_offset >= matchCount) {
+            return new Group[](0);
+        }
+
+        uint256 endIndex = _offset + _limit;
+        if (endIndex > matchCount) {
+            endIndex = matchCount;
+        }
+
+        uint256 resultLength = endIndex - _offset;
+        Group[] memory filteredGroups = new Group[](resultLength);
+
+        // Second pass: collect matching groups
+        uint256 currentIndex = 0;
+        uint256 resultIndex = 0;
+        for (uint256 i = 1; i <= totalGroups && resultIndex < resultLength; i++) {
+            if (!groups[i].isPrivate && groups[i].isActive && groups[i].tokenType == _tokenType) {
+                if (currentIndex >= _offset) {
+                    filteredGroups[resultIndex] = groups[i];
+                    resultIndex++;
+                }
+                currentIndex++;
+            }
+        }
+
+        return filteredGroups;
     }
 }

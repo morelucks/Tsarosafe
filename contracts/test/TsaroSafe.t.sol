@@ -106,7 +106,7 @@ contract TsaroSafeTest is Test {
         emit GoalSet(1, targetAmount, endDate, block.timestamp);
 
         // Execute
-        uint256 groupId = tsaroSafe.createGroup(groupName, description, isPrivate, targetAmount, memberLimit, endDate);
+        uint256 groupId = tsaroSafe.createGroup(groupName, description, isPrivate, targetAmount, memberLimit, endDate, ITsaroSafeData.TokenType.CELO);
 
         // Assertions
         assertEq(groupId, 1, "Group ID should be 1");
@@ -126,7 +126,7 @@ contract TsaroSafeTest is Test {
         uint256 endDate = block.timestamp + 60 days;
 
         // Execute
-        uint256 groupId = tsaroSafe.createGroup(groupName, description, isPrivate, targetAmount, memberLimit, endDate);
+        uint256 groupId = tsaroSafe.createGroup(groupName, description, isPrivate, targetAmount, memberLimit, endDate, ITsaroSafeData.TokenType.GSTAR);
 
         // Get group data
         ITsaroSafeData.Group memory group = tsaroSafe.getGroup(groupId);
@@ -144,6 +144,7 @@ contract TsaroSafeTest is Test {
         assertEq(group.endDate, endDate, "End date should match");
         assertTrue(group.isActive, "Group should be active");
         assertFalse(group.isCompleted, "Group should not be completed");
+        assertEq(uint256(group.tokenType), uint256(ITsaroSafeData.TokenType.GSTAR), "Token type should be GSTAR");
 
         vm.stopPrank();
     }
@@ -154,7 +155,7 @@ contract TsaroSafeTest is Test {
         uint256 endDate = block.timestamp + 30 days;
 
         // Execute
-        uint256 groupId = tsaroSafe.createGroup("Test Group", "Description", false, 1000 ether, 10, endDate);
+        uint256 groupId = tsaroSafe.createGroup("Test Group", "Description", false, 1000 ether, 10, endDate, ITsaroSafeData.TokenType.CELO);
 
         // Get member info
         ITsaroSafeData.Member memory member = tsaroSafe.getMemberInfo(groupId, user1);
@@ -183,7 +184,7 @@ contract TsaroSafeTest is Test {
 
         // Execute
         uint256 groupId =
-            tsaroSafe.createGroup("Goal Test Group", "Testing goal initialization", false, targetAmount, 15, endDate);
+            tsaroSafe.createGroup("Goal Test Group", "Testing goal initialization", false, targetAmount, 15, endDate, ITsaroSafeData.TokenType.CELO);
 
         // Get goal data
         ITsaroSafeData.GroupGoal memory goal = tsaroSafe.getGroupGoal(groupId);
@@ -207,10 +208,10 @@ contract TsaroSafeTest is Test {
         uint256 endDate = block.timestamp + 30 days;
 
         // Execute - create first group
-        uint256 groupId1 = tsaroSafe.createGroup("First Group", "Description 1", false, 1000 ether, 10, endDate);
+        uint256 groupId1 = tsaroSafe.createGroup("First Group", "Description 1", false, 1000 ether, 10, endDate, ITsaroSafeData.TokenType.CELO);
 
         // Execute - create second group
-        uint256 groupId2 = tsaroSafe.createGroup("Second Group", "Description 2", true, 2000 ether, 5, endDate);
+        uint256 groupId2 = tsaroSafe.createGroup("Second Group", "Description 2", true, 2000 ether, 5, endDate, ITsaroSafeData.TokenType.GSTAR);
 
         // Get user groups
         uint256[] memory userGroupIds = tsaroSafe.getUserGroups(user1);
@@ -235,7 +236,7 @@ contract TsaroSafeTest is Test {
         vm.recordLogs();
 
         // Execute
-        uint256 groupId = tsaroSafe.createGroup(groupName, "Testing events", false, targetAmount, memberLimit, endDate);
+        uint256 groupId = tsaroSafe.createGroup(groupName, "Testing events", false, targetAmount, memberLimit, endDate, ITsaroSafeData.TokenType.CELO);
 
         // Get logs
         Vm.Log[] memory logs = vm.getRecordedLogs();
@@ -274,8 +275,8 @@ contract TsaroSafeTest is Test {
         vm.startPrank(user1);
         uint256 endDate = block.timestamp + 30 days;
 
-        vm.expectRevert("Group name cannot be empty");
-        tsaroSafe.createGroup("", "Description", false, 1000 ether, 10, endDate);
+        vm.expectRevert(TsaroSafe.EmptyName.selector);
+        tsaroSafe.createGroup("", "Description", false, 1000 ether, 10, endDate, ITsaroSafeData.TokenType.CELO);
 
         vm.stopPrank();
     }
@@ -286,10 +287,10 @@ contract TsaroSafeTest is Test {
 
         // Create a name that's 101 characters long
         string memory longName =
-            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 
-        vm.expectRevert("Group name too long");
-        tsaroSafe.createGroup(longName, "Description", false, 1000 ether, 10, endDate);
+        vm.expectRevert(TsaroSafe.NameTooLong.selector);
+        tsaroSafe.createGroup(longName, "Description", false, 1000 ether, 10, endDate, ITsaroSafeData.TokenType.CELO);
 
         vm.stopPrank();
     }
@@ -302,8 +303,8 @@ contract TsaroSafeTest is Test {
         string memory longDescription =
             "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 
-        vm.expectRevert("Description too long");
-        tsaroSafe.createGroup("Test Group", longDescription, false, 1000 ether, 10, endDate);
+        vm.expectRevert(TsaroSafe.DescriptionTooLong.selector);
+        tsaroSafe.createGroup("Test Group", longDescription, false, 1000 ether, 10, endDate, ITsaroSafeData.TokenType.CELO);
 
         vm.stopPrank();
     }
@@ -312,8 +313,8 @@ contract TsaroSafeTest is Test {
         vm.startPrank(user1);
         uint256 endDate = block.timestamp + 30 days;
 
-        vm.expectRevert("Target amount must be greater than 0");
-        tsaroSafe.createGroup("Test Group", "Description", false, 0, 10, endDate);
+        vm.expectRevert(TsaroSafe.InvalidTarget.selector);
+        tsaroSafe.createGroup("Test Group", "Description", false, 0, 10, endDate, ITsaroSafeData.TokenType.CELO);
 
         vm.stopPrank();
     }
@@ -322,8 +323,8 @@ contract TsaroSafeTest is Test {
         vm.startPrank(user1);
         uint256 endDate = block.timestamp + 30 days;
 
-        vm.expectRevert("Member limit must be greater than 0");
-        tsaroSafe.createGroup("Test Group", "Description", false, 1000 ether, 0, endDate);
+        vm.expectRevert(TsaroSafe.InvalidMemberLimit.selector);
+        tsaroSafe.createGroup("Test Group", "Description", false, 1000 ether, 0, endDate, ITsaroSafeData.TokenType.CELO);
 
         vm.stopPrank();
     }
@@ -332,18 +333,18 @@ contract TsaroSafeTest is Test {
         vm.startPrank(user1);
         uint256 endDate = block.timestamp + 30 days;
 
-        vm.expectRevert("Member limit cannot exceed 100");
-        tsaroSafe.createGroup("Test Group", "Description", false, 1000 ether, 101, endDate);
+        vm.expectRevert(TsaroSafe.MemberLimitExceeded.selector);
+        tsaroSafe.createGroup("Test Group", "Description", false, 1000 ether, 101, endDate, ITsaroSafeData.TokenType.CELO);
 
         vm.stopPrank();
     }
 
     function testCreateGroupRevertsWithPastEndDate() public {
         vm.startPrank(user1);
-        uint256 pastDate = block.timestamp - 1 days;
+        uint256 pastDate = block.timestamp;
 
-        vm.expectRevert("End date must be in the future");
-        tsaroSafe.createGroup("Test Group", "Description", false, 1000 ether, 10, pastDate);
+        vm.expectRevert(TsaroSafe.InvalidEndDate.selector);
+        tsaroSafe.createGroup("Test Group", "Description", false, 1000 ether, 10, pastDate, ITsaroSafeData.TokenType.CELO);
 
         vm.stopPrank();
     }
@@ -352,8 +353,8 @@ contract TsaroSafeTest is Test {
         vm.startPrank(user1);
         uint256 farFutureDate = block.timestamp + 366 days;
 
-        vm.expectRevert("End date cannot exceed 1 year");
-        tsaroSafe.createGroup("Test Group", "Description", false, 1000 ether, 10, farFutureDate);
+        vm.expectRevert(TsaroSafe.EndDateTooFar.selector);
+        tsaroSafe.createGroup("Test Group", "Description", false, 1000 ether, 10, farFutureDate, ITsaroSafeData.TokenType.CELO);
 
         vm.stopPrank();
     }
@@ -368,7 +369,8 @@ contract TsaroSafeTest is Test {
             false,
             1, // Minimum target amount
             1, // Minimum member limit
-            endDate
+            endDate,
+            ITsaroSafeData.TokenType.CELO
         );
 
         ITsaroSafeData.Group memory group = tsaroSafe.getGroup(groupId);
@@ -399,7 +401,8 @@ contract TsaroSafeTest is Test {
             true,
             type(uint256).max, // Maximum target amount
             100, // Maximum member limit
-            endDate
+            endDate,
+            ITsaroSafeData.TokenType.GSTAR
         );
 
         ITsaroSafeData.Group memory group = tsaroSafe.getGroup(groupId);
@@ -416,17 +419,17 @@ contract TsaroSafeTest is Test {
 
         // User1 creates a group
         vm.startPrank(user1);
-        uint256 groupId1 = tsaroSafe.createGroup("User1 Group", "Description", false, 1000 ether, 10, endDate);
+        uint256 groupId1 = tsaroSafe.createGroup("User1 Group", "Description", false, 1000 ether, 10, endDate, ITsaroSafeData.TokenType.CELO);
         vm.stopPrank();
 
         // User2 creates a group
         vm.startPrank(user2);
-        uint256 groupId2 = tsaroSafe.createGroup("User2 Group", "Description", true, 2000 ether, 5, endDate);
+        uint256 groupId2 = tsaroSafe.createGroup("User2 Group", "Description", true, 2000 ether, 5, endDate, ITsaroSafeData.TokenType.GSTAR);
         vm.stopPrank();
 
         // User3 creates a group
         vm.startPrank(user3);
-        uint256 groupId3 = tsaroSafe.createGroup("User3 Group", "Description", false, 3000 ether, 15, endDate);
+        uint256 groupId3 = tsaroSafe.createGroup("User3 Group", "Description", false, 3000 ether, 15, endDate, ITsaroSafeData.TokenType.CELO);
         vm.stopPrank();
 
         // Assertions
@@ -455,7 +458,8 @@ contract TsaroSafeTest is Test {
             false, // isPrivate = false
             1000 ether,
             10,
-            endDate
+            endDate,
+            ITsaroSafeData.TokenType.CELO
         );
 
         ITsaroSafeData.Group memory group = tsaroSafe.getGroup(groupId);
@@ -475,7 +479,8 @@ contract TsaroSafeTest is Test {
             true, // isPrivate = true
             1000 ether,
             10,
-            endDate
+            endDate,
+            ITsaroSafeData.TokenType.GSTAR
         );
 
         ITsaroSafeData.Group memory group = tsaroSafe.getGroup(groupId);
@@ -491,18 +496,132 @@ contract TsaroSafeTest is Test {
 
         assertEq(tsaroSafe.nextGroupId(), 1, "Initial nextGroupId should be 1");
 
-        uint256 groupId1 = tsaroSafe.createGroup("Group 1", "Desc", false, 1000 ether, 10, endDate);
+        uint256 groupId1 = tsaroSafe.createGroup("Group 1", "Desc", false, 1000 ether, 10, endDate, ITsaroSafeData.TokenType.CELO);
         assertEq(groupId1, 1, "First group ID should be 1");
         assertEq(tsaroSafe.nextGroupId(), 2, "nextGroupId should be 2");
 
-        uint256 groupId2 = tsaroSafe.createGroup("Group 2", "Desc", false, 1000 ether, 10, endDate);
+        uint256 groupId2 = tsaroSafe.createGroup("Group 2", "Desc", false, 1000 ether, 10, endDate, ITsaroSafeData.TokenType.GSTAR);
         assertEq(groupId2, 2, "Second group ID should be 2");
         assertEq(tsaroSafe.nextGroupId(), 3, "nextGroupId should be 3");
 
-        uint256 groupId3 = tsaroSafe.createGroup("Group 3", "Desc", false, 1000 ether, 10, endDate);
+        uint256 groupId3 = tsaroSafe.createGroup("Group 3", "Desc", false, 1000 ether, 10, endDate, ITsaroSafeData.TokenType.CELO);
         assertEq(groupId3, 3, "Third group ID should be 3");
         assertEq(tsaroSafe.nextGroupId(), 4, "nextGroupId should be 4");
 
         vm.stopPrank();
+    }
+
+    // ============================================
+    // TOKEN PREFERENCE TESTS
+    // ============================================
+
+    function testCreateGroupWithCELOToken() public {
+        vm.startPrank(user1);
+        uint256 endDate = block.timestamp + 30 days;
+
+        uint256 groupId = tsaroSafe.createGroup(
+            "CELO Group",
+            "Group using CELO token",
+            false,
+            1000 ether,
+            10,
+            endDate,
+            ITsaroSafeData.TokenType.CELO
+        );
+
+        ITsaroSafeData.Group memory group = tsaroSafe.getGroup(groupId);
+        assertEq(uint256(group.tokenType), uint256(ITsaroSafeData.TokenType.CELO), "Token type should be CELO");
+
+        vm.stopPrank();
+    }
+
+    function testCreateGroupWithGSTARToken() public {
+        vm.startPrank(user1);
+        uint256 endDate = block.timestamp + 30 days;
+
+        uint256 groupId = tsaroSafe.createGroup(
+            "GSTAR Group",
+            "Group using GSTAR token",
+            false,
+            1000 ether,
+            10,
+            endDate,
+            ITsaroSafeData.TokenType.GSTAR
+        );
+
+        ITsaroSafeData.Group memory group = tsaroSafe.getGroup(groupId);
+        assertEq(uint256(group.tokenType), uint256(ITsaroSafeData.TokenType.GSTAR), "Token type should be GSTAR");
+
+        vm.stopPrank();
+    }
+
+    function testGetGroupTokenType() public {
+        vm.startPrank(user1);
+        uint256 endDate = block.timestamp + 30 days;
+
+        uint256 groupId = tsaroSafe.createGroup(
+            "Test Group",
+            "Description",
+            false,
+            1000 ether,
+            10,
+            endDate,
+            ITsaroSafeData.TokenType.CELO
+        );
+
+        ITsaroSafeData.TokenType tokenType = tsaroSafe.getGroupTokenType(groupId);
+        assertEq(uint256(tokenType), uint256(ITsaroSafeData.TokenType.CELO), "Should return CELO token type");
+
+        vm.stopPrank();
+    }
+
+    function testFilterGroupsByTokenType() public {
+        uint256 endDate = block.timestamp + 30 days;
+
+        // Create CELO groups
+        vm.startPrank(user1);
+        tsaroSafe.createGroup("CELO Group 1", "Description", false, 1000 ether, 10, endDate, ITsaroSafeData.TokenType.CELO);
+        tsaroSafe.createGroup("CELO Group 2", "Description", false, 2000 ether, 15, endDate, ITsaroSafeData.TokenType.CELO);
+        vm.stopPrank();
+
+        // Create GSTAR groups
+        vm.startPrank(user2);
+        tsaroSafe.createGroup("GSTAR Group 1", "Description", false, 1500 ether, 12, endDate, ITsaroSafeData.TokenType.GSTAR);
+        vm.stopPrank();
+
+        // Filter by CELO
+        ITsaroSafeData.Group[] memory celoGroups = tsaroSafe.getPublicGroupsByTokenType(ITsaroSafeData.TokenType.CELO, 0, 50);
+        assertEq(celoGroups.length, 2, "Should have 2 CELO groups");
+        assertEq(uint256(celoGroups[0].tokenType), uint256(ITsaroSafeData.TokenType.CELO), "First group should be CELO");
+        assertEq(uint256(celoGroups[1].tokenType), uint256(ITsaroSafeData.TokenType.CELO), "Second group should be CELO");
+
+        // Filter by GSTAR
+        ITsaroSafeData.Group[] memory gstarGroups = tsaroSafe.getPublicGroupsByTokenType(ITsaroSafeData.TokenType.GSTAR, 0, 50);
+        assertEq(gstarGroups.length, 1, "Should have 1 GSTAR group");
+        assertEq(uint256(gstarGroups[0].tokenType), uint256(ITsaroSafeData.TokenType.GSTAR), "Group should be GSTAR");
+    }
+
+    function testFilterGroupsByTokenTypeWithPagination() public {
+        uint256 endDate = block.timestamp + 30 days;
+
+        // Create multiple CELO groups
+        vm.startPrank(user1);
+        for (uint256 i = 0; i < 5; i++) {
+            string memory name = string(abi.encodePacked("CELO Group ", i));
+            tsaroSafe.createGroup(name, "Description", false, 1000 ether, 10, endDate, ITsaroSafeData.TokenType.CELO);
+        }
+        vm.stopPrank();
+
+        // Get first page
+        ITsaroSafeData.Group[] memory page1 = tsaroSafe.getPublicGroupsByTokenType(ITsaroSafeData.TokenType.CELO, 0, 2);
+        assertEq(page1.length, 2, "First page should have 2 groups");
+
+        // Get second page
+        ITsaroSafeData.Group[] memory page2 = tsaroSafe.getPublicGroupsByTokenType(ITsaroSafeData.TokenType.CELO, 2, 2);
+        assertEq(page2.length, 2, "Second page should have 2 groups");
+
+        // Get third page (partial)
+        ITsaroSafeData.Group[] memory page3 = tsaroSafe.getPublicGroupsByTokenType(ITsaroSafeData.TokenType.CELO, 4, 2);
+        assertEq(page3.length, 1, "Third page should have 1 group");
     }
 }
