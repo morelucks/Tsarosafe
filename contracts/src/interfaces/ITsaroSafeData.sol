@@ -53,6 +53,7 @@ interface ITsaroSafeData {
         uint256 timestamp;
         string description;
         bool isVerified;
+        TokenType tokenType;  // New field: tracks which token was used
     }
 
     struct GroupContributionSummary {
