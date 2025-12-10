@@ -4,6 +4,7 @@ import VerifyWithSelf from "../components/VerifyWithSelf";
 import { usePublicGroups, useJoinGroup } from "@/hooks/useTsaroSafe";
 
 type Privacy = "public" | "private";
+type TokenType = "CELO" | "GSTAR";
 
 interface GroupRow {
   id: string;
@@ -11,6 +12,7 @@ interface GroupRow {
   privacy: Privacy;
   members: number;
   description?: string;
+  tokenType?: TokenType;
 }
 
 const mockGroups: GroupRow[] = [
@@ -43,6 +45,7 @@ const PAGE_SIZE = 3;
 const JoinGroupPage = () => {
   const [query, setQuery] = useState("");
   const [privacy, setPrivacy] = useState<"all" | Privacy>("all");
+  const [tokenType, setTokenType] = useState<"all" | TokenType>("all");
   const [page, setPage] = useState(1);
   const [inviteCode, setInviteCode] = useState("");
   const [message, setMessage] = useState<string | null>(null);
@@ -93,7 +96,8 @@ const JoinGroupPage = () => {
       name: g.name,
       privacy: g.isPrivate ? 'private' : 'public',
       members: 0, // Will be fetched separately if needed
-      description: g.description
+      description: g.description,
+      tokenType: g.tokenType === 0 ? 'CELO' : 'GSTAR'
     }));
     
     // Combine mock groups with contract groups
@@ -103,11 +107,12 @@ const JoinGroupPage = () => {
       g.name.toLowerCase().includes(q) || g.description?.toLowerCase().includes(q)
     );
     if (privacy !== "all") rows = rows.filter(g => g.privacy === privacy);
+    if (tokenType !== "all") rows = rows.filter(g => g.tokenType === tokenType);
     return rows;
-  }, [query, privacy, publicGroups]);
+  }, [query, privacy, tokenType, publicGroups]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  useEffect(() => { setPage(1); }, [query, privacy]);
+  useEffect(() => { setPage(1); }, [query, privacy, tokenType]);
   const pageRows = useMemo(() => {
     const start = (page - 1) * PAGE_SIZE;
     return filtered.slice(start, start + PAGE_SIZE);
@@ -276,9 +281,18 @@ const JoinGroupPage = () => {
             onChange={e => setPrivacy(e.target.value as "all" | Privacy)}
             className="border border-gray-300 rounded-lg px-3 py-2 text-gray-900 bg-white"
           >
-            <option value="all">All</option>
+            <option value="all">All Privacy</option>
             <option value="public">Public</option>
             <option value="private">Private</option>
+          </select>
+          <select
+            value={tokenType}
+            onChange={e => setTokenType(e.target.value as "all" | TokenType)}
+            className="border border-gray-300 rounded-lg px-3 py-2 text-gray-900 bg-white"
+          >
+            <option value="all">All Tokens</option>
+            <option value="CELO">CELO</option>
+            <option value="GSTAR">G$ (GoodDollar)</option>
           </select>
         </div>
 
@@ -295,8 +309,17 @@ const JoinGroupPage = () => {
                   <div>
                     <p className="text-base font-semibold text-gray-900">{g.name}</p>
                     <p className="text-xs text-gray-500 mt-1">{g.description}</p>
-                    <div className="mt-2 flex gap-3 text-xs text-gray-600">
+                    <div className="mt-2 flex gap-3 text-xs text-gray-600 flex-wrap">
                       <span className="inline-flex items-center px-2 py-1 rounded bg-gray-100">{g.privacy}</span>
+                      {g.tokenType && (
+                        <span className={`inline-flex items-center px-2 py-1 rounded ${
+                          g.tokenType === 'CELO' 
+                            ? 'bg-yellow-100 text-yellow-800' 
+                            : 'bg-green-100 text-green-800'
+                        }`}>
+                          {g.tokenType === 'CELO' ? 'CELO' : 'G$'}
+                        </span>
+                      )}
                       <span>{g.members} members</span>
                     </div>
                   </div>

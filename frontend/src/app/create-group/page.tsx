@@ -6,6 +6,7 @@ import { useCreateGroup } from "@/hooks/useTsaroSafe";
 
 type Privacy = "public" | "private";
 type MemberRole = "admin" | "member";
+type TokenType = "CELO" | "GSTAR";
 
 interface Member {
   id: string;
@@ -17,6 +18,7 @@ interface GroupSettings {
   name: string;
   description: string;
   privacy: Privacy;
+  tokenType: TokenType;
 }
 
 interface SavingsGoal {
@@ -30,6 +32,7 @@ const initialSettings: GroupSettings = {
   name: "",
   description: "",
   privacy: "private",
+  tokenType: "CELO",
 };
 
 const initialGoal: SavingsGoal = {
@@ -79,6 +82,7 @@ const CreateGroupPage = () => {
   const validateSettings = (s: GroupSettings) => {
     const next: typeof errors = {};
     if (s.name.trim().length < 3) next.name = "Name must be at least 3 characters.";
+    if (!s.tokenType) next.name = "Token type is required.";
     setErrors(prev => ({ ...prev, ...next }));
     return Object.keys(next).length === 0;
   };
@@ -217,6 +221,9 @@ const CreateGroupPage = () => {
       // Convert target amount to wei (assuming USD, we'll use 18 decimals)
       const targetAmountWei = BigInt(Math.floor(goal.targetAmount * 1e18));
 
+      // Convert token type to enum (0 = CELO, 1 = GSTAR)
+      const tokenTypeEnum = settings.tokenType === "CELO" ? 0 : 1;
+
       // Create group on contract
       await createGroup(
         settings.name,
@@ -224,7 +231,8 @@ const CreateGroupPage = () => {
         settings.privacy === 'private',
         targetAmountWei,
         members.length + 1, // Include creator
-        BigInt(endTimestamp)
+        BigInt(endTimestamp),
+        tokenTypeEnum
       );
     } catch (error) {
       console.error('Failed to create group:', error);
@@ -310,6 +318,37 @@ const CreateGroupPage = () => {
                     <span>
                       <span className="block text-sm font-medium text-gray-900">Discoverable (Public)</span>
                       <span className="block text-xs text-gray-500">Group is visible in search/browse. Admin approval may still be required to join.</span>
+                    </span>
+                  </label>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Contribution Currency</label>
+                <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <label className="flex items-start gap-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="tokenType"
+                      className="mt-1"
+                      checked={settings.tokenType === "CELO"}
+                      onChange={() => setSettings({ ...settings, tokenType: "CELO" })}
+                    />
+                    <span>
+                      <span className="block text-sm font-medium text-gray-900">CELO</span>
+                      <span className="block text-xs text-gray-500">Celo native token for contributions and payouts.</span>
+                    </span>
+                  </label>
+                  <label className="flex items-start gap-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="tokenType"
+                      className="mt-1"
+                      checked={settings.tokenType === "GSTAR"}
+                      onChange={() => setSettings({ ...settings, tokenType: "GSTAR" })}
+                    />
+                    <span>
+                      <span className="block text-sm font-medium text-gray-900">G$ (GoodDollar)</span>
+                      <span className="block text-xs text-gray-500">GoodDollar token for inclusive financial access.</span>
                     </span>
                   </label>
                 </div>
@@ -474,6 +513,7 @@ const CreateGroupPage = () => {
                   <p className="font-semibold">Settings</p>
                   <p className="mt-1 text-gray-800">Name: <span className="font-medium">{settings.name}</span></p>
                   <p className="mt-1 text-gray-800">Privacy: <span className="font-medium">{settings.privacy}</span></p>
+                  <p className="mt-1 text-gray-800">Currency: <span className="font-medium">{settings.tokenType === "CELO" ? "CELO" : "G$ (GoodDollar)"}</span></p>
                   {settings.description && <p className="mt-1 text-gray-800">Description: <span className="font-medium">{settings.description}</span></p>}
                 </div>
                 <div className="p-3 rounded border text-gray-900">
