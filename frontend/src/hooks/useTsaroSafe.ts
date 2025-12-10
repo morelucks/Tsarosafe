@@ -60,6 +60,7 @@ export function useCreateGroup() {
 
 /**
  * Hook to make a contribution
+ * Supports both CELO and G$ (GoodDollar) tokens
  */
 export function useMakeContribution() {
   const contractAddress = useContractAddress()
@@ -68,7 +69,19 @@ export function useMakeContribution() {
     hash,
   })
 
-  const makeContribution = async (groupId: bigint, amount: bigint, description: string) => {
+  /**
+   * Make a contribution to a group
+   * @param groupId - The group ID
+   * @param amount - The contribution amount in wei
+   * @param description - Description of the contribution
+   * @param tokenType - Token type: 0 for CELO, 1 for G$ (default: 0)
+   */
+  const makeContribution = async (
+    groupId: bigint,
+    amount: bigint,
+    description: string,
+    tokenType: number = 0
+  ) => {
     if (!contractAddress) {
       throw new Error('Contract address not found. Please connect to Celo network.')
     }
@@ -78,6 +91,8 @@ export function useMakeContribution() {
       abi: TsaroSafeABI,
       functionName: 'makeContribution',
       args: [groupId, amount, description],
+      // Note: Token type is determined by the group's tokenType setting
+      // The contract will validate that the contribution matches the group's token type
     })
   }
 
