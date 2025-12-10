@@ -15,6 +15,7 @@ contract TsaroSafeDeploymentTest is Test {
     address public user1;
     address public user2;
     address public user3;
+    address public mockGoodDollar;
 
     event GroupCreated(
         uint256 indexed groupId, address indexed creator, string name, uint256 targetAmount, bool isPrivate
@@ -33,13 +34,15 @@ contract TsaroSafeDeploymentTest is Test {
         user1 = makeAddr("user1");
         user2 = makeAddr("user2");
         user3 = makeAddr("user3");
+        mockGoodDollar = makeAddr("mockGoodDollar");
 
-        // Deploy contract
-        tsaroSafe = new TsaroSafe();
+        // Deploy contract with mock token addresses
+        tsaroSafe = new TsaroSafe(mockGoodDollar, address(0));
     }
 
     function testContractDeployment() public {
         assertTrue(address(tsaroSafe) != address(0));
+        assertEq(tsaroSafe.goodDollarAddress(), mockGoodDollar);
     }
 }
 
@@ -52,6 +55,7 @@ contract TsaroSafeTest is Test {
     address public user1;
     address public user2;
     address public user3;
+    address public mockGoodDollar;
 
     // Events to test
     event GroupCreated(
@@ -68,14 +72,25 @@ contract TsaroSafeTest is Test {
 
     event GoalSet(uint256 indexed groupId, uint256 targetAmount, uint256 deadline, uint256 createdAt);
 
+    event ContributionMadeWithToken(
+        uint256 indexed contributionId,
+        uint256 indexed groupId,
+        address indexed member,
+        uint256 amount,
+        uint8 tokenType,
+        string description,
+        uint256 timestamp
+    );
+
     function setUp() public {
         // Create test users
         user1 = makeAddr("user1");
         user2 = makeAddr("user2");
         user3 = makeAddr("user3");
+        mockGoodDollar = makeAddr("mockGoodDollar");
 
-        // Deploy contract
-        tsaroSafe = new TsaroSafe();
+        // Deploy contract with mock token addresses
+        tsaroSafe = new TsaroSafe(mockGoodDollar, address(0));
     }
 
     function testContractDeployment() public view {
@@ -623,5 +638,130 @@ contract TsaroSafeTest is Test {
         // Get third page (partial)
         ITsaroSafeData.Group[] memory page3 = tsaroSafe.getPublicGroupsByTokenType(ITsaroSafeData.TokenType.CELO, 4, 2);
         assertEq(page3.length, 1, "Third page should have 1 group");
+    }
+
+    // ============================================
+    // ERC20 TOKEN CONTRIBUTION TESTS
+    // ============================================
+
+    function testMakeContributionWithTokenCELO() public {
+        uint256 endDate = block.timestamp + 30 days;
+
+        // Create CELO group
+        vm.startPrank(user1);
+        uint256 groupId = tsaroSafe.createGroup(
+            "CELO Group",
+            "Test CELO group",
+            false,
+            1000 ether,
+            10,
+            endDate,
+            ITsaroSafeData.TokenType.CELO
+        );
+        vm.stopPrank();
+
+        // Give user2 some CELO
+        deal(user2, 100 ether);
+
+        // Join group as user2
+        vm.startPrank(user2);
+        tsaroSafe.joinGroup(uint256(groupId));
+
+        // Make CELO contribution (send native CELO)
+        uint256 contributionAmount = 10 ether;
+        tsaroSafe.makeContributionWithToken{value: contributionAmount}(
+            uint256(groupId),
+            contributionAmount,
+            "CELO contribution",
+            0  // CELO token type
+        );
+
+        // Verify contribution was recorded
+        ITsaroSafeData.Group memory group = tsaroSafe.getGroup(uint256(groupId));
+        assertEq(group.currentAmount, contributionAmount, "Group current amount should be updated");
+
+        vm.stopPrank();
+    }
+
+    function testMakeContributionWithTokenTypeMismatch() public {
+        uint256 endDate = block.timestamp + 30 days;
+
+        // Create CELO group
+        vm.startPrank(user1);
+        uint256 groupId = tsaroSafe.createGroup(
+            "CELO Group",
+            "Test CELO group",
+            false,
+            1000 ether,
+            10,
+            endDate,
+            ITsaroSafeData.TokenType.CELO
+        );
+        vm.stopPrank();
+
+        // Join group as user2
+        vm.startPrank(user2);
+        tsaroSafe.joinGroup(uint256(groupId));
+
+        // Try to make G$ contribution to CELO group (should fail)
+        vm.expectRevert(TsaroSafe.TokenTypeMismatch.selector);
+        tsaroSafe.makeContributionWithToken(
+            uint256(groupId),
+            100 ether,
+            "G$ contribution",
+            1  // G$ token type (wrong for this group)
+        );
+
+        vm.stopPrank();
+    }
+
+    function testContributionHistoryIncludesTokenType() public {
+        uint256 endDate = block.timestamp + 30 days;
+
+        // Create CELO group
+        vm.startPrank(user1);
+        uint256 groupId = tsaroSafe.createGroup(
+            "CELO Group",
+            "Test CELO group",
+            false,
+            1000 ether,
+            10,
+            endDate,
+            ITsaroSafeData.TokenType.CELO
+        );
+        vm.stopPrank();
+
+        // Give user2 some CELO
+        deal(user2, 100 ether);
+
+        // Join and contribute
+        vm.startPrank(user2);
+        tsaroSafe.joinGroup(uint256(groupId));
+        uint256 contributionAmount = 10 ether;
+        tsaroSafe.makeContributionWithToken{value: contributionAmount}(
+            uint256(groupId),
+            contributionAmount,
+            "CELO contribution",
+            0
+        );
+        vm.stopPrank();
+
+        // Get contribution history
+        ITsaroSafeData.ContributionHistory[] memory contributions = tsaroSafe.getGroupContributions(uint256(groupId), 0, 10);
+        assertEq(contributions.length, 1, "Should have 1 contribution");
+        assertEq(uint256(contributions[0].tokenType), 0, "Token type should be CELO");
+        assertEq(contributions[0].amount, contributionAmount, "Amount should match");
+    }
+
+    function testSetGoodDollarAddress() public {
+        address newGoodDollarAddress = makeAddr("newGoodDollar");
+        tsaroSafe.setGoodDollarAddress(newGoodDollarAddress);
+        assertEq(tsaroSafe.goodDollarAddress(), newGoodDollarAddress, "GoodDollar address should be updated");
+    }
+
+    function testSetCeloAddress() public {
+        address newCeloAddress = makeAddr("newCelo");
+        tsaroSafe.setCeloAddress(newCeloAddress);
+        assertEq(tsaroSafe.celoAddress(), newCeloAddress, "CELO address should be updated");
     }
 }

@@ -2,6 +2,7 @@
 pragma solidity ^0.8.28;
 
 import "../interfaces/ITsaroSafeData.sol";
+import {IERC20} from "forge-std/interfaces/IERC20.sol";
 
 /**
  * @title TsaroSafe
@@ -34,6 +35,10 @@ contract TsaroSafe is ITsaroSafeData {
     error InvalidMilestone();
     error MilestoneNotFound();
     error CannotRemoveSelf();
+    error InvalidTokenAddress();
+    error TokenTransferFailed();
+    error TokenTypeMismatch();
+    error InsufficientAllowance();
 
     enum GroupType {
         ProjectPool,
@@ -42,6 +47,10 @@ contract TsaroSafe is ITsaroSafeData {
 
     mapping(uint256 => GroupType) public groupTypes;
     mapping(uint256 => ITsaroSafeData.TokenType) public groupTokenTypes;
+
+    // Token addresses for ERC20 support
+    address public goodDollarAddress;
+    address public celoAddress;
 
     // State variables
     uint256 public nextGroupId = 1;
@@ -96,6 +105,15 @@ contract TsaroSafe is ITsaroSafeData {
         string description,
         uint256 timestamp
     );
+    event ContributionMadeWithToken(
+        uint256 indexed contributionId,
+        uint256 indexed groupId,
+        address indexed member,
+        uint256 amount,
+        uint8 tokenType,
+        string description,
+        uint256 timestamp
+    );
     event ContributionVerified(
         uint256 indexed contributionId, uint256 indexed groupId, address indexed member, bool verified
     );
@@ -131,6 +149,34 @@ contract TsaroSafe is ITsaroSafeData {
     modifier groupActive(uint256 _groupId) {
         if (!groups[_groupId].isActive) revert GroupNotActive();
         _;
+    }
+
+    /**
+     * @notice Constructor to initialize token addresses
+     * @param _goodDollarAddress Address of GoodDollar token
+     * @param _celoAddress Address of CELO token (can be zero address for native CELO)
+     */
+    constructor(address _goodDollarAddress, address _celoAddress) {
+        if (_goodDollarAddress == address(0)) revert InvalidTokenAddress();
+        goodDollarAddress = _goodDollarAddress;
+        celoAddress = _celoAddress;
+    }
+
+    /**
+     * @notice Update GoodDollar token address
+     * @param _newAddress New GoodDollar token address
+     */
+    function setGoodDollarAddress(address _newAddress) external {
+        if (_newAddress == address(0)) revert InvalidTokenAddress();
+        goodDollarAddress = _newAddress;
+    }
+
+    /**
+     * @notice Update CELO token address
+     * @param _newAddress New CELO token address
+     */
+    function setCeloAddress(address _newAddress) external {
+        celoAddress = _newAddress;
     }
 
     // ========================================
@@ -451,7 +497,8 @@ contract TsaroSafe is ITsaroSafeData {
             amount: _amount,
             timestamp: block.timestamp,
             description: _description,
-            isVerified: false
+            isVerified: false,
+            tokenType: groups[_groupId].tokenType
         });
 
         // Add to group contributions
@@ -492,6 +539,112 @@ contract TsaroSafe is ITsaroSafeData {
         }
 
         emit ContributionMade(contributionId, _groupId, msg.sender, _amount, _description, block.timestamp);
+        emit ProgressUpdated(_groupId, goal.currentAmount, goal.targetAmount, goal.progressPercentage);
+    }
+
+    /**
+     * @notice Make a contribution to a group using ERC20 tokens (CELO or G$)
+     * @param _groupId Group ID
+     * @param _amount Contribution amount in token units
+     * @param _description Contribution description
+     * @param _tokenType Token type (0 = CELO, 1 = G$)
+     */
+    function makeContributionWithToken(
+        uint256 _groupId,
+        uint256 _amount,
+        string memory _description,
+        uint8 _tokenType
+    )
+        external
+        payable
+        groupExists(_groupId)
+        onlyGroupMember(_groupId)
+        groupActive(_groupId)
+    {
+        if (_amount == 0) revert InvalidAmount();
+        if (bytes(_description).length > 200) revert DescriptionTooLong();
+        if (_tokenType > 1) revert InvalidAmount();
+
+        Group storage group = groups[_groupId];
+        if (block.timestamp >= group.endDate) revert GroupEnded();
+        if (group.isCompleted) revert GroupCompleted();
+
+        // Verify token type matches group's token type
+        if (uint8(group.tokenType) != _tokenType) revert TokenTypeMismatch();
+
+        // Handle token transfer based on token type
+        if (_tokenType == 0) {
+            // CELO transfer (native token)
+            if (msg.value != _amount) revert InvalidAmount();
+        } else if (_tokenType == 1) {
+            // G$ (GoodDollar) transfer
+            if (goodDollarAddress == address(0)) revert InvalidTokenAddress();
+            
+            // Transfer G$ from user to contract
+            bool success = IERC20(goodDollarAddress).transferFrom(msg.sender, address(this), _amount);
+            if (!success) revert TokenTransferFailed();
+        }
+
+        uint256 contributionId = nextContributionId++;
+
+        // Create contribution history record with token type
+        ContributionHistory memory newContribution = ContributionHistory({
+            contributionId: contributionId,
+            member: msg.sender,
+            groupId: _groupId,
+            amount: _amount,
+            timestamp: block.timestamp,
+            description: _description,
+            isVerified: false,
+            tokenType: ITsaroSafeData.TokenType(_tokenType)
+        });
+
+        // Add to group contributions
+        groupContributions[_groupId].push(newContribution);
+
+        // Update member contribution totals
+        memberTotalContributions[msg.sender][_groupId]++;
+        memberTotalAmount[msg.sender][_groupId] += _amount;
+
+        // Update group totals
+        groupTotalContributions[_groupId]++;
+        groupTotalAmount[_groupId] += _amount;
+
+        // Update group current amount
+        group.currentAmount += _amount;
+
+        // Update member's contribution in group
+        groupMembers[_groupId][msg.sender].contribution += _amount;
+        groupMembers[_groupId][msg.sender].lastContribution = block.timestamp;
+
+        // Mark member as paid for the active round (if one is set)
+        uint256 activeRound = groupActiveRound[_groupId];
+        if (activeRound != 0) {
+            roundPayments[_groupId][activeRound][msg.sender] = true;
+        }
+
+        // Update goal progress
+        GroupGoal storage goal = groupGoals[_groupId];
+        goal.currentAmount += _amount;
+        goal.progressPercentage = (goal.currentAmount * 100) / goal.targetAmount;
+
+        // Check if group target is reached
+        if (group.currentAmount >= group.targetAmount) {
+            group.isCompleted = true;
+            goal.isCompleted = true;
+            goal.completedAt = block.timestamp;
+            emit GoalCompleted(_groupId, goal.targetAmount, goal.currentAmount, block.timestamp);
+        }
+
+        emit ContributionMadeWithToken(
+            contributionId,
+            _groupId,
+            msg.sender,
+            _amount,
+            _tokenType,
+            _description,
+            block.timestamp
+        );
         emit ProgressUpdated(_groupId, goal.currentAmount, goal.targetAmount, goal.progressPercentage);
     }
 
