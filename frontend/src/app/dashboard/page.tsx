@@ -5,7 +5,9 @@ import { useAccount } from "wagmi";
 import { useUserGroups, useGroup, useGroupMembers, useGroupStats, useGroupContributions } from "@/hooks/useTsaroSafe";
 import { Address } from "viem";
 import GoodDollarBalance from "../components/GoodDollarBalance";
+import UBIClaim from "../components/UBIClaim";
 import { Group, GroupStats } from "@/types/group";
+import { useUBIClaimInfo } from "@/hooks/useGoodDollar";
 
 interface DashboardStats {
   totalSavings: number;
@@ -130,6 +132,7 @@ const DashboardPage = () => {
   const { address } = useAccount();
   const { groupIds: groupIdsData, isLoading: isLoadingGroups } = useUserGroups(address as Address | undefined);
   const groupIds = groupIdsData as bigint[] | undefined;
+  const { claimableAmountFormatted, canClaim } = useUBIClaimInfo();
   
   const [groupAmounts, setGroupAmounts] = useState<Map<string, number>>(new Map());
   const [allActivities, setAllActivities] = useState<Map<string, RecentActivity[]>>(new Map());
@@ -249,9 +252,10 @@ const DashboardPage = () => {
           <p className="mt-2 text-gray-600">Welcome back! Here&apos;s your financial overview.</p>
         </div>
 
-        {/* GoodDollar Balance */}
-        <div className="mb-6">
+        {/* GoodDollar Balance and UBI Claim */}
+        <div className="mb-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
           <GoodDollarBalance />
+          <UBIClaim />
         </div>
 
         {/* Stats Cards */}
@@ -287,13 +291,17 @@ const DashboardPage = () => {
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                  <span className="text-purple-600 text-lg">📈</span>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  canClaim ? 'bg-green-100' : 'bg-gray-100'
+                }`}>
+                  <span className={`text-lg ${canClaim ? 'text-green-600' : 'text-gray-600'}`}>🌍</span>
                 </div>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Investments</p>
-                <p className="text-2xl font-semibold text-gray-900">${stats.totalInvestments.toLocaleString()}</p>
+                <p className="text-sm font-medium text-gray-500">UBI Available</p>
+                <p className={`text-2xl font-semibold ${canClaim ? 'text-green-600' : 'text-gray-900'}`}>
+                  {claimableAmountFormatted.toLocaleString(undefined, { maximumFractionDigits: 2 })} G$
+                </p>
               </div>
             </div>
           </div>
@@ -469,13 +477,11 @@ const DashboardPage = () => {
                 <span className="text-3xl mb-2">🔍</span>
                 <span className="text-sm font-medium text-gray-900">Join Group</span>
               </Link>
-              <Link 
-                href="/invest"
-                className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                <span className="text-3xl mb-2">📈</span>
-                <span className="text-sm font-medium text-gray-900">Invest</span>
-              </Link>
+              <div className="flex flex-col items-center p-4 border border-green-200 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+                <span className="text-3xl mb-2">🌍</span>
+                <span className="text-sm font-medium text-green-800">Claim UBI</span>
+                <span className="text-xs text-green-600 mt-1">Daily G$ Income</span>
+              </div>
             </div>
           </div>
         </div>
