@@ -94,4 +94,136 @@ export function useGoodDollarAllowance(spender: Address | undefined) {
   }
 }
 
+// GoodDollar UBI Contract ABI (simplified for claiming)
+const GOODDOLLAR_UBI_ABI = [
+  {
+    name: 'claim',
+    type: 'function',
+    stateMutability: 'nonpayable',
+    inputs: [],
+    outputs: [{ name: '', type: 'uint256', internalType: 'uint256' }],
+  },
+  {
+    name: 'checkEntitlement',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [{ name: 'account', type: 'address', internalType: 'address' }],
+    outputs: [{ name: '', type: 'uint256', internalType: 'uint256' }],
+  },
+  {
+    name: 'nextClaimTime',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [{ name: 'account', type: 'address', internalType: 'address' }],
+    outputs: [{ name: '', type: 'uint256', internalType: 'uint256' }],
+  },
+  {
+    name: 'dailyUbi',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [{ name: '', type: 'uint256', internalType: 'uint256' }],
+  },
+] as const
+
+// GoodDollar UBI Contract Addresses
+const UBI_CONTRACT_ADDRESSES = {
+  // Celo Mainnet - GoodDollar UBI contract
+  42220: '0x495d133B938596C9984d462F007B676bDc57eCEC',
+  // Celo Alfajores Testnet
+  44787: '0x495d133B938596C9984d462F007B676bDc57eCEC', // Update with testnet address if different
+} as const
+
+function getUBIContractAddress(chainId: number): string | undefined {
+  return UBI_CONTRACT_ADDRESSES[chainId as keyof typeof UBI_CONTRACT_ADDRESSES]
+}
+
+/**
+ * Hook to get UBI claim information for current user
+ */
+export function useUBIClaimInfo() {
+  const { address, chain } = useAccount()
+  const ubiContractAddress = chain ? getUBIContractAddress(chain.id) : undefined
+
+  const { data: claimableAmount, isLoading: isLoadingAmount } = useReadContract({
+    address: ubiContractAddress as Address | undefined,
+    abi: GOODDOLLAR_UBI_ABI,
+    functionName: 'checkEntitlement',
+    args: address ? [address] : undefined,
+    query: {
+      enabled: !!ubiContractAddress && !!address,
+      refetchInterval: 30000, // Refetch every 30 seconds
+    },
+  })
+
+  const { data: nextClaimTime, isLoading: isLoadingTime } = useReadContract({
+    address: ubiContractAddress as Address | undefined,
+    abi: GOODDOLLAR_UBI_ABI,
+    functionName: 'nextClaimTime',
+    args: address ? [address] : undefined,
+    query: {
+      enabled: !!ubiContractAddress && !!address,
+      refetchInterval: 30000,
+    },
+  })
+
+  const { data: dailyUBI, isLoading: isLoadingDaily } = useReadContract({
+    address: ubiContractAddress as Address | undefined,
+    abi: GOODDOLLAR_UBI_ABI,
+    functionName: 'dailyUbi',
+    query: {
+      enabled: !!ubiContractAddress,
+    },
+  })
+
+  const isLoading = isLoadingAmount || isLoadingTime || isLoadingDaily
+  const canClaim = claimableAmount ? claimableAmount > 0n : false
+  const timeUntilNextClaim = nextClaimTime ? Number(nextClaimTime) - Math.floor(Date.now() / 1000) : 0
+
+  return {
+    claimableAmount: claimableAmount || 0n,
+    claimableAmountFormatted: claimableAmount ? Number(claimableAmount) / 1e18 : 0,
+    nextClaimTime: nextClaimTime || 0n,
+    timeUntilNextClaim: Math.max(0, timeUntilNextClaim),
+    canClaim,
+    dailyUBI: dailyUBI || 0n,
+    dailyUBIFormatted: dailyUBI ? Number(dailyUBI) / 1e18 : 0,
+    isLoading,
+  }
+}
+
+/**
+ * Hook to claim UBI
+ */
+export function useClaimUBI() {
+  const { chain } = useAccount()
+  const ubiContractAddress = chain ? getUBIContractAddress(chain.id) : undefined
+  const { writeContract, data: hash, isPending, error } = useWriteContract()
+  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
+    hash,
+  })
+
+  const claimUBI = async () => {
+    if (!ubiContractAddress) {
+      throw new Error('UBI contract address not found. Please connect to Celo network.')
+    }
+
+    return writeContract({
+      address: ubiContractAddress as Address,
+      abi: GOODDOLLAR_UBI_ABI,
+      functionName: 'claim',
+    })
+  }
+
+  return {
+    claimUBI,
+    hash,
+    isPending,
+    isConfirming,
+    isConfirmed,
+    error,
+    isLoading: isPending || isConfirming,
+  }
+}
+
 
