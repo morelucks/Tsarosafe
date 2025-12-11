@@ -71,4 +71,25 @@ export function getExplorerUrl(chainId: number): string | undefined {
   return EXPLORER_URLS[chainId as keyof typeof EXPLORER_URLS]
 }
 
+// G$ Price Oracle Configuration
+export const GDOLLAR_PRICE_CONFIG = {
+  // CoinGecko API for G$ price data
+  COINGECKO_API: 'https://api.coingecko.com/api/v3',
+  GDOLLAR_ID: 'gooddollar', // GoodDollar's CoinGecko ID
+  UPDATE_INTERVAL: 60000, // 1 minute
+  FALLBACK_PRICE: 0.001, // Fallback price in USD if API fails
+  MAX_RETRIES: 3,
+  CACHE_DURATION: 300000, // 5 minutes cache
+} as const
+
+// Price chart periods
+export const PRICE_CHART_PERIODS = {
+  '1h': { days: 1, interval: 'hourly' },
+  '24h': { days: 1, interval: 'hourly' },
+  '7d': { days: 7, interval: 'daily' },
+  '30d': { days: 30, interval: 'daily' },
+  '90d': { days: 90, interval: 'daily' },
+  '1y': { days: 365, interval: 'daily' },
+} as const
+
 

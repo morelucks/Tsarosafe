@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
-import SavingsGoalCard from "../components/SavingsGoalCard";
-import ProgressChart from "../components/ProgressChart";
-import InvestmentPortfolio from "../components/InvestmentPortfolio";
+import SavingsGoalCard from "@/app/components/SavingsGoalCard";
+import ProgressChart from "@/app/components/ProgressChart";
+import InvestmentPortfolio from "@/app/components/InvestmentPortfolio";
 
 interface SavingsGoal {
   id: string;

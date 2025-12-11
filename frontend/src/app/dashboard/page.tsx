@@ -4,8 +4,10 @@ import Link from "next/link";
 import { useAccount } from "wagmi";
 import { useUserGroups, useGroup, useGroupMembers, useGroupStats, useGroupContributions } from "@/hooks/useTsaroSafe";
 import { Address } from "viem";
-import GoodDollarBalance from "../components/GoodDollarBalance";
-import UBIClaim from "../components/UBIClaim";
+import GoodDollarBalance from "@/app/components/GoodDollarBalance";
+import UBIClaim from "@/app/components/UBIClaim";
+import GDollarPriceDisplay from "@/app/components/GDollarPriceDisplay";
+import GDollarPriceChart from "@/app/components/GDollarPriceChart";
 import { Group, GroupStats } from "@/types/group";
 import { useUBIClaimInfo } from "@/hooks/useGoodDollar";
 
@@ -252,10 +254,11 @@ const DashboardPage = () => {
           <p className="mt-2 text-gray-600">Welcome back! Here&apos;s your financial overview.</p>
         </div>
 
-        {/* GoodDollar Balance and UBI Claim */}
-        <div className="mb-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* GoodDollar Balance, UBI Claim, and Price */}
+        <div className="mb-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
           <GoodDollarBalance />
           <UBIClaim />
+          <GDollarPriceDisplay showDetails={true} />
         </div>
 
         {/* Stats Cards */}
@@ -323,7 +326,7 @@ const DashboardPage = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Savings Progress */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 space-y-8">
             <div className="bg-white rounded-lg shadow p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">Savings Progress</h2>
               <div className="mb-4">
@@ -358,6 +361,9 @@ const DashboardPage = () => {
                 </Link>
               </div>
             </div>
+
+            {/* G$ Price Chart */}
+            <GDollarPriceChart height={250} />
           </div>
 
           {/* Recent Activity */}
@@ -477,11 +483,14 @@ const DashboardPage = () => {
                 <span className="text-3xl mb-2">🔍</span>
                 <span className="text-sm font-medium text-gray-900">Join Group</span>
               </Link>
-              <div className="flex flex-col items-center p-4 border border-green-200 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
-                <span className="text-3xl mb-2">🌍</span>
-                <span className="text-sm font-medium text-green-800">Claim UBI</span>
-                <span className="text-xs text-green-600 mt-1">Daily G$ Income</span>
-              </div>
+              <Link 
+                href="/price"
+                className="flex flex-col items-center p-4 border border-blue-200 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+              >
+                <span className="text-3xl mb-2">💱</span>
+                <span className="text-sm font-medium text-blue-800">G$ Price</span>
+                <span className="text-xs text-blue-600 mt-1">Charts & Converter</span>
+              </Link>
             </div>
           </div>
         </div>

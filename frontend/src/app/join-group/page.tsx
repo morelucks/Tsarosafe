@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import VerifyWithSelf from "../components/VerifyWithSelf";
+import VerifyWithSelf from "@/app/components/VerifyWithSelf";
 import { usePublicGroups, usePublicGroupsByTokenType, useJoinGroup } from "@/hooks/useTsaroSafe";
 import { Group } from "@/types/group";
 
