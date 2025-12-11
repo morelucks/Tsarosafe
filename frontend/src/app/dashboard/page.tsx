@@ -7,6 +7,7 @@ import { Address } from "viem";
 import GoodDollarBalance from "../components/GoodDollarBalance";
 import UBIClaim from "../components/UBIClaim";
 import GDollarPriceDisplay from "../components/GDollarPriceDisplay";
+import GDollarPriceChart from "../components/GDollarPriceChart";
 import { Group, GroupStats } from "@/types/group";
 import { useUBIClaimInfo } from "@/hooks/useGoodDollar";
 
@@ -325,7 +326,7 @@ const DashboardPage = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Savings Progress */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 space-y-8">
             <div className="bg-white rounded-lg shadow p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">Savings Progress</h2>
               <div className="mb-4">
@@ -360,6 +361,9 @@ const DashboardPage = () => {
                 </Link>
               </div>
             </div>
+
+            {/* G$ Price Chart */}
+            <GDollarPriceChart height={250} />
           </div>
 
           {/* Recent Activity */}
