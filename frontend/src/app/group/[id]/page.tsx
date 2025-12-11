@@ -7,17 +7,24 @@ import { useGroup, useGroupMembers, useGroupStats, useMakeContribution, useMakeC
 import { useGoodDollarBalance, useGoodDollarAllowance, useApproveGoodDollar } from "@/hooks/useGoodDollar";
 import { useContractAddress } from "@/hooks/useTsaroSafe";
 import { Address } from "viem";
+import { Group, ContributionHistory, GroupMilestone } from "@/types/group";
 
 export default function GroupDetailPage() {
   const params = useParams();
   const { address } = useAccount();
   const groupId = params?.id ? BigInt(params.id as string) : undefined;
 
-  const { group, isLoading: isLoadingGroup, refetch: refetchGroup } = useGroup(groupId);
-  const { members, isLoading: isLoadingMembers } = useGroupMembers(groupId);
+  const { group: groupData, isLoading: isLoadingGroup, refetch: refetchGroup } = useGroup(groupId);
+  const { members: membersData, isLoading: isLoadingMembers } = useGroupMembers(groupId);
   const { stats, isLoading: isLoadingStats } = useGroupStats(groupId);
-  const { contributions, isLoading: isLoadingContributions, refetch: refetchContributions } = useGroupContributions(groupId);
-  const { milestones, isLoading: isLoadingMilestones } = useGroupMilestones(groupId);
+  const { contributions: contributionsData, isLoading: isLoadingContributions, refetch: refetchContributions } = useGroupContributions(groupId);
+  const { milestones: milestonesData, isLoading: isLoadingMilestones } = useGroupMilestones(groupId);
+
+  // Type assertions for proper TypeScript support
+  const group = groupData as Group | undefined;
+  const members = membersData as string[] | undefined;
+  const contributions = contributionsData as ContributionHistory[] | undefined;
+  const milestones = milestonesData as GroupMilestone[] | undefined;
   const { makeContribution, isLoading: isSubmitting, isConfirmed, error: contributionError } = useMakeContribution();
   const { makeContributionWithToken, isLoading: isSubmittingToken, isConfirmed: isConfirmedToken, error: contributionTokenError } = useMakeContributionWithToken();
 
@@ -25,6 +32,15 @@ export default function GroupDetailPage() {
   const [contributionAmount, setContributionAmount] = useState("");
   const [contributionDescription, setContributionDescription] = useState("");
   const [selectedToken, setSelectedToken] = useState<"CELO" | "G$">("CELO");
+  
+  // Set the selected token based on group's token type when group loads
+  useEffect(() => {
+    if (group) {
+      // Default to CELO if tokenType is not available (for backward compatibility)
+      const tokenType = group.tokenType ?? 0;
+      setSelectedToken(tokenType === 0 ? "CELO" : "G$");
+    }
+  }, [group]);
   
   const { balanceFormatted: gdBalance } = useGoodDollarBalance();
   const contractAddress = useContractAddress();
@@ -116,7 +132,7 @@ export default function GroupDetailPage() {
         {/* Basic Info */}
         <div className="bg-white rounded-lg shadow p-6 mb-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Group Information</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
             <div>
               <p className="text-gray-600">Privacy</p>
               <p className="font-medium text-gray-900">{group.isPrivate ? "Private" : "Public"}</p>
@@ -130,6 +146,16 @@ export default function GroupDetailPage() {
               <p className={`font-medium ${group.isActive ? 'text-green-600' : 'text-red-600'}`}>
                 {group.isActive ? "Active" : "Inactive"}
               </p>
+            </div>
+            <div>
+              <p className="text-gray-600">Currency</p>
+              <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${
+                (group.tokenType ?? 0) === 0 
+                  ? 'bg-yellow-100 text-yellow-800' 
+                  : 'bg-green-100 text-green-800'
+              }`}>
+                {(group.tokenType ?? 0) === 0 ? "CELO" : "G$ (GoodDollar)"}
+              </span>
             </div>
             <div>
               <p className="text-gray-600">Progress</p>
@@ -174,31 +200,19 @@ export default function GroupDetailPage() {
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Select Token
+                    Contribution Token
                   </label>
-                  <div className="grid grid-cols-2 gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setSelectedToken("CELO")}
-                      className={`px-4 py-2 rounded-lg border-2 ${
-                        selectedToken === "CELO"
-                          ? "border-blue-600 bg-blue-50 text-blue-700"
-                          : "border-gray-300 bg-white text-gray-700"
-                      }`}
-                    >
-                      CELO
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setSelectedToken("G$")}
-                      className={`px-4 py-2 rounded-lg border-2 ${
-                        selectedToken === "G$"
-                          ? "border-green-600 bg-green-50 text-green-700"
-                          : "border-gray-300 bg-white text-gray-700"
-                      }`}
-                    >
-                      GoodDollar (G$)
-                    </button>
+                  <div className="p-3 border rounded-lg bg-gray-50">
+                    <div className={`inline-flex items-center px-3 py-2 rounded text-sm font-medium ${
+                      (group.tokenType ?? 0) === 0 
+                        ? 'bg-yellow-100 text-yellow-800' 
+                        : 'bg-green-100 text-green-800'
+                    }`}>
+                      {(group.tokenType ?? 0) === 0 ? "CELO" : "G$ (GoodDollar)"}
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1">
+                      This group accepts contributions in {(group.tokenType ?? 0) === 0 ? "CELO" : "G$ (GoodDollar)"} only.
+                    </p>
                   </div>
                   {selectedToken === "G$" && (
                     <div className="text-xs text-gray-500 mt-1 space-y-1">

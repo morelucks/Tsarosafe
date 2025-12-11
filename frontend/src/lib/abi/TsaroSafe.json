@@ -92,6 +92,11 @@
         "name": "_endDate",
         "type": "uint256",
         "internalType": "uint256"
+      },
+      {
+        "name": "_tokenType",
+        "type": "uint8",
+        "internalType": "enum ITsaroSafeData.TokenType"
       }
     ],
     "outputs": [
@@ -210,6 +215,11 @@
             "name": "isCompleted",
             "type": "bool",
             "internalType": "bool"
+          },
+          {
+            "name": "tokenType",
+            "type": "uint8",
+            "internalType": "enum ITsaroSafeData.TokenType"
           }
         ]
       }
@@ -798,8 +808,128 @@
             "name": "isCompleted",
             "type": "bool",
             "internalType": "bool"
+          },
+          {
+            "name": "tokenType",
+            "type": "uint8",
+            "internalType": "enum ITsaroSafeData.TokenType"
           }
         ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getPublicGroupsByTokenType",
+    "inputs": [
+      {
+        "name": "_tokenType",
+        "type": "uint8",
+        "internalType": "enum ITsaroSafeData.TokenType"
+      },
+      {
+        "name": "_offset",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_limit",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple[]",
+        "internalType": "struct ITsaroSafeData.Group[]",
+        "components": [
+          {
+            "name": "id",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "isPrivate",
+            "type": "bool",
+            "internalType": "bool"
+          },
+          {
+            "name": "creator",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "targetAmount",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "currentAmount",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "memberLimit",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "createdAt",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "endDate",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "isActive",
+            "type": "bool",
+            "internalType": "bool"
+          },
+          {
+            "name": "isCompleted",
+            "type": "bool",
+            "internalType": "bool"
+          },
+          {
+            "name": "tokenType",
+            "type": "uint8",
+            "internalType": "enum ITsaroSafeData.TokenType"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getGroupTokenType",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint8",
+        "internalType": "enum ITsaroSafeData.TokenType"
       }
     ],
     "stateMutability": "view"
