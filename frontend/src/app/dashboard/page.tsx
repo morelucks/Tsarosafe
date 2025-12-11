@@ -483,11 +483,14 @@ const DashboardPage = () => {
                 <span className="text-3xl mb-2">🔍</span>
                 <span className="text-sm font-medium text-gray-900">Join Group</span>
               </Link>
-              <div className="flex flex-col items-center p-4 border border-green-200 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
-                <span className="text-3xl mb-2">🌍</span>
-                <span className="text-sm font-medium text-green-800">Claim UBI</span>
-                <span className="text-xs text-green-600 mt-1">Daily G$ Income</span>
-              </div>
+              <Link 
+                href="/price"
+                className="flex flex-col items-center p-4 border border-blue-200 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+              >
+                <span className="text-3xl mb-2">💱</span>
+                <span className="text-sm font-medium text-blue-800">G$ Price</span>
+                <span className="text-xs text-blue-600 mt-1">Charts & Converter</span>
+              </Link>
             </div>
           </div>
         </div>
