@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import VerifyWithSelf from "../components/VerifyWithSelf";
-import { usePublicGroups, useJoinGroup } from "@/hooks/useTsaroSafe";
+import { usePublicGroups, usePublicGroupsByTokenType, useJoinGroup } from "@/hooks/useTsaroSafe";
+import { Group } from "@/types/group";
 
 type Privacy = "public" | "private";
 type TokenType = "CELO" | "GSTAR";
@@ -15,24 +16,7 @@ interface GroupRow {
   tokenType?: TokenType;
 }
 
-const mockGroups: GroupRow[] = [
-  { id: "g1", name: "Family Savings Circle", privacy: "public", members: 8, description: "Monthly deposits for family goals." },
-  { id: "g2", name: "Friends Travel Fund", privacy: "public", members: 5, description: "Save for our next trip." },
-  { id: "g3", name: "Community Support Pool", privacy: "public", members: 23, description: "Emergency support fund." },
-  { id: "g4", name: "Investors Guild", privacy: "private", members: 12, description: "Invite-only investing club." },
-];
 
-interface StoredGroup {
-  id: string;
-  name: string;
-  description: string;
-  privacy: Privacy;
-  members: Array<{ id: string; addressOrEmail: string; role: string }>;
-  goal: { targetAmount: number; cadence: string; startDate: string; endDate?: string };
-  invites: Array<{ code: string; addressOrEmail: string; status: string }>;
-  createdAt: string;
-  createdBy: string;
-}
 
 interface VerificationData {
   isHuman: boolean;
@@ -56,9 +40,27 @@ const JoinGroupPage = () => {
   const [verificationData, setVerificationData] = useState<VerificationData | null>(null);
   const [showVerification, setShowVerification] = useState(false);
 
-  // Load public groups from contract
-  const { groups: publicGroups, isLoading: isLoadingGroups } = usePublicGroups(0n, 50);
+  // Load public groups from contract based on token filter
+  const { groups: allPublicGroupsData, isLoading: isLoadingAllGroups } = usePublicGroups(0n, 50);
+  const { groups: celoGroupsData, isLoading: isLoadingCeloGroups } = usePublicGroupsByTokenType(0, 0n, 50);
+  const { groups: gstarGroupsData, isLoading: isLoadingGstarGroups } = usePublicGroupsByTokenType(1, 0n, 50);
   const { joinGroup, isLoading: isJoining, isConfirmed: isJoined } = useJoinGroup();
+
+  // Type assertions for proper TypeScript support
+  const allPublicGroups = allPublicGroupsData as Group[] | undefined;
+  const celoGroups = celoGroupsData as Group[] | undefined;
+  const gstarGroups = gstarGroupsData as Group[] | undefined;
+
+  // Determine which groups to use based on token filter
+  const publicGroups = useMemo(() => {
+    if (tokenType === "CELO") return celoGroups;
+    if (tokenType === "GSTAR") return gstarGroups;
+    return allPublicGroups;
+  }, [tokenType, celoGroups, gstarGroups, allPublicGroups]);
+
+  const isLoadingGroups = tokenType === "CELO" ? isLoadingCeloGroups : 
+                         tokenType === "GSTAR" ? isLoadingGstarGroups : 
+                         isLoadingAllGroups;
 
   // Load invites and verification from localStorage (these are UI-only, not contract data)
   useEffect(() => {
@@ -91,25 +93,23 @@ const JoinGroupPage = () => {
     const q = query.trim().toLowerCase();
     
     // Convert contract groups to GroupRow format
-    const contractGroupRows: GroupRow[] = (publicGroups || []).map(g => ({
+    const contractGroupRows: GroupRow[] = (publicGroups || []).map((g: Group) => ({
       id: g.id.toString(),
       name: g.name,
       privacy: g.isPrivate ? 'private' : 'public',
       members: 0, // Will be fetched separately if needed
       description: g.description,
-      tokenType: g.tokenType === 0 ? 'CELO' : 'GSTAR'
+      tokenType: (g.tokenType ?? 0) === 0 ? 'CELO' : 'GSTAR'
     }));
     
-    // Combine mock groups with contract groups
-    const allGroups = [...mockGroups, ...contractGroupRows];
-    
-    let rows = allGroups.filter(g =>
+    // Filter by search query and privacy
+    let rows = contractGroupRows.filter(g =>
       g.name.toLowerCase().includes(q) || g.description?.toLowerCase().includes(q)
     );
     if (privacy !== "all") rows = rows.filter(g => g.privacy === privacy);
-    if (tokenType !== "all") rows = rows.filter(g => g.tokenType === tokenType);
+    
     return rows;
-  }, [query, privacy, tokenType, publicGroups]);
+  }, [query, privacy, publicGroups]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   useEffect(() => { setPage(1); }, [query, privacy, tokenType]);
@@ -204,7 +204,14 @@ const JoinGroupPage = () => {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-5xl mx-auto px-4">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Join a Group</h1>
-        <p className="text-gray-600 mb-6">Discover public groups or join directly with an invite code.</p>
+        <p className="text-gray-600 mb-6">
+          Discover public groups or join directly with an invite code.
+          {tokenType !== "all" && (
+            <span className="ml-2 inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-800">
+              Filtering by {tokenType === "CELO" ? "CELO" : "G$ (GoodDollar)"}
+            </span>
+          )}
+        </p>
 
         {message && (
           <div className="mb-4 p-3 rounded bg-blue-50 text-blue-700">{message}</div>

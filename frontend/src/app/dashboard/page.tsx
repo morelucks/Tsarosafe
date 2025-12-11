@@ -5,6 +5,7 @@ import { useAccount } from "wagmi";
 import { useUserGroups, useGroup, useGroupMembers, useGroupStats, useGroupContributions } from "@/hooks/useTsaroSafe";
 import { Address } from "viem";
 import GoodDollarBalance from "../components/GoodDollarBalance";
+import { Group, GroupStats } from "@/types/group";
 
 interface DashboardStats {
   totalSavings: number;
@@ -24,7 +25,8 @@ interface RecentActivity {
 
 // Component to fetch stats for a single group and report back
 function GroupStatFetcher({ groupId, onAmountUpdate }: { groupId: bigint, onAmountUpdate: (amount: number) => void }) {
-  const { stats } = useGroupStats(groupId);
+  const { stats: statsData } = useGroupStats(groupId);
+  const stats = statsData as GroupStats | undefined;
   
   useEffect(() => {
     if (stats) {
@@ -42,7 +44,8 @@ function GroupContributionsFetcher({ groupId, groupName, onContributionsUpdate }
   groupName: string,
   onContributionsUpdate: (activities: RecentActivity[]) => void 
 }) {
-  const { contributions } = useGroupContributions(groupId, 0n, 10);
+  const { contributions: contributionsData } = useGroupContributions(groupId, 0n, 10);
+  const contributions = contributionsData as any[] | undefined;
   
   useEffect(() => {
     if (contributions && contributions.length > 0) {
@@ -63,8 +66,11 @@ function GroupContributionsFetcher({ groupId, groupName, onContributionsUpdate }
 
 // Component to display a single group card
 function GroupCard({ groupId }: { groupId: bigint }) {
-  const { group, isLoading } = useGroup(groupId);
-  const { members, isLoading: isLoadingMembers } = useGroupMembers(groupId);
+  const { group: groupData, isLoading } = useGroup(groupId);
+  const { members: membersData, isLoading: isLoadingMembers } = useGroupMembers(groupId);
+  
+  const group = groupData as Group | undefined;
+  const members = membersData as string[] | undefined;
 
   if (isLoading || !group) {
     return (
@@ -87,13 +93,22 @@ function GroupCard({ groupId }: { groupId: bigint }) {
       <p className="text-sm text-gray-600 mt-1">{group.description}</p>
       <div className="mt-3 flex justify-between items-center text-sm">
         <span className="text-gray-500">{memberCount} members</span>
-        <span className={`px-2 py-1 rounded text-xs ${
-          privacy === 'public' 
-            ? 'bg-green-100 text-green-800' 
-            : 'bg-blue-100 text-blue-800'
-        }`}>
-          {privacy}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className={`px-2 py-1 rounded text-xs ${
+            privacy === 'public' 
+              ? 'bg-green-100 text-green-800' 
+              : 'bg-blue-100 text-blue-800'
+          }`}>
+            {privacy}
+          </span>
+          <span className={`px-2 py-1 rounded text-xs ${
+            (group.tokenType ?? 0) === 0 
+              ? 'bg-yellow-100 text-yellow-800' 
+              : 'bg-green-100 text-green-800'
+          }`}>
+            {(group.tokenType ?? 0) === 0 ? "CELO" : "G$"}
+          </span>
+        </div>
       </div>
       <div className="mt-2 text-sm text-gray-600">
         Goal: ${targetAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })}
@@ -113,7 +128,8 @@ const DashboardPage = () => {
   const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([]);
 
   const { address } = useAccount();
-  const { groupIds, isLoading: isLoadingGroups } = useUserGroups(address as Address | undefined);
+  const { groupIds: groupIdsData, isLoading: isLoadingGroups } = useUserGroups(address as Address | undefined);
+  const groupIds = groupIdsData as bigint[] | undefined;
   
   const [groupAmounts, setGroupAmounts] = useState<Map<string, number>>(new Map());
   const [allActivities, setAllActivities] = useState<Map<string, RecentActivity[]>>(new Map());
@@ -388,7 +404,8 @@ const DashboardPage = () => {
           <>
             {groupIds.map((groupId) => {
               const GroupContributionsWrapper = () => {
-                const { group } = useGroup(groupId);
+                const { group: groupData } = useGroup(groupId);
+                const group = groupData as Group | undefined;
                 return (
                   <>
                     <GroupStatFetcher 
