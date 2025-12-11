@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useAccount } from "wagmi";
-import { useGroup, useGroupMembers, useGroupStats, useMakeContribution, useGroupContributions, useGroupMilestones } from "@/hooks/useTsaroSafe";
+import { useGroup, useGroupMembers, useGroupStats, useMakeContribution, useMakeContributionWithToken, useGroupContributions, useGroupMilestones } from "@/hooks/useTsaroSafe";
 import { useGoodDollarBalance, useGoodDollarAllowance, useApproveGoodDollar } from "@/hooks/useGoodDollar";
 import { useContractAddress } from "@/hooks/useTsaroSafe";
 import { Address } from "viem";
@@ -19,6 +19,7 @@ export default function GroupDetailPage() {
   const { contributions, isLoading: isLoadingContributions, refetch: refetchContributions } = useGroupContributions(groupId);
   const { milestones, isLoading: isLoadingMilestones } = useGroupMilestones(groupId);
   const { makeContribution, isLoading: isSubmitting, isConfirmed, error: contributionError } = useMakeContribution();
+  const { makeContributionWithToken, isLoading: isSubmittingToken, isConfirmed: isConfirmedToken, error: contributionTokenError } = useMakeContributionWithToken();
 
   const [showContributionForm, setShowContributionForm] = useState(false);
   const [contributionAmount, setContributionAmount] = useState("");
@@ -31,37 +32,39 @@ export default function GroupDetailPage() {
   const { approve: approveGd, isLoading: isApproving } = useApproveGoodDollar();
 
   useEffect(() => {
-    if (isConfirmed) {
+    if (isConfirmed || isConfirmedToken) {
       setShowContributionForm(false);
       setContributionAmount("");
       setContributionDescription("");
       refetchGroup();
       refetchContributions();
     }
-  }, [isConfirmed, refetchGroup, refetchContributions]);
+  }, [isConfirmed, isConfirmedToken, refetchGroup, refetchContributions]);
 
   const handleMakeContribution = async () => {
     if (!groupId || !contributionAmount || !contractAddress) return;
     
     try {
       const amountWei = BigInt(Math.floor(parseFloat(contributionAmount) * 1e18));
-      const amountValue = parseFloat(contributionAmount);
+      const description = contributionDescription || "Contribution";
       
-      // If using G$, check and request approval first
+      // If using G$ or CELO via token function, use makeContributionWithToken
       if (selectedToken === "G$") {
-        // Check if allowance is sufficient
-        if (gdAllowance < amountValue) {
-          // Request approval for the amount + 50% buffer for future contributions
+        // Check and request approval first for G$
+        if (gdAllowance < parseFloat(contributionAmount)) {
+          // Need to approve - approve amount + 50% buffer for future contributions
           const approvalAmount = amountWei + (amountWei / 2n);
           await approveGd(contractAddress as Address, approvalAmount);
-          // Wait for approval to be confirmed
+          // Wait a bit for approval to confirm
           await new Promise(resolve => setTimeout(resolve, 3000));
         }
+        
+        // Make contribution with G$ token (tokenType = 1)
+        await makeContributionWithToken(groupId, amountWei, description, 1);
+      } else {
+        // For CELO, use makeContributionWithToken with native value (tokenType = 0)
+        await makeContributionWithToken(groupId, amountWei, description, 0, amountWei);
       }
-      
-      // Make the contribution
-      // The contract will validate that the token type matches the group's setting
-      await makeContribution(groupId, amountWei, contributionDescription || "Contribution");
     } catch (error) {
       console.error("Failed to make contribution:", error);
     }
@@ -169,14 +172,6 @@ export default function GroupDetailPage() {
               </button>
             ) : (
               <div className="space-y-4">
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                  <p className="text-sm text-blue-900">
-                    <span className="font-medium">Group Currency:</span> {group?.tokenType === 0 ? 'CELO' : 'G$ (GoodDollar)'}
-                  </p>
-                  <p className="text-xs text-blue-700 mt-1">
-                    All contributions to this group must be made in {group?.tokenType === 0 ? 'CELO' : 'G$'}
-                  </p>
-                </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Select Token
@@ -185,36 +180,31 @@ export default function GroupDetailPage() {
                     <button
                       type="button"
                       onClick={() => setSelectedToken("CELO")}
-                      disabled={group?.tokenType === 1}
                       className={`px-4 py-2 rounded-lg border-2 ${
                         selectedToken === "CELO"
                           ? "border-blue-600 bg-blue-50 text-blue-700"
                           : "border-gray-300 bg-white text-gray-700"
-                      } ${group?.tokenType === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      }`}
                     >
                       CELO
                     </button>
                     <button
                       type="button"
                       onClick={() => setSelectedToken("G$")}
-                      disabled={group?.tokenType === 0}
                       className={`px-4 py-2 rounded-lg border-2 ${
                         selectedToken === "G$"
                           ? "border-green-600 bg-green-50 text-green-700"
                           : "border-gray-300 bg-white text-gray-700"
-                      } ${group?.tokenType === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      }`}
                     >
                       GoodDollar (G$)
                     </button>
                   </div>
                   {selectedToken === "G$" && (
-                    <div className="text-xs text-gray-500 mt-2 space-y-1 bg-gray-50 p-2 rounded">
-                      <p><span className="font-medium">Balance:</span> {gdBalance.toLocaleString(undefined, { maximumFractionDigits: 2 })} G$</p>
+                    <div className="text-xs text-gray-500 mt-1 space-y-1">
+                      <p>Balance: {gdBalance.toLocaleString(undefined, { maximumFractionDigits: 2 })} G$</p>
                       {contractAddress && (
-                        <p><span className="font-medium">Approved Allowance:</span> {gdAllowance.toLocaleString(undefined, { maximumFractionDigits: 2 })} G$</p>
-                      )}
-                      {gdAllowance < parseFloat(contributionAmount || '0') && (
-                        <p className="text-orange-600 font-medium">⚠️ Approval needed for this amount</p>
+                        <p>Allowance: {gdAllowance.toLocaleString(undefined, { maximumFractionDigits: 2 })} G$</p>
                       )}
                     </div>
                   )}
@@ -243,18 +233,18 @@ export default function GroupDetailPage() {
                     className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   />
                 </div>
-                {contributionError && (
+                {(contributionError || contributionTokenError) && (
                   <div className="text-red-600 text-sm">
-                    {contributionError.message || "Failed to make contribution"}
+                    {(contributionError || contributionTokenError)?.message || "Failed to make contribution"}
                   </div>
                 )}
                 <div className="flex gap-2">
                   <button
                     onClick={handleMakeContribution}
-                    disabled={isSubmitting || isApproving || !contributionAmount || (selectedToken === "G$" && gdBalance < parseFloat(contributionAmount || '0'))}
-                    className="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={isSubmitting || isSubmittingToken || isApproving || !contributionAmount}
+                    className="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
                   >
-                    {isApproving ? "Approving G$..." : isSubmitting ? "Submitting..." : "Submit Contribution"}
+                    {isApproving ? "Approving G$..." : (isSubmitting || isSubmittingToken) ? "Submitting..." : "Submit Contribution"}
                   </button>
                   <button
                     onClick={() => {
@@ -267,11 +257,6 @@ export default function GroupDetailPage() {
                     Cancel
                   </button>
                 </div>
-                {selectedToken === "G$" && gdBalance < parseFloat(contributionAmount || '0') && (
-                  <div className="text-red-600 text-sm bg-red-50 p-2 rounded">
-                    ⚠️ Insufficient G$ balance. You have {gdBalance.toLocaleString(undefined, { maximumFractionDigits: 2 })} G$
-                  </div>
-                )}
               </div>
             )}
           </div>
@@ -288,18 +273,9 @@ export default function GroupDetailPage() {
                 <div key={contribution.contributionId.toString()} className="border-b border-gray-200 pb-3">
                   <div className="flex justify-between items-start">
                     <div>
-                      <div className="flex items-center gap-2">
-                        <p className="font-medium text-gray-900">
-                          {(Number(contribution.amount) / 1e18).toLocaleString(undefined, { maximumFractionDigits: 2 })} {group?.tokenType === 0 ? 'CELO' : 'G$'}
-                        </p>
-                        <span className={`px-2 py-0.5 text-xs rounded font-medium ${
-                          group?.tokenType === 0
-                            ? 'bg-yellow-100 text-yellow-800'
-                            : 'bg-green-100 text-green-800'
-                        }`}>
-                          {group?.tokenType === 0 ? 'CELO' : 'G$'}
-                        </span>
-                      </div>
+                      <p className="font-medium text-gray-900">
+                        ${(Number(contribution.amount) / 1e18).toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                      </p>
                       {contribution.description && (
                         <p className="text-sm text-gray-600 mt-1">{contribution.description}</p>
                       )}

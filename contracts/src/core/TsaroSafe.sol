@@ -580,6 +580,14 @@ contract TsaroSafe is ITsaroSafeData {
             // G$ (GoodDollar) transfer
             if (goodDollarAddress == address(0)) revert InvalidTokenAddress();
             
+            // Check user's balance
+            uint256 userBalance = IERC20(goodDollarAddress).balanceOf(msg.sender);
+            if (userBalance < _amount) revert InvalidAmount();
+            
+            // Check allowance
+            uint256 allowance = IERC20(goodDollarAddress).allowance(msg.sender, address(this));
+            if (allowance < _amount) revert InsufficientAllowance();
+            
             // Transfer G$ from user to contract
             bool success = IERC20(goodDollarAddress).transferFrom(msg.sender, address(this), _amount);
             if (!success) revert TokenTransferFailed();

@@ -32,8 +32,7 @@ export function useCreateGroup() {
     isPrivate: boolean,
     targetAmount: bigint,
     memberLimit: number,
-    endDate: bigint,
-    tokenType: number = 0 // 0 = CELO, 1 = GSTAR
+    endDate: bigint
   ) => {
     if (!contractAddress) {
       throw new Error('Contract address not found. Please connect to Celo network.')
@@ -43,7 +42,7 @@ export function useCreateGroup() {
       address: contractAddress as Address,
       abi: TsaroSafeABI,
       functionName: 'createGroup',
-      args: [name, description, isPrivate, targetAmount, BigInt(memberLimit), endDate, tokenType],
+      args: [name, description, isPrivate, targetAmount, BigInt(memberLimit), endDate],
     })
   }
 
@@ -60,7 +59,6 @@ export function useCreateGroup() {
 
 /**
  * Hook to make a contribution
- * Supports both CELO and G$ (GoodDollar) tokens
  */
 export function useMakeContribution() {
   const contractAddress = useContractAddress()
@@ -69,19 +67,7 @@ export function useMakeContribution() {
     hash,
   })
 
-  /**
-   * Make a contribution to a group
-   * @param groupId - The group ID
-   * @param amount - The contribution amount in wei
-   * @param description - Description of the contribution
-   * @param tokenType - Token type: 0 for CELO, 1 for G$ (default: 0)
-   */
-  const makeContribution = async (
-    groupId: bigint,
-    amount: bigint,
-    description: string,
-    tokenType: number = 0
-  ) => {
+  const makeContribution = async (groupId: bigint, amount: bigint, description: string) => {
     if (!contractAddress) {
       throw new Error('Contract address not found. Please connect to Celo network.')
     }
@@ -91,13 +77,52 @@ export function useMakeContribution() {
       abi: TsaroSafeABI,
       functionName: 'makeContribution',
       args: [groupId, amount, description],
-      // Note: Token type is determined by the group's tokenType setting
-      // The contract will validate that the contribution matches the group's token type
     })
   }
 
   return {
     makeContribution,
+    hash,
+    isPending,
+    isConfirming,
+    isConfirmed,
+    error,
+    isLoading: isPending || isConfirming,
+  }
+}
+
+/**
+ * Hook to make a contribution with ERC20 tokens (CELO or G$)
+ */
+export function useMakeContributionWithToken() {
+  const contractAddress = useContractAddress()
+  const { writeContract, data: hash, isPending, error } = useWriteContract()
+  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
+    hash,
+  })
+
+  const makeContributionWithToken = async (
+    groupId: bigint,
+    amount: bigint,
+    description: string,
+    tokenType: number, // 0 = CELO, 1 = G$
+    value?: bigint // For native CELO transfers
+  ) => {
+    if (!contractAddress) {
+      throw new Error('Contract address not found. Please connect to Celo network.')
+    }
+
+    return writeContract({
+      address: contractAddress as Address,
+      abi: TsaroSafeABI,
+      functionName: 'makeContributionWithToken',
+      args: [groupId, amount, description, tokenType],
+      value: tokenType === 0 ? value : undefined, // Only send value for CELO (native token)
+    })
+  }
+
+  return {
+    makeContributionWithToken,
     hash,
     isPending,
     isConfirming,
@@ -327,54 +352,6 @@ export function useGroupProgress(groupId: bigint | undefined) {
 
   return {
     progress: data,
-    isLoading,
-    error,
-    refetch,
-  }
-}
-
-/**
- * Hook to get group token type
- */
-export function useGroupTokenType(groupId: bigint | undefined) {
-  const contractAddress = useContractAddress()
-  
-  const { data, isLoading, error, refetch } = useReadContract({
-    address: contractAddress as Address | undefined,
-    abi: TsaroSafeABI,
-    functionName: 'getGroupTokenType',
-    args: groupId !== undefined ? [groupId] : undefined,
-    query: {
-      enabled: !!contractAddress && groupId !== undefined,
-    },
-  })
-
-  return {
-    tokenType: data,
-    isLoading,
-    error,
-    refetch,
-  }
-}
-
-/**
- * Hook to get public groups filtered by token type
- */
-export function usePublicGroupsByTokenType(tokenType: number, offset: bigint = 0n, limit: number = 10) {
-  const contractAddress = useContractAddress()
-  
-  const { data, isLoading, error, refetch } = useReadContract({
-    address: contractAddress as Address | undefined,
-    abi: TsaroSafeABI,
-    functionName: 'getPublicGroupsByTokenType',
-    args: [tokenType, offset, BigInt(limit)],
-    query: {
-      enabled: !!contractAddress,
-    },
-  })
-
-  return {
-    groups: data,
     isLoading,
     error,
     refetch,
