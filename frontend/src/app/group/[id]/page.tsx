@@ -8,6 +8,8 @@ import { useGoodDollarBalance, useGoodDollarAllowance, useApproveGoodDollar } fr
 import { useContractAddress } from "@/hooks/useTsaroSafe";
 import { Address } from "viem";
 import { Group, ContributionHistory, GroupMilestone } from "@/types/group";
+import { InlineGDollarAmount, USDAmount } from "../components/GDollarAmount";
+import GDollarPriceDisplay from "../components/GDollarPriceDisplay";
 
 export default function GroupDetailPage() {
   const params = useParams();
@@ -179,8 +181,18 @@ export default function GroupDetailPage() {
               ></div>
             </div>
             <div className="flex justify-between text-sm text-gray-500 mt-2">
-              <span>${currentAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
-              <span>${targetAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
+              <div className="text-left">
+                <div>${currentAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })}</div>
+                {(group.tokenType ?? 0) === 1 && (
+                  <USDAmount gdollarAmount={currentAmount} className="text-xs text-gray-400" />
+                )}
+              </div>
+              <div className="text-right">
+                <div>${targetAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })}</div>
+                {(group.tokenType ?? 0) === 1 && (
+                  <USDAmount gdollarAmount={targetAmount} className="text-xs text-gray-400" />
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -276,40 +288,61 @@ export default function GroupDetailPage() {
           </div>
         )}
 
+        {/* G$ Price Info for G$ groups */}
+        {(group.tokenType ?? 0) === 1 && (
+          <div className="mt-6">
+            <GDollarPriceDisplay compact={true} className="w-full" />
+          </div>
+        )}
+
         {/* Contributions History */}
         <div className="bg-white rounded-lg shadow p-6 mt-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Contributions</h2>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold text-gray-900">Contributions</h2>
+            {(group.tokenType ?? 0) === 1 && (
+              <GDollarPriceDisplay compact={true} />
+            )}
+          </div>
           {isLoadingContributions ? (
             <div className="text-center py-4 text-gray-500">Loading contributions...</div>
           ) : contributions && contributions.length > 0 ? (
             <div className="space-y-3">
-              {contributions.map((contribution: any) => (
-                <div key={contribution.contributionId.toString()} className="border-b border-gray-200 pb-3">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <p className="font-medium text-gray-900">
-                        ${(Number(contribution.amount) / 1e18).toLocaleString(undefined, { maximumFractionDigits: 2 })}
-                      </p>
-                      {contribution.description && (
-                        <p className="text-sm text-gray-600 mt-1">{contribution.description}</p>
-                      )}
-                      <p className="text-xs text-gray-500 mt-1">
-                        {new Date(Number(contribution.timestamp) * 1000).toLocaleString()}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-xs text-gray-500">
-                        {contribution.member.slice(0, 6)}...{contribution.member.slice(-4)}
-                      </p>
-                      {contribution.isVerified && (
-                        <span className="inline-block mt-1 px-2 py-1 bg-green-100 text-green-800 text-xs rounded">
-                          Verified
-                        </span>
-                      )}
+              {contributions.map((contribution: any) => {
+                const contributionAmount = Number(contribution.amount) / 1e18;
+                const isGDollar = (contribution.tokenType ?? (group.tokenType ?? 0)) === 1;
+                
+                return (
+                  <div key={contribution.contributionId.toString()} className="border-b border-gray-200 pb-3">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <div className="font-medium text-gray-900">
+                          {isGDollar ? (
+                            <InlineGDollarAmount amount={contributionAmount} />
+                          ) : (
+                            `$${contributionAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })}`
+                          )}
+                        </div>
+                        {contribution.description && (
+                          <p className="text-sm text-gray-600 mt-1">{contribution.description}</p>
+                        )}
+                        <p className="text-xs text-gray-500 mt-1">
+                          {new Date(Number(contribution.timestamp) * 1000).toLocaleString()}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xs text-gray-500">
+                          {contribution.member.slice(0, 6)}...{contribution.member.slice(-4)}
+                        </p>
+                        {contribution.isVerified && (
+                          <span className="inline-block mt-1 px-2 py-1 bg-green-100 text-green-800 text-xs rounded">
+                            Verified
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           ) : (
             <div className="text-center py-4 text-gray-500">No contributions yet</div>
