@@ -8,8 +8,8 @@ import { useGoodDollarBalance, useGoodDollarAllowance, useApproveGoodDollar } fr
 import { useContractAddress } from "@/hooks/useTsaroSafe";
 import { Address } from "viem";
 import { Group, ContributionHistory, GroupMilestone } from "@/types/group";
-import { InlineGDollarAmount, USDAmount } from "../components/GDollarAmount";
-import GDollarPriceDisplay from "../components/GDollarPriceDisplay";
+import { InlineGDollarAmount, USDAmount } from "@/app/components/GDollarAmount";
+import GDollarPriceDisplay from "@/app/components/GDollarPriceDisplay";
 
 export default function GroupDetailPage() {
   const params = useParams();

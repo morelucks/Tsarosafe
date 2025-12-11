@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
-import GDollarPriceDisplay from "../components/GDollarPriceDisplay";
-import GDollarPriceChart from "../components/GDollarPriceChart";
+import GDollarPriceDisplay from "@/app/components/GDollarPriceDisplay";
+import GDollarPriceChart from "@/app/components/GDollarPriceChart";
 import { useGDollarPrice, useGDollarConversion } from "@/hooks/useGDollarPrice";
 import { useState } from "react";
 

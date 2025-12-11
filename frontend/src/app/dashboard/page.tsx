@@ -4,10 +4,10 @@ import Link from "next/link";
 import { useAccount } from "wagmi";
 import { useUserGroups, useGroup, useGroupMembers, useGroupStats, useGroupContributions } from "@/hooks/useTsaroSafe";
 import { Address } from "viem";
-import GoodDollarBalance from "../components/GoodDollarBalance";
-import UBIClaim from "../components/UBIClaim";
-import GDollarPriceDisplay from "../components/GDollarPriceDisplay";
-import GDollarPriceChart from "../components/GDollarPriceChart";
+import GoodDollarBalance from "@/app/components/GoodDollarBalance";
+import UBIClaim from "@/app/components/UBIClaim";
+import GDollarPriceDisplay from "@/app/components/GDollarPriceDisplay";
+import GDollarPriceChart from "@/app/components/GDollarPriceChart";
 import { Group, GroupStats } from "@/types/group";
 import { useUBIClaimInfo } from "@/hooks/useGoodDollar";
 
