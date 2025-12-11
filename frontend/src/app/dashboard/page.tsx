@@ -6,6 +6,7 @@ import { useUserGroups, useGroup, useGroupMembers, useGroupStats, useGroupContri
 import { Address } from "viem";
 import GoodDollarBalance from "../components/GoodDollarBalance";
 import UBIClaim from "../components/UBIClaim";
+import GDollarPriceDisplay from "../components/GDollarPriceDisplay";
 import { Group, GroupStats } from "@/types/group";
 import { useUBIClaimInfo } from "@/hooks/useGoodDollar";
 
@@ -252,10 +253,11 @@ const DashboardPage = () => {
           <p className="mt-2 text-gray-600">Welcome back! Here&apos;s your financial overview.</p>
         </div>
 
-        {/* GoodDollar Balance and UBI Claim */}
-        <div className="mb-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* GoodDollar Balance, UBI Claim, and Price */}
+        <div className="mb-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
           <GoodDollarBalance />
           <UBIClaim />
+          <GDollarPriceDisplay showDetails={true} />
         </div>
 
         {/* Stats Cards */}
