@@ -33,17 +33,22 @@ export default function UBIClaim() {
   // Handle successful claim
   useEffect(() => {
     if (isConfirmed) {
-      setMessage("UBI claimed successfully! 🎉");
+      setMessage("UBI claimed successfully! 🎉 Your G$ balance has been updated.");
       refetchBalance(); // Refresh balance after claim
-      setTimeout(() => setMessage(null), 5000);
+      setTimeout(() => setMessage(null), 6000);
     }
   }, [isConfirmed, refetchBalance]);
 
   // Handle claim error
   useEffect(() => {
     if (error) {
-      setMessage(`Claim failed: ${error.message}`);
-      setTimeout(() => setMessage(null), 5000);
+      const errorMessage = error.message.includes('User rejected') 
+        ? 'Transaction was cancelled by user'
+        : error.message.includes('insufficient funds')
+        ? 'Insufficient funds for transaction fees'
+        : `Claim failed: ${error.message}`;
+      setMessage(errorMessage);
+      setTimeout(() => setMessage(null), 7000);
     }
   }, [error]);
 
@@ -145,9 +150,17 @@ export default function UBIClaim() {
         </button>
 
         {!canClaim && timeLeft === 0 && claimableAmountFormatted === 0 && (
-          <p className="text-xs opacity-75 text-center">
-            You may not be eligible for UBI or have already claimed today's allocation.
-          </p>
+          <div className="text-xs opacity-75 text-center space-y-1">
+            <p>You may not be eligible for UBI or have already claimed today's allocation.</p>
+            <p>UBI is distributed daily to verified GoodDollar users.</p>
+          </div>
+        )}
+
+        {/* Transaction status */}
+        {isClaiming && (
+          <div className="text-xs opacity-75 text-center">
+            <p>Please confirm the transaction in your wallet...</p>
+          </div>
         )}
       </div>
     </div>
