@@ -151,7 +151,7 @@ export default function UBIClaim() {
 
         {!canClaim && timeLeft === 0 && claimableAmountFormatted === 0 && (
           <div className="text-xs opacity-75 text-center space-y-1">
-            <p>You may not be eligible for UBI or have already claimed today's allocation.</p>
+            <p>You may not be eligible for UBI or have already claimed today&apos;s allocation.</p>
             <p>UBI is distributed daily to verified GoodDollar users.</p>
           </div>
         )}
