@@ -287,9 +287,18 @@ export default function GroupDetailPage() {
                 <div key={contribution.contributionId.toString()} className="border-b border-gray-200 pb-3">
                   <div className="flex justify-between items-start">
                     <div>
-                      <p className="font-medium text-gray-900">
-                        ${(Number(contribution.amount) / 1e18).toLocaleString(undefined, { maximumFractionDigits: 2 })}
-                      </p>
+                      <div className="flex items-center gap-2">
+                        <p className="font-medium text-gray-900">
+                          ${(Number(contribution.amount) / 1e18).toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                        </p>
+                        <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${
+                          (contribution.tokenType ?? 0) === 0 
+                            ? 'bg-yellow-100 text-yellow-800' 
+                            : 'bg-green-100 text-green-800'
+                        }`}>
+                          {(contribution.tokenType ?? 0) === 0 ? "CELO" : "G$"}
+                        </span>
+                      </div>
                       {contribution.description && (
                         <p className="text-sm text-gray-600 mt-1">{contribution.description}</p>
                       )}
