@@ -69,12 +69,10 @@ const VerifyWithSelf: React.FC<VerifyWithSelfProps> = ({
   }, [userId, appName, scope, requiredDisclosures]);
 
   const handleSuccessfulVerification = () => {
-    console.log("Verification successful");
     onSuccess({ verified: true, timestamp: new Date().toISOString() });
   };
 
   const handleVerificationError = () => {
-    console.error("Verification error");
     onError({ error: "Verification failed" });
   };
 

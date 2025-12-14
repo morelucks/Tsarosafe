@@ -8,6 +8,8 @@ import { useGoodDollarBalance, useGoodDollarAllowance, useApproveGoodDollar } fr
 import { useContractAddress } from "@/hooks/useTsaroSafe";
 import { Address } from "viem";
 import { Group, ContributionHistory, GroupMilestone } from "@/types/group";
+import { InlineGDollarAmount, USDAmount } from "@/app/components/GDollarAmount";
+import GDollarPriceDisplay from "@/app/components/GDollarPriceDisplay";
 
 export default function GroupDetailPage() {
   const params = useParams();
@@ -179,8 +181,18 @@ export default function GroupDetailPage() {
               ></div>
             </div>
             <div className="flex justify-between text-sm text-gray-500 mt-2">
-              <span>${currentAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
-              <span>${targetAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
+              <div className="text-left">
+                <div>${currentAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })}</div>
+                {(group.tokenType ?? 0) === 1 && (
+                  <USDAmount gdollarAmount={currentAmount} className="text-xs text-gray-400" />
+                )}
+              </div>
+              <div className="text-right">
+                <div>${targetAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })}</div>
+                {(group.tokenType ?? 0) === 1 && (
+                  <USDAmount gdollarAmount={targetAmount} className="text-xs text-gray-400" />
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -276,9 +288,21 @@ export default function GroupDetailPage() {
           </div>
         )}
 
+        {/* G$ Price Info for G$ groups */}
+        {(group.tokenType ?? 0) === 1 && (
+          <div className="mt-6">
+            <GDollarPriceDisplay compact={true} className="w-full" />
+          </div>
+        )}
+
         {/* Contributions History */}
         <div className="bg-white rounded-lg shadow p-6 mt-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Contributions</h2>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold text-gray-900">Contributions</h2>
+            {(group.tokenType ?? 0) === 1 && (
+              <GDollarPriceDisplay compact={true} />
+            )}
+          </div>
           {isLoadingContributions ? (
             <div className="text-center py-4 text-gray-500">Loading contributions...</div>
           ) : contributions && contributions.length > 0 ? (
@@ -317,8 +341,8 @@ export default function GroupDetailPage() {
                       )}
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           ) : (
             <div className="text-center py-4 text-gray-500">No contributions yet</div>

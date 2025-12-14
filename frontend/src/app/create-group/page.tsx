@@ -1,7 +1,7 @@
 "use client";
 import { useMemo, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import VerifyWithSelf from "../components/VerifyWithSelf";
+import VerifyWithSelf from "@/app/components/VerifyWithSelf";
 import { useCreateGroup } from "@/hooks/useTsaroSafe";
 
 type Privacy = "public" | "private";

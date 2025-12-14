@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useUBIClaimInfo, useClaimUBI, useGoodDollarBalance } from "@/hooks/useGoodDollar";
+import { USDAmount } from "./GDollarAmount";
 
 export default function UBIClaim() {
   const { 
@@ -109,16 +110,26 @@ export default function UBIClaim() {
       <div className="space-y-3">
         <div className="flex justify-between items-center">
           <span className="text-sm opacity-90">Claimable Amount:</span>
-          <span className="font-bold text-lg">
-            {claimableAmountFormatted.toLocaleString(undefined, { maximumFractionDigits: 2 })} G$
-          </span>
+          <div className="text-right">
+            <span className="font-bold text-lg">
+              {claimableAmountFormatted.toLocaleString(undefined, { maximumFractionDigits: 2 })} G$
+            </span>
+            <div className="text-xs opacity-75">
+              <USDAmount gdollarAmount={claimableAmountFormatted} className="text-green-100" />
+            </div>
+          </div>
         </div>
 
         <div className="flex justify-between items-center">
           <span className="text-sm opacity-90">Daily UBI:</span>
-          <span className="font-medium">
-            {dailyUBIFormatted.toLocaleString(undefined, { maximumFractionDigits: 2 })} G$
-          </span>
+          <div className="text-right">
+            <span className="font-medium">
+              {dailyUBIFormatted.toLocaleString(undefined, { maximumFractionDigits: 2 })} G$
+            </span>
+            <div className="text-xs opacity-75">
+              <USDAmount gdollarAmount={dailyUBIFormatted} className="text-green-100" />
+            </div>
+          </div>
         </div>
 
         {!canClaim && timeLeft > 0 && (
