@@ -307,38 +307,38 @@ export default function GroupDetailPage() {
             <div className="text-center py-4 text-gray-500">Loading contributions...</div>
           ) : contributions && contributions.length > 0 ? (
             <div className="space-y-3">
-              {contributions.map((contribution: any) => {
-                const contributionAmount = Number(contribution.amount) / 1e18;
-                const isGDollar = (contribution.tokenType ?? (group.tokenType ?? 0)) === 1;
-                
-                return (
-                  <div key={contribution.contributionId.toString()} className="border-b border-gray-200 pb-3">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <div className="font-medium text-gray-900">
-                          {isGDollar ? (
-                            <InlineGDollarAmount amount={contributionAmount} />
-                          ) : (
-                            `$${contributionAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })}`
-                          )}
-                        </div>
-                        {contribution.description && (
-                          <p className="text-sm text-gray-600 mt-1">{contribution.description}</p>
-                        )}
-                        <p className="text-xs text-gray-500 mt-1">
-                          {new Date(Number(contribution.timestamp) * 1000).toLocaleString()}
+              {contributions.map((contribution: any) => (
+                <div key={contribution.contributionId.toString()} className="border-b border-gray-200 pb-3">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <p className="font-medium text-gray-900">
+                          ${(Number(contribution.amount) / 1e18).toLocaleString(undefined, { maximumFractionDigits: 2 })}
                         </p>
+                        <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${
+                          (contribution.tokenType ?? 0) === 0 
+                            ? 'bg-yellow-100 text-yellow-800' 
+                            : 'bg-green-100 text-green-800'
+                        }`}>
+                          {(contribution.tokenType ?? 0) === 0 ? "CELO" : "G$"}
+                        </span>
                       </div>
-                      <div className="text-right">
-                        <p className="text-xs text-gray-500">
-                          {contribution.member.slice(0, 6)}...{contribution.member.slice(-4)}
-                        </p>
-                        {contribution.isVerified && (
-                          <span className="inline-block mt-1 px-2 py-1 bg-green-100 text-green-800 text-xs rounded">
-                            Verified
-                          </span>
-                        )}
-                      </div>
+                      {contribution.description && (
+                        <p className="text-sm text-gray-600 mt-1">{contribution.description}</p>
+                      )}
+                      <p className="text-xs text-gray-500 mt-1">
+                        {new Date(Number(contribution.timestamp) * 1000).toLocaleString()}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xs text-gray-500">
+                        {contribution.member.slice(0, 6)}...{contribution.member.slice(-4)}
+                      </p>
+                      {contribution.isVerified && (
+                        <span className="inline-block mt-1 px-2 py-1 bg-green-100 text-green-800 text-xs rounded">
+                          Verified
+                        </span>
+                      )}
                     </div>
                   </div>
                 );
