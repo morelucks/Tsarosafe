@@ -39,6 +39,10 @@ contract TsaroSafe is ITsaroSafeData {
     error TokenTransferFailed();
     error TokenTypeMismatch();
     error InsufficientAllowance();
+    error WithdrawalNotAllowed();
+    error ContributionAlreadyWithdrawn();
+    error InsufficientContractBalance();
+    error WithdrawalFailed();
 
     enum GroupType {
         ProjectPool,
@@ -80,6 +84,12 @@ contract TsaroSafe is ITsaroSafeData {
     mapping(uint256 => GroupGoal) public groupGoals;
     mapping(uint256 => GoalMilestone[]) public groupMilestones;
     mapping(uint256 => uint256) public groupGoalDeadlines;
+
+    // Withdrawal tracking mappings
+    // groupId => contributionId => withdrawn
+    mapping(uint256 => mapping(uint256 => bool)) public withdrawnContributions;
+    // groupId => member => total withdrawn
+    mapping(uint256 => mapping(address => uint256)) public memberWithdrawnAmount;
 
     // Events
     event GroupCreated(
@@ -129,6 +139,23 @@ contract TsaroSafe is ITsaroSafeData {
         uint256 indexed groupId, uint256 currentAmount, uint256 targetAmount, uint256 progressPercentage
     );
 
+    // Withdrawal events
+    event WithdrawalInitiated(
+        uint256 indexed groupId,
+        uint256 indexed contributionId,
+        address indexed member,
+        uint256 amount,
+        uint8 tokenType,
+        uint256 timestamp
+    );
+    event WithdrawalCompleted(
+        uint256 indexed groupId,
+        uint256 indexed contributionId,
+        address indexed member,
+        uint256 amount,
+        uint8 tokenType,
+        uint256 timestamp
+    );
 
     // Modifiers
     modifier onlyGroupCreator(uint256 _groupId) {
@@ -1253,4 +1280,129 @@ contract TsaroSafe is ITsaroSafeData {
 
         return filteredGroups;
     }
+
+    // ========================================
+    // WITHDRAWAL FUNCTIONS
+    // ========================================
+
+    /**
+     * @notice Withdraw a contribution from a group
+     * @param _groupId Group ID
+     * @param _contributionId Contribution ID to withdraw
+     */
+    function withdrawContribution(uint256 _groupId, uint256 _contributionId)
+        external
+        groupExists(_groupId)
+        onlyGroupMember(_groupId)
+    {
+        // Find the contribution
+        ContributionHistory[] storage contributions = groupContributions[_groupId];
+        uint256 contributionIndex = type(uint256).max;
+        uint256 withdrawalAmount;
+        uint8 tokenType;
+
+        for (uint256 i = 0; i < contributions.length; i++) {
+            if (contributions[i].contributionId == _contributionId) {
+                contributionIndex = i;
+                withdrawalAmount = contributions[i].amount;
+                tokenType = uint8(contributions[i].tokenType);
+                break;
+            }
+        }
+
+        if (contributionIndex == type(uint256).max) revert ContributionNotFound();
+
+        // Verify the contribution belongs to the caller
+        if (contributions[contributionIndex].member != msg.sender) revert NotMember();
+
+        // Check if already withdrawn
+        if (withdrawnContributions[_groupId][_contributionId]) revert ContributionAlreadyWithdrawn();
+
+        // Get group info
+        Group storage group = groups[_groupId];
+
+        // Verify withdrawal is allowed (group must be completed or ended)
+        if (group.isActive && block.timestamp < group.endDate) revert WithdrawalNotAllowed();
+
+        // Mark as withdrawn
+        withdrawnContributions[_groupId][_contributionId] = true;
+        memberWithdrawnAmount[_groupId][msg.sender] += withdrawalAmount;
+
+        // Update group totals
+        group.currentAmount -= withdrawalAmount;
+
+        // Transfer tokens back to member
+        if (tokenType == 0) {
+            // CELO transfer (native token)
+            if (address(this).balance < withdrawalAmount) revert InsufficientContractBalance();
+            (bool success, ) = msg.sender.call{value: withdrawalAmount}("");
+            if (!success) revert WithdrawalFailed();
+        } else if (tokenType == 1) {
+            // G$ (GoodDollar) transfer
+            if (goodDollarAddress == address(0)) revert InvalidTokenAddress();
+            bool success = IERC20(goodDollarAddress).transfer(msg.sender, withdrawalAmount);
+            if (!success) revert TokenTransferFailed();
+        }
+
+        emit WithdrawalCompleted(_groupId, _contributionId, msg.sender, withdrawalAmount, tokenType, block.timestamp);
+    }
+
+    /**
+     * @notice Get total withdrawn amount for a member in a group
+     * @param _groupId Group ID
+     * @param _member Member address
+     */
+    function getMemberWithdrawnAmount(uint256 _groupId, address _member)
+        external
+        view
+        groupExists(_groupId)
+        returns (uint256)
+    {
+        return memberWithdrawnAmount[_groupId][_member];
+    }
+
+    /**
+     * @notice Check if a contribution has been withdrawn
+     * @param _groupId Group ID
+     * @param _contributionId Contribution ID
+     */
+    function isContributionWithdrawn(uint256 _groupId, uint256 _contributionId)
+        external
+        view
+        groupExists(_groupId)
+        returns (bool)
+    {
+        return withdrawnContributions[_groupId][_contributionId];
+    }
+
+    /**
+     * @notice Get withdrawable amount for a member in a group
+     * @param _groupId Group ID
+     * @param _member Member address
+     */
+    function getWithdrawableAmount(uint256 _groupId, address _member)
+        external
+        view
+        groupExists(_groupId)
+        returns (uint256)
+    {
+        Group storage group = groups[_groupId];
+        ContributionHistory[] storage contributions = groupContributions[_groupId];
+
+        uint256 totalWithdrawable = 0;
+
+        for (uint256 i = 0; i < contributions.length; i++) {
+            // Only count contributions from the member that haven't been withdrawn
+            if (contributions[i].member == _member && !withdrawnContributions[_groupId][contributions[i].contributionId]) {
+                totalWithdrawable += contributions[i].amount;
+            }
+        }
+
+        return totalWithdrawable;
+    }
+
+    /**
+     * @notice Receive CELO transfers
+     */
+    receive() external payable {}
 }
