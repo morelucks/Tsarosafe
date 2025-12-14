@@ -998,4 +998,405 @@ contract TsaroSafeTest is Test {
 
         vm.stopPrank();
     }
+
+    // ============================================
+    // ACCESS CONTROL TESTS
+    // ============================================
+
+    function testWithdrawalAccessControlNonMember() public {
+        uint256 endDate = block.timestamp + 30 days;
+
+        // Create CELO group
+        vm.startPrank(user1);
+        uint256 groupId = tsaroSafe.createGroup(
+            "CELO Group",
+            "Test CELO group",
+            false,
+            1000 ether,
+            10,
+            endDate,
+            ITsaroSafeData.TokenType.CELO
+        );
+        vm.stopPrank();
+
+        // Give user2 some CELO
+        deal(user2, 100 ether);
+
+        // Join and contribute
+        vm.startPrank(user2);
+        tsaroSafe.joinGroup(uint256(groupId));
+        uint256 contributionAmount = 10 ether;
+        tsaroSafe.makeContributionWithToken{value: contributionAmount}(
+            uint256(groupId),
+            contributionAmount,
+            "CELO contribution",
+            0
+        );
+        vm.stopPrank();
+
+        // Fast forward past end date
+        vm.warp(endDate + 1);
+
+        // Try to withdraw as non-member (user3)
+        vm.startPrank(user3);
+        ITsaroSafeData.ContributionHistory[] memory contributions = tsaroSafe.getGroupContributions(uint256(groupId), 0, 10);
+        uint256 contributionId = contributions[0].contributionId;
+
+        vm.expectRevert(TsaroSafe.NotMember.selector);
+        tsaroSafe.withdrawContribution(uint256(groupId), contributionId);
+
+        vm.stopPrank();
+    }
+
+    function testWithdrawalAccessControlWrongContributionOwner() public {
+        uint256 endDate = block.timestamp + 30 days;
+
+        // Create CELO group
+        vm.startPrank(user1);
+        uint256 groupId = tsaroSafe.createGroup(
+            "CELO Group",
+            "Test CELO group",
+            false,
+            1000 ether,
+            10,
+            endDate,
+            ITsaroSafeData.TokenType.CELO
+        );
+        vm.stopPrank();
+
+        // Give user2 and user3 some CELO
+        deal(user2, 100 ether);
+        deal(user3, 100 ether);
+
+        // User2 joins and contributes
+        vm.startPrank(user2);
+        tsaroSafe.joinGroup(uint256(groupId));
+        uint256 contributionAmount = 10 ether;
+        tsaroSafe.makeContributionWithToken{value: contributionAmount}(
+            uint256(groupId),
+            contributionAmount,
+            "CELO contribution",
+            0
+        );
+        vm.stopPrank();
+
+        // User3 joins
+        vm.startPrank(user3);
+        tsaroSafe.joinGroup(uint256(groupId));
+        vm.stopPrank();
+
+        // Fast forward past end date
+        vm.warp(endDate + 1);
+
+        // Try to withdraw user2's contribution as user3
+        vm.startPrank(user3);
+        ITsaroSafeData.ContributionHistory[] memory contributions = tsaroSafe.getGroupContributions(uint256(groupId), 0, 10);
+        uint256 contributionId = contributions[0].contributionId;
+
+        vm.expectRevert(TsaroSafe.NotMember.selector);
+        tsaroSafe.withdrawContribution(uint256(groupId), contributionId);
+
+        vm.stopPrank();
+    }
+
+    // ============================================
+    // EDGE CASE TESTS
+    // ============================================
+
+    function testWithdrawalInvalidContributionId() public {
+        uint256 endDate = block.timestamp + 30 days;
+
+        // Create CELO group
+        vm.startPrank(user1);
+        uint256 groupId = tsaroSafe.createGroup(
+            "CELO Group",
+            "Test CELO group",
+            false,
+            1000 ether,
+            10,
+            endDate,
+            ITsaroSafeData.TokenType.CELO
+        );
+        vm.stopPrank();
+
+        // Fast forward past end date
+        vm.warp(endDate + 1);
+
+        // Try to withdraw non-existent contribution
+        vm.startPrank(user1);
+        vm.expectRevert(TsaroSafe.ContributionNotFound.selector);
+        tsaroSafe.withdrawContribution(uint256(groupId), 999);
+
+        vm.stopPrank();
+    }
+
+    function testWithdrawalMultipleContributions() public {
+        uint256 endDate = block.timestamp + 30 days;
+
+        // Create CELO group
+        vm.startPrank(user1);
+        uint256 groupId = tsaroSafe.createGroup(
+            "CELO Group",
+            "Test CELO group",
+            false,
+            1000 ether,
+            10,
+            endDate,
+            ITsaroSafeData.TokenType.CELO
+        );
+        vm.stopPrank();
+
+        // Give user2 some CELO
+        deal(user2, 100 ether);
+
+        // Join and make multiple contributions
+        vm.startPrank(user2);
+        tsaroSafe.joinGroup(uint256(groupId));
+        uint256 contribution1 = 5 ether;
+        uint256 contribution2 = 3 ether;
+        uint256 contribution3 = 2 ether;
+
+        tsaroSafe.makeContributionWithToken{value: contribution1}(
+            uint256(groupId),
+            contribution1,
+            "First contribution",
+            0
+        );
+        tsaroSafe.makeContributionWithToken{value: contribution2}(
+            uint256(groupId),
+            contribution2,
+            "Second contribution",
+            0
+        );
+        tsaroSafe.makeContributionWithToken{value: contribution3}(
+            uint256(groupId),
+            contribution3,
+            "Third contribution",
+            0
+        );
+        vm.stopPrank();
+
+        // Fast forward past end date
+        vm.warp(endDate + 1);
+
+        // Withdraw all contributions
+        vm.startPrank(user2);
+        ITsaroSafeData.ContributionHistory[] memory contributions = tsaroSafe.getGroupContributions(uint256(groupId), 0, 10);
+
+        uint256 balanceBefore = user2.balance;
+
+        // Withdraw first contribution
+        tsaroSafe.withdrawContribution(uint256(groupId), contributions[0].contributionId);
+        // Withdraw second contribution
+        tsaroSafe.withdrawContribution(uint256(groupId), contributions[1].contributionId);
+        // Withdraw third contribution
+        tsaroSafe.withdrawContribution(uint256(groupId), contributions[2].contributionId);
+
+        uint256 balanceAfter = user2.balance;
+
+        assertEq(balanceAfter - balanceBefore, contribution1 + contribution2 + contribution3, "Should receive all contributions");
+
+        vm.stopPrank();
+    }
+
+    function testWithdrawalGroupCompleted() public {
+        uint256 endDate = block.timestamp + 30 days;
+
+        // Create CELO group with small target
+        vm.startPrank(user1);
+        uint256 groupId = tsaroSafe.createGroup(
+            "CELO Group",
+            "Test CELO group",
+            false,
+            10 ether, // Small target
+            10,
+            endDate,
+            ITsaroSafeData.TokenType.CELO
+        );
+        vm.stopPrank();
+
+        // Give user2 some CELO
+        deal(user2, 100 ether);
+
+        // Join and contribute enough to complete group
+        vm.startPrank(user2);
+        tsaroSafe.joinGroup(uint256(groupId));
+        uint256 contributionAmount = 10 ether;
+        tsaroSafe.makeContributionWithToken{value: contributionAmount}(
+            uint256(groupId),
+            contributionAmount,
+            "CELO contribution",
+            0
+        );
+        vm.stopPrank();
+
+        // Verify group is completed
+        ITsaroSafeData.Group memory group = tsaroSafe.getGroup(uint256(groupId));
+        assertTrue(group.isCompleted, "Group should be completed");
+
+        // Should be able to withdraw even though group is completed
+        vm.startPrank(user2);
+        ITsaroSafeData.ContributionHistory[] memory contributions = tsaroSafe.getGroupContributions(uint256(groupId), 0, 10);
+        uint256 contributionId = contributions[0].contributionId;
+
+        uint256 balanceBefore = user2.balance;
+        tsaroSafe.withdrawContribution(uint256(groupId), contributionId);
+        uint256 balanceAfter = user2.balance;
+
+        assertEq(balanceAfter - balanceBefore, contributionAmount, "Should receive contribution");
+
+        vm.stopPrank();
+    }
+
+    function testWithdrawalZeroAmount() public {
+        uint256 endDate = block.timestamp + 30 days;
+
+        // Create CELO group
+        vm.startPrank(user1);
+        uint256 groupId = tsaroSafe.createGroup(
+            "CELO Group",
+            "Test CELO group",
+            false,
+            1000 ether,
+            10,
+            endDate,
+            ITsaroSafeData.TokenType.CELO
+        );
+        vm.stopPrank();
+
+        // Fast forward past end date
+        vm.warp(endDate + 1);
+
+        // Try to withdraw from group with no contributions
+        vm.startPrank(user1);
+        vm.expectRevert(TsaroSafe.ContributionNotFound.selector);
+        tsaroSafe.withdrawContribution(uint256(groupId), 1);
+
+        vm.stopPrank();
+    }
+
+    function testWithdrawalPartialGroupCompletion() public {
+        uint256 endDate = block.timestamp + 30 days;
+
+        // Create CELO group
+        vm.startPrank(user1);
+        uint256 groupId = tsaroSafe.createGroup(
+            "CELO Group",
+            "Test CELO group",
+            false,
+            100 ether,
+            10,
+            endDate,
+            ITsaroSafeData.TokenType.CELO
+        );
+        vm.stopPrank();
+
+        // Give user2 and user3 some CELO
+        deal(user2, 100 ether);
+        deal(user3, 100 ether);
+
+        // User2 contributes
+        vm.startPrank(user2);
+        tsaroSafe.joinGroup(uint256(groupId));
+        uint256 contribution2 = 30 ether;
+        tsaroSafe.makeContributionWithToken{value: contribution2}(
+            uint256(groupId),
+            contribution2,
+            "User2 contribution",
+            0
+        );
+        vm.stopPrank();
+
+        // User3 contributes enough to complete
+        vm.startPrank(user3);
+        tsaroSafe.joinGroup(uint256(groupId));
+        uint256 contribution3 = 70 ether;
+        tsaroSafe.makeContributionWithToken{value: contribution3}(
+            uint256(groupId),
+            contribution3,
+            "User3 contribution",
+            0
+        );
+        vm.stopPrank();
+
+        // Verify group is completed
+        ITsaroSafeData.Group memory group = tsaroSafe.getGroup(uint256(groupId));
+        assertTrue(group.isCompleted, "Group should be completed");
+
+        // Both users should be able to withdraw
+        vm.startPrank(user2);
+        ITsaroSafeData.ContributionHistory[] memory contributions = tsaroSafe.getGroupContributions(uint256(groupId), 0, 10);
+        uint256 user2ContributionId = contributions[0].contributionId;
+
+        uint256 user2BalanceBefore = user2.balance;
+        tsaroSafe.withdrawContribution(uint256(groupId), user2ContributionId);
+        uint256 user2BalanceAfter = user2.balance;
+
+        assertEq(user2BalanceAfter - user2BalanceBefore, contribution2, "User2 should receive their contribution");
+
+        vm.stopPrank();
+
+        vm.startPrank(user3);
+        uint256 user3ContributionId = contributions[1].contributionId;
+
+        uint256 user3BalanceBefore = user3.balance;
+        tsaroSafe.withdrawContribution(uint256(groupId), user3ContributionId);
+        uint256 user3BalanceAfter = user3.balance;
+
+        assertEq(user3BalanceAfter - user3BalanceBefore, contribution3, "User3 should receive their contribution");
+
+        vm.stopPrank();
+    }
+
+    function testWithdrawalGroupTotalsUpdated() public {
+        uint256 endDate = block.timestamp + 30 days;
+
+        // Create CELO group
+        vm.startPrank(user1);
+        uint256 groupId = tsaroSafe.createGroup(
+            "CELO Group",
+            "Test CELO group",
+            false,
+            1000 ether,
+            10,
+            endDate,
+            ITsaroSafeData.TokenType.CELO
+        );
+        vm.stopPrank();
+
+        // Give user2 some CELO
+        deal(user2, 100 ether);
+
+        // Join and contribute
+        vm.startPrank(user2);
+        tsaroSafe.joinGroup(uint256(groupId));
+        uint256 contributionAmount = 10 ether;
+        tsaroSafe.makeContributionWithToken{value: contributionAmount}(
+            uint256(groupId),
+            contributionAmount,
+            "CELO contribution",
+            0
+        );
+        vm.stopPrank();
+
+        // Verify group amount before withdrawal
+        ITsaroSafeData.Group memory groupBefore = tsaroSafe.getGroup(uint256(groupId));
+        assertEq(groupBefore.currentAmount, contributionAmount, "Group should have contribution amount");
+
+        // Fast forward past end date
+        vm.warp(endDate + 1);
+
+        // Withdraw contribution
+        vm.startPrank(user2);
+        ITsaroSafeData.ContributionHistory[] memory contributions = tsaroSafe.getGroupContributions(uint256(groupId), 0, 10);
+        uint256 contributionId = contributions[0].contributionId;
+
+        tsaroSafe.withdrawContribution(uint256(groupId), contributionId);
+
+        // Verify group amount after withdrawal
+        ITsaroSafeData.Group memory groupAfter = tsaroSafe.getGroup(uint256(groupId));
+        assertEq(groupAfter.currentAmount, 0, "Group amount should be reduced to 0");
+
+        vm.stopPrank();
+    }
 }
