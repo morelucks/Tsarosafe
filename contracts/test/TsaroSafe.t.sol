@@ -5,6 +5,7 @@ import {Test, console} from "forge-std/Test.sol";
 import {Vm} from "forge-std/Vm.sol";
 import {TsaroSafe} from "../src/core/TsaroSafe.sol";
 import {ITsaroSafeData} from "../src/interfaces/ITsaroSafeData.sol";
+import {MockGoodDollar} from "./mocks/MockGoodDollar.sol";
 
 /**
  * @title TsaroSafeTest
@@ -52,10 +53,10 @@ contract TsaroSafeDeploymentTest is Test {
  */
 contract TsaroSafeTest is Test {
     TsaroSafe public tsaroSafe;
+    MockGoodDollar public mockGoodDollar;
     address public user1;
     address public user2;
     address public user3;
-    address public mockGoodDollar;
 
     // Events to test
     event GroupCreated(
@@ -87,10 +88,12 @@ contract TsaroSafeTest is Test {
         user1 = makeAddr("user1");
         user2 = makeAddr("user2");
         user3 = makeAddr("user3");
-        mockGoodDollar = makeAddr("mockGoodDollar");
+
+        // Deploy mock GoodDollar token
+        mockGoodDollar = new MockGoodDollar();
 
         // Deploy contract with mock token addresses
-        tsaroSafe = new TsaroSafe(mockGoodDollar, address(0));
+        tsaroSafe = new TsaroSafe(address(mockGoodDollar), address(0));
     }
 
     function testContractDeployment() public view {
@@ -1929,6 +1932,514 @@ contract TsaroSafeTest is Test {
         uint256 balanceAfter = user2.balance;
 
         assertEq(balanceAfter - balanceBefore, targetAmount, "User should receive contribution");
+
+        vm.stopPrank();
+    }
+
+    // ============================================
+    // G$ TOKEN APPROVAL FLOW TESTS
+    // ============================================
+
+    function testInitialApprovalNoAllowance() public {
+        uint256 endDate = block.timestamp + 30 days;
+
+        // Create G$ group
+        vm.startPrank(user1);
+        uint256 groupId = tsaroSafe.createGroup(
+            "G$ Group",
+            "Test G$ group",
+            false,
+            1000 ether,
+            10,
+            endDate,
+            ITsaroSafeData.TokenType.GSTAR
+        );
+        vm.stopPrank();
+
+        // Mint G$ tokens to user2
+        uint256 mintAmount = 100 ether;
+        mockGoodDollar.mint(user2, mintAmount);
+
+        // Join group as user2
+        vm.startPrank(user2);
+        tsaroSafe.joinGroup(groupId);
+
+        // Verify user2 has balance but no allowance
+        assertEq(mockGoodDollar.balanceOf(user2), mintAmount, "User2 should have G$ balance");
+        assertEq(mockGoodDollar.allowance(user2, address(tsaroSafe)), 0, "User2 should have no allowance initially");
+
+        // Try to make contribution without approval (should fail)
+        uint256 contributionAmount = 10 ether;
+        vm.expectRevert(TsaroSafe.InsufficientAllowance.selector);
+        tsaroSafe.makeContributionWithToken(
+            groupId,
+            contributionAmount,
+            "G$ contribution",
+            1  // G$ token type
+        );
+
+        vm.stopPrank();
+    }
+
+    function testApprovalWithExistingAllowance() public {
+        uint256 endDate = block.timestamp + 30 days;
+
+        // Create G$ group
+        vm.startPrank(user1);
+        uint256 groupId = tsaroSafe.createGroup(
+            "G$ Group",
+            "Test G$ group",
+            false,
+            1000 ether,
+            10,
+            endDate,
+            ITsaroSafeData.TokenType.GSTAR
+        );
+        vm.stopPrank();
+
+        // Mint G$ tokens to user2
+        uint256 mintAmount = 100 ether;
+        mockGoodDollar.mint(user2, mintAmount);
+
+        // Join group and approve tokens
+        vm.startPrank(user2);
+        tsaroSafe.joinGroup(groupId);
+
+        uint256 approvalAmount = 50 ether;
+        mockGoodDollar.approve(address(tsaroSafe), approvalAmount);
+
+        // Verify allowance is set
+        assertEq(mockGoodDollar.allowance(user2, address(tsaroSafe)), approvalAmount, "Allowance should be set");
+
+        // Make contribution with existing allowance
+        uint256 contributionAmount = 10 ether;
+        tsaroSafe.makeContributionWithToken(
+            groupId,
+            contributionAmount,
+            "G$ contribution",
+            1  // G$ token type
+        );
+
+        // Verify contribution was recorded
+        ITsaroSafeData.Group memory group = tsaroSafe.getGroup(groupId);
+        assertEq(group.currentAmount, contributionAmount, "Group should have contribution");
+
+        // Verify allowance was reduced
+        assertEq(
+            mockGoodDollar.allowance(user2, address(tsaroSafe)),
+            approvalAmount - contributionAmount,
+            "Allowance should be reduced"
+        );
+
+        vm.stopPrank();
+    }
+
+    function testApprovalRejectionByUser() public {
+        uint256 endDate = block.timestamp + 30 days;
+
+        // Create G$ group
+        vm.startPrank(user1);
+        uint256 groupId = tsaroSafe.createGroup(
+            "G$ Group",
+            "Test G$ group",
+            false,
+            1000 ether,
+            10,
+            endDate,
+            ITsaroSafeData.TokenType.GSTAR
+        );
+        vm.stopPrank();
+
+        // Mint G$ tokens to user2
+        uint256 mintAmount = 100 ether;
+        mockGoodDollar.mint(user2, mintAmount);
+
+        // Join group but don't approve
+        vm.startPrank(user2);
+        tsaroSafe.joinGroup(groupId);
+
+        // Verify no allowance
+        assertEq(mockGoodDollar.allowance(user2, address(tsaroSafe)), 0, "No allowance should be set");
+
+        // Try to make contribution without approval
+        uint256 contributionAmount = 10 ether;
+        vm.expectRevert(TsaroSafe.InsufficientAllowance.selector);
+        tsaroSafe.makeContributionWithToken(
+            groupId,
+            contributionAmount,
+            "G$ contribution",
+            1  // G$ token type
+        );
+
+        // Verify group amount is still 0
+        ITsaroSafeData.Group memory group = tsaroSafe.getGroup(groupId);
+        assertEq(group.currentAmount, 0, "Group should have no contributions");
+
+        vm.stopPrank();
+    }
+
+    function testInsufficientAllowanceErrorHandling() public {
+        uint256 endDate = block.timestamp + 30 days;
+
+        // Create G$ group
+        vm.startPrank(user1);
+        uint256 groupId = tsaroSafe.createGroup(
+            "G$ Group",
+            "Test G$ group",
+            false,
+            1000 ether,
+            10,
+            endDate,
+            ITsaroSafeData.TokenType.GSTAR
+        );
+        vm.stopPrank();
+
+        // Mint G$ tokens to user2
+        uint256 mintAmount = 100 ether;
+        mockGoodDollar.mint(user2, mintAmount);
+
+        // Join group and approve insufficient amount
+        vm.startPrank(user2);
+        tsaroSafe.joinGroup(groupId);
+
+        uint256 approvalAmount = 5 ether;
+        mockGoodDollar.approve(address(tsaroSafe), approvalAmount);
+
+        // Try to contribute more than approved
+        uint256 contributionAmount = 10 ether;
+        vm.expectRevert(TsaroSafe.InsufficientAllowance.selector);
+        tsaroSafe.makeContributionWithToken(
+            groupId,
+            contributionAmount,
+            "G$ contribution",
+            1  // G$ token type
+        );
+
+        // Verify no contribution was recorded
+        ITsaroSafeData.Group memory group = tsaroSafe.getGroup(groupId);
+        assertEq(group.currentAmount, 0, "Group should have no contributions");
+
+        vm.stopPrank();
+    }
+
+    function testApprovalAmountCalculations() public {
+        uint256 endDate = block.timestamp + 30 days;
+
+        // Create G$ group
+        vm.startPrank(user1);
+        uint256 groupId = tsaroSafe.createGroup(
+            "G$ Group",
+            "Test G$ group",
+            false,
+            1000 ether,
+            10,
+            endDate,
+            ITsaroSafeData.TokenType.GSTAR
+        );
+        vm.stopPrank();
+
+        // Mint G$ tokens to user2
+        uint256 mintAmount = 1000 ether;
+        mockGoodDollar.mint(user2, mintAmount);
+
+        // Join group and approve exact amount
+        vm.startPrank(user2);
+        tsaroSafe.joinGroup(groupId);
+
+        uint256 approvalAmount = 100 ether;
+        mockGoodDollar.approve(address(tsaroSafe), approvalAmount);
+
+        // Make first contribution
+        uint256 contribution1 = 30 ether;
+        tsaroSafe.makeContributionWithToken(
+            groupId,
+            contribution1,
+            "First contribution",
+            1
+        );
+
+        // Verify remaining allowance
+        uint256 remainingAllowance = mockGoodDollar.allowance(user2, address(tsaroSafe));
+        assertEq(remainingAllowance, approvalAmount - contribution1, "Remaining allowance should be calculated correctly");
+
+        // Make second contribution with remaining allowance
+        uint256 contribution2 = 50 ether;
+        tsaroSafe.makeContributionWithToken(
+            groupId,
+            contribution2,
+            "Second contribution",
+            1
+        );
+
+        // Verify final allowance
+        uint256 finalAllowance = mockGoodDollar.allowance(user2, address(tsaroSafe));
+        assertEq(finalAllowance, approvalAmount - contribution1 - contribution2, "Final allowance should be correct");
+
+        // Verify group total
+        ITsaroSafeData.Group memory group = tsaroSafe.getGroup(groupId);
+        assertEq(group.currentAmount, contribution1 + contribution2, "Group should have both contributions");
+
+        vm.stopPrank();
+    }
+
+    function testMultipleUsersApprovalFlow() public {
+        uint256 endDate = block.timestamp + 30 days;
+
+        // Create G$ group
+        vm.startPrank(user1);
+        uint256 groupId = tsaroSafe.createGroup(
+            "G$ Group",
+            "Test G$ group",
+            false,
+            1000 ether,
+            10,
+            endDate,
+            ITsaroSafeData.TokenType.GSTAR
+        );
+        vm.stopPrank();
+
+        // Mint G$ tokens to user2 and user3
+        uint256 mintAmount = 500 ether;
+        mockGoodDollar.mint(user2, mintAmount);
+        mockGoodDollar.mint(user3, mintAmount);
+
+        // User2 joins and approves
+        vm.startPrank(user2);
+        tsaroSafe.joinGroup(groupId);
+        mockGoodDollar.approve(address(tsaroSafe), 100 ether);
+
+        uint256 contribution2 = 40 ether;
+        tsaroSafe.makeContributionWithToken(
+            groupId,
+            contribution2,
+            "User2 contribution",
+            1
+        );
+        vm.stopPrank();
+
+        // User3 joins and approves
+        vm.startPrank(user3);
+        tsaroSafe.joinGroup(groupId);
+        mockGoodDollar.approve(address(tsaroSafe), 150 ether);
+
+        uint256 contribution3 = 60 ether;
+        tsaroSafe.makeContributionWithToken(
+            groupId,
+            contribution3,
+            "User3 contribution",
+            1
+        );
+        vm.stopPrank();
+
+        // Verify group total
+        ITsaroSafeData.Group memory group = tsaroSafe.getGroup(groupId);
+        assertEq(group.currentAmount, contribution2 + contribution3, "Group should have both contributions");
+
+        // Verify individual allowances
+        assertEq(
+            mockGoodDollar.allowance(user2, address(tsaroSafe)),
+            100 ether - contribution2,
+            "User2 allowance should be correct"
+        );
+        assertEq(
+            mockGoodDollar.allowance(user3, address(tsaroSafe)),
+            150 ether - contribution3,
+            "User3 allowance should be correct"
+        );
+    }
+
+    function testApprovalWithZeroAmount() public {
+        uint256 endDate = block.timestamp + 30 days;
+
+        // Create G$ group
+        vm.startPrank(user1);
+        uint256 groupId = tsaroSafe.createGroup(
+            "G$ Group",
+            "Test G$ group",
+            false,
+            1000 ether,
+            10,
+            endDate,
+            ITsaroSafeData.TokenType.GSTAR
+        );
+        vm.stopPrank();
+
+        // Mint G$ tokens to user2
+        uint256 mintAmount = 100 ether;
+        mockGoodDollar.mint(user2, mintAmount);
+
+        // Join group and approve zero amount
+        vm.startPrank(user2);
+        tsaroSafe.joinGroup(groupId);
+        mockGoodDollar.approve(address(tsaroSafe), 0);
+
+        // Try to make contribution with zero approval
+        uint256 contributionAmount = 10 ether;
+        vm.expectRevert(TsaroSafe.InsufficientAllowance.selector);
+        tsaroSafe.makeContributionWithToken(
+            groupId,
+            contributionAmount,
+            "G$ contribution",
+            1
+        );
+
+        vm.stopPrank();
+    }
+
+    function testApprovalIncreaseFlow() public {
+        uint256 endDate = block.timestamp + 30 days;
+
+        // Create G$ group
+        vm.startPrank(user1);
+        uint256 groupId = tsaroSafe.createGroup(
+            "G$ Group",
+            "Test G$ group",
+            false,
+            1000 ether,
+            10,
+            endDate,
+            ITsaroSafeData.TokenType.GSTAR
+        );
+        vm.stopPrank();
+
+        // Mint G$ tokens to user2
+        uint256 mintAmount = 500 ether;
+        mockGoodDollar.mint(user2, mintAmount);
+
+        // Join group and approve initial amount
+        vm.startPrank(user2);
+        tsaroSafe.joinGroup(groupId);
+
+        uint256 initialApproval = 50 ether;
+        mockGoodDollar.approve(address(tsaroSafe), initialApproval);
+
+        // Make first contribution
+        uint256 contribution1 = 40 ether;
+        tsaroSafe.makeContributionWithToken(
+            groupId,
+            contribution1,
+            "First contribution",
+            1
+        );
+
+        // Verify remaining allowance
+        uint256 remainingAllowance = mockGoodDollar.allowance(user2, address(tsaroSafe));
+        assertEq(remainingAllowance, 10 ether, "Remaining allowance should be 10 ether");
+
+        // Increase approval
+        uint256 additionalApproval = 100 ether;
+        mockGoodDollar.approve(address(tsaroSafe), additionalApproval);
+
+        // Make second contribution with new approval
+        uint256 contribution2 = 80 ether;
+        tsaroSafe.makeContributionWithToken(
+            groupId,
+            contribution2,
+            "Second contribution",
+            1
+        );
+
+        // Verify final allowance
+        uint256 finalAllowance = mockGoodDollar.allowance(user2, address(tsaroSafe));
+        assertEq(finalAllowance, additionalApproval - contribution2, "Final allowance should be correct");
+
+        // Verify group total
+        ITsaroSafeData.Group memory group = tsaroSafe.getGroup(groupId);
+        assertEq(group.currentAmount, contribution1 + contribution2, "Group should have both contributions");
+
+        vm.stopPrank();
+    }
+
+    function testApprovalWithMaxUint256() public {
+        uint256 endDate = block.timestamp + 30 days;
+
+        // Create G$ group
+        vm.startPrank(user1);
+        uint256 groupId = tsaroSafe.createGroup(
+            "G$ Group",
+            "Test G$ group",
+            false,
+            1000 ether,
+            10,
+            endDate,
+            ITsaroSafeData.TokenType.GSTAR
+        );
+        vm.stopPrank();
+
+        // Mint G$ tokens to user2
+        uint256 mintAmount = 1000 ether;
+        mockGoodDollar.mint(user2, mintAmount);
+
+        // Join group and approve max uint256
+        vm.startPrank(user2);
+        tsaroSafe.joinGroup(groupId);
+        mockGoodDollar.approve(address(tsaroSafe), type(uint256).max);
+
+        // Verify max allowance is set
+        assertEq(
+            mockGoodDollar.allowance(user2, address(tsaroSafe)),
+            type(uint256).max,
+            "Allowance should be max uint256"
+        );
+
+        // Make multiple contributions
+        uint256 contribution1 = 100 ether;
+        tsaroSafe.makeContributionWithToken(
+            groupId,
+            contribution1,
+            "First contribution",
+            1
+        );
+
+        uint256 contribution2 = 200 ether;
+        tsaroSafe.makeContributionWithToken(
+            groupId,
+            contribution2,
+            "Second contribution",
+            1
+        );
+
+        // Verify group total
+        ITsaroSafeData.Group memory group = tsaroSafe.getGroup(groupId);
+        assertEq(group.currentAmount, contribution1 + contribution2, "Group should have both contributions");
+
+        vm.stopPrank();
+    }
+
+    function testApprovalWithInsufficientBalance() public {
+        uint256 endDate = block.timestamp + 30 days;
+
+        // Create G$ group
+        vm.startPrank(user1);
+        uint256 groupId = tsaroSafe.createGroup(
+            "G$ Group",
+            "Test G$ group",
+            false,
+            1000 ether,
+            10,
+            endDate,
+            ITsaroSafeData.TokenType.GSTAR
+        );
+        vm.stopPrank();
+
+        // Mint limited G$ tokens to user2
+        uint256 mintAmount = 10 ether;
+        mockGoodDollar.mint(user2, mintAmount);
+
+        // Join group and approve more than balance
+        vm.startPrank(user2);
+        tsaroSafe.joinGroup(groupId);
+        mockGoodDollar.approve(address(tsaroSafe), 100 ether);
+
+        // Try to contribute more than balance (even though approved)
+        uint256 contributionAmount = 50 ether;
+        vm.expectRevert(TsaroSafe.InvalidAmount.selector);
+        tsaroSafe.makeContributionWithToken(
+            groupId,
+            contributionAmount,
+            "G$ contribution",
+            1
+        );
 
         vm.stopPrank();
     }
