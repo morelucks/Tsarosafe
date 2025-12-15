@@ -8,6 +8,7 @@ import GoodDollarBalance from "@/app/components/GoodDollarBalance";
 import UBIClaim from "@/app/components/UBIClaim";
 import GDollarPriceDisplay from "@/app/components/GDollarPriceDisplay";
 import GDollarPriceChart from "@/app/components/GDollarPriceChart";
+import { USDAmount } from "@/app/components/GDollarAmount";
 import { Group, GroupStats } from "@/types/group";
 import { useUBIClaimInfo } from "@/hooks/useGoodDollar";
 
@@ -305,6 +306,9 @@ const DashboardPage = () => {
                 <p className={`text-2xl font-semibold ${canClaim ? 'text-green-600' : 'text-gray-900'}`}>
                   {claimableAmountFormatted.toLocaleString(undefined, { maximumFractionDigits: 2 })} G$
                 </p>
+                <div className="text-sm text-gray-500">
+                  <USDAmount gdollarAmount={claimableAmountFormatted} className="text-gray-500" />
+                </div>
               </div>
             </div>
           </div>

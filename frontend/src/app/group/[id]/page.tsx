@@ -8,7 +8,7 @@ import { useGoodDollarBalance, useGoodDollarAllowance, useApproveGoodDollar } fr
 import { useContractAddress } from "@/hooks/useTsaroSafe";
 import { Address } from "viem";
 import { Group, ContributionHistory, GroupMilestone } from "@/types/group";
-import { InlineGDollarAmount, USDAmount } from "@/app/components/GDollarAmount";
+import GDollarAmount, { InlineGDollarAmount, USDAmount } from "@/app/components/GDollarAmount";
 import GDollarPriceDisplay from "@/app/components/GDollarPriceDisplay";
 
 export default function GroupDetailPage() {
@@ -118,6 +118,7 @@ export default function GroupDetailPage() {
   const progressPercentage = targetAmount > 0 ? (currentAmount / targetAmount) * 100 : 0;
   const memberCount = members?.length || 0;
   const isMember = address && members?.includes(address as Address);
+  const isGDollarGroup = (group.tokenType ?? 0) === 1;
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -163,6 +164,12 @@ export default function GroupDetailPage() {
               <p className="text-gray-600">Progress</p>
               <p className="font-medium text-gray-900">{progressPercentage.toFixed(1)}%</p>
             </div>
+            {isGDollarGroup && (
+              <div className="col-span-2 md:col-span-1">
+                <p className="text-gray-600">G$ Price</p>
+                <GDollarPriceDisplay compact className="mt-1" />
+              </div>
+            )}
           </div>
         </div>
 
@@ -182,15 +189,27 @@ export default function GroupDetailPage() {
             </div>
             <div className="flex justify-between text-sm text-gray-500 mt-2">
               <div className="text-left">
-                <div>${currentAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })}</div>
-                {(group.tokenType ?? 0) === 1 && (
-                  <USDAmount gdollarAmount={currentAmount} className="text-xs text-gray-400" />
+                {isGDollarGroup ? (
+                  <GDollarAmount
+                    amount={currentAmount}
+                    format="compact"
+                    className="text-gray-900"
+                    usdClassName="text-xs text-gray-400"
+                  />
+                ) : (
+                  <div>${currentAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })}</div>
                 )}
               </div>
               <div className="text-right">
-                <div>${targetAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })}</div>
-                {(group.tokenType ?? 0) === 1 && (
-                  <USDAmount gdollarAmount={targetAmount} className="text-xs text-gray-400" />
+                {isGDollarGroup ? (
+                  <GDollarAmount
+                    amount={targetAmount}
+                    format="compact"
+                    className="text-gray-900"
+                    usdClassName="text-xs text-gray-400"
+                  />
+                ) : (
+                  <div>${targetAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })}</div>
                 )}
               </div>
             </div>
@@ -312,9 +331,13 @@ export default function GroupDetailPage() {
                   <div className="flex justify-between items-start">
                     <div>
                       <div className="flex items-center gap-2">
-                        <p className="font-medium text-gray-900">
-                          ${(Number(contribution.amount) / 1e18).toLocaleString(undefined, { maximumFractionDigits: 2 })}
-                        </p>
+                        {isGDollarGroup ? (
+                          <InlineGDollarAmount amount={Number(contribution.amount) / 1e18} className="text-gray-900" />
+                        ) : (
+                          <p className="font-medium text-gray-900">
+                            ${(Number(contribution.amount) / 1e18).toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                          </p>
+                        )}
                         <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${
                           (contribution.tokenType ?? 0) === 0 
                             ? 'bg-yellow-100 text-yellow-800' 
