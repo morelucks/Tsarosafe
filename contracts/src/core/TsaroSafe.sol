@@ -1386,7 +1386,6 @@ contract TsaroSafe is ITsaroSafeData {
         groupExists(_groupId)
         returns (uint256)
     {
-        Group storage group = groups[_groupId];
         ContributionHistory[] storage contributions = groupContributions[_groupId];
 
         uint256 totalWithdrawable = 0;

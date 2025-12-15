@@ -40,7 +40,7 @@ contract TsaroSafeDeploymentTest is Test {
         tsaroSafe = new TsaroSafe(mockGoodDollar, address(0));
     }
 
-    function testContractDeployment() public {
+    function testContractDeployment() public view {
         assertTrue(address(tsaroSafe) != address(0));
         assertEq(tsaroSafe.goodDollarAddress(), mockGoodDollar);
     }

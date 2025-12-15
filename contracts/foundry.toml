@@ -12,10 +12,16 @@ remappings = [
     "forge-std/=lib/forge-std/src/"
 ]
 
-# Celo Network Configurations
+# Network Configurations
 [rpc_endpoints]
 celo = "https://forno.celo.org"
 celo-alfajores = "https://alfajores-forno.celo-testnet.org"
 celo-baklava = "https://baklava-forno.celo-testnet.org"
+base = "https://mainnet.base.org"
+base-sepolia = "https://sepolia.base.org"
+
+# Etherscan API Keys for verification
+[etherscan]
+base = { key = "${BASESCAN_API_KEY}" }
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options

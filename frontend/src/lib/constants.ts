@@ -5,9 +5,9 @@
 // Deployed contract addresses
 export const CONTRACT_ADDRESSES = {
   // Celo Mainnet
-  42220: '0x5d4005061327a4C97252fB33Ad56787c596A4EC3',
+  42220: '0x7BC6274E2DAde23d26a56C2fe8ADf4f561d2427A',
   // Celo Alfajores Testnet
-  44787: '0x5d4005061327a4C97252fB33Ad56787c596A4EC3', // Same address if deployed to testnet
+  44787: '0x7BC6274E2DAde23d26a56C2fe8ADf4f561d2427A', // Update with testnet address if deployed separately
 } as const
 
 // Network names

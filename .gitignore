@@ -32,6 +32,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -40,7 +41,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-frontend/.env
 frontend/node_modules
 frontend/.next/
 frontend/out/
@@ -51,5 +51,9 @@ contracts/cache/
 contracts/out/
 # Integration checklist (local development)
 INTEGRATION_CHECKLIST.md
+GOODDOLLAR_INTEGRATION_MILESTONES.md
+INTEGRATION_REMAINING_WORK.md
+CONTRACT_MILESTONES.md
+CONTRACT_REMAINING_WORK.md
 # Interaction scripts (local testing only)
 contracts/script/Interact*.s.sol
