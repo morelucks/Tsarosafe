@@ -23,6 +23,7 @@ interface RecentActivity {
   id: string;
   type: 'deposit' | 'withdrawal' | 'group_join' | 'investment';
   amount?: number;
+  tokenType?: number;
   description: string;
   timestamp: string;
   status: 'completed' | 'pending' | 'failed';
@@ -58,6 +59,7 @@ function GroupContributionsFetcher({ groupId, groupName, onContributionsUpdate }
         id: contrib.contributionId.toString(),
         type: 'deposit' as const,
         amount: Number(contrib.amount) / 1e18,
+        tokenType: Number(contrib.tokenType ?? 0),
         description: contrib.description || `Contribution to ${groupName}`,
         timestamp: new Date(Number(contrib.timestamp) * 1000).toISOString(),
         status: contrib.isVerified ? 'completed' as const : 'pending' as const
@@ -227,6 +229,24 @@ const DashboardPage = () => {
     }
   };
 
+  const renderAmount = (activity: RecentActivity) => {
+    if (activity.tokenType === 1) {
+      return (
+        <span className="text-sm text-gray-600">
+          <InlineGDollarAmount amount={activity.amount || 0} className="text-gray-900" />
+        </span>
+      );
+    }
+    if (activity.amount !== undefined) {
+      return (
+        <span className="text-sm text-gray-600">
+          ${activity.amount.toLocaleString()}
+        </span>
+      );
+    }
+    return null;
+  };
+
   const formatDate = (timestamp: string) => {
     return new Date(timestamp).toLocaleDateString('en-US', {
       month: 'short',
@@ -383,11 +403,7 @@ const DashboardPage = () => {
                     <p className="text-sm font-medium text-gray-900">
                       {activity.description}
                     </p>
-                    {activity.amount && (
-                      <p className="text-sm text-gray-600">
-                        ${activity.amount.toLocaleString()}
-                      </p>
-                    )}
+                    {renderAmount(activity)}
                     <div className="flex items-center justify-between mt-1">
                       <p className="text-xs text-gray-500">
                         {formatDate(activity.timestamp)}

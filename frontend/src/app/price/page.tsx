@@ -6,14 +6,19 @@ import { useGDollarPrice, useGDollarConversion } from "@/hooks/useGDollarPrice";
 import { useState } from "react";
 
 export default function PricePage() {
-  const { price, isLoading, error } = useGDollarPrice();
+  const { price, isLoading, error, refetch } = useGDollarPrice();
   const { convertToUSD, convertFromUSD } = useGDollarConversion();
   const [gdollarInput, setGDollarInput] = useState("");
   const [usdInput, setUSDInput] = useState("");
+  const [conversionError, setConversionError] = useState<string | null>(null);
 
   const handleGDollarConvert = async () => {
     const amount = parseFloat(gdollarInput);
-    if (isNaN(amount) || amount <= 0) return;
+    if (isNaN(amount) || amount <= 0) {
+      setConversionError("Enter a valid G$ amount");
+      return;
+    }
+    setConversionError(null);
     
     const result = await convertToUSD(amount);
     if (result) {
@@ -23,7 +28,11 @@ export default function PricePage() {
 
   const handleUSDConvert = async () => {
     const amount = parseFloat(usdInput);
-    if (isNaN(amount) || amount <= 0) return;
+    if (isNaN(amount) || amount <= 0) {
+      setConversionError("Enter a valid USD amount");
+      return;
+    }
+    setConversionError(null);
     
     const result = await convertFromUSD(amount);
     if (result) {
@@ -50,6 +59,14 @@ export default function PricePage() {
           <div className="space-y-6">
             {/* Current Price */}
             <GDollarPriceDisplay showDetails={true} />
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg p-3">
+                <div className="flex items-center justify-between">
+                  <span>{error}</span>
+                  <button onClick={refetch} className="underline hover:text-red-800">Retry</button>
+                </div>
+              </div>
+            )}
 
             {/* Price Converter */}
             <div className="bg-white rounded-lg shadow p-6">
@@ -109,6 +126,9 @@ export default function PricePage() {
                   </div>
                 </div>
               </div>
+              {conversionError && (
+                <p className="text-sm text-red-600 mt-2">{conversionError}</p>
+              )}
 
               {price && (
                 <div className="mt-4 pt-4 border-t border-gray-200">
