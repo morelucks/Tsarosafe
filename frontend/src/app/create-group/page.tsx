@@ -1,7 +1,6 @@
 "use client";
 import { useMemo, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import VerifyWithSelf from "@/app/components/VerifyWithSelf";
 import { useCreateGroup } from "@/hooks/useTsaroSafe";
 
 type Privacy = "public" | "private";
@@ -54,12 +53,6 @@ const CreateGroupPage = () => {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [invites, setInvites] = useState<Array<{ code: string; addressOrEmail: string; status: 'sent' | 'accepted' | 'declined'; }>>([]);
-  // Verification state
-  const [isVerified, setIsVerified] = useState(false);
-  const [verifiedAt, setVerifiedAt] = useState<string | null>(null);
-  const [expiresAt, setExpiresAt] = useState<string | null>(null);
-  const [showVerification, setShowVerification] = useState(false);
-  const [verifyError, setVerifyError] = useState<string | null>(null);
 
   const [errors, setErrors] = useState<{ 
     name?: string;
@@ -138,11 +131,6 @@ const CreateGroupPage = () => {
     return true;
   }, [activeStep, settings, members, goal]);
 
-  const isVerificationFresh = useMemo(() => {
-    if (!isVerified) return false;
-    if (!expiresAt) return true;
-    return new Date(expiresAt) > new Date();
-  }, [isVerified, expiresAt]);
 
   const addMember = () => {
     const value = pendingMember.trim();
@@ -203,12 +191,6 @@ const CreateGroupPage = () => {
   }, [isConfirmed, router]);
 
   const handleSubmit = async () => {
-    if (!isVerificationFresh) {
-      setShowVerification(true);
-      setVerifyError("Verification required before creating the group.");
-      return;
-    }
-
     setSubmitting(true);
     
     try {
@@ -236,7 +218,6 @@ const CreateGroupPage = () => {
       );
     } catch (error) {
       console.error('Failed to create group:', error);
-      setVerifyError("Failed to create group. Please try again.");
       setSubmitting(false);
     }
   };
@@ -532,52 +513,6 @@ const CreateGroupPage = () => {
                   <p className="mt-1 text-gray-800">End: <span className="font-medium">{goal.endDate || "-"}</span></p>
                 </div>
               </div>
-              {/* Verification status */}
-              <div className="p-4 rounded border flex items-start justify-between">
-                <div>
-                  <p className="font-medium">Identity Verification</p>
-                  <p className={`mt-1 text-sm ${isVerificationFresh ? "text-green-700" : "text-red-700"}`}>
-                    {isVerificationFresh ? `Verified${verifiedAt ? ` on ${new Date(verifiedAt).toLocaleString()}` : ""}` : "Not verified or expired"}
-                  </p>
-                  {verifyError && (
-                    <p className="mt-1 text-xs text-red-600">{verifyError}</p>
-                  )}
-                  {expiresAt && (
-                    <p className="mt-1 text-xs text-gray-500">Expires: {new Date(expiresAt).toLocaleString()}</p>
-                  )}
-                </div>
-                <button
-                  type="button"
-                  onClick={() => { setShowVerification(true); setVerifyError(null); }}
-                  className="px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
-                >
-                  {isVerificationFresh ? "Re-verify" : "Verify now"}
-                </button>
-              </div>
-
-              {showVerification && (
-                <div className="border rounded-lg p-4">
-                  <VerifyWithSelf
-                    onSuccess={() => {
-                      setIsVerified(true);
-                      const now = new Date();
-                      setVerifiedAt(now.toISOString());
-                      const expiry = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-                      setExpiresAt(expiry.toISOString());
-                      setVerifyError(null);
-                      setShowVerification(false);
-                    }}
-                    onError={() => {
-                      setIsVerified(false);
-                      setVerifyError("Verification failed. Please try again.");
-                    }}
-                    onCancel={() => setShowVerification(false)}
-                    requiredDisclosures={{ minimumAge: 18, nationality: true }}
-                    appName="Tsarosafe"
-                    scope="tsarosafe-verification"
-                  />
-                </div>
-              )}
 
               {submitted ? (
                 <div className="p-4 rounded bg-green-50 text-green-700">
@@ -616,10 +551,10 @@ const CreateGroupPage = () => {
             <button
               type="button"
               onClick={handleSubmit}
-              disabled={submitting || isCreating || !isVerificationFresh}
+              disabled={submitting || isCreating}
               className="px-4 py-2 rounded bg-green-600 text-white disabled:opacity-50"
             >
-              {submitting || isCreating ? "Creating…" : (isVerificationFresh ? "Create Group" : "Verify to Create")}
+              {submitting || isCreating ? "Creating…" : "Create Group"}
             </button>
           )}
         </div>
