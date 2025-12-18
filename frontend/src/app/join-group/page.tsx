@@ -224,9 +224,9 @@ const JoinGroupPage = () => {
               <h2 className="text-lg font-semibold text-gray-900">Identity Verification</h2>
               <p className="text-sm text-gray-600">
                 {isVerified ? (
-                  <span className="text-green-600">✓ Verified Human</span>
+                  <span className="text-green-600">✓ Verified Human - You can join groups</span>
                 ) : (
-                  <span className="text-red-600">✗ Not Verified</span>
+                  <span className="text-red-600">✗ Not Verified - Verification required to join groups</span>
                 )}
               </p>
               {verificationData && (
@@ -383,7 +383,7 @@ const JoinGroupPage = () => {
           <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
             <h3 className="text-lg font-semibold mb-4">Verify Your Identity</h3>
             <p className="text-sm text-gray-600 mb-4">
-              You need to verify your identity to join groups. This helps ensure all members are verified humans.
+              <strong>Verification is required to join groups.</strong> This helps ensure all members are verified humans and maintains the security of our savings groups.
             </p>
             <VerifyWithSelf
               requiredDisclosures={{
