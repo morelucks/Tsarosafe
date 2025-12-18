@@ -8,7 +8,7 @@ import GoodDollarBalance from "@/app/components/GoodDollarBalance";
 import UBIClaim from "@/app/components/UBIClaim";
 import GDollarPriceDisplay from "@/app/components/GDollarPriceDisplay";
 import GDollarPriceChart from "@/app/components/GDollarPriceChart";
-import { USDAmount } from "@/app/components/GDollarAmount";
+import { USDAmount, InlineGDollarAmount } from "@/app/components/GDollarAmount";
 import { Group, GroupStats } from "@/types/group";
 import { useUBIClaimInfo } from "@/hooks/useGoodDollar";
 
