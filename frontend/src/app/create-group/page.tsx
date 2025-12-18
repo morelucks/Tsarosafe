@@ -226,7 +226,7 @@ const CreateGroupPage = () => {
     <div className="min-h-screen bg-gray-50 py-4 md:py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Create New Group</h1>
-        <p className="text-gray-600 mb-6">Build your savings group in a few steps.</p>
+        <p className="text-gray-600 mb-6">Build your savings group in a few steps. No verification required.</p>
 
         {/* Steps */}
         <ol className="flex items-center w-full mb-6 md:mb-8 overflow-x-auto pb-2">
