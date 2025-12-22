@@ -1,340 +1,121 @@
-// "use client";
-// import Link from "next/link";
-// import { useCallback, useEffect, useMemo, useState } from "react";
-
-// type EthereumProvider = {
-//   request: (args: { method: string; params?: unknown[] }) => Promise<unknown>;
-//   on?: (event: string, handler: (...args: unknown[]) => void) => void;
-//   removeListener?: (event: string, handler: (...args: unknown[]) => void) => void;
-// };
-
-// const NavBar = () => {
-//   const [account, setAccount] = useState<string | null>(null);
-//   const [isConnecting, setIsConnecting] = useState(false);
-//   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-//   const ethereum = useMemo<EthereumProvider | undefined>(() => {
-//     if (typeof window === "undefined") return undefined;
-//     const w = window as Window & { ethereum?: EthereumProvider };
-//     return w.ethereum;
-//   }, []);
-
-//   const shortAddress = useMemo(() => {
-//     if (!account) return "";
-//     return account.slice(0, 6) + "…" + account.slice(-4);
-//   }, [account]);
-
-//   const handleConnect = useCallback(async () => {
-//     if (!ethereum) {
-//       alert("No Ethereum provider found. Install MetaMask.");
-//       return;
-//     }
-//     try {
-//       setIsConnecting(true);
-//       const accounts = (await ethereum.request({ method: "eth_requestAccounts" })) as string[];
-//       setAccount(accounts?.[0] ?? null);
-//     } catch (err) {
-//       console.error("Wallet connection failed", err);
-//     } finally {
-//       setIsConnecting(false);
-//     }
-//   }, [ethereum]);
-
-//   useEffect(() => {
-//     if (!ethereum?.on) return;
-//     const handleAccountsChanged = (...args: unknown[]) => {
-//       const accounts = (args[0] as string[]) || [];
-//       setAccount(accounts?.[0] ?? null);
-//     };
-//     ethereum
-//       .request({ method: "eth_accounts" })
-//       .then((acc) => setAccount((acc as string[])?.[0] ?? null))
-//       .catch(() => {});
-//     if (ethereum && ethereum.on) {
-//       ethereum.on("accountsChanged", handleAccountsChanged);
-//     }
-//     return () => {
-//       if (ethereum?.removeListener) {
-//         ethereum.removeListener("accountsChanged", handleAccountsChanged);
-//       }
-//     };
-//   }, [ethereum]);
-
-//   return (
-//     <div>
-//       <nav className="bg-gradient-to-r from-[#0a1929] via-[#0d2137] to-[#0a1929] border-b border-sky-500/20 backdrop-blur-xl sticky top-0 z-50 shadow-lg">
-//         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-//           {/* Logo */}
-//           <Link 
-//             className="flex items-center space-x-3 rtl:space-x-reverse"
-//             href={"/"}>
-//             <span className="self-center text-2xl font-bold text-white hover:text-sky-400 transition-colors duration-200">
-//               Tsarosafe
-//             </span>
-//           </Link>
-
-//           {/* Right side: Connect Button + Mobile Menu Toggle */}
-//           <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-//             {/* Connect Wallet Button */}
-//             <button
-//               onClick={handleConnect}
-//               type="button"
-//               className="rounded-full bg-gradient-to-r from-sky-600 to-sky-500 text-white px-6 py-2.5 mr-4 font-semibold hover:from-sky-500 hover:to-sky-400 disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-200"
-//               disabled={isConnecting}
-//             >
-//               <span className="flex items-center gap-2">
-//                 {account ? (
-//                   <>
-//                     <span className="w-2 h-2 bg-green-400 rounded-full"></span>
-//                     {shortAddress}
-//                   </>
-//                 ) : isConnecting ? (
-//                   <>
-//                     <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
-//                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
-//                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-//                     </svg>
-//                     Connecting…
-//                   </>
-//                 ) : (
-//                   "Connect Wallet"
-//                 )}
-//               </span>
-//             </button>
-
-//             {/* Mobile Menu Toggle */}
-//             <button
-//               type="button"
-//               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-//               className="inline-flex items-center p-2 w-10 h-10 justify-center text-gray-400 rounded-lg md:hidden hover:bg-gray-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-sky-500 transition-colors duration-200"
-//               aria-controls="navbar-user"
-//               aria-expanded={isMobileMenuOpen}
-//             >
-//               <span className="sr-only">Open main menu</span>
-//               {isMobileMenuOpen ? (
-//                 <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-//                   <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-//                 </svg>
-//               ) : (
-//                 <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-//                   <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15"/>
-//                 </svg>
-//               )}
-//             </button>
-//           </div>
-
-//           {/* Navigation Links */}
-//           <div
-//             className={`items-center justify-between w-full md:flex md:w-auto md:order-1 ${
-//               isMobileMenuOpen ? "block" : "hidden"
-//             }`}
-//             id="navbar-user"
-//           >
-//             <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-700 rounded-lg bg-gray-900 md:space-x-2 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent">
-//               <li>
-//                 <Link 
-//                   href={"/dashboard"} 
-//                   onClick={() => setIsMobileMenuOpen(false)}
-//                   className="block py-2.5 px-4 text-gray-300 rounded-lg hover:text-sky-400 transition-colors duration-200 md:p-2">
-//                   Dashboard
-//                 </Link>
-//               </li>
-              
-//               <li>
-//                 <Link 
-//                   href={'/create-group'} 
-//                   onClick={() => setIsMobileMenuOpen(false)}
-//                   className="block py-2.5 px-4 text-gray-300 rounded-lg hover:text-sky-400 transition-colors duration-200 md:p-2">
-//                   Create Group
-//                 </Link>
-//               </li>
-
-//               <li>
-//                 <Link 
-//                   href={"/join-group"} 
-//                   onClick={() => setIsMobileMenuOpen(false)}
-//                   className="block py-2.5 px-4 text-gray-300 rounded-lg hover:text-sky-400 transition-colors duration-200 md:p-2">
-//                   Join Group
-//                 </Link>
-//               </li>
-
-//               <li>
-//                 <Link 
-//                   href={"/save-solo"} 
-//                   onClick={() => setIsMobileMenuOpen(false)}
-//                   className="block py-2.5 px-4 text-gray-300 rounded-lg hover:text-sky-400 transition-colors duration-200 md:p-2">
-//                   Save Solo
-//                 </Link>
-//               </li>
-
-//               <li>
-//                 <Link 
-//                   href={"/savings"} 
-//                   onClick={() => setIsMobileMenuOpen(false)}
-//                   className="block py-2.5 px-4 text-gray-300 rounded-lg hover:text-sky-400 transition-colors duration-200 md:p-2">
-//                   Savings
-//                 </Link>
-//               </li>
-              
-//               <li>
-//                 <Link
-//                   href={"/invest"}
-//                   onClick={() => setIsMobileMenuOpen(false)}
-//                   className="block py-2.5 px-4 text-gray-300 rounded-lg hover:text-sky-400 transition-colors duration-200 md:p-2">
-//                   Invest
-//                 </Link>
-//               </li>
-//             </ul>
-//           </div>
-//         </div>
-//       </nav>
-//     </div>
-//   );
-// };
-
-// export default NavBar;
-
-
 "use client";
 import Link from "next/link";
 import { useState } from "react";
-import { useAppKit } from '@reown/appkit/react'
-import { useAccount, useDisconnect } from 'wagmi'
+import { useAppKit } from "@reown/appkit/react";
+import { useAccount, useDisconnect } from "wagmi";
 
 const NavBar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { open } = useAppKit()
-  const { address, isConnected } = useAccount()
-  const { disconnect } = useDisconnect()
+  const { open } = useAppKit();
+  const { address, isConnected } = useAccount();
+  const { disconnect } = useDisconnect();
 
-  const shortAddress = address 
-    ? `${address.slice(0, 6)}...${address.slice(-4)}` 
-    : ''
+  const shortAddress = address
+    ? `${address.slice(0, 6)}...${address.slice(-4)}`
+    : "";
+
+  const navLinks = [
+    { name: "DASHBOARD", href: "/dashboard" },
+    { name: "CREATE GROUP", href: "/create-group" },
+    { name: "JOIN GROUP", href: "/join-group" },
+    { name: "SAVE SOLO", href: "/save-solo" },
+    { name: "SAVINGS", href: "/savings" },
+    { name: "INVEST", href: "/invest" },
+  ];
 
   return (
-    <div>
-      <nav className="bg-gradient-to-r from-[#0a1929] via-[#0d2137] to-[#0a1929] border-b border-sky-500/20 backdrop-blur-xl sticky top-0 z-50 shadow-lg">
-        <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-          <Link 
-            className="flex items-center space-x-3 rtl:space-x-reverse"
-            href={"/"}>
-            <span className="self-center text-2xl font-bold text-white hover:text-sky-400 transition-colors duration-200">
-              Tsarosafe
-            </span>
-          </Link>
+    <nav className="w-full bg-[#0a192f] border-b border-white/10 sticky top-0 z-[100] h-20 flex items-center">
+      <div className="max-w-7xl mx-auto w-full px-6 flex justify-between items-center">
+        {/* Logo */}
+        <Link href="/" className="group">
+          <span className="text-2xl font-black text-white tracking-tighter transition-colors group-hover:text-blue-500">
+            TSAROSAFE<span className="text-blue-500">.</span>
+          </span>
+        </Link>
 
-          <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-            {isConnected ? (
-              <div className="relative group mr-4">
-                <button
-                  className="rounded-full bg-gradient-to-r from-sky-600 to-sky-500 text-white px-6 py-2.5 font-semibold hover:from-sky-500 hover:to-sky-400 transition-all duration-200 flex items-center gap-2"
-                >
-                  <span className="w-2 h-2 bg-green-400 rounded-full"></span>
-                  {shortAddress}
-                </button>
-                
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                  <button
-                    onClick={() => open({ view: 'Account' })}
-                    className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 rounded-t-lg"
-                  >
-                    View Account
-                  </button>
-                  <button
-                    onClick={() => disconnect()}
-                    className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 rounded-b-lg"
-                  >
-                    Disconnect
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <button
-                onClick={() => open()}
-                type="button"
-                className="rounded-full bg-gradient-to-r from-sky-600 to-sky-500 text-white px-6 py-2.5 mr-4 font-semibold hover:from-sky-500 hover:to-sky-400 transition-all duration-200"
-              >
-                Connect Wallet
-              </button>
-            )}
-
-            <button
-              type="button"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="inline-flex items-center p-2 w-10 h-10 justify-center text-gray-400 rounded-lg md:hidden hover:bg-gray-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-sky-500 transition-colors duration-200"
+        {/* Desktop Menu - Increased size from 11px to 13px for better readability */}
+        <div className="hidden lg:flex items-center space-x-8">
+          {navLinks.map((link) => (
+            <Link
+              key={link.name}
+              href={link.href}
+              className="text-[13px] font-mono font-bold tracking-[0.15em] text-gray-400 hover:text-white transition-colors"
             >
-              <span className="sr-only">Open main menu</span>
-              {isMobileMenuOpen ? (
-                <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                </svg>
-              ) : (
-                <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15"/>
-                </svg>
-              )}
+              {link.name}
+            </Link>
+          ))}
+        </div>
+
+        {/* Wallet & Mobile Toggle */}
+        <div className="flex items-center gap-6">
+          {isConnected ? (
+            /* Address Button: Click to Disconnect */
+            <button
+              onClick={() => disconnect()}
+              className="border border-blue-500 bg-blue-500/5 px-5 py-2.5 font-mono text-sm text-blue-400 hover:bg-red-500 hover:text-white hover:border-red-500 transition-all flex items-center gap-2 group"
+            >
+              <span className="w-2 h-2 bg-blue-500 rounded-full group-hover:bg-white animate-pulse"></span>
+              <span className="group-hover:hidden">{shortAddress}</span>
+              <span className="hidden group-hover:inline text-[10px] uppercase font-black tracking-widest">
+                Disconnect
+              </span>
+            </button>
+          ) : (
+            <button
+              onClick={() => open()}
+              className="bg-white text-[#0a192f] px-6 py-2.5 text-sm font-black tracking-widest uppercase hover:bg-blue-500 hover:text-white transition-all"
+            >
+              Connect
+            </button>
+          )}
+
+          {/* High-Visibility Mobile Toggle */}
+          <button
+            onClick={() => setIsMobileMenuOpen(true)}
+            className="lg:hidden flex flex-col justify-center items-end gap-1.5 p-2 group"
+            aria-label="Open Menu"
+          >
+            <div className="w-8 h-0.5 bg-white group-hover:bg-blue-500 transition-colors"></div>
+            <div className="w-5 h-0.5 bg-white group-hover:bg-blue-500 transition-colors"></div>
+            <div className="w-8 h-0.5 bg-white group-hover:bg-blue-500 transition-colors"></div>
+          </button>
+        </div>
+      </div>
+
+      {/* Full-Screen Mobile Overlay */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 bg-[#0a192f] z-[110] flex flex-col p-8 animate-in fade-in slide-in-from-right duration-300">
+          <div className="flex justify-between items-center mb-16">
+            <span className="text-2xl font-black text-white tracking-tighter italic">
+              MENU
+            </span>
+            <button
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="w-12 h-12 flex items-center justify-center border border-white/10 text-white text-2xl"
+            >
+              ✕
             </button>
           </div>
+          <div className="flex flex-col gap-6">
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-5xl font-black text-white tracking-tighter hover:text-blue-500 transition-colors uppercase"
+              >
+                {link.name}
+              </Link>
+            ))}
+          </div>
 
-          <div
-            className={`items-center justify-between w-full md:flex md:w-auto md:order-1 ${
-              isMobileMenuOpen ? "block" : "hidden"
-            }`}
-          >
-            <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-700 rounded-lg bg-gray-900 md:space-x-2 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent">
-              <li>
-                <Link 
-                  href={"/dashboard"} 
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="block py-2.5 px-4 text-gray-300 rounded-lg hover:text-sky-400 transition-colors duration-200 md:p-2">
-                  Dashboard
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  href={'/create-group'} 
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="block py-2.5 px-4 text-gray-300 rounded-lg hover:text-sky-400 transition-colors duration-200 md:p-2">
-                  Create Group
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  href={"/join-group"} 
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="block py-2.5 px-4 text-gray-300 rounded-lg hover:text-sky-400 transition-colors duration-200 md:p-2">
-                  Join Group
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  href={"/save-solo"} 
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="block py-2.5 px-4 text-gray-300 rounded-lg hover:text-sky-400 transition-colors duration-200 md:p-2">
-                  Save Solo
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  href={"/savings"} 
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="block py-2.5 px-4 text-gray-300 rounded-lg hover:text-sky-400 transition-colors duration-200 md:p-2">
-                  Savings
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href={"/invest"}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="block py-2.5 px-4 text-gray-300 rounded-lg hover:text-sky-400 transition-colors duration-200 md:p-2">
-                  Invest
-                </Link>
-              </li>
-            </ul>
+          {/* Mobile Footer Decor */}
+          <div className="mt-auto py-8 border-t border-white/5 font-mono text-[10px] text-gray-600 tracking-widest">
+            SECURE ON-CHAIN PROTOCOL // 2025
           </div>
         </div>
-      </nav>
-    </div>
+      )}
+    </nav>
   );
 };
 
