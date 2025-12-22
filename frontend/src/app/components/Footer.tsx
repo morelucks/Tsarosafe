@@ -1,21 +1,22 @@
 import Link from "next/link";
 
 const Footer = () => {
+  // FOOTER - Simple, Sharp, Slick
   return (
-    <footer className="mt-16 border-t border-gray-200 dark:border-gray-700 py-8 text-sm text-gray-600 dark:text-gray-300">
-      <div className="max-w-screen-xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
-        <div className="font-semibold">Tsarosafe</div>
-        <nav className="flex items-center gap-6">
-          <Link href="/" className="hover:text-blue-700">Home</Link>
-          <Link href="/dashboard" className="hover:text-blue-700">Dashboard</Link>
-          <Link href="/create-group" className="hover:text-blue-700">Create Group</Link>
-          <Link href="/join-group" className="hover:text-blue-700">Join Group</Link>
-          <Link href="/savings" className="hover:text-blue-700">Savings</Link>
-          <Link href="/invest" className="hover:text-blue-700">Invest</Link>
-        </nav>
-        <div className="opacity-75">© {new Date().getFullYear()} Tsarosafe</div>
-      </div>
-    </footer>
+      <footer className="w-full bg-[#0a192f] border-t border-white/10 py-12 px-6">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+          <span className="text-xl font-black text-white tracking-tighter">
+            TSAROSAFE<span className="text-blue-500">.</span>
+          </span>
+          <div className="flex gap-8 text-[10px] font-mono text-gray-500 font-bold uppercase tracking-widest">
+             <Link href="#" className="hover:text-white transition-colors">Twitter</Link>
+             <Link href="#" className="hover:text-white transition-colors">Discord</Link>
+             <Link href="#" className="hover:text-white transition-colors">Github</Link>
+             <Link href="#" className="hover:text-white transition-colors text-blue-500">Terms of Service</Link>
+          </div>
+          <span className="text-[10px] font-mono text-gray-600 uppercase">© 2025 ALL RIGHTS RESERVED.</span>
+        </div>
+      </footer>
   );
 };
 
