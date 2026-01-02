@@ -78,7 +78,7 @@ TsaroSafe tackles these challenges by combining blockchain technology and smart 
 
 ### 6. Key Partners
 
-- Blockchain networks (Celo for low fees)
+- Blockchain networks (Base for low fees and scalability)
 - NGOs and community finance organizations
 - Microfinance institutions (MFIs)
 - Regulatory advisors
@@ -143,8 +143,36 @@ npm run dev
 ## Technology Stack
 
 - **Smart Contracts**: Solidity, Foundry
-- **Frontend**: Next.js, TypeScript, Thirdweb
-- **Blockchain**: Celo Network
+- **Frontend**: Next.js 16, TypeScript, React 19
+- **Blockchain**: Base Network
+- **Wallet Integration**: Reown (WalletConnect), Wagmi
+- **Token Support**: Native ETH, GoodDollar (G$), and ERC20 tokens
+
+## Features
+
+### Core Functionality
+
+- **Group Creation**: Create public or private savings groups with customizable goals
+- **Token Support**: Support for native ETH and GoodDollar (G$) tokens
+- **Contributions**: Make contributions using ETH or G$ tokens
+- **UBI Integration**: Claim GoodDollar Universal Basic Income directly from the platform
+- **Price Tracking**: Real-time G$ to USD conversion rates and price charts
+- **Identity Verification**: Self protocol integration for secure group joining
+
+### Security Features
+
+- **Self Protocol Verification**: Required for joining groups (optional for creating)
+- **Smart Contract Security**: Audited contracts with access controls
+- **Transparent Transactions**: All transactions recorded on-chain
+
+## Network Configuration
+
+TsaroSafe is deployed on **Base Network**:
+
+- **Base Mainnet**: Chain ID 8453
+- **Base Sepolia Testnet**: Chain ID 84532
+
+The platform also supports multiple networks including Ethereum, Arbitrum, Optimism, and Polygon for flexibility.
 
 ## Contributing
 
@@ -161,5 +189,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ---
 
 **Built with ❤️ for financial inclusion and community empowerment**
-
 
