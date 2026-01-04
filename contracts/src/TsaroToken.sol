@@ -39,9 +39,19 @@ contract TsaroToken is IERC20 {
     /// @notice Emitted when ownership is transferred
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
-    // Modifiers
+    // ============ Custom Errors ============
+    
+    error NotOwner();
+    error ZeroAddress();
+    error InsufficientBalance();
+    error InsufficientAllowance();
+    error InvalidAmount();
+    error MintToZeroAddress();
+
+    // ============ Modifiers ============
+    
     modifier onlyOwner() {
-        require(msg.sender == owner, "Not the owner");
+        if (msg.sender != owner) revert NotOwner();
         _;
     }
 
@@ -58,8 +68,8 @@ contract TsaroToken is IERC20 {
      * @param _value Amount to transfer
      */
     function transfer(address _to, uint256 _value) external returns (bool) {
-        require(_to != address(0), "Transfer to zero address");
-        require(balanceOf[msg.sender] >= _value, "Insufficient balance");
+        if (_to == address(0)) revert ZeroAddress();
+        if (balanceOf[msg.sender] < _value) revert InsufficientBalance();
 
         balanceOf[msg.sender] -= _value;
         balanceOf[_to] += _value;
@@ -74,6 +84,8 @@ contract TsaroToken is IERC20 {
      * @param _value Amount to approve
      */
     function approve(address _spender, uint256 _value) external returns (bool) {
+        if (_spender == address(0)) revert ZeroAddress();
+        
         allowance[msg.sender][_spender] = _value;
         emit Approval(msg.sender, _spender, _value);
         return true;
@@ -86,9 +98,9 @@ contract TsaroToken is IERC20 {
      * @param _value Amount to transfer
      */
     function transferFrom(address _from, address _to, uint256 _value) external returns (bool) {
-        require(_to != address(0), "Transfer to zero address");
-        require(balanceOf[_from] >= _value, "Insufficient balance");
-        require(allowance[_from][msg.sender] >= _value, "Insufficient allowance");
+        if (_to == address(0)) revert ZeroAddress();
+        if (balanceOf[_from] < _value) revert InsufficientBalance();
+        if (allowance[_from][msg.sender] < _value) revert InsufficientAllowance();
 
         balanceOf[_from] -= _value;
         balanceOf[_to] += _value;
@@ -104,8 +116,8 @@ contract TsaroToken is IERC20 {
      * @param _amount Amount to mint
      */
     function mint(address _to, uint256 _amount) external onlyOwner {
-        require(_to != address(0), "Mint to zero address");
-        require(_amount > 0, "Amount must be greater than 0");
+        if (_to == address(0)) revert MintToZeroAddress();
+        if (_amount == 0) revert InvalidAmount();
 
         totalSupply += _amount;
         balanceOf[_to] += _amount;
@@ -118,8 +130,8 @@ contract TsaroToken is IERC20 {
      * @param _amount Amount to burn
      */
     function burn(uint256 _amount) external {
-        require(balanceOf[msg.sender] >= _amount, "Insufficient balance");
-        require(_amount > 0, "Amount must be greater than 0");
+        if (_amount == 0) revert InvalidAmount();
+        if (balanceOf[msg.sender] < _amount) revert InsufficientBalance();
 
         balanceOf[msg.sender] -= _amount;
         totalSupply -= _amount;
@@ -132,7 +144,7 @@ contract TsaroToken is IERC20 {
      * @param _newOwner New owner address
      */
     function transferOwnership(address _newOwner) external onlyOwner {
-        require(_newOwner != address(0), "New owner is zero address");
+        if (_newOwner == address(0)) revert ZeroAddress();
 
         address oldOwner = owner;
         owner = _newOwner;
