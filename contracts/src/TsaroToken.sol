@@ -63,92 +63,95 @@ contract TsaroToken is IERC20 {
     }
 
     /**
-     * @notice Transfer tokens
-     * @param _to Recipient address
-     * @param _value Amount to transfer
+     * @notice Transfer tokens to a specified address
+     * @param to Recipient address
+     * @param amount Amount to transfer
+     * @return success True if transfer succeeds
      */
-    function transfer(address _to, uint256 _value) external returns (bool) {
-        if (_to == address(0)) revert ZeroAddress();
-        if (balanceOf[msg.sender] < _value) revert InsufficientBalance();
+    function transfer(address to, uint256 amount) external returns (bool) {
+        if (to == address(0)) revert ZeroAddress();
+        if (balanceOf[msg.sender] < amount) revert InsufficientBalance();
 
-        balanceOf[msg.sender] -= _value;
-        balanceOf[_to] += _value;
+        balanceOf[msg.sender] -= amount;
+        balanceOf[to] += amount;
 
-        emit Transfer(msg.sender, _to, _value);
+        emit Transfer(msg.sender, to, amount);
         return true;
     }
 
     /**
-     * @notice Approve spender
-     * @param _spender Spender address
-     * @param _value Amount to approve
+     * @notice Approve spender to transfer tokens on behalf of caller
+     * @param spender Spender address
+     * @param amount Amount to approve
+     * @return success True if approval succeeds
      */
-    function approve(address _spender, uint256 _value) external returns (bool) {
-        if (_spender == address(0)) revert ZeroAddress();
+    function approve(address spender, uint256 amount) external returns (bool) {
+        if (spender == address(0)) revert ZeroAddress();
         
-        allowance[msg.sender][_spender] = _value;
-        emit Approval(msg.sender, _spender, _value);
+        allowance[msg.sender][spender] = amount;
+        emit Approval(msg.sender, spender, amount);
         return true;
     }
 
     /**
-     * @notice Transfer from
-     * @param _from Sender address
-     * @param _to Recipient address
-     * @param _value Amount to transfer
+     * @notice Transfer tokens from one address to another using allowance
+     * @param from Sender address
+     * @param to Recipient address
+     * @param amount Amount to transfer
+     * @return success True if transfer succeeds
      */
-    function transferFrom(address _from, address _to, uint256 _value) external returns (bool) {
-        if (_to == address(0)) revert ZeroAddress();
-        if (balanceOf[_from] < _value) revert InsufficientBalance();
-        if (allowance[_from][msg.sender] < _value) revert InsufficientAllowance();
+    function transferFrom(address from, address to, uint256 amount) external returns (bool) {
+        if (to == address(0)) revert ZeroAddress();
+        if (balanceOf[from] < amount) revert InsufficientBalance();
+        if (allowance[from][msg.sender] < amount) revert InsufficientAllowance();
 
-        balanceOf[_from] -= _value;
-        balanceOf[_to] += _value;
-        allowance[_from][msg.sender] -= _value;
+        balanceOf[from] -= amount;
+        balanceOf[to] += amount;
+        allowance[from][msg.sender] -= amount;
 
-        emit Transfer(_from, _to, _value);
+        emit Transfer(from, to, amount);
         return true;
     }
 
     /**
      * @notice Mint new tokens (only owner)
-     * @param _to Recipient address
-     * @param _amount Amount to mint
+     * @param to Recipient address
+     * @param amount Amount to mint
      */
-    function mint(address _to, uint256 _amount) external onlyOwner {
-        if (_to == address(0)) revert MintToZeroAddress();
-        if (_amount == 0) revert InvalidAmount();
+    function mint(address to, uint256 amount) external onlyOwner {
+        if (to == address(0)) revert MintToZeroAddress();
+        if (amount == 0) revert InvalidAmount();
 
-        totalSupply += _amount;
-        balanceOf[_to] += _amount;
+        totalSupply += amount;
+        balanceOf[to] += amount;
 
-        emit Transfer(address(0), _to, _amount);
+        emit Transfer(address(0), to, amount);
     }
 
     /**
-     * @notice Burn tokens
-     * @param _amount Amount to burn
+     * @notice Burn tokens from caller's balance
+     * @param amount Amount to burn
      */
-    function burn(uint256 _amount) external {
-        if (_amount == 0) revert InvalidAmount();
-        if (balanceOf[msg.sender] < _amount) revert InsufficientBalance();
+    function burn(uint256 amount) external {
+        if (amount == 0) revert InvalidAmount();
+        if (balanceOf[msg.sender] < amount) revert InsufficientBalance();
 
-        balanceOf[msg.sender] -= _amount;
-        totalSupply -= _amount;
+        balanceOf[msg.sender] -= amount;
+        totalSupply -= amount;
 
-        emit Transfer(msg.sender, address(0), _amount);
+        emit Transfer(msg.sender, address(0), amount);
     }
 
     /**
-     * @notice Transfer ownership
-     * @param _newOwner New owner address
+     * @notice Transfer ownership to a new address
+     * @param newOwner New owner address
      */
-    function transferOwnership(address _newOwner) external onlyOwner {
-        if (_newOwner == address(0)) revert ZeroAddress();
+    function transferOwnership(address newOwner) external onlyOwner {
+        if (newOwner == address(0)) revert ZeroAddress();
 
         address oldOwner = owner;
-        owner = _newOwner;
+        owner = newOwner;
 
-        emit OwnershipTransferred(oldOwner, _newOwner);
+        emit OwnershipTransferred(oldOwner, newOwner);
     }
 }
