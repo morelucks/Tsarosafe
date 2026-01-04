@@ -125,10 +125,34 @@ contract TsaroToken is IERC20 {
         if (to == address(0)) revert MintToZeroAddress();
         if (amount == 0) revert InvalidAmount();
 
-        totalSupply += amount;
-        balanceOf[to] += amount;
+        unchecked {
+            totalSupply += amount;
+            balanceOf[to] += amount;
+        }
 
         emit Transfer(address(0), to, amount);
+    }
+
+    /**
+     * @notice Transfer ownership to a new address
+     * @param newOwner New owner address
+     */
+    function transferOwnership(address newOwner) external onlyOwner {
+        if (newOwner == address(0)) revert ZeroAddress();
+
+        address oldOwner = owner;
+        owner = newOwner;
+
+        emit OwnershipTransferred(oldOwner, newOwner);
+    }
+
+    /**
+     * @notice Renounce ownership, making the contract ownerless
+     */
+    function renounceOwnership() external onlyOwner {
+        address oldOwner = owner;
+        owner = address(0);
+        emit OwnershipTransferred(oldOwner, address(0));
     }
 
     // ============ Public Functions ============
@@ -151,6 +175,29 @@ contract TsaroToken is IERC20 {
         emit Transfer(msg.sender, address(0), amount);
     }
 
+    /**
+     * @notice Burn tokens from a specified address (requires allowance)
+     * @param from Address to burn tokens from
+     * @param amount Amount to burn
+     */
+    function burnFrom(address from, uint256 amount) external {
+        if (amount == 0) revert InvalidAmount();
+        
+        uint256 currentAllowance = allowance[from][msg.sender];
+        if (currentAllowance < amount) revert InsufficientAllowance();
+        
+        uint256 accountBalance = balanceOf[from];
+        if (accountBalance < amount) revert InsufficientBalance();
+
+        unchecked {
+            allowance[from][msg.sender] = currentAllowance - amount;
+            balanceOf[from] = accountBalance - amount;
+            totalSupply -= amount;
+        }
+
+        emit Transfer(from, address(0), amount);
+    }
+
     // ============ Internal Functions ============
     
     /**
@@ -171,18 +218,5 @@ contract TsaroToken is IERC20 {
         }
 
         emit Transfer(from, to, amount);
-    }
-
-    /**
-     * @notice Transfer ownership to a new address
-     * @param newOwner New owner address
-     */
-    function transferOwnership(address newOwner) external onlyOwner {
-        if (newOwner == address(0)) revert ZeroAddress();
-
-        address oldOwner = owner;
-        owner = newOwner;
-
-        emit OwnershipTransferred(oldOwner, newOwner);
     }
 }
