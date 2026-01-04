@@ -19,6 +19,9 @@ contract TsaroToken is IERC20 {
     
     /// @notice Token decimals
     uint8 public constant decimals = 18;
+    
+    /// @notice Initial supply: 1 billion TSARO
+    uint256 private constant INITIAL_SUPPLY = 1_000_000_000 * 10 ** 18;
 
     // ============ State Variables ============
     
@@ -55,13 +58,17 @@ contract TsaroToken is IERC20 {
         _;
     }
 
+    // ============ Constructor ============
+    
     constructor() {
         owner = msg.sender;
-        totalSupply = 1_000_000_000 * 10 ** 18; // 1 billion TSARO
-        balanceOf[msg.sender] = totalSupply;
-        emit Transfer(address(0), msg.sender, totalSupply);
+        totalSupply = INITIAL_SUPPLY;
+        balanceOf[msg.sender] = INITIAL_SUPPLY;
+        emit Transfer(address(0), msg.sender, INITIAL_SUPPLY);
     }
 
+    // ============ ERC-20 Functions ============
+    
     /**
      * @notice Transfer tokens to a specified address
      * @param to Recipient address
@@ -69,13 +76,7 @@ contract TsaroToken is IERC20 {
      * @return success True if transfer succeeds
      */
     function transfer(address to, uint256 amount) external returns (bool) {
-        if (to == address(0)) revert ZeroAddress();
-        if (balanceOf[msg.sender] < amount) revert InsufficientBalance();
-
-        balanceOf[msg.sender] -= amount;
-        balanceOf[to] += amount;
-
-        emit Transfer(msg.sender, to, amount);
+        _transfer(msg.sender, to, amount);
         return true;
     }
 
@@ -101,17 +102,19 @@ contract TsaroToken is IERC20 {
      * @return success True if transfer succeeds
      */
     function transferFrom(address from, address to, uint256 amount) external returns (bool) {
-        if (to == address(0)) revert ZeroAddress();
-        if (balanceOf[from] < amount) revert InsufficientBalance();
-        if (allowance[from][msg.sender] < amount) revert InsufficientAllowance();
-
-        balanceOf[from] -= amount;
-        balanceOf[to] += amount;
-        allowance[from][msg.sender] -= amount;
-
-        emit Transfer(from, to, amount);
+        uint256 currentAllowance = allowance[from][msg.sender];
+        if (currentAllowance < amount) revert InsufficientAllowance();
+        
+        // Use unchecked for allowance subtraction since we've already checked it
+        unchecked {
+            allowance[from][msg.sender] = currentAllowance - amount;
+        }
+        
+        _transfer(from, to, amount);
         return true;
     }
+
+    // ============ Owner Functions ============
 
     /**
      * @notice Mint new tokens (only owner)
@@ -128,18 +131,46 @@ contract TsaroToken is IERC20 {
         emit Transfer(address(0), to, amount);
     }
 
+    // ============ Public Functions ============
+    
     /**
      * @notice Burn tokens from caller's balance
      * @param amount Amount to burn
      */
     function burn(uint256 amount) external {
         if (amount == 0) revert InvalidAmount();
-        if (balanceOf[msg.sender] < amount) revert InsufficientBalance();
+        
+        uint256 accountBalance = balanceOf[msg.sender];
+        if (accountBalance < amount) revert InsufficientBalance();
 
-        balanceOf[msg.sender] -= amount;
-        totalSupply -= amount;
+        unchecked {
+            balanceOf[msg.sender] = accountBalance - amount;
+            totalSupply -= amount;
+        }
 
         emit Transfer(msg.sender, address(0), amount);
+    }
+
+    // ============ Internal Functions ============
+    
+    /**
+     * @notice Internal transfer function
+     * @param from Sender address
+     * @param to Recipient address
+     * @param amount Amount to transfer
+     */
+    function _transfer(address from, address to, uint256 amount) internal {
+        if (to == address(0)) revert ZeroAddress();
+        
+        uint256 fromBalance = balanceOf[from];
+        if (fromBalance < amount) revert InsufficientBalance();
+
+        unchecked {
+            balanceOf[from] = fromBalance - amount;
+            balanceOf[to] += amount;
+        }
+
+        emit Transfer(from, to, amount);
     }
 
     /**
