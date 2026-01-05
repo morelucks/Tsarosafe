@@ -7,7 +7,14 @@ import {IERC20} from "forge-std/interfaces/IERC20.sol";
 /**
  * @title TsaroSafe
  * @notice Main TsaroSafe contract for decentralized savings groups
- * @dev Implements Create Groups and Join/Leave Groups milestones
+ * @dev Implements comprehensive savings group functionality including:
+ *      - Group creation and management
+ *      - Member join/leave operations
+ *      - Contribution tracking with multi-token support (CELO, G$)
+ *      - Goal setting and milestone tracking
+ *      - Withdrawal functionality
+ *      - Round payment tracking
+ * @author TsaroSafe Team
  */
 contract TsaroSafe is ITsaroSafeData {
     // ============ Custom Errors ============
@@ -486,7 +493,7 @@ contract TsaroSafe is ITsaroSafeData {
     }
 
     // ========================================
-    //  CONTRIBUTION TRACKING
+    //   CONTRIBUTIONS
     // ========================================
 
     /**
@@ -1022,7 +1029,7 @@ contract TsaroSafe is ITsaroSafeData {
     }
 
     // ========================================
-    // QUERY FUNCTIONS
+    //   VIEW FUNCTIONS
     // ========================================
 
     /**
