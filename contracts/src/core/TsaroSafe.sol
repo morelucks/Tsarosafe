@@ -264,7 +264,10 @@ contract TsaroSafe is ITsaroSafeData {
         if (endDate <= block.timestamp) revert InvalidEndDate();
         if (endDate > block.timestamp + 365 days) revert EndDateTooFar();
 
-        uint256 groupId = nextGroupId++;
+        uint256 groupId;
+        unchecked {
+            groupId = nextGroupId++;
+        }
 
         // Create group
         groups[groupId] = Group({
@@ -561,7 +564,10 @@ contract TsaroSafe is ITsaroSafeData {
         // Handle token transfer
         _handleTokenTransfer(_tokenType, _amount);
 
-        uint256 contributionId = nextContributionId++;
+        uint256 contributionId;
+        unchecked {
+            contributionId = nextContributionId++;
+        }
 
         // Create contribution history record with token type
         ContributionHistory memory newContribution = ContributionHistory({
@@ -1236,10 +1242,11 @@ contract TsaroSafe is ITsaroSafeData {
 
         // Mark as withdrawn
         withdrawnContributions[_groupId][_contributionId] = true;
-        memberWithdrawnAmount[_groupId][msg.sender] += withdrawalAmount;
-
-        // Update group totals
-        group.currentAmount -= withdrawalAmount;
+        
+        unchecked {
+            memberWithdrawnAmount[_groupId][msg.sender] += withdrawalAmount;
+            group.currentAmount -= withdrawalAmount;
+        }
 
         // Transfer tokens back to member
         if (tokenType == 0) {
