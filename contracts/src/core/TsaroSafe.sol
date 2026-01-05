@@ -10,7 +10,9 @@ import {IERC20} from "forge-std/interfaces/IERC20.sol";
  * @dev Implements Create Groups and Join/Leave Groups milestones
  */
 contract TsaroSafe is ITsaroSafeData {
-    // Custom Errors (saves gas and contract size)
+    // ============ Custom Errors ============
+    
+    // Group validation errors
     error EmptyName();
     error NameTooLong();
     error DescriptionTooLong();
@@ -19,8 +21,13 @@ contract TsaroSafe is ITsaroSafeData {
     error MemberLimitExceeded();
     error InvalidEndDate();
     error EndDateTooFar();
+    
+    // Access control errors
     error NotCreator();
     error NotMember();
+    error CannotRemoveSelf();
+    
+    // Group state errors
     error GroupNotExists();
     error GroupNotActive();
     error AlreadyMember();
@@ -28,46 +35,58 @@ contract TsaroSafe is ITsaroSafeData {
     error GroupEnded();
     error GroupCompleted();
     error CreatorCannotLeave();
+    
+    // Contribution errors
     error InvalidAmount();
     error ContributionNotFound();
+    error ContributionAlreadyWithdrawn();
+    
+    // Goal and milestone errors
     error InvalidLimit();
     error InvalidDeadline();
     error InvalidMilestone();
     error MilestoneNotFound();
-    error CannotRemoveSelf();
+    
+    // Token errors
     error InvalidTokenAddress();
     error TokenTransferFailed();
     error TokenTypeMismatch();
     error InsufficientAllowance();
+    
+    // Withdrawal errors
     error WithdrawalNotAllowed();
-    error ContributionAlreadyWithdrawn();
     error InsufficientContractBalance();
     error WithdrawalFailed();
 
+    // ============ Enums ============
+    
     enum GroupType {
         ProjectPool,
         CircleSavings
     }
 
-    mapping(uint256 => GroupType) public groupTypes;
-    mapping(uint256 => ITsaroSafeData.TokenType) public groupTokenTypes;
-
+    // ============ State Variables ============
+    
     // Token addresses for ERC20 support
     address public goodDollarAddress;
     address public celoAddress;
 
-    // State variables
+    // ID counters
     uint256 public nextGroupId = 1;
     uint256 public nextContributionId = 1;
     uint256 public nextMilestoneId = 1;
 
-    // Mappings
+    // ============ Mappings ============
+    
+    // Group management
     mapping(uint256 => Group) public groups;
+    mapping(uint256 => GroupType) public groupTypes;
+    mapping(uint256 => ITsaroSafeData.TokenType) public groupTokenTypes;
     mapping(uint256 => mapping(address => Member)) public groupMembers;
     mapping(uint256 => address[]) public groupMemberList;
     mapping(address => uint256[]) public userGroups;
 
-    // Contribution tracking mappings
+    // Contribution tracking
     mapping(uint256 => ContributionHistory[]) public groupContributions;
     mapping(uint256 => uint256) public groupTotalContributions;
     mapping(uint256 => uint256) public groupTotalAmount;
@@ -75,23 +94,21 @@ contract TsaroSafe is ITsaroSafeData {
     mapping(address => mapping(uint256 => uint256)) public memberTotalAmount;
 
     // Round payment tracking
-    // groupId => active round id
-    mapping(uint256 => uint256) public groupActiveRound;
-    // groupId => roundId => member => paid
-    mapping(uint256 => mapping(uint256 => mapping(address => bool))) private roundPayments;
+    mapping(uint256 => uint256) public groupActiveRound; // groupId => active round id
+    mapping(uint256 => mapping(uint256 => mapping(address => bool))) private roundPayments; // groupId => roundId => member => paid
 
-    // Goal setting mappings
+    // Goal setting
     mapping(uint256 => GroupGoal) public groupGoals;
     mapping(uint256 => GoalMilestone[]) public groupMilestones;
     mapping(uint256 => uint256) public groupGoalDeadlines;
 
-    // Withdrawal tracking mappings
-    // groupId => contributionId => withdrawn
-    mapping(uint256 => mapping(uint256 => bool)) public withdrawnContributions;
-    // groupId => member => total withdrawn
-    mapping(uint256 => mapping(address => uint256)) public memberWithdrawnAmount;
+    // Withdrawal tracking
+    mapping(uint256 => mapping(uint256 => bool)) public withdrawnContributions; // groupId => contributionId => withdrawn
+    mapping(uint256 => mapping(address => uint256)) public memberWithdrawnAmount; // groupId => member => total withdrawn
 
-    // Events
+    // ============ Events ============
+    
+    // Group management events
     event GroupCreated(
         uint256 indexed groupId,
         address indexed creator,
@@ -101,12 +118,11 @@ contract TsaroSafe is ITsaroSafeData {
         uint256 memberLimit,
         uint256 endDate
     );
-
     event MemberJoined(uint256 indexed groupId, address indexed member);
     event MemberLeft(uint256 indexed groupId, address indexed member);
     event GroupUpdated(uint256 indexed groupId, string field, string value);
 
-    // Contribution tracking events
+    // Contribution events
     event ContributionMade(
         uint256 indexed contributionId,
         uint256 indexed groupId,
@@ -125,7 +141,10 @@ contract TsaroSafe is ITsaroSafeData {
         uint256 timestamp
     );
     event ContributionVerified(
-        uint256 indexed contributionId, uint256 indexed groupId, address indexed member, bool verified
+        uint256 indexed contributionId,
+        uint256 indexed groupId,
+        address indexed member,
+        bool verified
     );
 
     // Goal setting events
@@ -133,10 +152,16 @@ contract TsaroSafe is ITsaroSafeData {
     event GoalUpdated(uint256 indexed groupId, uint256 oldTarget, uint256 newTarget, address indexed updater);
     event GoalCompleted(uint256 indexed groupId, uint256 targetAmount, uint256 actualAmount, uint256 completedAt);
     event MilestoneReached(
-        uint256 indexed milestoneId, uint256 indexed groupId, uint256 targetAmount, uint256 reachedAt
+        uint256 indexed milestoneId,
+        uint256 indexed groupId,
+        uint256 targetAmount,
+        uint256 reachedAt
     );
     event ProgressUpdated(
-        uint256 indexed groupId, uint256 currentAmount, uint256 targetAmount, uint256 progressPercentage
+        uint256 indexed groupId,
+        uint256 currentAmount,
+        uint256 targetAmount,
+        uint256 progressPercentage
     );
 
     // Withdrawal events
@@ -157,7 +182,7 @@ contract TsaroSafe is ITsaroSafeData {
         uint256 timestamp
     );
 
-    // Modifiers
+    // ============ Modifiers ============
     modifier onlyGroupCreator(uint256 _groupId) {
         if (groups[_groupId].creator != msg.sender) revert NotCreator();
         _;
