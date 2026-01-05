@@ -183,52 +183,52 @@ contract TsaroSafe is ITsaroSafeData {
     );
 
     // ============ Modifiers ============
-    modifier onlyGroupCreator(uint256 _groupId) {
-        if (groups[_groupId].creator != msg.sender) revert NotCreator();
+    modifier onlyGroupCreator(uint256 groupId) {
+        if (groups[groupId].creator != msg.sender) revert NotCreator();
         _;
     }
 
-    modifier onlyGroupMember(uint256 _groupId) {
-        if (!groupMembers[_groupId][msg.sender].isActive) revert NotMember();
+    modifier onlyGroupMember(uint256 groupId) {
+        if (!groupMembers[groupId][msg.sender].isActive) revert NotMember();
         _;
     }
 
-    modifier groupExists(uint256 _groupId) {
-        if (groups[_groupId].id == 0) revert GroupNotExists();
+    modifier groupExists(uint256 groupId) {
+        if (groups[groupId].id == 0) revert GroupNotExists();
         _;
     }
 
-    modifier groupActive(uint256 _groupId) {
-        if (!groups[_groupId].isActive) revert GroupNotActive();
+    modifier groupActive(uint256 groupId) {
+        if (!groups[groupId].isActive) revert GroupNotActive();
         _;
     }
 
     /**
      * @notice Constructor to initialize token addresses
-     * @param _goodDollarAddress Address of GoodDollar token
-     * @param _celoAddress Address of CELO token (can be zero address for native CELO)
+     * @param goodDollarAddress_ Address of GoodDollar token
+     * @param celoAddress_ Address of CELO token (can be zero address for native CELO)
      */
-    constructor(address _goodDollarAddress, address _celoAddress) {
-        if (_goodDollarAddress == address(0)) revert InvalidTokenAddress();
-        goodDollarAddress = _goodDollarAddress;
-        celoAddress = _celoAddress;
+    constructor(address goodDollarAddress_, address celoAddress_) {
+        if (goodDollarAddress_ == address(0)) revert InvalidTokenAddress();
+        goodDollarAddress = goodDollarAddress_;
+        celoAddress = celoAddress_;
     }
 
     /**
      * @notice Update GoodDollar token address
-     * @param _newAddress New GoodDollar token address
+     * @param newAddress New GoodDollar token address
      */
-    function setGoodDollarAddress(address _newAddress) external {
-        if (_newAddress == address(0)) revert InvalidTokenAddress();
-        goodDollarAddress = _newAddress;
+    function setGoodDollarAddress(address newAddress) external {
+        if (newAddress == address(0)) revert InvalidTokenAddress();
+        goodDollarAddress = newAddress;
     }
 
     /**
      * @notice Update CELO token address
-     * @param _newAddress New CELO token address
+     * @param newAddress New CELO token address
      */
-    function setCeloAddress(address _newAddress) external {
-        celoAddress = _newAddress;
+    function setCeloAddress(address newAddress) external {
+        celoAddress = newAddress;
     }
 
     // ========================================
@@ -237,54 +237,54 @@ contract TsaroSafe is ITsaroSafeData {
 
     /**
      * @notice Create a new savings group
-     * @param _name Group name
-     * @param _description Group description
-     * @param _isPrivate Whether the group is private
-     * @param _targetAmount Target savings amount
-     * @param _memberLimit Maximum number of members
-     * @param _endDate Group end date (timestamp)
-     * @param _tokenType Token type (CELO or GSTAR)
+     * @param name Group name
+     * @param description Group description
+     * @param isPrivate Whether the group is private
+     * @param targetAmount Target savings amount
+     * @param memberLimit Maximum number of members
+     * @param endDate Group end date (timestamp)
+     * @param tokenType Token type (CELO or GSTAR)
      */
     function createGroup(
-        string memory _name,
-        string memory _description,
-        bool _isPrivate,
-        uint256 _targetAmount,
-        uint256 _memberLimit,
-        uint256 _endDate,
-        ITsaroSafeData.TokenType _tokenType
+        string memory name,
+        string memory description,
+        bool isPrivate,
+        uint256 targetAmount,
+        uint256 memberLimit,
+        uint256 endDate,
+        ITsaroSafeData.TokenType tokenType
     ) external returns (uint256) {
         // Validation
-        if (bytes(_name).length == 0) revert EmptyName();
-        if (bytes(_name).length > 100) revert NameTooLong();
-        if (bytes(_description).length > 500) revert DescriptionTooLong();
-        if (_targetAmount == 0) revert InvalidTarget();
-        if (_memberLimit == 0) revert InvalidMemberLimit();
-        if (_memberLimit > 100) revert MemberLimitExceeded();
-        if (_endDate <= block.timestamp) revert InvalidEndDate();
-        if (_endDate > block.timestamp + 365 days) revert EndDateTooFar();
+        if (bytes(name).length == 0) revert EmptyName();
+        if (bytes(name).length > 100) revert NameTooLong();
+        if (bytes(description).length > 500) revert DescriptionTooLong();
+        if (targetAmount == 0) revert InvalidTarget();
+        if (memberLimit == 0) revert InvalidMemberLimit();
+        if (memberLimit > 100) revert MemberLimitExceeded();
+        if (endDate <= block.timestamp) revert InvalidEndDate();
+        if (endDate > block.timestamp + 365 days) revert EndDateTooFar();
 
         uint256 groupId = nextGroupId++;
 
         // Create group
         groups[groupId] = Group({
             id: groupId,
-            name: _name,
-            description: _description,
-            isPrivate: _isPrivate,
+            name: name,
+            description: description,
+            isPrivate: isPrivate,
             creator: msg.sender,
-            targetAmount: _targetAmount,
+            targetAmount: targetAmount,
             currentAmount: 0,
-            memberLimit: _memberLimit,
+            memberLimit: memberLimit,
             createdAt: block.timestamp,
-            endDate: _endDate,
+            endDate: endDate,
             isActive: true,
             isCompleted: false,
-            tokenType: _tokenType
+            tokenType: tokenType
         });
 
         // Store token type
-        groupTokenTypes[groupId] = _tokenType;
+        groupTokenTypes[groupId] = tokenType;
 
         // Add creator as first member
         groupMembers[groupId][msg.sender] =
@@ -296,109 +296,109 @@ contract TsaroSafe is ITsaroSafeData {
         // Initialize group goal
         groupGoals[groupId] = GroupGoal({
             groupId: groupId,
-            targetAmount: _targetAmount,
+            targetAmount: targetAmount,
             currentAmount: 0,
-            deadline: _endDate,
+            deadline: endDate,
             isCompleted: false,
             createdAt: block.timestamp,
             completedAt: 0,
             progressPercentage: 0
         });
 
-        groupGoalDeadlines[groupId] = _endDate;
+        groupGoalDeadlines[groupId] = endDate;
 
-        emit GroupCreated(groupId, msg.sender, _name, _isPrivate, _targetAmount, _memberLimit, _endDate);
+        emit GroupCreated(groupId, msg.sender, name, isPrivate, targetAmount, memberLimit, endDate);
         emit MemberJoined(groupId, msg.sender);
-        emit GoalSet(groupId, _targetAmount, _endDate, block.timestamp);
+        emit GoalSet(groupId, targetAmount, endDate, block.timestamp);
 
         return groupId;
     }
 
     /**
      * @notice Update group metadata (only by creator)
-     * @param _groupId Group ID
-     * @param _name New group name
-     * @param _description New group description
+     * @param groupId Group ID
+     * @param name New group name
+     * @param description New group description
      */
-    function updateGroupMetadata(uint256 _groupId, string memory _name, string memory _description)
+    function updateGroupMetadata(uint256 groupId, string memory name, string memory description)
         external
-        groupExists(_groupId)
-        onlyGroupCreator(_groupId)
-        groupActive(_groupId)
+        groupExists(groupId)
+        onlyGroupCreator(groupId)
+        groupActive(groupId)
     {
-        if (bytes(_name).length == 0) revert EmptyName();
-        if (bytes(_name).length > 100) revert NameTooLong();
-        if (bytes(_description).length > 500) revert DescriptionTooLong();
+        if (bytes(name).length == 0) revert EmptyName();
+        if (bytes(name).length > 100) revert NameTooLong();
+        if (bytes(description).length > 500) revert DescriptionTooLong();
 
-        groups[_groupId].name = _name;
-        groups[_groupId].description = _description;
+        groups[groupId].name = name;
+        groups[groupId].description = description;
 
-        emit GroupUpdated(_groupId, "metadata", "updated");
+        emit GroupUpdated(groupId, "metadata", "updated");
     }
 
     /**
      * @notice Update group member limit (only by creator)
-     * @param _groupId Group ID
-     * @param _newLimit New member limit
+     * @param groupId Group ID
+     * @param newLimit New member limit
      */
-    function updateMemberLimit(uint256 _groupId, uint256 _newLimit)
+    function updateMemberLimit(uint256 groupId, uint256 newLimit)
         external
-        groupExists(_groupId)
-        onlyGroupCreator(_groupId)
-        groupActive(_groupId)
+        groupExists(groupId)
+        onlyGroupCreator(groupId)
+        groupActive(groupId)
     {
-        if (_newLimit == 0) revert InvalidMemberLimit();
-        if (_newLimit > 100) revert MemberLimitExceeded();
-        if (_newLimit < groupMemberList[_groupId].length) revert InvalidMemberLimit();
+        if (newLimit == 0) revert InvalidMemberLimit();
+        if (newLimit > 100) revert MemberLimitExceeded();
+        if (newLimit < groupMemberList[groupId].length) revert InvalidMemberLimit();
 
-        groups[_groupId].memberLimit = _newLimit;
-        emit GroupUpdated(_groupId, "memberLimit", "updated");
+        groups[groupId].memberLimit = newLimit;
+        emit GroupUpdated(groupId, "memberLimit", "updated");
     }
 
     /**
      * @notice Update group end date (only by creator)
-     * @param _groupId Group ID
-     * @param _newEndDate New end date
+     * @param groupId Group ID
+     * @param newEndDate New end date
      */
-    function updateEndDate(uint256 _groupId, uint256 _newEndDate)
+    function updateEndDate(uint256 groupId, uint256 newEndDate)
         external
-        groupExists(_groupId)
-        onlyGroupCreator(_groupId)
-        groupActive(_groupId)
+        groupExists(groupId)
+        onlyGroupCreator(groupId)
+        groupActive(groupId)
     {
-        if (_newEndDate <= block.timestamp) revert InvalidEndDate();
-        if (_newEndDate > block.timestamp + 365 days) revert EndDateTooFar();
+        if (newEndDate <= block.timestamp) revert InvalidEndDate();
+        if (newEndDate > block.timestamp + 365 days) revert EndDateTooFar();
 
-        groups[_groupId].endDate = _newEndDate;
-        emit GroupUpdated(_groupId, "endDate", "updated");
+        groups[groupId].endDate = newEndDate;
+        emit GroupUpdated(groupId, "endDate", "updated");
     }
 
     /**
      * @notice Toggle group privacy (only by creator)
-     * @param _groupId Group ID
+     * @param groupId Group ID
      */
-    function toggleGroupPrivacy(uint256 _groupId)
+    function toggleGroupPrivacy(uint256 groupId)
         external
-        groupExists(_groupId)
-        onlyGroupCreator(_groupId)
-        groupActive(_groupId)
+        groupExists(groupId)
+        onlyGroupCreator(groupId)
+        groupActive(groupId)
     {
-        groups[_groupId].isPrivate = !groups[_groupId].isPrivate;
-        emit GroupUpdated(_groupId, "privacy", groups[_groupId].isPrivate ? "private" : "public");
+        groups[groupId].isPrivate = !groups[groupId].isPrivate;
+        emit GroupUpdated(groupId, "privacy", groups[groupId].isPrivate ? "private" : "public");
     }
 
     /**
      * @notice Deactivate group (only by creator)
-     * @param _groupId Group ID
+     * @param groupId Group ID
      */
-    function deactivateGroup(uint256 _groupId)
+    function deactivateGroup(uint256 groupId)
         external
-        groupExists(_groupId)
-        onlyGroupCreator(_groupId)
-        groupActive(_groupId)
+        groupExists(groupId)
+        onlyGroupCreator(groupId)
+        groupActive(groupId)
     {
-        groups[_groupId].isActive = false;
-        emit GroupUpdated(_groupId, "status", "deactivated");
+        groups[groupId].isActive = false;
+        emit GroupUpdated(groupId, "status", "deactivated");
     }
 
     // ========================================
@@ -407,16 +407,16 @@ contract TsaroSafe is ITsaroSafeData {
 
     /**
      * @notice Join an existing group
-     * @param _groupId Group ID to join
+     * @param groupId Group ID to join
      */
-    function joinGroup(uint256 _groupId) external groupExists(_groupId) groupActive(_groupId) {
-        Group storage group = groups[_groupId];
+    function joinGroup(uint256 groupId) external groupExists(groupId) groupActive(groupId) {
+        Group storage group = groups[groupId];
 
         // Check if user is already a member
-        if (groupMembers[_groupId][msg.sender].isActive) revert AlreadyMember();
+        if (groupMembers[groupId][msg.sender].isActive) revert AlreadyMember();
 
         // Check group capacity
-        if (groupMemberList[_groupId].length >= group.memberLimit) revert GroupAtCapacity();
+        if (groupMemberList[groupId].length >= group.memberLimit) revert GroupAtCapacity();
 
         // Check if group has ended
         if (block.timestamp >= group.endDate) revert GroupEnded();
@@ -425,21 +425,21 @@ contract TsaroSafe is ITsaroSafeData {
         if (group.isCompleted) revert GroupCompleted();
 
         // Add user as member
-        groupMembers[_groupId][msg.sender] =
+        groupMembers[groupId][msg.sender] =
             Member({user: msg.sender, contribution: 0, lastContribution: 0, isActive: true, joinedAt: block.timestamp});
 
-        groupMemberList[_groupId].push(msg.sender);
-        userGroups[msg.sender].push(_groupId);
+        groupMemberList[groupId].push(msg.sender);
+        userGroups[msg.sender].push(groupId);
 
-        emit MemberJoined(_groupId, msg.sender);
+        emit MemberJoined(groupId, msg.sender);
     }
 
     /**
      * @notice Leave a group
-     * @param _groupId Group ID to leave
+     * @param groupId Group ID to leave
      */
-    function leaveGroup(uint256 _groupId) external groupExists(_groupId) onlyGroupMember(_groupId) {
-        Group storage group = groups[_groupId];
+    function leaveGroup(uint256 groupId) external groupExists(groupId) onlyGroupMember(groupId) {
+        Group storage group = groups[groupId];
 
         // Prevent creator from leaving (they must deactivate group instead)
         if (msg.sender == group.creator) revert CreatorCannotLeave();
@@ -451,10 +451,10 @@ contract TsaroSafe is ITsaroSafeData {
         if (group.isCompleted) revert GroupCompleted();
 
         // Mark member as inactive
-        groupMembers[_groupId][msg.sender].isActive = false;
+        groupMembers[groupId][msg.sender].isActive = false;
 
         // Remove from member list
-        address[] storage members = groupMemberList[_groupId];
+        address[] storage members = groupMemberList[groupId];
         for (uint256 i = 0; i < members.length; i++) {
             if (members[i] == msg.sender) {
                 members[i] = members[members.length - 1];
@@ -466,14 +466,14 @@ contract TsaroSafe is ITsaroSafeData {
         // Remove from user groups
         uint256[] storage userGroupList = userGroups[msg.sender];
         for (uint256 i = 0; i < userGroupList.length; i++) {
-            if (userGroupList[i] == _groupId) {
+            if (userGroupList[i] == groupId) {
                 userGroupList[i] = userGroupList[userGroupList.length - 1];
                 userGroupList.pop();
                 break;
             }
         }
 
-        emit MemberLeft(_groupId, msg.sender);
+        emit MemberLeft(groupId, msg.sender);
     }
 
     /**
