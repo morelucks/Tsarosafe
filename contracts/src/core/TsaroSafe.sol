@@ -453,67 +453,33 @@ contract TsaroSafe is ITsaroSafeData {
         // Mark member as inactive
         groupMembers[groupId][msg.sender].isActive = false;
 
-        // Remove from member list
-        address[] storage members = groupMemberList[groupId];
-        for (uint256 i = 0; i < members.length; i++) {
-            if (members[i] == msg.sender) {
-                members[i] = members[members.length - 1];
-                members.pop();
-                break;
-            }
-        }
-
-        // Remove from user groups
-        uint256[] storage userGroupList = userGroups[msg.sender];
-        for (uint256 i = 0; i < userGroupList.length; i++) {
-            if (userGroupList[i] == groupId) {
-                userGroupList[i] = userGroupList[userGroupList.length - 1];
-                userGroupList.pop();
-                break;
-            }
-        }
+        // Remove from arrays
+        _removeMemberFromArrays(groupId, msg.sender);
 
         emit MemberLeft(groupId, msg.sender);
     }
 
     /**
      * @notice Remove a member from group (only by creator)
-     * @param _groupId Group ID
-     * @param _member Member address to remove
+     * @param groupId Group ID
+     * @param member Member address to remove
      */
-    function removeMember(uint256 _groupId, address _member)
+    function removeMember(uint256 groupId, address member)
         external
-        groupExists(_groupId)
-        onlyGroupCreator(_groupId)
-        groupActive(_groupId)
+        groupExists(groupId)
+        onlyGroupCreator(groupId)
+        groupActive(groupId)
     {
-        if (_member == msg.sender) revert CannotRemoveSelf();
-        if (!groupMembers[_groupId][_member].isActive) revert NotMember();
+        if (member == msg.sender) revert CannotRemoveSelf();
+        if (!groupMembers[groupId][member].isActive) revert NotMember();
 
         // Mark member as inactive
-        groupMembers[_groupId][_member].isActive = false;
+        groupMembers[groupId][member].isActive = false;
 
-        // Remove from member list
-        address[] storage members = groupMemberList[_groupId];
-        for (uint256 i = 0; i < members.length; i++) {
-            if (members[i] == _member) {
-                members[i] = members[members.length - 1];
-                members.pop();
-                break;
-            }
-        }
+        // Remove from arrays
+        _removeMemberFromArrays(groupId, member);
 
-        // Remove from user groups
-        uint256[] storage userGroupList = userGroups[_member];
-        for (uint256 i = 0; i < userGroupList.length; i++) {
-            if (userGroupList[i] == _groupId) {
-                userGroupList[i] = userGroupList[userGroupList.length - 1];
-                userGroupList.pop();
-                break;
-            }
-        }
-
-        emit MemberLeft(_groupId, _member);
+        emit MemberLeft(groupId, member);
     }
 
     // ========================================
@@ -556,42 +522,10 @@ contract TsaroSafe is ITsaroSafeData {
         // Add to group contributions
         groupContributions[_groupId].push(newContribution);
 
-        // Update member contribution totals
-        memberTotalContributions[msg.sender][_groupId]++;
-        memberTotalAmount[msg.sender][_groupId] += _amount;
-
-        // Update group totals
-        groupTotalContributions[_groupId]++;
-        groupTotalAmount[_groupId] += _amount;
-
-        // Update group current amount
-        group.currentAmount += _amount;
-
-        // Update member's contribution in group
-        groupMembers[_groupId][msg.sender].contribution += _amount;
-        groupMembers[_groupId][msg.sender].lastContribution = block.timestamp;
-
-        // Mark member as paid for the active round (if one is set)
-        uint256 activeRound = groupActiveRound[_groupId];
-        if (activeRound != 0) {
-            roundPayments[_groupId][activeRound][msg.sender] = true;
-        }
-
-        // Update goal progress
-        GroupGoal storage goal = groupGoals[_groupId];
-        goal.currentAmount += _amount;
-        goal.progressPercentage = (goal.currentAmount * 100) / goal.targetAmount;
-
-        // Check if group target is reached
-        if (group.currentAmount >= group.targetAmount) {
-            group.isCompleted = true;
-            goal.isCompleted = true;
-            goal.completedAt = block.timestamp;
-            emit GoalCompleted(_groupId, goal.targetAmount, goal.currentAmount, block.timestamp);
-        }
+        // Process contribution updates
+        _processContribution(_groupId, contributionId, msg.sender, _amount, groups[_groupId].tokenType);
 
         emit ContributionMade(contributionId, _groupId, msg.sender, _amount, _description, block.timestamp);
-        emit ProgressUpdated(_groupId, goal.currentAmount, goal.targetAmount, goal.progressPercentage);
     }
 
     /**
@@ -624,26 +558,8 @@ contract TsaroSafe is ITsaroSafeData {
         // Verify token type matches group's token type
         if (uint8(group.tokenType) != _tokenType) revert TokenTypeMismatch();
 
-        // Handle token transfer based on token type
-        if (_tokenType == 0) {
-            // CELO transfer (native token)
-            if (msg.value != _amount) revert InvalidAmount();
-        } else if (_tokenType == 1) {
-            // G$ (GoodDollar) transfer
-            if (goodDollarAddress == address(0)) revert InvalidTokenAddress();
-            
-            // Check user's balance
-            uint256 userBalance = IERC20(goodDollarAddress).balanceOf(msg.sender);
-            if (userBalance < _amount) revert InvalidAmount();
-            
-            // Check allowance
-            uint256 allowance = IERC20(goodDollarAddress).allowance(msg.sender, address(this));
-            if (allowance < _amount) revert InsufficientAllowance();
-            
-            // Transfer G$ from user to contract
-            bool success = IERC20(goodDollarAddress).transferFrom(msg.sender, address(this), _amount);
-            if (!success) revert TokenTransferFailed();
-        }
+        // Handle token transfer
+        _handleTokenTransfer(_tokenType, _amount);
 
         uint256 contributionId = nextContributionId++;
 
@@ -662,39 +578,8 @@ contract TsaroSafe is ITsaroSafeData {
         // Add to group contributions
         groupContributions[_groupId].push(newContribution);
 
-        // Update member contribution totals
-        memberTotalContributions[msg.sender][_groupId]++;
-        memberTotalAmount[msg.sender][_groupId] += _amount;
-
-        // Update group totals
-        groupTotalContributions[_groupId]++;
-        groupTotalAmount[_groupId] += _amount;
-
-        // Update group current amount
-        group.currentAmount += _amount;
-
-        // Update member's contribution in group
-        groupMembers[_groupId][msg.sender].contribution += _amount;
-        groupMembers[_groupId][msg.sender].lastContribution = block.timestamp;
-
-        // Mark member as paid for the active round (if one is set)
-        uint256 activeRound = groupActiveRound[_groupId];
-        if (activeRound != 0) {
-            roundPayments[_groupId][activeRound][msg.sender] = true;
-        }
-
-        // Update goal progress
-        GroupGoal storage goal = groupGoals[_groupId];
-        goal.currentAmount += _amount;
-        goal.progressPercentage = (goal.currentAmount * 100) / goal.targetAmount;
-
-        // Check if group target is reached
-        if (group.currentAmount >= group.targetAmount) {
-            group.isCompleted = true;
-            goal.isCompleted = true;
-            goal.completedAt = block.timestamp;
-            emit GoalCompleted(_groupId, goal.targetAmount, goal.currentAmount, block.timestamp);
-        }
+        // Process contribution updates
+        _processContribution(_groupId, contributionId, msg.sender, _amount, ITsaroSafeData.TokenType(_tokenType));
 
         emit ContributionMadeWithToken(
             contributionId,
@@ -1423,6 +1308,128 @@ contract TsaroSafe is ITsaroSafeData {
         }
 
         return totalWithdrawable;
+    }
+
+    // ============ Internal Helper Functions ============
+    
+    /**
+     * @notice Internal function to process contribution updates
+     * @param groupId Group ID
+     * @param contributionId Contribution ID
+     * @param member Member address
+     * @param amount Contribution amount
+     * @param tokenType Token type
+     */
+    function _processContribution(
+        uint256 groupId,
+        uint256 contributionId,
+        address member,
+        uint256 amount,
+        ITsaroSafeData.TokenType tokenType
+    ) internal {
+        Group storage group = groups[groupId];
+        
+        // Update member contribution totals
+        unchecked {
+            memberTotalContributions[member][groupId]++;
+            memberTotalAmount[member][groupId] += amount;
+        }
+        
+        // Update group totals
+        unchecked {
+            groupTotalContributions[groupId]++;
+            groupTotalAmount[groupId] += amount;
+        }
+        
+        // Update group current amount
+        unchecked {
+            group.currentAmount += amount;
+        }
+        
+        // Update member's contribution in group
+        unchecked {
+            groupMembers[groupId][member].contribution += amount;
+        }
+        groupMembers[groupId][member].lastContribution = block.timestamp;
+        
+        // Mark member as paid for the active round (if one is set)
+        uint256 activeRound = groupActiveRound[groupId];
+        if (activeRound != 0) {
+            roundPayments[groupId][activeRound][member] = true;
+        }
+        
+        // Update goal progress
+        GroupGoal storage goal = groupGoals[groupId];
+        unchecked {
+            goal.currentAmount += amount;
+        }
+        goal.progressPercentage = (goal.currentAmount * 100) / goal.targetAmount;
+        
+        // Check if group target is reached
+        if (group.currentAmount >= group.targetAmount) {
+            group.isCompleted = true;
+            goal.isCompleted = true;
+            goal.completedAt = block.timestamp;
+            emit GoalCompleted(groupId, goal.targetAmount, goal.currentAmount, block.timestamp);
+        }
+        
+        emit ProgressUpdated(groupId, goal.currentAmount, goal.targetAmount, goal.progressPercentage);
+    }
+    
+    /**
+     * @notice Internal function to handle token transfers for contributions
+     * @param tokenType Token type (0 = CELO, 1 = G$)
+     * @param amount Amount to transfer
+     */
+    function _handleTokenTransfer(uint8 tokenType, uint256 amount) internal {
+        if (tokenType == 0) {
+            // CELO transfer (native token)
+            if (msg.value != amount) revert InvalidAmount();
+        } else if (tokenType == 1) {
+            // G$ (GoodDollar) transfer
+            if (goodDollarAddress == address(0)) revert InvalidTokenAddress();
+            
+            // Check user's balance
+            uint256 userBalance = IERC20(goodDollarAddress).balanceOf(msg.sender);
+            if (userBalance < amount) revert InvalidAmount();
+            
+            // Check allowance
+            uint256 allowance = IERC20(goodDollarAddress).allowance(msg.sender, address(this));
+            if (allowance < amount) revert InsufficientAllowance();
+            
+            // Transfer G$ from user to contract
+            bool success = IERC20(goodDollarAddress).transferFrom(msg.sender, address(this), amount);
+            if (!success) revert TokenTransferFailed();
+        }
+    }
+    
+    /**
+     * @notice Internal function to remove member from arrays
+     * @param groupId Group ID
+     * @param member Member address to remove
+     */
+    function _removeMemberFromArrays(uint256 groupId, address member) internal {
+        // Remove from member list
+        address[] storage members = groupMemberList[groupId];
+        uint256 memberCount = members.length;
+        for (uint256 i = 0; i < memberCount; i++) {
+            if (members[i] == member) {
+                members[i] = members[memberCount - 1];
+                members.pop();
+                break;
+            }
+        }
+        
+        // Remove from user groups
+        uint256[] storage userGroupList = userGroups[member];
+        uint256 userGroupCount = userGroupList.length;
+        for (uint256 i = 0; i < userGroupCount; i++) {
+            if (userGroupList[i] == groupId) {
+                userGroupList[i] = userGroupList[userGroupCount - 1];
+                userGroupList.pop();
+                break;
+            }
+        }
     }
 
     /**
