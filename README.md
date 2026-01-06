@@ -144,9 +144,9 @@ npm run dev
 
 - **Smart Contracts**: Solidity, Foundry
 - **Frontend**: Next.js 16, TypeScript, React 19
-- **Blockchain**: Base Network
+- **Blockchains**: Base & Celo (primary deployment targets)
 - **Wallet Integration**: Reown (WalletConnect), Wagmi
-- **Token Support**: Native ETH, GoodDollar (G$), and ERC20 tokens
+- **Token Support**: Native ETH, CELO, GoodDollar (G$), and ERC20 tokens
 
 ## Features
 
@@ -167,12 +167,18 @@ npm run dev
 
 ## Network Configuration
 
-TsaroSafe is deployed on **Base Network**:
+TsaroSafe is designed to run on **Base** and **Celo**:
 
-- **Base Mainnet**: Chain ID 8453
-- **Base Sepolia Testnet**: Chain ID 84532
+- **Base Mainnet**: Chain ID `8453`
+- **Base Sepolia Testnet**: Chain ID `84532`
+- **Celo Mainnet**: Chain ID `42220`
 
-The platform also supports multiple networks including Ethereum, Arbitrum, Optimism, and Polygon for flexibility.
+The smart contracts project (`contracts/`) is configured with RPC endpoints for both Base and Celo in `foundry.toml`, and deployment scripts are provided for:
+
+- `TsaroToken` and `TsaroSafe` on Base / Celo
+- `TsaroSafeRewardsAdapter` on **Celo Mainnet** for GoodDollar EngagementRewards integration
+
+The platform can also be extended to additional EVM networks (Ethereum, Arbitrum, Optimism, Polygon) with minimal changes.
 
 ## Contributing
 
