@@ -515,7 +515,10 @@ contract TsaroSafe is ITsaroSafeData {
         if (block.timestamp >= group.endDate) revert GroupEnded();
         if (group.isCompleted) revert GroupCompleted();
 
-        uint256 contributionId = nextContributionId++;
+        uint256 contributionId;
+        unchecked {
+            contributionId = nextContributionId++;
+        }
 
         // Create contribution history record
         ContributionHistory memory newContribution = ContributionHistory({
@@ -603,7 +606,6 @@ contract TsaroSafe is ITsaroSafeData {
             _description,
             block.timestamp
         );
-        emit ProgressUpdated(_groupId, goal.currentAmount, goal.targetAmount, goal.progressPercentage);
     }
 
     /**

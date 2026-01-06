@@ -35,7 +35,7 @@ contract TsaroSafeRewardsAdapter {
     constructor(address tsaroSafe_, address engagementRewards_) {
         require(tsaroSafe_ != address(0), "TsaroSafe address zero");
         require(engagementRewards_ != address(0), "Rewards address zero");
-        tsaroSafe = TsaroSafe(tsaroSafe_);
+        tsaroSafe = TsaroSafe(payable(tsaroSafe_));
         engagementRewards = IEngagementRewards(engagementRewards_);
     }
 
