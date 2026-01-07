@@ -36,11 +36,41 @@ export const GOODDOLLAR_ADDRESSES = {
   44787: '0x62B8B11039FcfE5aB0C56E502b1C372A3d2a9c7A', // Update with testnet address if different
 } as const
 
+// Engagement Rewards Configuration
+export const ENGAGEMENT_REWARDS_ADDRESSES = {
+  // Celo Mainnet (Production)
+  42220: '0x25db74CF4E7BA120526fd87e159CF656d94bAE43',
+  // Celo Alfajores Testnet (Development)
+  44787: '0xb44fC3A592aDaA257AECe1Ae8956019EA53d0465',
+} as const
+
+// TsaroSafe Rewards Adapter Addresses
+export const TSAROSAFE_REWARDS_ADAPTER_ADDRESSES = {
+  // Celo Mainnet
+  42220: '0x4902045cEF54fBc664591a40fecf22Bb51932a45',
+  // Celo Alfajores Testnet (update when deployed)
+  44787: '0x4902045cEF54fBc664591a40fecf22Bb51932a45',
+} as const
+
 /**
  * Get GoodDollar token address for a given chain ID
  */
 export function getGoodDollarAddress(chainId: number): string | undefined {
   return GOODDOLLAR_ADDRESSES[chainId as keyof typeof GOODDOLLAR_ADDRESSES]
+}
+
+/**
+ * Get Engagement Rewards contract address for a given chain ID
+ */
+export function getEngagementRewardsAddress(chainId: number): string | undefined {
+  return ENGAGEMENT_REWARDS_ADDRESSES[chainId as keyof typeof ENGAGEMENT_REWARDS_ADDRESSES]
+}
+
+/**
+ * Get TsaroSafe Rewards Adapter address for a given chain ID
+ */
+export function getRewardsAdapterAddress(chainId: number): string | undefined {
+  return TSAROSAFE_REWARDS_ADAPTER_ADDRESSES[chainId as keyof typeof TSAROSAFE_REWARDS_ADAPTER_ADDRESSES]
 }
 
 /**
