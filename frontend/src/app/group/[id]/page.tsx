@@ -1,11 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { useAccount } from "wagmi";
+import { useAccount, usePublicClient } from "wagmi";
 import { useGroup, useGroupMembers, useGroupStats, useMakeContribution, useMakeContributionWithToken, useGroupContributions, useGroupMilestones } from "@/hooks/useTsaroSafe";
 import { useGoodDollarBalance, useGoodDollarAllowance, useApproveGoodDollar } from "@/hooks/useGoodDollar";
 import { useContractAddress } from "@/hooks/useTsaroSafe";
+import { useClaimEngagementReward, useCurrentBlockNumber } from "@/hooks/useEngagementRewards";
+import { calculateValidUntilBlock, getInviterAddress, generateSignature } from "@/lib/engagementRewards";
 import { Address } from "viem";
 import { Group, ContributionHistory, GroupMilestone } from "@/types/group";
 import GDollarAmount, { InlineGDollarAmount, USDAmount } from "@/app/components/GDollarAmount";
@@ -13,7 +15,9 @@ import GDollarPriceDisplay from "@/app/components/GDollarPriceDisplay";
 
 export default function GroupDetailPage() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const { address } = useAccount();
+  const publicClient = usePublicClient();
   const groupId = params?.id ? BigInt(params.id as string) : undefined;
 
   const { group: groupData, isLoading: isLoadingGroup, refetch: refetchGroup } = useGroup(groupId);
@@ -29,6 +33,9 @@ export default function GroupDetailPage() {
   const milestones = milestonesData as GroupMilestone[] | undefined;
   const { makeContribution, isLoading: isSubmitting, isConfirmed, error: contributionError } = useMakeContribution();
   const { makeContributionWithToken, isLoading: isSubmittingToken, isConfirmed: isConfirmedToken, error: contributionTokenError } = useMakeContributionWithToken();
+  const { claimReward } = useClaimEngagementReward();
+  const { getCurrentBlock } = useCurrentBlockNumber();
+  const [rewardClaimedForContribution, setRewardClaimedForContribution] = useState(false);
 
   const [showContributionForm, setShowContributionForm] = useState(false);
   const [contributionAmount, setContributionAmount] = useState("");
@@ -49,6 +56,45 @@ export default function GroupDetailPage() {
   const { allowanceFormatted: gdAllowance } = useGoodDollarAllowance(contractAddress as Address | undefined);
   const { approve: approveGd, isLoading: isApproving } = useApproveGoodDollar();
 
+  // Claim engagement rewards after contribution is successfully made
+  useEffect(() => {
+    const claimRewardsAfterContribution = async () => {
+      if ((!isConfirmed && !isConfirmedToken) || rewardClaimedForContribution || !address || !publicClient) return;
+
+      try {
+        setRewardClaimedForContribution(true);
+        
+        // Get inviter from URL params
+        const inviter = getInviterAddress(new URLSearchParams(searchParams.toString()));
+        
+        // Get current block and calculate validUntilBlock
+        const currentBlock = await getCurrentBlock();
+        const validUntilBlock = calculateValidUntilBlock(currentBlock);
+        
+        // Generate signature (simplified - use GoodDollar SDK in production)
+        const signature = await generateSignature(
+          '0x4902045cEF54fBc664591a40fecf22Bb51932a45' as Address,
+          inviter,
+          validUntilBlock,
+          null // Placeholder - use GoodDollar SDK in production
+        );
+        
+        // Claim reward (non-blocking - don't fail if this errors)
+        try {
+          await claimReward(inviter, validUntilBlock, signature);
+        } catch (rewardError) {
+          console.warn('Failed to claim engagement reward:', rewardError);
+          // Don't block user flow if reward claim fails
+        }
+      } catch (error) {
+        console.error('Error in reward claim flow:', error);
+        // Don't block user flow
+      }
+    };
+
+    claimRewardsAfterContribution();
+  }, [isConfirmed, isConfirmedToken, rewardClaimedForContribution, address, publicClient, searchParams, getCurrentBlock, claimReward]);
+
   useEffect(() => {
     if (isConfirmed || isConfirmedToken) {
       setShowContributionForm(false);
@@ -56,6 +102,8 @@ export default function GroupDetailPage() {
       setContributionDescription("");
       refetchGroup();
       refetchContributions();
+      // Reset reward claim flag for next contribution
+      setRewardClaimedForContribution(false);
     }
   }, [isConfirmed, isConfirmedToken, refetchGroup, refetchContributions]);
 
