@@ -1,7 +1,11 @@
 "use client";
 import { useMemo, useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCreateGroup } from "@/hooks/useTsaroSafe";
+import { useClaimEngagementReward, useCurrentBlockNumber } from "@/hooks/useEngagementRewards";
+import { useAccount, usePublicClient } from "wagmi";
+import { calculateValidUntilBlock, getInviterAddress, generateSignature } from "@/lib/engagementRewards";
+import { Address } from "viem";
 
 type Privacy = "public" | "private";
 type MemberRole = "admin" | "member";
@@ -178,7 +182,52 @@ const CreateGroupPage = () => {
   const back = () => setActiveStep(s => Math.max(s - 1, 0));
 
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const { address } = useAccount();
+  const publicClient = usePublicClient();
   const { createGroup, isLoading: isCreating, isConfirmed, error: createError } = useCreateGroup();
+  const { claimReward, isLoading: isClaimingReward } = useClaimEngagementReward();
+  const { getCurrentBlock } = useCurrentBlockNumber();
+  const [rewardClaimed, setRewardClaimed] = useState(false);
+
+  // Claim engagement rewards after group is successfully created
+  useEffect(() => {
+    const claimRewardsAfterGroupCreation = async () => {
+      if (!isConfirmed || rewardClaimed || !address || !publicClient) return;
+
+      try {
+        setRewardClaimed(true);
+        
+        // Get inviter from URL params
+        const inviter = getInviterAddress(new URLSearchParams(searchParams.toString()));
+        
+        // Get current block and calculate validUntilBlock
+        const currentBlock = await getCurrentBlock();
+        const validUntilBlock = calculateValidUntilBlock(currentBlock);
+        
+        // Generate signature (simplified - use GoodDollar SDK in production)
+        const signature = await generateSignature(
+          '0x4902045cEF54fBc664591a40fecf22Bb51932a45' as Address,
+          inviter,
+          validUntilBlock,
+          null // Placeholder - use GoodDollar SDK in production
+        );
+        
+        // Claim reward (non-blocking - don't fail if this errors)
+        try {
+          await claimReward(inviter, validUntilBlock, signature);
+        } catch (rewardError) {
+          console.warn('Failed to claim engagement reward:', rewardError);
+          // Don't block user flow if reward claim fails
+        }
+      } catch (error) {
+        console.error('Error in reward claim flow:', error);
+        // Don't block user flow
+      }
+    };
+
+    claimRewardsAfterGroupCreation();
+  }, [isConfirmed, rewardClaimed, address, publicClient, searchParams, getCurrentBlock, claimReward]);
 
   useEffect(() => {
     if (isConfirmed) {
