@@ -545,7 +545,9 @@ contract TsaroSafe is ITsaroSafeData {
         });
 
         // Add to group contributions
+        uint256 index = groupContributions[_groupId].length;
         groupContributions[_groupId].push(newContribution);
+        contributionIndices[contributionId] = index;
 
         // Process contribution updates
         _processContribution(_groupId, contributionId, msg.sender, _amount, groups[_groupId].tokenType);
