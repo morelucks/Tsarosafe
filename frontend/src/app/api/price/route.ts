@@ -6,6 +6,15 @@
 import { NextResponse } from 'next/server';
 import { GDOLLAR_PRICE_CONFIG } from '@/lib/constants';
 
+interface PriceResponse {
+  [key: string]: {
+    usd: number;
+    usd_24h_change?: number;
+    usd_market_cap?: number;
+    usd_24h_vol?: number;
+  };
+}
+
 export const dynamic = 'force-dynamic';
 export const revalidate = 300; // Revalidate every 5 minutes
 
@@ -22,10 +31,16 @@ export async function GET() {
     );
 
     if (!response.ok) {
-      throw new Error(`CoinGecko API error: ${response.status}`);
+      const errorText = await response.text().catch(() => 'Unknown error');
+      throw new Error(`CoinGecko API error: ${response.status} - ${errorText}`);
     }
 
-    const data = await response.json();
+    const data: PriceResponse = await response.json();
+    
+    // Validate response structure
+    if (!data[GDOLLAR_PRICE_CONFIG.GDOLLAR_ID]) {
+      throw new Error('Invalid price data structure received from CoinGecko');
+    }
     
     // Return the data with CORS headers for Farcaster
     return NextResponse.json(data, {
@@ -37,9 +52,10 @@ export async function GET() {
       },
     });
   } catch (error) {
-    console.error('Price API route error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.error('Price API route error:', errorMessage, error);
     
-    // Return fallback price data
+    // Return fallback price data with error indicator
     return NextResponse.json(
       {
         [GDOLLAR_PRICE_CONFIG.GDOLLAR_ID]: {
@@ -47,6 +63,8 @@ export async function GET() {
           usd_24h_change: 0,
           usd_market_cap: 0,
           usd_24h_vol: 0,
+          _fallback: true,
+          _error: errorMessage,
         },
       },
       {
