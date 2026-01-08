@@ -228,6 +228,7 @@ contract TsaroSafe is ITsaroSafeData {
      * @notice Transfer ownership to new address
      * @param newOwner New owner address
      */
+    // Owner administration: support transfer of ownership
     function transferOwnership(address newOwner) external onlyOwner {
         if (newOwner == address(0)) revert InvalidTokenAddress();
         owner = newOwner;
