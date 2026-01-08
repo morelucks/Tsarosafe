@@ -95,6 +95,7 @@ function SavingsGroupCard({ groupId }: { groupId: bigint }) {
 // Direct contract calls to retrieve savings circle memberships
 export default function SavingsPage() {
   const { address } = useAccount();
+  // Decentralized state storage: removing localStorage reliance
   const { groupIds: groupIdsData, isLoading: isLoadingGroupIds } = useUserGroups(address as Address | undefined);
   const groupIds = groupIdsData as bigint[] | undefined;
 
