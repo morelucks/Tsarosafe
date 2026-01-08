@@ -1,7 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useGDollarPrice } from "@/hooks/useGDollarPrice";
 import { GDOLLAR_PRICE_CONFIG } from "@/lib/constants";
+import { priceHealthChecker } from "@/lib/priceHealthCheck";
 
 interface GDollarPriceDisplayProps {
   showDetails?: boolean;
@@ -17,6 +18,19 @@ export default function GDollarPriceDisplay({
   const { price, isLoading, error, refetch, lastUpdated } = useGDollarPrice();
   const [showRefresh, setShowRefresh] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [apiHealth, setApiHealth] = useState<{ isHealthy: boolean; lastCheck: number } | null>(null);
+
+  // Check API health on mount and periodically
+  useEffect(() => {
+    const checkHealth = async () => {
+      const status = await priceHealthChecker.checkHealth();
+      setApiHealth({ isHealthy: status.isHealthy, lastCheck: status.lastCheck });
+    };
+
+    checkHealth();
+    const interval = setInterval(checkHealth, 60000); // Check every minute
+    return () => clearInterval(interval);
+  }, []);
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
@@ -199,6 +213,16 @@ export default function GDollarPriceDisplay({
             <span className="text-xs opacity-75">Last Updated:</span>
             <span className="text-xs opacity-75">{formatLastUpdated()}</span>
           </div>
+          {apiHealth && (
+            <div className="flex items-center justify-end mt-1">
+              <div className={`w-2 h-2 rounded-full mr-1 ${
+                apiHealth.isHealthy ? 'bg-green-300' : 'bg-red-300'
+              }`}></div>
+              <span className="text-xs opacity-75">
+                {apiHealth.isHealthy ? 'API Online' : 'API Offline'}
+              </span>
+            </div>
+          )}
         </div>
       </div>
 
