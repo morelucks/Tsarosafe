@@ -1240,6 +1240,7 @@ contract TsaroSafe is ITsaroSafeData {
      * @param _groupId Group ID
      * @param _contributionId Contribution ID to withdraw
      */
+    // Optimized gas usage for withdrawal operations
     function withdrawContribution(uint256 _groupId, uint256 _contributionId)
         external
         groupExists(_groupId)
