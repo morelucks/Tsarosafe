@@ -78,6 +78,7 @@ contract TsaroSafe is ITsaroSafeData {
     // Token addresses for ERC20 support
     address public goodDollarAddress;
     address public celoAddress;
+    address public owner;
 
     // ID counters
     uint256 public nextGroupId = 1;
@@ -192,6 +193,11 @@ contract TsaroSafe is ITsaroSafeData {
     );
 
     // ============ Modifiers ============
+    modifier onlyOwner() {
+        if (msg.sender != owner) revert NotOwner();
+        _;
+    }
+
     modifier onlyGroupCreator(uint256 groupId) {
         if (groups[groupId].creator != msg.sender) revert NotCreator();
         _;
@@ -246,7 +252,7 @@ contract TsaroSafe is ITsaroSafeData {
      * @notice Update CELO token address
      * @param newAddress New CELO token address
      */
-    function setCeloAddress(address newAddress) external {
+    function setCeloAddress(address newAddress) external onlyOwner {
         celoAddress = newAddress;
     }
 
@@ -606,7 +612,9 @@ contract TsaroSafe is ITsaroSafeData {
         });
 
         // Add to group contributions
+        uint256 index = groupContributions[_groupId].length;
         groupContributions[_groupId].push(newContribution);
+        contributionIndices[contributionId] = index;
 
         // Process contribution updates
         _processContribution(_groupId, contributionId, msg.sender, _amount, ITsaroSafeData.TokenType(_tokenType));
