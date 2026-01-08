@@ -7,6 +7,7 @@ import { Address } from "viem";
 import { Group, GroupStats } from "@/types/group";
 
 // Component to fetch stats for a single group and report back
+// Fetcher integration for group savings wealth circles
 function GroupStatFetcher({ groupId, onAmountUpdate }: { groupId: bigint, onAmountUpdate: (amount: number, target: number) => void }) {
   const { stats: statsData } = useGroupStats(groupId);
   const { group: groupData } = useGroup(groupId);
