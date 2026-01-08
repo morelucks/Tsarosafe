@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useGDollarPrice } from "@/hooks/useGDollarPrice";
+import { GDOLLAR_PRICE_CONFIG } from "@/lib/constants";
 
 interface GDollarPriceDisplayProps {
   showDetails?: boolean;
@@ -29,17 +30,29 @@ export default function GDollarPriceDisplay({
 
   if (error && !price) {
     return (
-      <div className={`bg-red-50 border border-red-200 rounded-lg p-4 ${className}`}>
-        <div className="flex items-center justify-between">
+      <div className={`bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow p-4 text-white ${className}`}>
+        <div className="flex items-start justify-between mb-3">
           <div>
-            <p className="text-sm text-red-600">Failed to load G$ price</p>
-            <p className="text-xs text-red-500 mt-1">{error}</p>
+            <h3 className="text-lg font-semibold mb-1">G$ Price</h3>
+            <p className="text-sm opacity-90">GoodDollar to USD</p>
+          </div>
+          <div className="text-2xl">💱</div>
+        </div>
+        <div className="space-y-2">
+          <div className="flex justify-between items-center">
+            <span className="text-sm opacity-90">Current Rate:</span>
+            <span className="font-bold text-xl">
+              ${GDOLLAR_PRICE_CONFIG.FALLBACK_PRICE.toFixed(6)} (Est.)
+            </span>
+          </div>
+          <div className="bg-yellow-100 text-yellow-800 text-xs p-2 rounded">
+            ⚠️ Using estimated price. Unable to fetch live data.
           </div>
           <button
             onClick={refetch}
-            className="text-red-600 hover:text-red-800 text-sm underline"
+            className="w-full mt-2 py-2 px-4 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-sm"
           >
-            Retry
+            Retry Connection
           </button>
         </div>
       </div>

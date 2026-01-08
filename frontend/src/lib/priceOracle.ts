@@ -22,14 +22,37 @@ class PriceOracleService {
     }
 
     try {
-      const response = await fetch(
-        `${GDOLLAR_PRICE_CONFIG.COINGECKO_API}/simple/price?ids=${GDOLLAR_PRICE_CONFIG.GDOLLAR_ID}&vs_currencies=usd&include_24hr_change=true&include_market_cap=true&include_24hr_vol=true`,
-        {
-          headers: {
-            'Accept': 'application/json',
-          },
+      // Try using Next.js API route first (avoids CORS issues in Farcaster)
+      let response: Response;
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+      
+      try {
+        try {
+          response = await fetch('/api/price', {
+            headers: {
+              'Accept': 'application/json',
+            },
+            signal: controller.signal,
+          });
+        } catch (apiError) {
+          // Fallback to direct CoinGecko API if API route fails
+          console.warn('API route failed, trying direct CoinGecko:', apiError);
+          response = await fetch(
+            `${GDOLLAR_PRICE_CONFIG.COINGECKO_API}/simple/price?ids=${GDOLLAR_PRICE_CONFIG.GDOLLAR_ID}&vs_currencies=usd&include_24hr_change=true&include_market_cap=true&include_24hr_vol=true`,
+            {
+              headers: {
+                'Accept': 'application/json',
+              },
+              signal: controller.signal,
+            }
+          );
         }
-      );
+        clearTimeout(timeoutId);
+      } catch (fetchError) {
+        clearTimeout(timeoutId);
+        throw fetchError;
+      }
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -56,6 +79,7 @@ class PriceOracleService {
       return priceData;
     } catch (error) {
       console.error('Failed to fetch G$ price:', error);
+      // Return fallback price with error flag
       return this.handlePriceError(cacheKey);
     }
   }
