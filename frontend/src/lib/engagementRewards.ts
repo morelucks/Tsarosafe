@@ -7,6 +7,7 @@
 
 import { Address } from 'viem'
 import { PublicClient } from 'viem'
+import { logger } from './logger'
 
 /**
  * Calculate validUntilBlock (current block + buffer)
@@ -17,7 +18,13 @@ export function calculateValidUntilBlock(
   currentBlock: bigint,
   blocksBuffer: bigint = 600n
 ): bigint {
-  return currentBlock + blocksBuffer
+  const validUntil = currentBlock + blocksBuffer
+  logger.debug('Calculated validUntilBlock', {
+    component: 'EngagementRewards',
+    action: 'calculateValidUntilBlock',
+    metadata: { currentBlock: currentBlock.toString(), validUntil: validUntil.toString() }
+  })
+  return validUntil
 }
 
 /**
@@ -26,17 +33,32 @@ export function calculateValidUntilBlock(
  */
 export function getInviterAddress(searchParams: URLSearchParams): Address | undefined {
   const inviteCode = searchParams.get('invite')
-  if (!inviteCode) return undefined
+  if (!inviteCode) {
+    logger.debug('No invite code found in URL params', {
+      component: 'EngagementRewards',
+      action: 'getInviterAddress'
+    })
+    return undefined
+  }
 
   // Try to get inviter from localStorage (set when invite link is created)
   try {
     const inviteData = localStorage.getItem(`invite_${inviteCode}`)
     if (inviteData) {
       const parsed = JSON.parse(inviteData)
+      logger.info('Found inviter address from localStorage', {
+        component: 'EngagementRewards',
+        action: 'getInviterAddress',
+        metadata: { inviteCode, inviter: parsed.inviter }
+      })
       return parsed.inviter as Address
     }
-  } catch {
-    // Ignore localStorage errors
+  } catch (error) {
+    logger.warn('Failed to get inviter from localStorage', {
+      component: 'EngagementRewards',
+      action: 'getInviterAddress',
+      metadata: { inviteCode, error: error instanceof Error ? error.message : 'Unknown' }
+    })
   }
 
   return undefined
