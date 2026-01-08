@@ -254,6 +254,7 @@ export default function SavingsPage() {
 
         {/* Solo Savings Info / Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Q1 2026 Roadmap and Promotional Banners */}
           <div className="bg-gradient-to-br from-[#0f2a56] to-[#1e3a8a] rounded-xl p-8 text-white shadow-lg">
             <h2 className="text-2xl font-bold mb-4">Solo On-Chain Vaults</h2>
             <p className="text-blue-100 mb-6 leading-relaxed">
