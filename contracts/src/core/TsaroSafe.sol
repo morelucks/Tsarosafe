@@ -32,6 +32,7 @@ contract TsaroSafe is ITsaroSafeData {
     // Access control errors
     error NotCreator();
     error NotMember();
+    error NotOwner();
     error CannotRemoveSelf();
     
     // Group state errors
@@ -77,6 +78,7 @@ contract TsaroSafe is ITsaroSafeData {
     // Token addresses for ERC20 support
     address public goodDollarAddress;
     address public celoAddress;
+    address public owner;
 
     // ID counters
     uint256 public nextGroupId = 1;
@@ -112,6 +114,7 @@ contract TsaroSafe is ITsaroSafeData {
     // Withdrawal tracking
     mapping(uint256 => mapping(uint256 => bool)) public withdrawnContributions; // groupId => contributionId => withdrawn
     mapping(uint256 => mapping(address => uint256)) public memberWithdrawnAmount; // groupId => member => total withdrawn
+    mapping(uint256 => uint256) public contributionIndices; // contributionId => index in groupContributions
 
     // ============ Events ============
     
@@ -190,6 +193,11 @@ contract TsaroSafe is ITsaroSafeData {
     );
 
     // ============ Modifiers ============
+    modifier onlyOwner() {
+        if (msg.sender != owner) revert NotOwner();
+        _;
+    }
+
     modifier onlyGroupCreator(uint256 groupId) {
         if (groups[groupId].creator != msg.sender) revert NotCreator();
         _;
@@ -219,13 +227,23 @@ contract TsaroSafe is ITsaroSafeData {
         if (goodDollarAddress_ == address(0)) revert InvalidTokenAddress();
         goodDollarAddress = goodDollarAddress_;
         celoAddress = celoAddress_;
+        owner = msg.sender;
+    }
+
+    /**
+     * @notice Transfer ownership to new address
+     * @param newOwner New owner address
+     */
+    function transferOwnership(address newOwner) external onlyOwner {
+        if (newOwner == address(0)) revert InvalidTokenAddress();
+        owner = newOwner;
     }
 
     /**
      * @notice Update GoodDollar token address
      * @param newAddress New GoodDollar token address
      */
-    function setGoodDollarAddress(address newAddress) external {
+    function setGoodDollarAddress(address newAddress) external onlyOwner {
         if (newAddress == address(0)) revert InvalidTokenAddress();
         goodDollarAddress = newAddress;
     }
@@ -234,7 +252,7 @@ contract TsaroSafe is ITsaroSafeData {
      * @notice Update CELO token address
      * @param newAddress New CELO token address
      */
-    function setCeloAddress(address newAddress) external {
+    function setCeloAddress(address newAddress) external onlyOwner {
         celoAddress = newAddress;
     }
 
@@ -533,7 +551,9 @@ contract TsaroSafe is ITsaroSafeData {
         });
 
         // Add to group contributions
+        uint256 index = groupContributions[_groupId].length;
         groupContributions[_groupId].push(newContribution);
+        contributionIndices[contributionId] = index;
 
         // Process contribution updates
         _processContribution(_groupId, contributionId, msg.sender, _amount, groups[_groupId].tokenType);
@@ -592,7 +612,9 @@ contract TsaroSafe is ITsaroSafeData {
         });
 
         // Add to group contributions
+        uint256 index = groupContributions[_groupId].length;
         groupContributions[_groupId].push(newContribution);
+        contributionIndices[contributionId] = index;
 
         // Process contribution updates
         _processContribution(_groupId, contributionId, msg.sender, _amount, ITsaroSafeData.TokenType(_tokenType));
@@ -1222,20 +1244,14 @@ contract TsaroSafe is ITsaroSafeData {
     {
         // Find the contribution
         ContributionHistory[] storage contributions = groupContributions[_groupId];
-        uint256 contributionIndex = type(uint256).max;
-        uint256 withdrawalAmount;
-        uint8 tokenType;
-
-        for (uint256 i = 0; i < contributions.length; i++) {
-            if (contributions[i].contributionId == _contributionId) {
-                contributionIndex = i;
-                withdrawalAmount = contributions[i].amount;
-                tokenType = uint8(contributions[i].tokenType);
-                break;
-            }
+        uint256 contributionIndex = contributionIndices[_contributionId];
+        
+        if (contributionIndex >= contributions.length || contributions[contributionIndex].contributionId != _contributionId) {
+             revert ContributionNotFound();
         }
 
-        if (contributionIndex == type(uint256).max) revert ContributionNotFound();
+        uint256 withdrawalAmount = contributions[contributionIndex].amount;
+        uint8 tokenType = uint8(contributions[contributionIndex].tokenType);
 
         // Verify the contribution belongs to the caller
         if (contributions[contributionIndex].member != msg.sender) revert NotMember();
