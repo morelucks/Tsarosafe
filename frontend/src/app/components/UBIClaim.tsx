@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useUBIClaimInfo, useClaimUBI, useGoodDollarBalance } from "@/hooks/useGoodDollar";
+import { useUBIEligibility } from "@/hooks/useUBIEligibility";
 import { USDAmount } from "./GDollarAmount";
 
 export default function UBIClaim() {
@@ -12,6 +13,7 @@ export default function UBIClaim() {
     isLoading: isLoadingClaimInfo 
   } = useUBIClaimInfo();
   
+  const { isEligible, timeUntilClaim } = useUBIEligibility();
   const { claimUBI, isLoading: isClaiming, isConfirmed, error } = useClaimUBI();
   const { refetch: refetchBalance } = useGoodDollarBalance();
   
@@ -145,6 +147,12 @@ export default function UBIClaim() {
           <div className="flex justify-between items-center">
             <span className="text-sm opacity-90">Next claim in:</span>
             <span className="font-medium">{formatTime(timeLeft)}</span>
+          </div>
+        )}
+
+        {!isEligible && canClaim && (
+          <div className="bg-yellow-100 text-yellow-800 text-xs p-2 rounded mt-2">
+            ⚠️ You may need to verify your GoodDollar identity to claim UBI.
           </div>
         )}
 
