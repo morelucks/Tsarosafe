@@ -221,13 +221,23 @@ contract TsaroSafe is ITsaroSafeData {
         if (goodDollarAddress_ == address(0)) revert InvalidTokenAddress();
         goodDollarAddress = goodDollarAddress_;
         celoAddress = celoAddress_;
+        owner = msg.sender;
+    }
+
+    /**
+     * @notice Transfer ownership to new address
+     * @param newOwner New owner address
+     */
+    function transferOwnership(address newOwner) external onlyOwner {
+        if (newOwner == address(0)) revert InvalidTokenAddress();
+        owner = newOwner;
     }
 
     /**
      * @notice Update GoodDollar token address
      * @param newAddress New GoodDollar token address
      */
-    function setGoodDollarAddress(address newAddress) external {
+    function setGoodDollarAddress(address newAddress) external onlyOwner {
         if (newAddress == address(0)) revert InvalidTokenAddress();
         goodDollarAddress = newAddress;
     }
