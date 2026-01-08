@@ -43,13 +43,22 @@ export default function UBIClaim() {
   // Handle claim error
   useEffect(() => {
     if (error) {
-      const errorMessage = error.message.includes('User rejected') 
-        ? 'Transaction was cancelled by user'
-        : error.message.includes('insufficient funds')
-        ? 'Insufficient funds for transaction fees'
-        : `Claim failed: ${error.message}`;
+      let errorMessage = 'Failed to claim UBI';
+      
+      if (error.message.includes('User rejected') || error.message.includes('user rejected')) {
+        errorMessage = 'Transaction was cancelled. Please try again when ready.';
+      } else if (error.message.includes('insufficient funds') || error.message.includes('gas')) {
+        errorMessage = 'Insufficient funds for transaction fees. Please add CELO to your wallet.';
+      } else if (error.message.includes('not eligible') || error.message.includes('entitlement')) {
+        errorMessage = 'You are not currently eligible for UBI. Please verify your GoodDollar identity.';
+      } else if (error.message.includes('already claimed') || error.message.includes('cooldown')) {
+        errorMessage = 'You have already claimed UBI recently. Please wait for the next claim period.';
+      } else if (error.message) {
+        errorMessage = `Claim failed: ${error.message}`;
+      }
+      
       setMessage(errorMessage);
-      setTimeout(() => setMessage(null), 7000);
+      setTimeout(() => setMessage(null), 8000);
     }
   }, [error]);
 
