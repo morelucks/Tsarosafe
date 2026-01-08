@@ -1236,20 +1236,14 @@ contract TsaroSafe is ITsaroSafeData {
     {
         // Find the contribution
         ContributionHistory[] storage contributions = groupContributions[_groupId];
-        uint256 contributionIndex = type(uint256).max;
-        uint256 withdrawalAmount;
-        uint8 tokenType;
-
-        for (uint256 i = 0; i < contributions.length; i++) {
-            if (contributions[i].contributionId == _contributionId) {
-                contributionIndex = i;
-                withdrawalAmount = contributions[i].amount;
-                tokenType = uint8(contributions[i].tokenType);
-                break;
-            }
+        uint256 contributionIndex = contributionIndices[_contributionId];
+        
+        if (contributionIndex >= contributions.length || contributions[contributionIndex].contributionId != _contributionId) {
+             revert ContributionNotFound();
         }
 
-        if (contributionIndex == type(uint256).max) revert ContributionNotFound();
+        uint256 withdrawalAmount = contributions[contributionIndex].amount;
+        uint8 tokenType = uint8(contributions[contributionIndex].tokenType);
 
         // Verify the contribution belongs to the caller
         if (contributions[contributionIndex].member != msg.sender) revert NotMember();
