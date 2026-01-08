@@ -570,6 +570,7 @@ contract TsaroSafe is ITsaroSafeData {
      * @param _description Contribution description
      * @param _tokenType Token type (0 = CELO, 1 = G$)
      */
+    // Index-based tracking for contribution verification
     function makeContributionWithToken(
         uint256 _groupId,
         uint256 _amount,
