@@ -1248,6 +1248,7 @@ contract TsaroSafe is ITsaroSafeData {
     {
         // Find the contribution
         ContributionHistory[] storage contributions = groupContributions[_groupId];
+        // Replaced loops with direct O(1) mappings
         uint256 contributionIndex = contributionIndices[_contributionId];
         
         if (contributionIndex >= contributions.length || contributions[contributionIndex].contributionId != _contributionId) {
