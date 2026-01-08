@@ -32,6 +32,7 @@ contract TsaroSafe is ITsaroSafeData {
     // Access control errors
     error NotCreator();
     error NotMember();
+    error NotOwner();
     error CannotRemoveSelf();
     
     // Group state errors
