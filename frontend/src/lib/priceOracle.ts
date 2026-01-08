@@ -5,6 +5,7 @@
 
 import { GDollarPrice, PriceHistoryPoint, PriceChartData } from '@/types/price';
 import { GDOLLAR_PRICE_CONFIG, PRICE_CHART_PERIODS } from './constants';
+import { logger } from './logger';
 
 class PriceOracleService {
   private cache: Map<string, { data: any; timestamp: number }> = new Map();
@@ -76,9 +77,19 @@ class PriceOracleService {
       this.setCachedData(cacheKey, priceData);
       this.retryCount.delete(cacheKey);
       
+      logger.info('Successfully fetched G$ price', {
+        component: 'PriceOracle',
+        action: 'getCurrentPrice',
+        metadata: { price: priceData.usd, change24h: priceData.change24h }
+      });
+      
       return priceData;
     } catch (error) {
-      console.error('Failed to fetch G$ price:', error);
+      logger.error('Failed to fetch G$ price', error, {
+        component: 'PriceOracle',
+        action: 'getCurrentPrice',
+        metadata: { cacheKey }
+      });
       // Return fallback price with error flag
       return this.handlePriceError(cacheKey);
     }
@@ -131,9 +142,19 @@ class PriceOracleService {
       this.setCachedData(cacheKey, chartData);
       this.retryCount.delete(cacheKey);
       
+      logger.info(`Successfully fetched G$ historical prices for ${period}`, {
+        component: 'PriceOracle',
+        action: 'getHistoricalPrices',
+        metadata: { period, dataPoints: prices.length }
+      });
+      
       return chartData;
     } catch (error) {
-      console.error(`Failed to fetch G$ historical prices for ${period}:`, error);
+      logger.error(`Failed to fetch G$ historical prices for ${period}`, error, {
+        component: 'PriceOracle',
+        action: 'getHistoricalPrices',
+        metadata: { period }
+      });
       return this.handleHistoricalError(period);
     }
   }
