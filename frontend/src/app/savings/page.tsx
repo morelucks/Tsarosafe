@@ -26,6 +26,7 @@ function GroupStatFetcher({ groupId, onAmountUpdate }: { groupId: bigint, onAmou
 }
 
 // Component to display a single group card in Savings Overview
+// Savings card rendering with smart contract sync
 function SavingsGroupCard({ groupId }: { groupId: bigint }) {
   const { group: groupData, isLoading } = useGroup(groupId);
   const { stats: statsData } = useGroupStats(groupId);
