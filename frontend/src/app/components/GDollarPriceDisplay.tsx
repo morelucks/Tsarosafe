@@ -16,6 +16,16 @@ export default function GDollarPriceDisplay({
 }: GDollarPriceDisplayProps) {
   const { price, isLoading, error, refetch, lastUpdated } = useGDollarPrice();
   const [showRefresh, setShowRefresh] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    try {
+      await refetch();
+    } finally {
+      setTimeout(() => setIsRefreshing(false), 500);
+    }
+  };
 
   if (isLoading && !price) {
     return (
@@ -49,10 +59,11 @@ export default function GDollarPriceDisplay({
             ⚠️ Using estimated price. Unable to fetch live data.
           </div>
           <button
-            onClick={refetch}
-            className="w-full mt-2 py-2 px-4 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-sm"
+            onClick={handleRefresh}
+            disabled={isRefreshing}
+            className="w-full mt-2 py-2 px-4 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-sm disabled:opacity-50"
           >
-            Retry Connection
+            {isRefreshing ? 'Refreshing...' : 'Retry Connection'}
           </button>
         </div>
       </div>
@@ -124,11 +135,17 @@ export default function GDollarPriceDisplay({
           <div className="text-2xl">💱</div>
           {showRefresh && (
             <button
-              onClick={refetch}
-              className="text-white hover:text-blue-200 transition-colors"
+              onClick={handleRefresh}
+              disabled={isRefreshing}
+              className="text-white hover:text-blue-200 transition-colors disabled:opacity-50"
               title="Refresh price"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg 
+                className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
               </svg>
             </button>
