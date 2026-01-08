@@ -113,6 +113,7 @@ contract TsaroSafe is ITsaroSafeData {
     // Withdrawal tracking
     mapping(uint256 => mapping(uint256 => bool)) public withdrawnContributions; // groupId => contributionId => withdrawn
     mapping(uint256 => mapping(address => uint256)) public memberWithdrawnAmount; // groupId => member => total withdrawn
+    mapping(uint256 => uint256) public contributionIndices; // contributionId => index in groupContributions
 
     // ============ Events ============
     
