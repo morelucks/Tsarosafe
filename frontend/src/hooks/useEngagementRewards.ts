@@ -36,6 +36,14 @@ export function useClaimEngagementReward() {
       throw new Error('Rewards adapter address not found. Please connect to Celo network.')
     }
 
+    if (validUntilBlock <= 0n) {
+      throw new Error('Invalid validUntilBlock. Block number must be greater than 0.')
+    }
+
+    if (!signature || signature === '0x') {
+      console.warn('Claiming engagement rewards without signature (subsequent claim)')
+    }
+
     return writeContract({
       address: adapterAddress as Address,
       abi: TsaroSafeRewardsAdapterABI,
