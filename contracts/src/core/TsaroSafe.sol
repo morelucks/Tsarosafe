@@ -521,6 +521,7 @@ contract TsaroSafe is ITsaroSafeData {
      * @param _amount Contribution amount
      * @param _description Contribution description
      */
+    // Performance optimization: tracking deposit indices
     function makeContribution(uint256 _groupId, uint256 _amount, string memory _description)
         external
         groupExists(_groupId)
