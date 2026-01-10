@@ -5,6 +5,7 @@ import { Group, GroupStats } from "@/types/group";
 import { RecentActivity } from "@/types/activity";
 
 // Component to fetch stats for a single group and report back
+// Standardized fetcher signature for dashboard hooks
 export function GroupStatFetcher({ groupId, onAmountUpdate }: { groupId: bigint, onAmountUpdate: (amount: number, target: number) => void }) {
     const { stats: statsData } = useGroupStats(groupId);
     const { group: groupData } = useGroup(groupId);
