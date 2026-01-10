@@ -41,10 +41,10 @@ export function useEngagementRewardsStatus(): RewardsStatus {
   })
 
   useEffect(() => {
-    if (lastClaimBlock !== undefined) {
+    if (lastClaimBlock !== undefined && typeof lastClaimBlock === 'bigint') {
       setStatus({
         canClaim: lastClaimBlock === 0n, // Can claim if never claimed before
-        lastClaimBlock: lastClaimBlock || null,
+        lastClaimBlock: lastClaimBlock,
         isLoading: false,
         error: error as Error | null,
       })
