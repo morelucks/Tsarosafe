@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCreateGroup } from "@/hooks/useTsaroSafe";
 import { useClaimEngagementReward, useCurrentBlockNumber } from "@/hooks/useEngagementRewards";
@@ -612,4 +612,18 @@ const CreateGroupPage = () => {
   );
 };
 
-export default CreateGroupPage;
+// Wrapper component with Suspense boundary for useSearchParams
+export default function CreateGroupPageWrapper() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    }>
+      <CreateGroupPage />
+    </Suspense>
+  );
+}

@@ -18,6 +18,22 @@ interface PriceResponse {
 export const dynamic = 'force-dynamic';
 export const revalidate = 300; // Revalidate every 5 minutes
 
+// CORS headers helper
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+  'Access-Control-Max-Age': '86400', // 24 hours
+};
+
+// Handle CORS preflight requests
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 200,
+    headers: corsHeaders,
+  });
+}
+
 export async function GET() {
   try {
     const response = await fetch(
@@ -45,9 +61,7 @@ export async function GET() {
     // Return the data with CORS headers for Farcaster
     return NextResponse.json(data, {
       headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET',
-        'Access-Control-Allow-Headers': 'Content-Type',
+        ...corsHeaders,
         'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
       },
     });
@@ -69,11 +83,7 @@ export async function GET() {
       },
       {
         status: 200, // Return 200 with fallback data
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'GET',
-          'Access-Control-Allow-Headers': 'Content-Type',
-        },
+        headers: corsHeaders,
       }
     );
   }

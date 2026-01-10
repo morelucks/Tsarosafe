@@ -6,7 +6,79 @@ import { useUserGroups, useGroup, useGroupStats } from "@/hooks/useTsaroSafe";
 import { Address } from "viem";
 import { Group, GroupStats } from "@/types/group";
 
-import { GroupStatFetcher } from "@/components/dashboard/Fetchers";
+// Component to fetch stats for a single group and report back
+function GroupStatFetcher({ groupId, onAmountUpdate }: { groupId: bigint, onAmountUpdate: (groupId: bigint, current: number, target: number) => void }) {
+  const { stats: statsData } = useGroupStats(groupId);
+  const { group: groupData } = useGroup(groupId);
+  const stats = statsData as GroupStats | undefined;
+  const group = groupData as Group | undefined;
+  
+  useEffect(() => {
+    if (stats && group) {
+      const amount = Number(stats.currentAmount) / 1e18;
+      const target = Number(group.targetAmount) / 1e18;
+      onAmountUpdate(groupId, amount, target);
+    }
+  }, [stats, group, groupId, onAmountUpdate]);
+  
+  return null;
+}
+
+// Component to display a single group card in Savings Overview
+function SavingsGroupCard({ groupId }: { groupId: bigint }) {
+  const { group: groupData, isLoading } = useGroup(groupId);
+  const { stats: statsData } = useGroupStats(groupId);
+  
+  const group = groupData as Group | undefined;
+  const stats = statsData as GroupStats | undefined;
+
+  if (isLoading || !group || !stats) {
+    return (
+      <div className="bg-white rounded-lg shadow p-6 animate-pulse">
+        <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
+        <div className="h-4 bg-gray-200 rounded w-1/2 mb-6"></div>
+        <div className="h-2 bg-gray-200 rounded w-full mb-2"></div>
+        <div className="h-2 bg-gray-200 rounded w-full"></div>
+      </div>
+    );
+  }
+
+  const currentAmount = Number(stats.currentAmount) / 1e18;
+  const targetAmount = Number(group.targetAmount) / 1e18;
+  const progress = (currentAmount / targetAmount) * 100;
+  const deadlineDate = new Date(Number(group.endDate) * 1000);
+  const daysRemaining = Math.ceil((deadlineDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
+
+  return (
+    <Link href={`/group/${groupId}`} className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-all block">
+      <div className="flex justify-between items-start mb-4">
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900">{group.name}</h3>
+          <p className="text-sm text-gray-600 line-clamp-2">{group.description}</p>
+        </div>
+        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+          (group.tokenType ?? 0) === 0 ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'
+        }`}>
+          {(group.tokenType ?? 0) === 0 ? "CELO" : "G$"}
+        </span>
+      </div>
+
+      <div className="mb-4">
+        <div className="flex justify-between text-sm text-gray-600 mb-2">
+          <span>Progress</span>
+          <span>{Math.round(progress)}%</span>
+        </div>
+        <div className="w-full bg-gray-100 rounded-full h-3">
+          <div
+            className="bg-[#0f2a56] h-3 rounded-full transition-all duration-300"
+            style={{ width: `${Math.min(progress, 100)}%` }}
+          ></div>
+        </div>
+        <div className="flex justify-between text-sm text-gray-500 mt-2 font-medium">
+          <span>{currentAmount.toLocaleString()}</span>
+          <span>{targetAmount.toLocaleString()}</span>
+        </div>
+      </div>
 
 import { SavingsGroupCard } from "@/components/SavingsGroupCard";
 
