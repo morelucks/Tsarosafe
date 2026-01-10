@@ -8,13 +8,52 @@ import { cookieStorage, createStorage } from '@wagmi/core'
 // 1. Get projectId from https://cloud.reown.com
 // Using a placeholder if not set - wallet connection won't work but app will load
 const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || '00000000000000000000000000000000'
+const isProjectIdValid = projectId !== '00000000000000000000000000000000' && !!process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID
 
-if (!process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID) {
+if (!isProjectIdValid) {
   console.warn(
     '⚠️ NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID is not set. ' +
     'Wallet connection will not work. ' +
     'Get your project ID from https://cloud.reown.com and add it to your .env.local file'
   )
+  
+  // Suppress WalletConnect errors when project ID is invalid
+  if (typeof window !== 'undefined') {
+    // Suppress unhandled promise rejections from WalletConnect
+    window.addEventListener('unhandledrejection', (event) => {
+      const errorMessage = event.reason?.message || event.reason?.toString() || ''
+      if (
+        errorMessage.includes('rpc.walletconnect.org') ||
+        errorMessage.includes('Access-Control-Allow-Origin') ||
+        errorMessage.includes('429') ||
+        errorMessage.includes('WalletConnect') ||
+        errorMessage.includes('CORS')
+      ) {
+        event.preventDefault() // Suppress the error
+      }
+    })
+    
+    // Suppress console errors from WalletConnect
+    const originalError = console.error
+    console.error = (...args: any[]) => {
+      const errorMessage = args.map(arg => 
+        typeof arg === 'string' ? arg : 
+        arg?.message || arg?.toString() || ''
+      ).join(' ')
+      
+      // Suppress WalletConnect CORS and 429 errors when project ID is invalid
+      if (
+        errorMessage.includes('rpc.walletconnect.org') ||
+        errorMessage.includes('Access-Control-Allow-Origin') ||
+        errorMessage.includes('429') ||
+        (errorMessage.includes('WalletConnect') && !isProjectIdValid)
+      ) {
+        // Silently ignore these errors
+        return
+      }
+      originalError.apply(console, args)
+    }
+  }
 }
 
 // Celo Mainnet network configuration
