@@ -1,14 +1,19 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAppKit } from "@reown/appkit/react";
 import { useAccount, useDisconnect } from "wagmi";
 
 const NavBar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const { open } = useAppKit();
   const { address, isConnected } = useAccount();
   const { disconnect } = useDisconnect();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const shortAddress = address
     ? `${address.slice(0, 6)}...${address.slice(-4)}`
@@ -48,7 +53,7 @@ const NavBar = () => {
 
         {/* Wallet & Mobile Toggle */}
         <div className="flex items-center gap-6">
-          {isConnected ? (
+          {mounted && isConnected ? (
             /* Address Button: Click to Disconnect */
             <button
               onClick={() => disconnect()}
@@ -60,13 +65,17 @@ const NavBar = () => {
                 Disconnect
               </span>
             </button>
-          ) : (
+          ) : mounted ? (
             <button
               onClick={() => open()}
               className="bg-white text-[#0a192f] px-6 py-2.5 text-sm font-black tracking-widest uppercase hover:bg-blue-500 hover:text-white transition-all"
             >
               Connect
             </button>
+          ) : (
+            <div className="bg-white/10 text-white px-6 py-2.5 text-sm font-black tracking-widest uppercase">
+              Loading...
+            </div>
           )}
 
           {/* High-Visibility Mobile Toggle */}
