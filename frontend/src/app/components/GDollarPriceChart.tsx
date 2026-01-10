@@ -43,13 +43,24 @@ export default function GDollarPriceChart({
     const width = 800; // SVG viewBox width
     const chartHeight = height - 40; // Leave space for padding
 
-    const points = prices.map((point, index) => {
+    const pathPoints = prices.map((point, index) => {
       const x = (index / (prices.length - 1)) * width;
       const y = chartHeight - ((point.price - min) / range) * chartHeight + 20;
-      return `${x},${y}`;
-    }).join(' ');
+      return { x, y };
+    });
 
-    return `M ${points.replace(/,/g, ' ').replace(/ /g, ' L ')}`.replace('M  L ', 'M ');
+    // Build SVG path: M x1,y1 L x2,y2 L x3,y3 ...
+    const firstPoint = pathPoints[0];
+    const path = pathPoints
+      .map((point, index) => {
+        if (index === 0) {
+          return `M ${firstPoint.x},${firstPoint.y}`;
+        }
+        return `L ${point.x},${point.y}`;
+      })
+      .join(' ');
+
+    return path;
   }, [chartData, chartStats, height]);
 
   const formatPrice = (price: number) => {
