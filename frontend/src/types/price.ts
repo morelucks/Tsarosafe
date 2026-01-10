@@ -17,7 +17,6 @@ export interface PriceChartData {
   prices: PriceHistoryPoint[];
   period: '1h' | '24h' | '7d' | '30d' | '90d' | '1y';
   currency: 'usd';
-  _isFallback?: boolean; // Flag to indicate if this is fallback data
 }
 
 export interface ConversionResult {

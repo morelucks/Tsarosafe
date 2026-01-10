@@ -43,24 +43,13 @@ export default function GDollarPriceChart({
     const width = 800; // SVG viewBox width
     const chartHeight = height - 40; // Leave space for padding
 
-    const pathPoints = prices.map((point, index) => {
+    const points = prices.map((point, index) => {
       const x = (index / (prices.length - 1)) * width;
       const y = chartHeight - ((point.price - min) / range) * chartHeight + 20;
-      return { x, y };
-    });
+      return `${x},${y}`;
+    }).join(' ');
 
-    // Build SVG path: M x1,y1 L x2,y2 L x3,y3 ...
-    const firstPoint = pathPoints[0];
-    const path = pathPoints
-      .map((point, index) => {
-        if (index === 0) {
-          return `M ${firstPoint.x},${firstPoint.y}`;
-        }
-        return `L ${point.x},${point.y}`;
-      })
-      .join(' ');
-
-    return path;
+    return `M ${points.replace(/,/g, ' ').replace(/ /g, ' L ')}`.replace('M  L ', 'M ');
   }, [chartData, chartStats, height]);
 
   const formatPrice = (price: number) => {
@@ -206,23 +195,11 @@ export default function GDollarPriceChart({
 
       {/* Chart Info */}
       {chartData && (
-        <div className="mt-4 flex justify-between items-center text-sm">
-          <div className="flex items-center space-x-2">
-            <span className="text-gray-600">
-              {chartData.prices.length} data points
-            </span>
-            {chartData._isFallback && (
-              <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-xs font-medium">
-                ⚠️ Estimated Data
-              </span>
-            )}
-            {!chartData._isFallback && (
-              <span className="px-2 py-1 bg-green-100 text-green-800 rounded text-xs font-medium">
-                ✓ Live Data
-              </span>
-            )}
-          </div>
-          <span className="text-gray-600">
+        <div className="mt-4 flex justify-between text-sm text-gray-600">
+          <span>
+            {chartData.prices.length} data points
+          </span>
+          <span>
             Period: {periods.find(p => p.key === selectedPeriod)?.label}
           </span>
         </div>

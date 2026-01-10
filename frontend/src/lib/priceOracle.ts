@@ -137,7 +137,6 @@ class PriceOracleService {
         prices,
         period,
         currency: 'usd',
-        _isFallback: false, // Real data from CoinGecko
       };
 
       this.setCachedData(cacheKey, chartData);
@@ -233,7 +232,6 @@ class PriceOracleService {
       prices,
       period,
       currency: 'usd',
-      _isFallback: true, // Fallback data - API failed
     };
   }
 

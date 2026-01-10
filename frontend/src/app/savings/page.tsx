@@ -8,7 +8,7 @@ import { Group, GroupStats } from "@/types/group";
 
 // Component to fetch stats for a single group and report back
 // Fetcher integration for group savings wealth circles
-function GroupStatFetcher({ groupId, onAmountUpdate }: { groupId: bigint, onAmountUpdate: (groupId: bigint, current: number, target: number) => void }) {
+function GroupStatFetcher({ groupId, onAmountUpdate }: { groupId: bigint, onAmountUpdate: (amount: number, target: number) => void }) {
   const { stats: statsData } = useGroupStats(groupId);
   const { group: groupData } = useGroup(groupId);
   const stats = statsData as GroupStats | undefined;
@@ -18,9 +18,9 @@ function GroupStatFetcher({ groupId, onAmountUpdate }: { groupId: bigint, onAmou
     if (stats && group) {
       const amount = Number(stats.currentAmount) / 1e18;
       const target = Number(group.targetAmount) / 1e18;
-      onAmountUpdate(groupId, amount, target);
+      onAmountUpdate(amount, target);
     }
-  }, [stats, group, groupId, onAmountUpdate]);
+  }, [stats, group, onAmountUpdate]);
   
   return null;
 }
