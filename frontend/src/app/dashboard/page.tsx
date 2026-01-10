@@ -467,7 +467,7 @@ const DashboardPage = () => {
                     <GroupStatFetcher 
                       key={`stats-${groupId.toString()}`} 
                       groupId={groupId} 
-                      onAmountUpdate={(amount) => handleGroupAmountUpdate(groupId, amount)}
+                      onAmountUpdate={handleGroupAmountUpdate}
                     />
                     {group && (
                       <GroupContributionsFetcher
