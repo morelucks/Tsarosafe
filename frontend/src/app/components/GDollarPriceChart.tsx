@@ -206,11 +206,23 @@ export default function GDollarPriceChart({
 
       {/* Chart Info */}
       {chartData && (
-        <div className="mt-4 flex justify-between text-sm text-gray-600">
-          <span>
-            {chartData.prices.length} data points
-          </span>
-          <span>
+        <div className="mt-4 flex justify-between items-center text-sm">
+          <div className="flex items-center space-x-2">
+            <span className="text-gray-600">
+              {chartData.prices.length} data points
+            </span>
+            {chartData._isFallback && (
+              <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-xs font-medium">
+                ⚠️ Estimated Data
+              </span>
+            )}
+            {!chartData._isFallback && (
+              <span className="px-2 py-1 bg-green-100 text-green-800 rounded text-xs font-medium">
+                ✓ Live Data
+              </span>
+            )}
+          </div>
+          <span className="text-gray-600">
             Period: {periods.find(p => p.key === selectedPeriod)?.label}
           </span>
         </div>
