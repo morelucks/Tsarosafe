@@ -26,6 +26,7 @@ interface DashboardStats {
 }
 
 const DashboardPage = () => {
+  const [mounted, setMounted] = useState(false);
   const [stats, setStats] = useState<DashboardStats>({
     totalSavings: 0,
     activeGroups: 0,
@@ -36,6 +37,11 @@ const DashboardPage = () => {
   const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([]);
 
   const { address } = useAccount();
+
+  // Prevent hydration mismatch by only rendering after mount
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const { groupIds: groupIdsData, isLoading: isLoadingGroups } = useUserGroups(address as Address | undefined);
   const groupIds = groupIdsData as bigint[] | undefined;
   const { claimableAmountFormatted, canClaim } = useUBIClaimInfo();
@@ -103,7 +109,8 @@ const DashboardPage = () => {
   const isLoading = isLoadingGroups;
   const savingsProgress = (stats.totalSavings / stats.monthlyGoal) * 100;
 
-  if (isLoading) {
+  // Show loading state until mounted to prevent hydration mismatch
+  if (!mounted || isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
