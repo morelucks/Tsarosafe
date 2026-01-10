@@ -1,12 +1,18 @@
 "use client";
 import { useEngagementRewardsStatus } from "@/hooks/useEngagementRewardsStatus";
 import { useAccount } from "wagmi";
+import { useEffect, useState } from "react";
 
 export default function EngagementRewardsStatus() {
   const { address } = useAccount();
   const { canClaim, lastClaimBlock, isLoading, error } = useEngagementRewardsStatus();
+  const [mounted, setMounted] = useState(false);
 
-  if (!address) {
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted || !address) {
     return null;
   }
 
