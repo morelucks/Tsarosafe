@@ -1509,6 +1509,34 @@
   },
   {
     "type": "function",
+    "name": "makeContributionWithToken",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_amount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_description",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "_tokenType",
+        "type": "uint8",
+        "internalType": "uint8"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "function",
     "name": "memberTotalAmount",
     "inputs": [
       {
