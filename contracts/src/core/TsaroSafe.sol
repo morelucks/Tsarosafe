@@ -18,6 +18,7 @@ import {IERC20} from "forge-std/interfaces/IERC20.sol";
  */
 contract TsaroSafe is ITsaroSafeData {
     // ============ Custom Errors ============
+    error ReentrancyGuardReentrantCall();
     
     // Group validation errors
     error EmptyName();
@@ -84,6 +85,11 @@ contract TsaroSafe is ITsaroSafeData {
     uint256 public nextGroupId = 1;
     uint256 public nextContributionId = 1;
     uint256 public nextMilestoneId = 1;
+
+    // Reentrancy Guard state
+    uint256 private _status;
+    uint256 private constant _NOT_ENTERED = 1;
+    uint256 private constant _ENTERED = 2;
 
     // ============ Mappings ============
     
@@ -218,6 +224,13 @@ contract TsaroSafe is ITsaroSafeData {
         _;
     }
 
+    modifier nonReentrant() {
+        if (_status == _ENTERED) revert ReentrancyGuardReentrantCall();
+        _status = _ENTERED;
+        _;
+        _status = _NOT_ENTERED;
+    }
+
     /**
      * @notice Constructor to initialize token addresses
      * @param goodDollarAddress_ Address of GoodDollar token
@@ -228,6 +241,7 @@ contract TsaroSafe is ITsaroSafeData {
         goodDollarAddress = goodDollarAddress_;
         celoAddress = celoAddress_;
         owner = msg.sender;
+        _status = _NOT_ENTERED;
     }
 
     /**
@@ -582,7 +596,9 @@ contract TsaroSafe is ITsaroSafeData {
     {
         if (_amount == 0) revert InvalidAmount();
         if (bytes(_description).length > 200) revert DescriptionTooLong();
-        if (_tokenType > 1) revert InvalidAmount();
+        if (_amount == 0) revert InvalidAmount();
+        if (bytes(_description).length > 200) revert DescriptionTooLong();
+        if (_tokenType > uint8(ITsaroSafeData.TokenType.GSTAR)) revert InvalidAmount();
 
         Group storage group = groups[_groupId];
         if (block.timestamp >= group.endDate) revert GroupEnded();
@@ -1241,6 +1257,7 @@ contract TsaroSafe is ITsaroSafeData {
         external
         groupExists(_groupId)
         onlyGroupMember(_groupId)
+        nonReentrant
     {
         // Find the contribution
         ContributionHistory[] storage contributions = groupContributions[_groupId];
@@ -1347,17 +1364,15 @@ contract TsaroSafe is ITsaroSafeData {
     /**
      * @notice Internal function to process contribution updates
      * @param groupId Group ID
-     * @param contributionId Contribution ID
      * @param member Member address
      * @param amount Contribution amount
-     * @param tokenType Token type
      */
     function _processContribution(
         uint256 groupId,
-        uint256 contributionId,
+        uint256 /* contributionId */,
         address member,
         uint256 amount,
-        ITsaroSafeData.TokenType tokenType
+        ITsaroSafeData.TokenType /* tokenType */
     ) internal {
         Group storage group = groups[groupId];
         
