@@ -196,3 +196,9 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 **Built with ❤️ for financial inclusion and community empowerment**
 
+
+### Recent Updates
+- **Dashboard Refactor**: Extracted `GroupCard` and `ActivityFeed` for better maintainability.
+- **Transaction History**: Added a dedicated page for viewing full transaction history.
+- **Global Notifications**: Integrated a toast notification system for user feedback.
+- **Savings Improvements**: Refactored savings components and standardized data fetching.
