@@ -7,7 +7,7 @@ import { Address } from "viem";
 import { Group, GroupStats } from "@/types/group";
 
 // Component to fetch stats for a single group and report back
-function GroupStatFetcher({ groupId, onAmountUpdate }: { groupId: bigint, onAmountUpdate: (amount: number, target: number) => void }) {
+function GroupStatFetcher({ groupId, onAmountUpdate }: { groupId: bigint, onAmountUpdate: (groupId: bigint, current: number, target: number) => void }) {
   const { stats: statsData } = useGroupStats(groupId);
   const { group: groupData } = useGroup(groupId);
   const stats = statsData as GroupStats | undefined;
@@ -17,9 +17,9 @@ function GroupStatFetcher({ groupId, onAmountUpdate }: { groupId: bigint, onAmou
     if (stats && group) {
       const amount = Number(stats.currentAmount) / 1e18;
       const target = Number(group.targetAmount) / 1e18;
-      onAmountUpdate(amount, target);
+      onAmountUpdate(groupId, amount, target);
     }
-  }, [stats, group, onAmountUpdate]);
+  }, [stats, group, groupId, onAmountUpdate]);
   
   return null;
 }
