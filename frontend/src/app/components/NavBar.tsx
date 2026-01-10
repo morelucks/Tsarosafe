@@ -26,6 +26,7 @@ const NavBar = () => {
     { name: "SAVE SOLO", href: "/save-solo" },
     { name: "SAVINGS", href: "/savings" },
     { name: "INVEST", href: "/invest" },
+    { name: "HISTORY", href: "/transactions" },
   ];
 
   return (

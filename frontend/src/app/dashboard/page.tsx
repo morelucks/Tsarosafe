@@ -2,14 +2,14 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import { useAccount } from "wagmi";
-import { useUserGroups, useGroup, useGroupMembers, useGroupStats, useGroupContributions } from "@/hooks/useTsaroSafe";
+import { useUserGroups, useGroup } from "@/hooks/useTsaroSafe";
 import { Address } from "viem";
 import GoodDollarBalance from "@/app/components/GoodDollarBalance";
 import UBIClaim from "@/app/components/UBIClaim";
 import GDollarPriceDisplay from "@/app/components/GDollarPriceDisplay";
 import GDollarPriceChart from "@/app/components/GDollarPriceChart";
-import { USDAmount, InlineGDollarAmount } from "@/app/components/GDollarAmount";
-import { Group, GroupStats } from "@/types/group";
+import { USDAmount } from "@/app/components/GDollarAmount";
+import { Group } from "@/types/group";
 import { useUBIClaimInfo } from "@/hooks/useGoodDollar";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import EngagementRewardsNotification from "@/components/EngagementRewardsNotification";
@@ -152,7 +152,7 @@ const DashboardPage = () => {
   const { groupIds: groupIdsData, isLoading: isLoadingGroups } = useUserGroups(address as Address | undefined);
   const groupIds = groupIdsData as bigint[] | undefined;
   const { claimableAmountFormatted, canClaim } = useUBIClaimInfo();
-  
+
   const [groupAmounts, setGroupAmounts] = useState<Map<string, number>>(new Map());
   const [allActivities, setAllActivities] = useState<Map<string, RecentActivity[]>>(new Map());
 
@@ -187,7 +187,7 @@ const DashboardPage = () => {
     allActivities.forEach((activities) => {
       aggregated.push(...activities);
     });
-    
+
     // Sort by timestamp (newest first) and take top 5
     aggregated.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
     setRecentActivity(aggregated.slice(0, 5));
@@ -214,62 +214,6 @@ const DashboardPage = () => {
   }, [groupIds, totalSavings]);
 
   const isLoading = isLoadingGroups;
-
-  const getActivityIcon = (type: string) => {
-    switch (type) {
-      case 'deposit':
-        return '💰';
-      case 'withdrawal':
-        return '💸';
-      case 'group_join':
-        return '👥';
-      case 'investment':
-        return '📈';
-      default:
-        return '📋';
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'completed':
-        return 'text-green-600 bg-green-100';
-      case 'pending':
-        return 'text-yellow-600 bg-yellow-100';
-      case 'failed':
-        return 'text-red-600 bg-red-100';
-      default:
-        return 'text-gray-600 bg-gray-100';
-    }
-  };
-
-  const renderAmount = (activity: RecentActivity) => {
-    if (activity.tokenType === 1) {
-      return (
-        <span className="text-sm text-gray-600">
-          <InlineGDollarAmount amount={activity.amount || 0} className="text-gray-900" />
-        </span>
-      );
-    }
-    if (activity.amount !== undefined) {
-      return (
-        <span className="text-sm text-gray-600">
-          ${activity.amount.toLocaleString()}
-        </span>
-      );
-    }
-    return null;
-  };
-
-  const formatDate = (timestamp: string) => {
-    return new Date(timestamp).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
   const savingsProgress = (stats.totalSavings / stats.monthlyGoal) * 100;
 
   // Show loading state until mounted to prevent hydration mismatch
@@ -286,18 +230,11 @@ const DashboardPage = () => {
       <div className="min-h-screen bg-gray-50 py-8">
         <EngagementRewardsNotification />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="mt-2 text-gray-600">Welcome back! Here&apos;s your financial overview.</p>
-        </div>
-
-        {/* GoodDollar Balance, UBI Claim, and Price */}
-        <div className="mb-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <GoodDollarBalance />
-          <UBIClaim />
-          <GDollarPriceDisplay showDetails={true} />
-        </div>
+          {/* Header */}
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+            <p className="mt-2 text-gray-600">Welcome back! Here&apos;s your financial overview.</p>
+          </div>
 
         {/* Engagement Rewards Status */}
         <div className="mb-6">
@@ -320,140 +257,116 @@ const DashboardPage = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                  <span className="text-green-600 text-lg">👥</span>
-                </div>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Active Groups</p>
-                <p className="text-2xl font-semibold text-gray-900">{stats.activeGroups}</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                  canClaim ? 'bg-green-100' : 'bg-gray-100'
-                }`}>
-                  <span className={`text-lg ${canClaim ? 'text-green-600' : 'text-gray-600'}`}>🌍</span>
-                </div>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">UBI Available</p>
-                <p className={`text-2xl font-semibold ${canClaim ? 'text-green-600' : 'text-gray-900'}`}>
-                  {claimableAmountFormatted.toLocaleString(undefined, { maximumFractionDigits: 2 })} G$
-                </p>
-                <div className="text-sm text-gray-500">
-                  <USDAmount gdollarAmount={claimableAmountFormatted} className="text-gray-500" />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
-                  <span className="text-orange-600 text-lg">🎯</span>
-                </div>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Monthly Goal</p>
-                <p className="text-2xl font-semibold text-gray-900">${stats.monthlyGoal.toLocaleString()}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Savings Progress */}
-          <div className="lg:col-span-2 space-y-8">
+          {/* Stats Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Savings Progress</h2>
-              <div className="mb-4">
-                <div className="flex justify-between text-sm text-gray-600 mb-2">
-                  <span>Monthly Goal Progress</span>
-                  <span>{Math.round(savingsProgress)}%</span>
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                    <span className="text-blue-600 text-lg">💰</span>
+                  </div>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-3">
-                  <div 
-                    className="bg-[#0f2a56] h-3 rounded-full transition-all duration-300"
-                    style={{ width: `${Math.min(savingsProgress, 100)}%` }}
-                  ></div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-500">Total Savings</p>
+                  <p className="text-2xl font-semibold text-gray-900">${stats.totalSavings.toLocaleString()}</p>
                 </div>
-                <div className="flex justify-between text-sm text-gray-500 mt-2">
-                  <span>${stats.totalSavings.toLocaleString()}</span>
-                  <span>${stats.monthlyGoal.toLocaleString()}</span>
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4 mt-6">
-                <Link 
-                  href="/savings"
-                  className="bg-[#0f2a56] text-white px-4 py-2 rounded-lg text-center hover:bg-[#0f2a56]/90 transition-colors"
-                >
-                  Add Savings
-                </Link>
-                <Link 
-                  href="/create-group"
-                  className="bg-[#0f2a56] text-white px-4 py-2 rounded-lg text-center hover:bg-[#0f2a56]/90 transition-colors"
-                >
-                  Create Group
-                </Link>
               </div>
             </div>
 
-            {/* G$ Price Chart */}
-            <GDollarPriceChart height={250} />
+            <div className="bg-white rounded-lg shadow p-6">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                    <span className="text-green-600 text-lg">👥</span>
+                  </div>
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-500">Active Groups</p>
+                  <p className="text-2xl font-semibold text-gray-900">{stats.activeGroups}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-lg shadow p-6">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${canClaim ? 'bg-green-100' : 'bg-gray-100'
+                    }`}>
+                    <span className={`text-lg ${canClaim ? 'text-green-600' : 'text-gray-600'}`}>🌍</span>
+                  </div>
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-500">UBI Available</p>
+                  <p className={`text-2xl font-semibold ${canClaim ? 'text-green-600' : 'text-gray-900'}`}>
+                    {claimableAmountFormatted.toLocaleString(undefined, { maximumFractionDigits: 2 })} G$
+                  </p>
+                  <div className="text-sm text-gray-500">
+                    <USDAmount gdollarAmount={claimableAmountFormatted} className="text-gray-500" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-lg shadow p-6">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
+                    <span className="text-orange-600 text-lg">🎯</span>
+                  </div>
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-500">Monthly Goal</p>
+                  <p className="text-2xl font-semibold text-gray-900">${stats.monthlyGoal.toLocaleString()}</p>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Recent Activity */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Recent Activity</h2>
-            <div className="space-y-4">
-              {recentActivity.length > 0 ? recentActivity.map((activity) => (
-                <div key={activity.id} className="flex items-start space-x-3">
-                  <div className="flex-shrink-0">
-                    <span className="text-2xl">{getActivityIcon(activity.type)}</span>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Savings Progress */}
+            <div className="lg:col-span-2 space-y-8">
+              <div className="bg-white rounded-lg shadow p-6">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">Savings Progress</h2>
+                <div className="mb-4">
+                  <div className="flex justify-between text-sm text-gray-600 mb-2">
+                    <span>Monthly Goal Progress</span>
+                    <span>{Math.round(savingsProgress)}%</span>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900">
-                      {activity.description}
-                    </p>
-                    {renderAmount(activity)}
-                    <div className="flex items-center justify-between mt-1">
-                      <p className="text-xs text-gray-500">
-                        {formatDate(activity.timestamp)}
-                      </p>
-                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(activity.status)}`}>
-                        {activity.status}
-                      </span>
-                    </div>
+                  <div className="w-full bg-gray-200 rounded-full h-3">
+                    <div
+                      className="bg-[#0f2a56] h-3 rounded-full transition-all duration-300"
+                      style={{ width: `${Math.min(savingsProgress, 100)}%` }}
+                    ></div>
+                  </div>
+                  <div className="flex justify-between text-sm text-gray-500 mt-2">
+                    <span>${stats.totalSavings.toLocaleString()}</span>
+                    <span>${stats.monthlyGoal.toLocaleString()}</span>
                   </div>
                 </div>
-              )) : (
-                <div className="text-center py-4 text-gray-500 text-sm">
-                  No recent activity. Make a contribution to see it here!
+
+                <div className="grid grid-cols-2 gap-4 mt-6">
+                  <Link
+                    href="/savings"
+                    className="bg-[#0f2a56] text-white px-4 py-2 rounded-lg text-center hover:bg-[#0f2a56]/90 transition-colors"
+                  >
+                    Add Savings
+                  </Link>
+                  <Link
+                    href="/create-group"
+                    className="bg-[#0f2a56] text-white px-4 py-2 rounded-lg text-center hover:bg-[#0f2a56]/90 transition-colors"
+                  >
+                    Create Group
+                  </Link>
                 </div>
-              )}
-            </div>
-            {recentActivity.length > 0 && (
-              <div className="mt-4">
-                <Link 
-                  href="/dashboard"
-                  className="text-blue-600 text-sm hover:text-blue-800"
-                >
-                  View all activity →
-                </Link>
               </div>
-            )}
+
+              {/* G$ Price Chart */}
+              <GDollarPriceChart height={250} />
+            </div>
+
+            {/* Recent Activity */}
+            <ActivityFeed activities={recentActivity} showViewAll={true} />
           </div>
-        </div>
 
         {/* Hidden components to fetch group stats and contributions */}
         {groupIds && groupIds.length > 0 && (
@@ -473,69 +386,75 @@ const DashboardPage = () => {
                       <GroupContributionsFetcher
                         key={`contribs-${groupId.toString()}`}
                         groupId={groupId}
-                        groupName={group.name}
-                        onContributionsUpdate={(activities) => handleContributionsUpdate(groupId, activities)}
+                        onAmountUpdate={(amount) => handleGroupAmountUpdate(groupId, amount)}
                       />
-                    )}
-                  </>
-                );
-              };
-              return <GroupContributionsWrapper key={`wrapper-${groupId.toString()}`} />;
-            })}
-          </>
-        )}
+                      {group && (
+                        <GroupContributionsFetcher
+                          key={`contribs-${groupId.toString()}`}
+                          groupId={groupId}
+                          groupName={group.name}
+                          onContributionsUpdate={(activities) => handleContributionsUpdate(groupId, activities)}
+                        />
+                      )}
+                    </>
+                  );
+                };
+                return <GroupContributionsWrapper key={`wrapper-${groupId.toString()}`} />;
+              })}
+            </>
+          )}
 
-        {/* Your Groups */}
-        {groupIds && groupIds.length > 0 && (
+          {/* Your Groups */}
+          {groupIds && groupIds.length > 0 && (
+            <div className="mt-8">
+              <div className="bg-white rounded-lg shadow p-6">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">Your Groups</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {groupIds.map((groupId) => (
+                    <GroupCard key={groupId.toString()} groupId={groupId} />
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Quick Actions */}
           <div className="mt-8">
             <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Your Groups</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {groupIds.map((groupId) => (
-                  <GroupCard key={groupId.toString()} groupId={groupId} />
-                ))}
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">Quick Actions</h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <Link
+                  href="/savings"
+                  className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  <span className="text-3xl mb-2">💰</span>
+                  <span className="text-sm font-medium text-gray-900">Add Savings</span>
+                </Link>
+                <Link
+                  href="/create-group"
+                  className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  <span className="text-3xl mb-2">👥</span>
+                  <span className="text-sm font-medium text-gray-900">Create Group</span>
+                </Link>
+                <Link
+                  href="/join-group"
+                  className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  <span className="text-3xl mb-2">🔍</span>
+                  <span className="text-sm font-medium text-gray-900">Join Group</span>
+                </Link>
+                <Link
+                  href="/price"
+                  className="flex flex-col items-center p-4 border border-blue-200 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+                >
+                  <span className="text-3xl mb-2">💱</span>
+                  <span className="text-sm font-medium text-blue-800">G$ Price</span>
+                  <span className="text-xs text-blue-600 mt-1">Charts & Converter</span>
+                </Link>
               </div>
             </div>
           </div>
-        )}
-
-        {/* Quick Actions */}
-        <div className="mt-8">
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Quick Actions</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Link 
-                href="/savings"
-                className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                <span className="text-3xl mb-2">💰</span>
-                <span className="text-sm font-medium text-gray-900">Add Savings</span>
-              </Link>
-              <Link 
-                href="/create-group"
-                className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                <span className="text-3xl mb-2">👥</span>
-                <span className="text-sm font-medium text-gray-900">Create Group</span>
-              </Link>
-              <Link 
-                href="/join-group"
-                className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                <span className="text-3xl mb-2">🔍</span>
-                <span className="text-sm font-medium text-gray-900">Join Group</span>
-              </Link>
-              <Link 
-                href="/price"
-                className="flex flex-col items-center p-4 border border-blue-200 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
-              >
-                <span className="text-3xl mb-2">💱</span>
-                <span className="text-sm font-medium text-blue-800">G$ Price</span>
-                <span className="text-xs text-blue-600 mt-1">Charts & Converter</span>
-              </Link>
-            </div>
-          </div>
-        </div>
         </div>
       </div>
     </ErrorBoundary>
