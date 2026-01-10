@@ -33,16 +33,21 @@ interface RecentActivity {
 }
 
 // Component to fetch stats for a single group and report back
-function GroupStatFetcher({ groupId, onAmountUpdate }: { groupId: bigint, onAmountUpdate: (amount: number) => void }) {
+function GroupStatFetcher({ groupId, onAmountUpdate }: { groupId: bigint, onAmountUpdate: (id: bigint, amount: number) => void }) {
+  const [mounted, setMounted] = useState(false);
   const { stats: statsData } = useGroupStats(groupId);
   const stats = statsData as GroupStats | undefined;
   
   useEffect(() => {
-    if (stats) {
+    setMounted(true);
+  }, []);
+  
+  useEffect(() => {
+    if (mounted && stats) {
       const amount = Number(stats.currentAmount) / 1e18;
-      onAmountUpdate(amount);
+      onAmountUpdate(groupId, amount);
     }
-  }, [stats, onAmountUpdate]);
+  }, [mounted, stats, onAmountUpdate, groupId]);
   
   return null;
 }
