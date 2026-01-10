@@ -13,6 +13,7 @@ import { Group, GroupStats } from "@/types/group";
 import { useUBIClaimInfo } from "@/hooks/useGoodDollar";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import EngagementRewardsNotification from "@/components/EngagementRewardsNotification";
+import EngagementRewardsStatus from "@/app/components/EngagementRewardsStatus";
 
 interface DashboardStats {
   totalSavings: number;
@@ -284,6 +285,11 @@ const DashboardPage = () => {
           <GoodDollarBalance />
           <UBIClaim />
           <GDollarPriceDisplay showDetails={true} />
+        </div>
+
+        {/* Engagement Rewards Status */}
+        <div className="mb-6">
+          <EngagementRewardsStatus />
         </div>
 
         {/* Stats Cards */}
