@@ -246,8 +246,8 @@ const LandingPage = () => {
       </section>
 
       <FinalCTA />
-      
-  
+
+
 
       <style jsx>{`
         @keyframes marquee-fast {
@@ -258,7 +258,15 @@ const LandingPage = () => {
           animation: marquee-fast 25s linear infinite;
         }
       `}</style>
+      <button
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        className="fixed bottom-8 right-8 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-all z-50 opacity-80 hover:opacity-100"
+        aria-label="Scroll to top"
+      >
+        ↑
+      </button>
     </main>
+
   );
 };
 
