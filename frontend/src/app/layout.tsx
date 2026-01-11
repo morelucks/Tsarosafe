@@ -5,6 +5,7 @@ import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import { FarcasterProvider } from "./components/farcaster-provider"
 import { AppKitProvider } from "./components/AppKitProvider"
+import { NotificationProvider } from "@/context/NotificationContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,8 +34,10 @@ export default function RootLayout({
       >
         <AppKitProvider>
           <FarcasterProvider>
-            <NavBar />
-            {children}
+            <NotificationProvider>
+              <NavBar />
+              {children}
+            </NotificationProvider>
             <Footer />
           </FarcasterProvider>
         </AppKitProvider>

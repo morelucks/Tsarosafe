@@ -82,15 +82,7 @@ function SavingsGroupCard({ groupId }: { groupId: bigint }) {
         </div>
       </div>
 
-      <div className="flex justify-between items-center text-sm text-gray-600">
-        <span className={daysRemaining < 7 ? 'text-red-500 font-bold' : ''}>
-          {daysRemaining > 0 ? `${daysRemaining} days left` : 'Reviewing / Ended'}
-        </span>
-        <span>{deadlineDate.toLocaleDateString()}</span>
-      </div>
-    </Link>
-  );
-}
+import { SavingsGroupCard } from "@/components/SavingsGroupCard";
 
 // Direct contract calls to retrieve savings circle memberships
 export default function SavingsPage() {
@@ -128,11 +120,11 @@ export default function SavingsPage() {
       }
     });
 
-    return { 
-      totalSaved: saved, 
-      totalTarget: target, 
-      activeGoals: active, 
-      completedGoals: completed 
+    return {
+      totalSaved: saved,
+      totalTarget: target,
+      activeGoals: active,
+      completedGoals: completed
     };
   }, [groupDataMap]);
 
@@ -207,7 +199,7 @@ export default function SavingsPage() {
         <div className="mb-10">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-bold text-gray-900">Your Savings Circles</h2>
-            <Link 
+            <Link
               href="/create-group"
               className="bg-[#0f2a56] text-white px-6 py-2 rounded-lg hover:bg-[#0f2a56]/90 transition-colors shadow-sm"
             >
@@ -216,11 +208,11 @@ export default function SavingsPage() {
           </div>
 
           {isLoadingGroupIds ? (
-             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[...Array(3)].map((_, i) => (
-                  <div key={i} className="h-48 bg-white rounded-lg shadow animate-pulse"></div>
-                ))}
-             </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="h-48 bg-white rounded-lg shadow animate-pulse"></div>
+              ))}
+            </div>
           ) : groupIds && groupIds.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {groupIds.map((id) => (
@@ -235,13 +227,13 @@ export default function SavingsPage() {
                 You haven&apos;t joined any savings groups yet. Start your journey by creating a group or joining an existing one.
               </p>
               <div className="flex justify-center gap-4">
-                <Link 
+                <Link
                   href="/create-group"
                   className="bg-[#0f2a56] text-white px-6 py-2 rounded-lg"
                 >
                   Create Goal
                 </Link>
-                <Link 
+                <Link
                   href="/join-group"
                   className="border border-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-50"
                 >
@@ -258,10 +250,10 @@ export default function SavingsPage() {
           <div className="bg-gradient-to-br from-[#0f2a56] to-[#1e3a8a] rounded-xl p-8 text-white shadow-lg">
             <h2 className="text-2xl font-bold mb-4">Solo On-Chain Vaults</h2>
             <p className="text-blue-100 mb-6 leading-relaxed">
-              Want to save alone? Simply create a private group with a member limit of 1. 
+              Want to save alone? Simply create a private group with a member limit of 1.
               Your funds, your goals, absolute transparency.
             </p>
-            <Link 
+            <Link
               href="/create-group"
               className="inline-block bg-white text-[#0f2a56] px-6 py-3 rounded-lg font-bold hover:bg-blue-50 transition-colors"
             >
@@ -272,7 +264,7 @@ export default function SavingsPage() {
           <div className="bg-white rounded-xl p-8 border border-gray-200 shadow-sm">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Investment Insights</h2>
             <p className="text-gray-600 mb-6 leading-relaxed">
-              TsaroSafe is building automated yield generation for your Idle savings. 
+              TsaroSafe is building automated yield generation for your Idle savings.
               Stay tuned for DeFi integration coming in Q1 2026.
             </p>
             <div className="flex items-center text-blue-600 font-semibold cursor-not-allowed">
