@@ -96,9 +96,10 @@ contract TsaroToken is IERC20 {
 
     /**
      * @notice Transfer tokens from one address to another using allowance
-     * @param from Sender address
+     * @dev Caller must have sufficient allowance from `from` account
+     * @param from Sender address (token owner)
      * @param to Recipient address
-     * @param amount Amount to transfer
+     * @param amount Amount of tokens to transfer
      * @return success True if transfer succeeds
      */
     function transferFrom(address from, address to, uint256 amount) external returns (bool) {
