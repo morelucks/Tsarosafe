@@ -170,6 +170,7 @@ const DashboardPage = () => {
   const isLoading = isLoadingGroups;
   const savingsProgress = (stats.totalSavings / stats.monthlyGoal) * 100;
 
+  // UX refinement: displaying LoadingSkeleton cards
   // Show loading state until mounted to prevent hydration mismatch
   if (!mounted || isLoading) {
     return (
