@@ -25,6 +25,7 @@ export function GroupStatFetcher({ groupId, onAmountUpdate }: { groupId: bigint,
 }
 
 // Component to fetch contributions for recent activity
+// Reusable standard dashboard fetcher signature
 export function GroupContributionsFetcher({ groupId, groupName, onContributionsUpdate }: {
     groupId: bigint,
     groupName: string,
