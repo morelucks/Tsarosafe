@@ -46,7 +46,7 @@ export function useApproveGoodDollar() {
 
   const approve = async (spender: Address, amount: bigint) => {
     if (!tokenAddress) {
-      throw new Error('GoodDollar token address not found. Please connect to Celo network.')
+      throw new Error('GoodDollar token address not found on this network. Please switch to a supported network (Celo or Base).')
     }
 
     return writeContract({
@@ -131,7 +131,11 @@ const UBI_CONTRACT_ADDRESSES = {
   // Celo Mainnet - GoodDollar UBI contract
   42220: '0x495d133B938596C9984d462F007B676bDc57eCEC',
   // Celo Alfajores Testnet
-  44787: '0x495d133B938596C9984d462F007B676bDc57eCEC', // Update with testnet address if different
+  44787: '0x495d133B938596C9984d462F007B676bDc57eCEC',
+  // Base Mainnet
+  8453: '0x0000000000000000000000000000000000000000', // Update once UBI contract is on Base
+  // Base Sepolia
+  84532: '0x0000000000000000000000000000000000000000', // Update once UBI contract is on Base Sepolia
 } as const
 
 function getUBIContractAddress(chainId: number): string | undefined {
@@ -205,7 +209,7 @@ export function useClaimUBI() {
 
   const claimUBI = async () => {
     if (!ubiContractAddress) {
-      throw new Error('UBI contract address not found. Please connect to Celo network.')
+      throw new Error('UBI contract address not found on this network. Please switch to a supported network (Celo).')
     }
 
     return writeContract({

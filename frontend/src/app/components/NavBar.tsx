@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useAppKit } from "@reown/appkit/react";
 import { useAccount, useDisconnect } from "wagmi";
+import NetworkStatus from "./NetworkStatus";
 
 const NavBar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -54,6 +55,7 @@ const NavBar = () => {
 
         {/* Wallet & Mobile Toggle */}
         <div className="flex items-center gap-6">
+          {mounted && <NetworkStatus />}
           {mounted && isConnected ? (
             /* Address Button: Click to Disconnect */
             <button
