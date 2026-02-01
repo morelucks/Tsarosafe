@@ -12,7 +12,7 @@ function GroupStatFetcher({ groupId, onAmountUpdate }: { groupId: bigint, onAmou
   const { group: groupData } = useGroup(groupId);
   const stats = statsData as GroupStats | undefined;
   const group = groupData as Group | undefined;
-  
+
   useEffect(() => {
     if (stats && group) {
       const amount = Number(stats.currentAmount) / 1e18;
@@ -20,7 +20,7 @@ function GroupStatFetcher({ groupId, onAmountUpdate }: { groupId: bigint, onAmou
       onAmountUpdate(groupId, amount, target);
     }
   }, [stats, group, groupId, onAmountUpdate]);
-  
+
   return null;
 }
 
@@ -28,7 +28,7 @@ function GroupStatFetcher({ groupId, onAmountUpdate }: { groupId: bigint, onAmou
 function SavingsGroupCard({ groupId }: { groupId: bigint }) {
   const { group: groupData, isLoading } = useGroup(groupId);
   const { stats: statsData } = useGroupStats(groupId);
-  
+
   const group = groupData as Group | undefined;
   const stats = statsData as GroupStats | undefined;
 
@@ -46,8 +46,6 @@ function SavingsGroupCard({ groupId }: { groupId: bigint }) {
   const currentAmount = Number(stats.currentAmount) / 1e18;
   const targetAmount = Number(group.targetAmount) / 1e18;
   const progress = (currentAmount / targetAmount) * 100;
-  const deadlineDate = new Date(Number(group.endDate) * 1000);
-  const daysRemaining = Math.ceil((deadlineDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
 
   return (
     <Link href={`/group/${groupId}`} className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-all block">
@@ -56,9 +54,8 @@ function SavingsGroupCard({ groupId }: { groupId: bigint }) {
           <h3 className="text-lg font-semibold text-gray-900">{group.name}</h3>
           <p className="text-sm text-gray-600 line-clamp-2">{group.description}</p>
         </div>
-        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-          (group.tokenType ?? 0) === 0 ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'
-        }`}>
+        <span className={`px-2 py-1 rounded-full text-xs font-medium ${(group.tokenType ?? 0) === 0 ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'
+          }`}>
           {(group.tokenType ?? 0) === 0 ? "CELO" : "G$"}
         </span>
       </div>
@@ -79,8 +76,9 @@ function SavingsGroupCard({ groupId }: { groupId: bigint }) {
           <span>{targetAmount.toLocaleString()}</span>
         </div>
       </div>
-
-import { SavingsGroupCard } from "@/components/SavingsGroupCard";
+    </Link>
+  );
+}
 
 export default function SavingsPage() {
   const { address } = useAccount();

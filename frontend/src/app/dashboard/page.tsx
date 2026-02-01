@@ -2,7 +2,7 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import { useAccount } from "wagmi";
-import { useUserGroups, useGroup } from "@/hooks/useTsaroSafe";
+import { useUserGroups, useGroup, useGroupMembers } from "@/hooks/useTsaroSafe";
 import { Address } from "viem";
 import GoodDollarBalance from "@/app/components/GoodDollarBalance";
 import UBIClaim from "@/app/components/UBIClaim";
@@ -16,6 +16,7 @@ import EngagementRewardsNotification from "@/components/EngagementRewardsNotific
 import EngagementRewardsStatus from "@/app/components/EngagementRewardsStatus";
 import { GroupStatFetcher, GroupContributionsFetcher } from "@/components/dashboard/Fetchers";
 import { CardSkeleton } from "@/components/LoadingSkeleton";
+import { ActivityFeed } from "@/components/ActivityFeed";
 
 interface DashboardStats {
   totalSavings: number;
@@ -38,7 +39,7 @@ interface RecentActivity {
 // Component to display a single group card
 function GroupCard({ groupId }: { groupId: bigint }) {
   const { group: groupData, isLoading } = useGroup(groupId);
-  const { members: membersData, isLoading: isLoadingMembers } = useGroupMembers(groupId);
+  const { members: membersData } = useGroupMembers(groupId);
 
   const group = groupData as Group | undefined;
   const members = membersData as string[] | undefined;
