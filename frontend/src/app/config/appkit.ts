@@ -1,7 +1,7 @@
 "use client";
 
 import { createAppKit } from '@reown/appkit/react'
-import { mainnet, arbitrum, base, optimism, polygon, AppKitNetwork } from '@reown/appkit/networks'
+import { mainnet, arbitrum, base, baseSepolia, optimism, polygon, AppKitNetwork } from '@reown/appkit/networks'
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi'
 import { cookieStorage, createStorage } from '@wagmi/core'
 
@@ -16,7 +16,7 @@ if (!isProjectIdValid) {
     'Wallet connection will not work. ' +
     'Get your project ID from https://cloud.reown.com and add it to your .env.local file'
   )
-  
+
   // Suppress WalletConnect errors when project ID is invalid
   if (typeof window !== 'undefined') {
     // Suppress unhandled promise rejections from WalletConnect
@@ -32,15 +32,15 @@ if (!isProjectIdValid) {
         event.preventDefault() // Suppress the error
       }
     })
-    
+
     // Suppress console errors from WalletConnect
     const originalError = console.error
     console.error = (...args: any[]) => {
-      const errorMessage = args.map(arg => 
-        typeof arg === 'string' ? arg : 
-        arg?.message || arg?.toString() || ''
+      const errorMessage = args.map(arg =>
+        typeof arg === 'string' ? arg :
+          arg?.message || arg?.toString() || ''
       ).join(' ')
-      
+
       // Suppress WalletConnect CORS and 429 errors when project ID is invalid
       if (
         errorMessage.includes('rpc.walletconnect.org') ||
@@ -79,6 +79,7 @@ export const networks: [AppKitNetwork, ...AppKitNetwork[]] = [
   mainnet,
   arbitrum,
   base,
+  baseSepolia,
   optimism,
   polygon
 ]
