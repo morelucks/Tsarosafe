@@ -1,3 +1,4 @@
+"use client";
 import { ReactNode, createContext, useContext, useState, useCallback } from 'react';
 
 type NotificationType = 'success' | 'error' | 'info';
@@ -39,8 +40,8 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
                     <div
                         key={notification.id}
                         className={`p-4 rounded-lg shadow-lg text-white transform transition-all duration-300 flex items-center justify-between min-w-[300px] ${notification.type === 'success' ? 'bg-green-600' :
-                                notification.type === 'error' ? 'bg-red-600' :
-                                    'bg-blue-600'
+                            notification.type === 'error' ? 'bg-red-600' :
+                                'bg-blue-600'
                             }`}
                     >
                         <span>{notification.message}</span>
