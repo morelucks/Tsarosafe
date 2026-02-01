@@ -25,6 +25,7 @@ interface Investment {
   returnRate: number;
   dateInvested: string;
   status: 'active' | 'completed' | 'paused';
+  network: 'celo' | 'base' | 'ethereum' | 'arbitrum' | 'optimism' | 'polygon';
 }
 
 interface ProgressData {
@@ -55,7 +56,7 @@ export default function InvestPage() {
       const savedGoals = JSON.parse(localStorage.getItem('tsarosafe_savings_goals') || '[]');
       const savedInvestments = JSON.parse(localStorage.getItem('tsarosafe_investments') || '[]');
       const savedProgress = JSON.parse(localStorage.getItem('tsarosafe_progress') || '[]');
-      
+
       setSavingsGoals(savedGoals);
       setInvestments(savedInvestments);
       setProgressData(savedProgress);
@@ -90,7 +91,7 @@ export default function InvestPage() {
         createdAt: new Date().toISOString(),
         category: newGoal.category
       };
-      
+
       setSavingsGoals([...savingsGoals, goal]);
       setNewGoal({
         name: '',
@@ -105,7 +106,7 @@ export default function InvestPage() {
 
   const handleEditGoal = (goal: SavingsGoal) => {
     // Simple edit - in a real app, you'd have a proper edit form
-    const updatedGoals = savingsGoals.map(g => 
+    const updatedGoals = savingsGoals.map(g =>
       g.id === goal.id ? { ...g, name: prompt('Enter new name:', g.name) || g.name } : g
     );
     setSavingsGoals(updatedGoals);
@@ -118,8 +119,8 @@ export default function InvestPage() {
   };
 
   const handleAddContribution = (goalId: string, amount: number) => {
-    const updatedGoals = savingsGoals.map(goal => 
-      goal.id === goalId 
+    const updatedGoals = savingsGoals.map(goal =>
+      goal.id === goalId
         ? { ...goal, currentAmount: goal.currentAmount + amount }
         : goal
     );
@@ -129,13 +130,14 @@ export default function InvestPage() {
   const handleAddInvestment = (investment: Omit<Investment, 'id'>) => {
     const newInvestment: Investment = {
       ...investment,
-      id: Date.now().toString()
+      id: Date.now().toString(),
+      network: investment.network || 'celo'
     };
     setInvestments([...investments, newInvestment]);
   };
 
   const handleUpdateInvestment = (id: string, updates: Partial<Investment>) => {
-    const updatedInvestments = investments.map(inv => 
+    const updatedInvestments = investments.map(inv =>
       inv.id === id ? { ...inv, ...updates } : inv
     );
     setInvestments(updatedInvestments);
@@ -223,10 +225,10 @@ export default function InvestPage() {
 
         {/* Progress Chart */}
         <div className="mb-8">
-          <ProgressChart 
-            data={progressData} 
-            timeframe={timeframe} 
-            onTimeframeChange={setTimeframe} 
+          <ProgressChart
+            data={progressData}
+            timeframe={timeframe}
+            onTimeframeChange={setTimeframe}
           />
         </div>
 
@@ -252,7 +254,7 @@ export default function InvestPage() {
                     <input
                       type="text"
                       value={newGoal.name}
-                      onChange={(e) => setNewGoal({...newGoal, name: e.target.value})}
+                      onChange={(e) => setNewGoal({ ...newGoal, name: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md"
                       placeholder="e.g., Emergency Fund"
                     />
@@ -261,7 +263,7 @@ export default function InvestPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
                     <select
                       value={newGoal.category}
-                      onChange={(e) => setNewGoal({...newGoal, category: e.target.value as any})}
+                      onChange={(e) => setNewGoal({ ...newGoal, category: e.target.value as any })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md"
                     >
                       <option value="emergency">Emergency</option>
@@ -277,7 +279,7 @@ export default function InvestPage() {
                     <input
                       type="number"
                       value={newGoal.targetAmount}
-                      onChange={(e) => setNewGoal({...newGoal, targetAmount: e.target.value})}
+                      onChange={(e) => setNewGoal({ ...newGoal, targetAmount: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md"
                       placeholder="10000"
                     />
@@ -287,7 +289,7 @@ export default function InvestPage() {
                     <input
                       type="date"
                       value={newGoal.deadline}
-                      onChange={(e) => setNewGoal({...newGoal, deadline: e.target.value})}
+                      onChange={(e) => setNewGoal({ ...newGoal, deadline: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md"
                     />
                   </div>
@@ -295,7 +297,7 @@ export default function InvestPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
                     <textarea
                       value={newGoal.description}
-                      onChange={(e) => setNewGoal({...newGoal, description: e.target.value})}
+                      onChange={(e) => setNewGoal({ ...newGoal, description: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md"
                       rows={3}
                       placeholder="Describe your savings goal..."

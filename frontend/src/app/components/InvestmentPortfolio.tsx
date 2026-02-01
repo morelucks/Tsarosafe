@@ -10,6 +10,7 @@ interface Investment {
   returnRate: number;
   dateInvested: string;
   status: 'active' | 'completed' | 'paused';
+  network: 'celo' | 'base' | 'ethereum' | 'arbitrum' | 'optimism' | 'polygon';
 }
 
 interface InvestmentPortfolioProps {
@@ -19,11 +20,11 @@ interface InvestmentPortfolioProps {
   onRemoveInvestment: (id: string) => void;
 }
 
-const InvestmentPortfolio = ({ 
-  investments, 
-  onAddInvestment, 
-  onUpdateInvestment, 
-  onRemoveInvestment 
+const InvestmentPortfolio = ({
+  investments,
+  onAddInvestment,
+  onUpdateInvestment,
+  onRemoveInvestment
 }: InvestmentPortfolioProps) => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [newInvestment, setNewInvestment] = useState({
@@ -33,7 +34,8 @@ const InvestmentPortfolio = ({
     currentValue: '',
     returnRate: '',
     dateInvested: new Date().toISOString().split('T')[0],
-    status: 'active' as const
+    status: 'active' as const,
+    network: 'celo' as const
   });
 
   const getTypeIcon = (type: string) => {
@@ -67,6 +69,18 @@ const InvestmentPortfolio = ({
     }
   };
 
+  const getNetworkBadge = (network: string) => {
+    switch (network) {
+      case 'base': return 'bg-blue-500 text-white';
+      case 'celo': return 'bg-green-500 text-white';
+      case 'ethereum': return 'bg-gray-800 text-white';
+      case 'arbitrum': return 'bg-blue-900 text-white';
+      case 'optimism': return 'bg-red-600 text-white';
+      case 'polygon': return 'bg-purple-600 text-white';
+      default: return 'bg-gray-500 text-white';
+    }
+  };
+
   const totalInvested = investments.reduce((sum, inv) => sum + inv.amount, 0);
   const totalCurrentValue = investments.reduce((sum, inv) => sum + inv.currentValue, 0);
   const totalReturn = totalCurrentValue - totalInvested;
@@ -87,7 +101,8 @@ const InvestmentPortfolio = ({
         currentValue: '',
         returnRate: '',
         dateInvested: new Date().toISOString().split('T')[0],
-        status: 'active'
+        status: 'active',
+        network: 'celo'
       });
       setShowAddForm(false);
     }
@@ -139,7 +154,7 @@ const InvestmentPortfolio = ({
               <input
                 type="text"
                 value={newInvestment.name}
-                onChange={(e) => setNewInvestment({...newInvestment, name: e.target.value})}
+                onChange={(e) => setNewInvestment({ ...newInvestment, name: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md"
                 placeholder="Investment name"
               />
@@ -148,7 +163,7 @@ const InvestmentPortfolio = ({
               <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
               <select
                 value={newInvestment.type}
-                onChange={(e) => setNewInvestment({...newInvestment, type: e.target.value as any})}
+                onChange={(e) => setNewInvestment({ ...newInvestment, type: e.target.value as any })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md"
               >
                 <option value="defi">DeFi</option>
@@ -164,7 +179,7 @@ const InvestmentPortfolio = ({
               <input
                 type="number"
                 value={newInvestment.amount}
-                onChange={(e) => setNewInvestment({...newInvestment, amount: e.target.value})}
+                onChange={(e) => setNewInvestment({ ...newInvestment, amount: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md"
                 placeholder="0.00"
               />
@@ -174,7 +189,7 @@ const InvestmentPortfolio = ({
               <input
                 type="number"
                 value={newInvestment.currentValue}
-                onChange={(e) => setNewInvestment({...newInvestment, currentValue: e.target.value})}
+                onChange={(e) => setNewInvestment({ ...newInvestment, currentValue: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md"
                 placeholder="0.00"
               />
@@ -184,7 +199,7 @@ const InvestmentPortfolio = ({
               <input
                 type="number"
                 value={newInvestment.returnRate}
-                onChange={(e) => setNewInvestment({...newInvestment, returnRate: e.target.value})}
+                onChange={(e) => setNewInvestment({ ...newInvestment, returnRate: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md"
                 placeholder="0.00"
               />
@@ -194,9 +209,24 @@ const InvestmentPortfolio = ({
               <input
                 type="date"
                 value={newInvestment.dateInvested}
-                onChange={(e) => setNewInvestment({...newInvestment, dateInvested: e.target.value})}
+                onChange={(e) => setNewInvestment({ ...newInvestment, dateInvested: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md"
               />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Network</label>
+              <select
+                value={newInvestment.network}
+                onChange={(e) => setNewInvestment({ ...newInvestment, network: e.target.value as any })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md uppercase text-xs font-bold"
+              >
+                <option value="celo">Celo</option>
+                <option value="base">Base</option>
+                <option value="ethereum">Ethereum</option>
+                <option value="arbitrum">Arbitrum</option>
+                <option value="optimism">Optimism</option>
+                <option value="polygon">Polygon</option>
+              </select>
             </div>
           </div>
           <div className="mt-4 flex justify-end space-x-2">
@@ -232,13 +262,16 @@ const InvestmentPortfolio = ({
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(investment.status)}`}>
                       {investment.status}
                     </span>
+                    <span className={`px-2 py-1 rounded-full text-[9px] font-black uppercase tracking-tighter ${getNetworkBadge(investment.network)}`}>
+                      {investment.network}
+                    </span>
                   </div>
                 </div>
               </div>
               <div className="flex space-x-2">
                 <button
-                  onClick={() => onUpdateInvestment(investment.id, { 
-                    status: investment.status === 'active' ? 'paused' : 'active' 
+                  onClick={() => onUpdateInvestment(investment.id, {
+                    status: investment.status === 'active' ? 'paused' : 'active'
                   })}
                   className="text-blue-600 hover:text-blue-800 text-sm"
                 >

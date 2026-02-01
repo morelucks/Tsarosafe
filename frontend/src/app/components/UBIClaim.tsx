@@ -3,32 +3,36 @@ import { useState, useEffect } from "react";
 import { useUBIClaimInfo, useClaimUBI, useGoodDollarBalance } from "@/hooks/useGoodDollar";
 import { useUBIEligibility } from "@/hooks/useUBIEligibility";
 import { USDAmount } from "./GDollarAmount";
+import { useAccount } from "wagmi";
 
 export default function UBIClaim() {
-  const { 
-    claimableAmountFormatted, 
-    timeUntilNextClaim, 
-    canClaim, 
+  const {
+    claimableAmountFormatted,
+    timeUntilNextClaim,
+    canClaim,
     dailyUBIFormatted,
-    isLoading: isLoadingClaimInfo 
+    isLoading: isLoadingClaimInfo
   } = useUBIClaimInfo();
-  
-  const { isEligible, timeUntilClaim } = useUBIEligibility();
+
+  const { isEligible } = useUBIEligibility();
   const { claimUBI, isLoading: isClaiming, isConfirmed, error } = useClaimUBI();
   const { refetch: refetchBalance } = useGoodDollarBalance();
-  
+  const { chain } = useAccount();
+
+  const isBase = chain?.id === 8453 || chain?.id === 84532;
+
   const [message, setMessage] = useState<string | null>(null);
   const [timeLeft, setTimeLeft] = useState(timeUntilNextClaim);
 
   // Update countdown timer
   useEffect(() => {
     setTimeLeft(timeUntilNextClaim);
-    
+
     if (timeUntilNextClaim > 0) {
       const interval = setInterval(() => {
         setTimeLeft(prev => Math.max(0, prev - 1));
       }, 1000);
-      
+
       return () => clearInterval(interval);
     }
   }, [timeUntilNextClaim]);
@@ -37,7 +41,7 @@ export default function UBIClaim() {
   useEffect(() => {
     if (isConfirmed) {
       setMessage("UBI claimed successfully! 🎉 Your G$ balance has been updated.");
-      refetchBalance(); // Refresh balance after claim
+      refetchBalance();
       setTimeout(() => setMessage(null), 6000);
     }
   }, [isConfirmed, refetchBalance]);
@@ -46,11 +50,11 @@ export default function UBIClaim() {
   useEffect(() => {
     if (error) {
       let errorMessage = 'Failed to claim UBI';
-      
+
       if (error.message.includes('User rejected') || error.message.includes('user rejected')) {
         errorMessage = 'Transaction was cancelled. Please try again when ready.';
       } else if (error.message.includes('insufficient funds') || error.message.includes('gas')) {
-        errorMessage = 'Insufficient funds for transaction fees. Please add CELO to your wallet.';
+        errorMessage = `Insufficient funds for transaction fees. Please add ${isBase ? 'ETH' : 'CELO'} to your wallet.`;
       } else if (error.message.includes('not eligible') || error.message.includes('entitlement')) {
         errorMessage = 'You are not currently eligible for UBI. Please verify your GoodDollar identity.';
       } else if (error.message.includes('already claimed') || error.message.includes('cooldown')) {
@@ -58,11 +62,11 @@ export default function UBIClaim() {
       } else if (error.message) {
         errorMessage = `Claim failed: ${error.message}`;
       }
-      
+
       setMessage(errorMessage);
       setTimeout(() => setMessage(null), 8000);
     }
-  }, [error]);
+  }, [error, isBase]);
 
   const handleClaim = async () => {
     try {
@@ -76,19 +80,15 @@ export default function UBIClaim() {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-    
-    if (hours > 0) {
-      return `${hours}h ${minutes}m ${secs}s`;
-    } else if (minutes > 0) {
-      return `${minutes}m ${secs}s`;
-    } else {
-      return `${secs}s`;
-    }
+
+    if (hours > 0) return `${hours}h ${minutes}m ${secs}s`;
+    if (minutes > 0) return `${minutes}m ${secs}s`;
+    return `${secs}s`;
   };
 
   if (isLoadingClaimInfo) {
     return (
-      <div className="bg-white rounded-lg shadow p-6">
+      <div className="bg-white rounded-xl shadow-md p-6">
         <div className="animate-pulse">
           <div className="h-4 bg-gray-200 rounded w-32 mb-2"></div>
           <div className="h-8 bg-gray-200 rounded w-24 mb-4"></div>
@@ -98,98 +98,111 @@ export default function UBIClaim() {
     );
   }
 
+  const bgClass = isBase
+    ? "from-blue-600 to-blue-800"
+    : "from-green-500 to-green-600";
+
   return (
-    <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-lg shadow p-6 text-white">
-      <div className="flex items-start justify-between mb-4">
-        <div>
-          <h3 className="text-lg font-semibold mb-1">Universal Basic Income</h3>
-          <p className="text-sm opacity-90">Daily G$ allocation</p>
+    <div className={`bg-gradient-to-br ${bgClass} rounded-2xl shadow-xl p-6 text-white relative overflow-hidden group transition-all duration-500`}>
+      {/* Network Watermark */}
+      <div className="absolute top-0 right-0 p-4 opacity-[0.07] pointer-events-none group-hover:opacity-10 transition-opacity">
+        <div className="text-9xl font-black text-white transform -rotate-12 translate-x-16 -translate-y-8 uppercase select-none">
+          {isBase ? "Base" : "Celo"}
         </div>
-        <div className="text-3xl">🌍</div>
       </div>
 
-      {message && (
-        <div className={`mb-4 p-3 rounded ${
-          message.includes('successfully') 
-            ? 'bg-green-100 text-green-800' 
-            : 'bg-red-100 text-red-800'
-        }`}>
-          {message}
-        </div>
-      )}
-
-      <div className="space-y-3">
-        <div className="flex justify-between items-center">
-          <span className="text-sm opacity-90">Claimable Amount:</span>
-          <div className="text-right">
-            <span className="font-bold text-lg">
-              {claimableAmountFormatted.toLocaleString(undefined, { maximumFractionDigits: 2 })} G$
-            </span>
-            <div className="text-xs opacity-75">
-              <USDAmount gdollarAmount={claimableAmountFormatted} className="text-green-100" />
-            </div>
+      <div className="relative z-10">
+        <div className="flex items-start justify-between mb-6">
+          <div>
+            <h3 className="text-xl font-black tracking-tight mb-1 uppercase">Universal Basic Income</h3>
+            <p className="text-sm opacity-80 font-medium tracking-wide">Daily G$ allocation</p>
           </div>
+          <div className="text-4xl filter drop-shadow-lg">{isBase ? "🔵" : "🌍"}</div>
         </div>
 
-        <div className="flex justify-between items-center">
-          <span className="text-sm opacity-90">Daily UBI:</span>
-          <div className="text-right">
-            <span className="font-medium">
-              {dailyUBIFormatted.toLocaleString(undefined, { maximumFractionDigits: 2 })} G$
-            </span>
-            <div className="text-xs opacity-75">
-              <USDAmount gdollarAmount={dailyUBIFormatted} className="text-green-100" />
-            </div>
+        {message && (
+          <div className={`mb-6 p-4 rounded-xl font-bold text-sm flex items-center gap-3 backdrop-blur-md animate-in fade-in slide-in-from-top-2 ${message.includes('successfully')
+              ? 'bg-white/90 text-green-800 shadow-lg'
+              : 'bg-red-500/90 text-white shadow-lg'
+            }`}>
+            <span>{message.includes('successfully') ? '✅' : '❌'}</span>
+            {message}
           </div>
-        </div>
+        )}
 
-        {!canClaim && timeLeft > 0 && (
+        <div className="space-y-4 mb-6 pt-2 border-t border-white/10">
           <div className="flex justify-between items-center">
-            <span className="text-sm opacity-90">Next claim in:</span>
-            <span className="font-medium">{formatTime(timeLeft)}</span>
+            <span className="text-sm opacity-80 font-bold uppercase tracking-widest">Claimable</span>
+            <div className="text-right">
+              <span className="font-black text-2xl tracking-tighter">
+                {claimableAmountFormatted.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                <span className="text-sm ml-1 opacity-70">G$</span>
+              </span>
+              <div className="text-xs font-medium opacity-70">
+                <USDAmount gdollarAmount={claimableAmountFormatted} className="text-white" />
+              </div>
+            </div>
           </div>
-        )}
 
-        {!isEligible && canClaim && (
-          <div className="bg-yellow-100 text-yellow-800 text-xs p-2 rounded mt-2">
-            ⚠️ You may need to verify your GoodDollar identity to claim UBI.
+          <div className="flex justify-between items-center">
+            <span className="text-sm opacity-80 font-bold uppercase tracking-widest">Daily Rate</span>
+            <div className="text-right">
+              <span className="font-bold">
+                {dailyUBIFormatted.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                <span className="text-xs ml-1 opacity-70">G$</span>
+              </span>
+            </div>
           </div>
-        )}
+
+          {!canClaim && timeLeft > 0 && (
+            <div className="flex justify-between items-center p-3 bg-black/10 rounded-lg">
+              <span className="text-xs opacity-80 font-bold uppercase tracking-widest">Next claim in</span>
+              <span className="font-mono font-bold text-sm tracking-widest">{formatTime(timeLeft)}</span>
+            </div>
+          )}
+
+          {!isEligible && canClaim && (
+            <div className="bg-yellow-400/20 border border-yellow-400/30 text-yellow-100 text-[10px] font-black uppercase tracking-widest p-3 rounded-lg flex items-center gap-2">
+              <span className="text-lg">⚠️</span>
+              Verify identity to claim
+            </div>
+          )}
+        </div>
 
         <button
           onClick={handleClaim}
           disabled={!canClaim || isClaiming}
-          className={`w-full py-3 px-4 rounded-lg font-semibold transition-all ${
-            canClaim && !isClaiming
-              ? 'bg-white text-green-600 hover:bg-gray-100 shadow-md'
-              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-          }`}
+          className={`w-full py-4 px-4 rounded-xl font-black tracking-widest uppercase transition-all shadow-2xl relative group/btn ${canClaim && !isClaiming
+              ? 'bg-white text-gray-900 hover:scale-[1.03] active:scale-95'
+              : 'bg-white/10 text-white/30 cursor-not-allowed'
+            }`}
         >
           {isClaiming ? (
-            <div className="flex items-center justify-center">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-green-600 mr-2"></div>
-              Claiming...
+            <div className="flex items-center justify-center gap-3">
+              <div className="animate-spin rounded-full h-5 w-5 border-2 border-gray-900 border-t-transparent"></div>
+              <span>Processing...</span>
             </div>
           ) : canClaim ? (
-            `Claim ${claimableAmountFormatted.toLocaleString(undefined, { maximumFractionDigits: 2 })} G$`
+            <div className="flex items-center justify-center gap-2">
+              <span>Claim</span>
+              <span>{claimableAmountFormatted.toLocaleString(undefined, { maximumFractionDigits: 2 })} G$</span>
+            </div>
           ) : (
-            'No UBI Available'
+            'Locked'
           )}
         </button>
 
-        {!canClaim && timeLeft === 0 && claimableAmountFormatted === 0 && (
-          <div className="text-xs opacity-75 text-center space-y-1">
-            <p>You may not be eligible for UBI or have already claimed today&apos;s allocation.</p>
-            <p>UBI is distributed daily to verified GoodDollar users.</p>
-          </div>
-        )}
-
-        {/* Transaction status */}
         {isClaiming && (
-          <div className="text-xs opacity-75 text-center">
-            <p>Please confirm the transaction in your wallet...</p>
-          </div>
+          <p className="text-[10px] font-bold text-center mt-3 opacity-60 uppercase tracking-widest animate-pulse font-mono">
+            Transaction pending in wallet...
+          </p>
         )}
+      </div>
+
+      {/* Decorative pulse line */}
+      <div className="absolute bottom-0 left-0 w-full h-1 bg-white/5 overflow-hidden">
+        <div className={`h-full w-1/4 animate-[translateX_4s_infinite_linear] ${isBase ? "bg-blue-400/40" : "bg-green-400/40"
+          }`}></div>
       </div>
     </div>
   );
