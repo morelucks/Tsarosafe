@@ -7,25 +7,35 @@ export const CONTRACT_ADDRESSES = {
   // Celo Mainnet
   42220: '0x7BC6274E2DAde23d26a56C2fe8ADf4f561d2427A',
   // Celo Alfajores Testnet
-  44787: '0x7BC6274E2DAde23d26a56C2fe8ADf4f561d2427A', // Update with testnet address if deployed separately
+  44787: '0x7BC6274E2DAde23d26a56C2fe8ADf4f561d2427A',
+  // Base Mainnet
+  8453: '0x7BC6274E2DAde23d26a56C2fe8ADf4f561d2427A', // Placeholder
+  // Base Sepolia
+  84532: '0x7BC6274E2DAde23d26a56C2fe8ADf4f561d2427A', // Placeholder
 } as const
 
 // Network names
 export const NETWORK_NAMES = {
   42220: 'Celo Mainnet',
   44787: 'Celo Alfajores',
+  8453: 'Base Mainnet',
+  84532: 'Base Sepolia',
 } as const
 
 // RPC URLs
 export const RPC_URLS = {
   42220: 'https://forno.celo.org',
   44787: 'https://alfajores-forno.celo-testnet.org',
+  8453: 'https://mainnet.base.org',
+  84532: 'https://sepolia.base.org',
 } as const
 
 // Block explorers
 export const EXPLORER_URLS = {
   42220: 'https://celoscan.io',
   44787: 'https://alfajores.celoscan.io',
+  8453: 'https://base.blockscout.com/',
+  84532: 'https://sepolia-explorer.base.org',
 } as const
 
 // GoodDollar (G$) Token Addresses
@@ -33,7 +43,9 @@ export const GOODDOLLAR_ADDRESSES = {
   // Celo Mainnet
   42220: '0x62B8B11039FcfE5aB0C56E502b1C372A3d2a9c7A',
   // Celo Alfajores Testnet (if available)
-  44787: '0x62B8B11039FcfE5aB0C56E502b1C372A3d2a9c7A', // Update with testnet address if different
+  44787: '0x62B8B11039FcfE5aB0C56E502b1C372A3d2a9c7A',
+  8453: '0xba16bCCCC6CD3385750889154743207E09736531', // Base Mainnet G$ address from GoodDollar docs
+  84532: '0xba16bCCCC6CD3385750889154743207E09736531', // Placeholder/Base Sepolia G$ if available
 } as const
 
 // Engagement Rewards Configuration
@@ -42,6 +54,8 @@ export const ENGAGEMENT_REWARDS_ADDRESSES = {
   42220: '0x25db74CF4E7BA120526fd87e159CF656d94bAE43',
   // Celo Alfajores Testnet (Development)
   44787: '0xb44fC3A592aDaA257AECe1Ae8956019EA53d0465',
+  8453: '0x25db74CF4E7BA120526fd87e159CF656d94bAE43', // Placeholder
+  84532: '0xb44fC3A592aDaA257AECe1Ae8956019EA53d0465', // Placeholder
 } as const
 
 // TsaroSafe Rewards Adapter Addresses
@@ -50,6 +64,8 @@ export const TSAROSAFE_REWARDS_ADAPTER_ADDRESSES = {
   42220: '0x4902045cEF54fBc664591a40fecf22Bb51932a45',
   // Celo Alfajores Testnet (update when deployed)
   44787: '0x4902045cEF54fBc664591a40fecf22Bb51932a45',
+  8453: '0x4902045cEF54fBc664591a40fecf22Bb51932a45', // Placeholder
+  84532: '0x4902045cEF54fBc664591a40fecf22Bb51932a45', // Placeholder
 } as const
 
 /**
