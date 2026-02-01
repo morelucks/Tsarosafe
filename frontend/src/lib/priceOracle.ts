@@ -17,7 +17,7 @@ class PriceOracleService {
   async getCurrentPrice(): Promise<GDollarPrice> {
     const cacheKey = 'current-price';
     const cached = this.getCachedData(cacheKey);
-    
+
     if (cached) {
       return cached;
     }
@@ -27,10 +27,14 @@ class PriceOracleService {
       let response: Response;
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
-      
+
       try {
         try {
-          response = await fetch('/api/price', {
+          // Use absolute URL if possible to avoid issues in embedded frames like Farcaster
+          const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
+          const apiUrl = `${baseUrl}/api/price`;
+
+          response = await fetch(apiUrl, {
             headers: {
               'Accept': 'application/json',
             },
@@ -76,13 +80,13 @@ class PriceOracleService {
 
       this.setCachedData(cacheKey, priceData);
       this.retryCount.delete(cacheKey);
-      
+
       logger.info('Successfully fetched G$ price', {
         component: 'PriceOracle',
         action: 'getCurrentPrice',
         metadata: { price: priceData.usd, change24h: priceData.change24h }
       });
-      
+
       return priceData;
     } catch (error) {
       logger.error('Failed to fetch G$ price', error, {
@@ -101,7 +105,7 @@ class PriceOracleService {
   async getHistoricalPrices(period: keyof typeof PRICE_CHART_PERIODS): Promise<PriceChartData> {
     const cacheKey = `historical-${period}`;
     const cached = this.getCachedData(cacheKey);
-    
+
     if (cached) {
       return cached;
     }
@@ -142,13 +146,13 @@ class PriceOracleService {
 
       this.setCachedData(cacheKey, chartData);
       this.retryCount.delete(cacheKey);
-      
+
       logger.info(`Successfully fetched G$ historical prices for ${period}`, {
         component: 'PriceOracle',
         action: 'getHistoricalPrices',
         metadata: { period, dataPoints: prices.length }
       });
-      
+
       return chartData;
     } catch (error) {
       logger.error(`Failed to fetch G$ historical prices for ${period}`, error, {
@@ -222,7 +226,7 @@ class PriceOracleService {
     const now = Date.now();
     const config = PRICE_CHART_PERIODS[period];
     const dayMs = 24 * 60 * 60 * 1000;
-    
+
     const prices: PriceHistoryPoint[] = Array.from({ length: config.days }, (_, i) => ({
       timestamp: now - (config.days - i - 1) * dayMs,
       price: GDOLLAR_PRICE_CONFIG.FALLBACK_PRICE,
