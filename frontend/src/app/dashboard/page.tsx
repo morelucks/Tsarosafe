@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
-import { useAccount } from "wagmi";
+import { useAccount, useSwitchChain } from "wagmi";
 import { useUserGroups, useGroup, useGroupMembers } from "@/hooks/useTsaroSafe";
 import { Address } from "viem";
 import GoodDollarBalance from "@/app/components/GoodDollarBalance";
@@ -99,7 +99,9 @@ const DashboardPage = () => {
 
   const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([]);
 
-  const { address } = useAccount();
+  const { address, chain } = useAccount();
+  const { switchChain } = useSwitchChain();
+  const isCelo = chain?.id === 42220 || chain?.id === 44787;
 
   // Prevent hydration mismatch by only rendering after mount
   useEffect(() => {
@@ -328,7 +330,7 @@ const DashboardPage = () => {
           )}
 
           {/* Your Groups */}
-          {groupIds && groupIds.length > 0 && (
+          {groupIds && groupIds.length > 0 ? (
             <div className="mt-8">
               <div className="bg-white rounded-lg shadow p-6">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">Your Groups</h2>
@@ -338,6 +340,22 @@ const DashboardPage = () => {
                   ))}
                 </div>
               </div>
+            </div>
+          ) : (
+            <div className="mt-8 text-center p-12 bg-white rounded-2xl shadow-sm border border-dashed border-gray-200">
+              <div className="text-4xl mb-4">🔍</div>
+              <h3 className="text-lg font-bold text-gray-900">No Groups Found</h3>
+              <p className="text-sm text-gray-500 max-w-xs mx-auto mt-2">
+                We couldn&apos;t find any groups for your address on the <strong>{chain?.name || 'current'}</strong> network.
+              </p>
+              {!isCelo && (
+                <button
+                  onClick={() => switchChain({ chainId: 42220 })}
+                  className="mt-6 text-blue-600 font-bold text-sm hover:underline flex items-center justify-center gap-2 mx-auto"
+                >
+                  <span>🌍</span> Try switching to Celo
+                </button>
+              )}
             </div>
           )}
 

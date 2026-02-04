@@ -12,6 +12,7 @@ import { Address } from "viem";
 import { Group, ContributionHistory, GroupMilestone } from "@/types/group";
 import GDollarAmount, { InlineGDollarAmount, USDAmount } from "@/app/components/GDollarAmount";
 import GDollarPriceDisplay from "@/app/components/GDollarPriceDisplay";
+import EngagementRewardsNotification from "@/components/EngagementRewardsNotification";
 
 export default function GroupDetailPage() {
   const params = useParams();
@@ -41,7 +42,7 @@ export default function GroupDetailPage() {
   const [contributionAmount, setContributionAmount] = useState("");
   const [contributionDescription, setContributionDescription] = useState("");
   const [selectedToken, setSelectedToken] = useState<"CELO" | "G$">("CELO");
-  
+
   // Set the selected token based on group's token type when group loads
   useEffect(() => {
     if (group) {
@@ -50,7 +51,7 @@ export default function GroupDetailPage() {
       setSelectedToken(tokenType === 0 ? "CELO" : "G$");
     }
   }, [group]);
-  
+
   const { balanceFormatted: gdBalance } = useGoodDollarBalance();
   const contractAddress = useContractAddress();
   const { allowanceFormatted: gdAllowance } = useGoodDollarAllowance(contractAddress as Address | undefined);
@@ -63,14 +64,14 @@ export default function GroupDetailPage() {
 
       try {
         setRewardClaimedForContribution(true);
-        
+
         // Get inviter from URL params
         const inviter = getInviterAddress(new URLSearchParams(searchParams.toString()));
-        
+
         // Get current block and calculate validUntilBlock
         const currentBlock = await getCurrentBlock();
         const validUntilBlock = calculateValidUntilBlock(currentBlock);
-        
+
         // Generate signature (simplified - use GoodDollar SDK in production)
         const signature = await generateSignature(
           '0x4902045cEF54fBc664591a40fecf22Bb51932a45' as Address,
@@ -78,13 +79,14 @@ export default function GroupDetailPage() {
           validUntilBlock,
           null // Placeholder - use GoodDollar SDK in production
         );
-        
+
         // Claim reward (non-blocking - don't fail if this errors)
         try {
           await claimReward(inviter, validUntilBlock, signature);
         } catch (rewardError) {
           console.warn('Failed to claim engagement reward:', rewardError);
-          // Don't block user flow if reward claim fails
+          // We don't show a blocking error here as the group was created successfully,
+          // but we log it. The user can retry from the dashboard.
         }
       } catch (error) {
         console.error('Error in reward claim flow:', error);
@@ -109,11 +111,11 @@ export default function GroupDetailPage() {
 
   const handleMakeContribution = async () => {
     if (!groupId || !contributionAmount || !contractAddress) return;
-    
+
     try {
       const amountWei = BigInt(Math.floor(parseFloat(contributionAmount) * 1e18));
       const description = contributionDescription || "Contribution";
-      
+
       // If using G$ or CELO via token function, use makeContributionWithToken
       if (selectedToken === "G$") {
         // Check and request approval first for G$
@@ -124,7 +126,7 @@ export default function GroupDetailPage() {
           // Wait a bit for approval to confirm
           await new Promise(resolve => setTimeout(resolve, 3000));
         }
-        
+
         // Make contribution with G$ token (tokenType = 1)
         await makeContributionWithToken(groupId, amountWei, description, 1);
       } else {
@@ -170,6 +172,7 @@ export default function GroupDetailPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
+      <EngagementRewardsNotification />
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-6">
@@ -200,11 +203,10 @@ export default function GroupDetailPage() {
             </div>
             <div>
               <p className="text-gray-600">Currency</p>
-              <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${
-                (group.tokenType ?? 0) === 0 
-                  ? 'bg-yellow-100 text-yellow-800' 
+              <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${(group.tokenType ?? 0) === 0
+                  ? 'bg-yellow-100 text-yellow-800'
                   : 'bg-green-100 text-green-800'
-              }`}>
+                }`}>
                 {(group.tokenType ?? 0) === 0 ? "CELO" : "G$ (GoodDollar)"}
               </span>
             </div>
@@ -230,7 +232,7 @@ export default function GroupDetailPage() {
               <span>{progressPercentage.toFixed(1)}%</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-4">
-              <div 
+              <div
                 className="bg-blue-600 h-4 rounded-full transition-all duration-300"
                 style={{ width: `${Math.min(progressPercentage, 100)}%` }}
               ></div>
@@ -282,11 +284,10 @@ export default function GroupDetailPage() {
                     Contribution Token
                   </label>
                   <div className="p-3 border rounded-lg bg-gray-50">
-                    <div className={`inline-flex items-center px-3 py-2 rounded text-sm font-medium ${
-                      (group.tokenType ?? 0) === 0 
-                        ? 'bg-yellow-100 text-yellow-800' 
+                    <div className={`inline-flex items-center px-3 py-2 rounded text-sm font-medium ${(group.tokenType ?? 0) === 0
+                        ? 'bg-yellow-100 text-yellow-800'
                         : 'bg-green-100 text-green-800'
-                    }`}>
+                      }`}>
                       {(group.tokenType ?? 0) === 0 ? "CELO" : "G$ (GoodDollar)"}
                     </div>
                     <p className="text-xs text-gray-500 mt-1">
@@ -386,11 +387,10 @@ export default function GroupDetailPage() {
                             ${(Number(contribution.amount) / 1e18).toLocaleString(undefined, { maximumFractionDigits: 2 })}
                           </p>
                         )}
-                        <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${
-                          (contribution.tokenType ?? 0) === 0 
-                            ? 'bg-yellow-100 text-yellow-800' 
+                        <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${(contribution.tokenType ?? 0) === 0
+                            ? 'bg-yellow-100 text-yellow-800'
                             : 'bg-green-100 text-green-800'
-                        }`}>
+                          }`}>
                           {(contribution.tokenType ?? 0) === 0 ? "CELO" : "G$"}
                         </span>
                       </div>
