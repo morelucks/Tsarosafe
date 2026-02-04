@@ -270,9 +270,52 @@ contract TsaroSafe is ITsaroSafeData {
         celoAddress = newAddress;
     }
 
+    /**
+     * @notice Withdraw native CELO from the contract (only owner)
+     * @dev Used to reclaim CELO for gas or other administrative purposes
+     * @param amount Amount to withdraw
+     */
+    function withdrawNative(uint256 amount) external onlyOwner {
+        if (address(this).balance < amount) revert InsufficientContractBalance();
+        (bool success,) = owner.call{value: amount}("");
+        if (!success) revert WithdrawalFailed();
+    }
+
+    /**
+     * @notice Withdraw ERC20 tokens from the contract (only owner)
+     * @dev Used to reclaim G$ or other tokens for administrative purposes
+     * @param token Address of the ERC20 token
+     * @param amount Amount to withdraw
+     */
+    function withdrawERC20(address token, uint256 amount) external onlyOwner {
+        if (token == address(0)) revert InvalidTokenAddress();
+        bool success = IERC20(token).transfer(owner, amount);
+        if (!success) revert TokenTransferFailed();
+    }
+
     // ========================================
     //   CREATE GROUPS
     // ========================================
+
+    /**
+     * @notice Create a new savings group (legacy support for 6 params)
+     * @param name Group name
+     * @param description Group description
+     * @param isPrivate Whether the group is private
+     * @param targetAmount Target savings amount
+     * @param memberLimit Maximum number of members
+     * @param endDate Group end date (timestamp)
+     */
+    function createGroup(
+        string memory name,
+        string memory description,
+        bool isPrivate,
+        uint256 targetAmount,
+        uint256 memberLimit,
+        uint256 endDate
+    ) external returns (uint256) {
+        return createGroup(name, description, isPrivate, targetAmount, memberLimit, endDate, ITsaroSafeData.TokenType.CELO);
+    }
 
     /**
      * @notice Create a new savings group
@@ -292,7 +335,7 @@ contract TsaroSafe is ITsaroSafeData {
         uint256 memberLimit,
         uint256 endDate,
         ITsaroSafeData.TokenType tokenType
-    ) external returns (uint256) {
+    ) public returns (uint256) {
         // Validation
         if (bytes(name).length == 0) revert EmptyName();
         if (bytes(name).length > 100) revert NameTooLong();
