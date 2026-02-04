@@ -1,5 +1,25 @@
 [
   {
+    "type": "constructor",
+    "inputs": [
+      {
+        "name": "goodDollarAddress_",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "celoAddress_",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "receive",
+    "stateMutability": "payable"
+  },
+  {
     "type": "function",
     "name": "addGroupMilestone",
     "inputs": [
@@ -43,6 +63,19 @@
   },
   {
     "type": "function",
+    "name": "celoAddress",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "checkMilestoneStatus",
     "inputs": [
       {
@@ -61,40 +94,103 @@
   },
   {
     "type": "function",
+    "name": "contributionIndices",
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "createGroup",
     "inputs": [
       {
-        "name": "_name",
+        "name": "name",
         "type": "string",
         "internalType": "string"
       },
       {
-        "name": "_description",
+        "name": "description",
         "type": "string",
         "internalType": "string"
       },
       {
-        "name": "_isPrivate",
+        "name": "isPrivate",
         "type": "bool",
         "internalType": "bool"
       },
       {
-        "name": "_targetAmount",
+        "name": "targetAmount",
         "type": "uint256",
         "internalType": "uint256"
       },
       {
-        "name": "_memberLimit",
+        "name": "memberLimit",
         "type": "uint256",
         "internalType": "uint256"
       },
       {
-        "name": "_endDate",
+        "name": "endDate",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "createGroup",
+    "inputs": [
+      {
+        "name": "name",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "isPrivate",
+        "type": "bool",
+        "internalType": "bool"
+      },
+      {
+        "name": "targetAmount",
         "type": "uint256",
         "internalType": "uint256"
       },
       {
-        "name": "_tokenType",
+        "name": "memberLimit",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "endDate",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "tokenType",
         "type": "uint8",
         "internalType": "enum ITsaroSafeData.TokenType"
       }
@@ -113,7 +209,7 @@
     "name": "deactivateGroup",
     "inputs": [
       {
-        "name": "_groupId",
+        "name": "groupId",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -325,6 +421,11 @@
             "name": "isVerified",
             "type": "bool",
             "internalType": "bool"
+          },
+          {
+            "name": "tokenType",
+            "type": "uint8",
+            "internalType": "enum ITsaroSafeData.TokenType"
           }
         ]
       }
@@ -569,6 +670,25 @@
   },
   {
     "type": "function",
+    "name": "getGroupTokenType",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint8",
+        "internalType": "enum ITsaroSafeData.TokenType"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "getMemberContributionSummary",
     "inputs": [
       {
@@ -671,6 +791,11 @@
             "name": "isVerified",
             "type": "bool",
             "internalType": "bool"
+          },
+          {
+            "name": "tokenType",
+            "type": "uint8",
+            "internalType": "enum ITsaroSafeData.TokenType"
           }
         ]
       }
@@ -724,6 +849,30 @@
             "internalType": "uint256"
           }
         ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getMemberWithdrawnAmount",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_member",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "stateMutability": "view"
@@ -917,25 +1066,6 @@
   },
   {
     "type": "function",
-    "name": "getGroupTokenType",
-    "inputs": [
-      {
-        "name": "_groupId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint8",
-        "internalType": "enum ITsaroSafeData.TokenType"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
     "name": "getRoundPaidCount",
     "inputs": [
       {
@@ -1002,6 +1132,43 @@
         "name": "",
         "type": "uint256[]",
         "internalType": "uint256[]"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getWithdrawableAmount",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_member",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "goodDollarAddress",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
       }
     ],
     "stateMutability": "view"
@@ -1075,6 +1242,11 @@
         "name": "isVerified",
         "type": "bool",
         "internalType": "bool"
+      },
+      {
+        "name": "tokenType",
+        "type": "uint8",
+        "internalType": "enum ITsaroSafeData.TokenType"
       }
     ],
     "stateMutability": "view"
@@ -1276,6 +1448,25 @@
   },
   {
     "type": "function",
+    "name": "groupTokenTypes",
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint8",
+        "internalType": "enum ITsaroSafeData.TokenType"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "groupTotalAmount",
     "inputs": [
       {
@@ -1401,6 +1592,35 @@
         "name": "isCompleted",
         "type": "bool",
         "internalType": "bool"
+      },
+      {
+        "name": "tokenType",
+        "type": "uint8",
+        "internalType": "enum ITsaroSafeData.TokenType"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "isContributionWithdrawn",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_contributionId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
       }
     ],
     "stateMutability": "view"
@@ -1463,7 +1683,7 @@
     "name": "joinGroup",
     "inputs": [
       {
-        "name": "_groupId",
+        "name": "groupId",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -1476,7 +1696,7 @@
     "name": "leaveGroup",
     "inputs": [
       {
-        "name": "_groupId",
+        "name": "groupId",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -1585,6 +1805,30 @@
   },
   {
     "type": "function",
+    "name": "memberWithdrawnAmount",
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "nextContributionId",
     "inputs": [],
     "outputs": [
@@ -1624,15 +1868,28 @@
   },
   {
     "type": "function",
+    "name": "owner",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "removeMember",
     "inputs": [
       {
-        "name": "_groupId",
+        "name": "groupId",
         "type": "uint256",
         "internalType": "uint256"
       },
       {
-        "name": "_member",
+        "name": "member",
         "type": "address",
         "internalType": "address"
       }
@@ -1660,12 +1917,51 @@
   },
   {
     "type": "function",
+    "name": "setCeloAddress",
+    "inputs": [
+      {
+        "name": "newAddress",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "setGoodDollarAddress",
+    "inputs": [
+      {
+        "name": "newAddress",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "toggleGroupPrivacy",
     "inputs": [
       {
-        "name": "_groupId",
+        "name": "groupId",
         "type": "uint256",
         "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "transferOwnership",
+    "inputs": [
+      {
+        "name": "newOwner",
+        "type": "address",
+        "internalType": "address"
       }
     ],
     "outputs": [],
@@ -1676,12 +1972,12 @@
     "name": "updateEndDate",
     "inputs": [
       {
-        "name": "_groupId",
+        "name": "groupId",
         "type": "uint256",
         "internalType": "uint256"
       },
       {
-        "name": "_newEndDate",
+        "name": "newEndDate",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -1712,17 +2008,17 @@
     "name": "updateGroupMetadata",
     "inputs": [
       {
-        "name": "_groupId",
+        "name": "groupId",
         "type": "uint256",
         "internalType": "uint256"
       },
       {
-        "name": "_name",
+        "name": "name",
         "type": "string",
         "internalType": "string"
       },
       {
-        "name": "_description",
+        "name": "description",
         "type": "string",
         "internalType": "string"
       }
@@ -1753,12 +2049,12 @@
     "name": "updateMemberLimit",
     "inputs": [
       {
-        "name": "_groupId",
+        "name": "groupId",
         "type": "uint256",
         "internalType": "uint256"
       },
       {
-        "name": "_newLimit",
+        "name": "newLimit",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -1814,6 +2110,79 @@
     "stateMutability": "nonpayable"
   },
   {
+    "type": "function",
+    "name": "withdrawContribution",
+    "inputs": [
+      {
+        "name": "_groupId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_contributionId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "withdrawERC20",
+    "inputs": [
+      {
+        "name": "token",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "withdrawNative",
+    "inputs": [
+      {
+        "name": "amount",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "withdrawnContributions",
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
     "type": "event",
     "name": "ContributionMade",
     "inputs": [
@@ -1840,6 +2209,55 @@
         "type": "uint256",
         "indexed": false,
         "internalType": "uint256"
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "indexed": false,
+        "internalType": "string"
+      },
+      {
+        "name": "timestamp",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "ContributionMadeWithToken",
+    "inputs": [
+      {
+        "name": "contributionId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "groupId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "member",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "tokenType",
+        "type": "uint8",
+        "indexed": false,
+        "internalType": "uint8"
       },
       {
         "name": "description",
@@ -2155,6 +2573,92 @@
     "anonymous": false
   },
   {
+    "type": "event",
+    "name": "WithdrawalCompleted",
+    "inputs": [
+      {
+        "name": "groupId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "contributionId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "member",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "tokenType",
+        "type": "uint8",
+        "indexed": false,
+        "internalType": "uint8"
+      },
+      {
+        "name": "timestamp",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "WithdrawalInitiated",
+    "inputs": [
+      {
+        "name": "groupId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "contributionId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "member",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "tokenType",
+        "type": "uint8",
+        "indexed": false,
+        "internalType": "uint8"
+      },
+      {
+        "name": "timestamp",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
     "type": "error",
     "name": "AlreadyMember",
     "inputs": []
@@ -2162,6 +2666,11 @@
   {
     "type": "error",
     "name": "CannotRemoveSelf",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ContributionAlreadyWithdrawn",
     "inputs": []
   },
   {
@@ -2216,6 +2725,16 @@
   },
   {
     "type": "error",
+    "name": "InsufficientAllowance",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "InsufficientContractBalance",
+    "inputs": []
+  },
+  {
+    "type": "error",
     "name": "InvalidAmount",
     "inputs": []
   },
@@ -2251,6 +2770,11 @@
   },
   {
     "type": "error",
+    "name": "InvalidTokenAddress",
+    "inputs": []
+  },
+  {
+    "type": "error",
     "name": "MemberLimitExceeded",
     "inputs": []
   },
@@ -2272,6 +2796,36 @@
   {
     "type": "error",
     "name": "NotMember",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "NotOwner",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ReentrancyGuardReentrantCall",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "TokenTransferFailed",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "TokenTypeMismatch",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "WithdrawalFailed",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "WithdrawalNotAllowed",
     "inputs": []
   }
 ]
