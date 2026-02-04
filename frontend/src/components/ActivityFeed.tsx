@@ -50,7 +50,7 @@ export function ActivityFeed({ activities, limit, showViewAll }: ActivityFeedPro
         if (activity.amount !== undefined) {
             return (
                 <span className="text-sm text-gray-600">
-                    ${activity.amount.toLocaleString()}
+                    ${activity.amount.toLocaleString('en-US')}
                 </span>
             );
         }

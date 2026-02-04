@@ -82,9 +82,39 @@ function GroupCard({ groupId }: { groupId: bigint }) {
         </div>
       </div>
       <div className="mt-2 text-sm text-gray-600">
-        Goal: ${targetAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+        Goal: ${targetAmount.toLocaleString('en-US', { maximumFractionDigits: 2 })}
       </div>
     </Link>
+  );
+}
+
+// Wrapper component to fetch group stats and contributions without nesting
+function GroupFetchers({
+  groupId,
+  onAmountUpdate,
+  onContributionsUpdate
+}: {
+  groupId: bigint;
+  onAmountUpdate: (groupId: bigint, amount: number) => void;
+  onContributionsUpdate: (groupId: bigint, activities: RecentActivity[]) => void;
+}) {
+  const { group: groupData } = useGroup(groupId);
+  const group = groupData as Group | undefined;
+
+  return (
+    <>
+      <GroupStatFetcher
+        groupId={groupId}
+        onAmountUpdate={(amount) => onAmountUpdate(groupId, amount)}
+      />
+      {group && (
+        <GroupContributionsFetcher
+          groupId={groupId}
+          groupName={group.name}
+          onContributionsUpdate={(activities) => onContributionsUpdate(groupId, activities)}
+        />
+      )}
+    </>
   );
 }
 
@@ -219,7 +249,7 @@ const DashboardPage = () => {
                   </div>
                   <div>
                     <p className="text-sm font-bold text-gray-500 uppercase tracking-wider">Total Savings</p>
-                    <p className="text-3xl font-black text-gray-900">${stats.totalSavings.toLocaleString()}</p>
+                    <p className="text-3xl font-black text-gray-900">${stats.totalSavings.toLocaleString('en-US')}</p>
                   </div>
                 </div>
               </div>
@@ -239,7 +269,7 @@ const DashboardPage = () => {
               <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 md:col-span-2">
                 <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">Monthly Goal Progress</h3>
                 <div className="flex justify-between text-sm font-bold text-gray-900 mb-2">
-                  <span>${stats.totalSavings.toLocaleString()} of ${stats.monthlyGoal.toLocaleString()}</span>
+                  <span>${stats.totalSavings.toLocaleString('en-US')} of ${stats.monthlyGoal.toLocaleString('en-US')}</span>
                   <span>{Math.round(savingsProgress)}%</span>
                 </div>
                 <div className="w-full bg-gray-100 rounded-full h-4 relative overflow-hidden">
@@ -302,30 +332,14 @@ const DashboardPage = () => {
           {/* Hidden components to fetch group stats and contributions */}
           {groupIds && groupIds.length > 0 && (
             <>
-              {groupIds.map((groupId) => {
-                const GroupContributionsWrapper = () => {
-                  const { group: groupData } = useGroup(groupId);
-                  const group = groupData as Group | undefined;
-                  return (
-                    <>
-                      <GroupStatFetcher
-                        key={`stats-${groupId.toString()}`}
-                        groupId={groupId}
-                        onAmountUpdate={(amount) => handleGroupAmountUpdate(groupId, amount)}
-                      />
-                      {group && (
-                        <GroupContributionsFetcher
-                          key={`contribs-${groupId.toString()}`}
-                          groupId={groupId}
-                          groupName={group.name}
-                          onContributionsUpdate={(activities) => handleContributionsUpdate(groupId, activities)}
-                        />
-                      )}
-                    </>
-                  );
-                };
-                return <GroupContributionsWrapper key={`wrapper-${groupId.toString()}`} />;
-              })}
+              {groupIds.map((groupId) => (
+                <GroupFetchers
+                  key={`fetcher-${groupId.toString()}`}
+                  groupId={groupId}
+                  onAmountUpdate={handleGroupAmountUpdate}
+                  onContributionsUpdate={handleContributionsUpdate}
+                />
+              ))}
             </>
           )}
 

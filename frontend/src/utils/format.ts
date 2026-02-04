@@ -1,9 +1,9 @@
 export const formatCurrency = (amount: number, currency: 'USD' | 'G$' | 'CELO' = 'USD'): string => {
     if (currency === 'G$') {
-        return `${amount.toLocaleString(undefined, { maximumFractionDigits: 2 })} G$`;
+        return `${amount.toLocaleString('en-US', { maximumFractionDigits: 2 })} G$`;
     }
     if (currency === 'CELO') {
-        return `${amount.toLocaleString(undefined, { maximumFractionDigits: 4 })} CELO`;
+        return `${amount.toLocaleString('en-US', { maximumFractionDigits: 4 })} CELO`;
     }
     return new Intl.NumberFormat('en-US', {
         style: 'currency',

@@ -10,12 +10,17 @@ interface GDollarPriceChartProps {
 
 type Period = keyof typeof PRICE_CHART_PERIODS;
 
-export default function GDollarPriceChart({ 
+export default function GDollarPriceChart({
   className = "",
-  height = 300 
+  height = 300
 }: GDollarPriceChartProps) {
   const [selectedPeriod, setSelectedPeriod] = useState<Period>('7d');
   const { chartData, isLoading, error, refetch } = useGDollarPriceHistory(selectedPeriod);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const chartStats = useMemo(() => {
     if (!chartData?.prices || chartData.prices.length === 0) {
@@ -88,6 +93,18 @@ export default function GDollarPriceChart({
     { key: '1y', label: '1Y' },
   ];
 
+  if (!mounted || isLoading) {
+    return (
+      <div className={`bg-white rounded-lg shadow p-6 ${className}`} style={{ height: `${height + 100}px` }}>
+        <div className="animate-pulse space-y-4">
+          <div className="h-6 bg-gray-200 rounded w-1/3" />
+          <div className="h-4 bg-gray-200 rounded w-1/4" />
+          <div className="h-[200px] bg-gray-100 rounded" />
+        </div>
+      </div>
+    );
+  }
+
   if (error) {
     return (
       <div className={`bg-white rounded-lg shadow p-6 ${className}`}>
@@ -138,11 +155,10 @@ export default function GDollarPriceChart({
           <button
             key={key}
             onClick={() => setSelectedPeriod(key)}
-            className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
-              selectedPeriod === key
-                ? 'bg-white text-blue-600 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
-            }`}
+            className={`px-3 py-1 rounded text-sm font-medium transition-colors ${selectedPeriod === key
+              ? 'bg-white text-blue-600 shadow-sm'
+              : 'text-gray-600 hover:text-gray-900'
+              }`}
           >
             {label}
           </button>
@@ -151,11 +167,7 @@ export default function GDollarPriceChart({
 
       {/* Chart */}
       <div className="relative" style={{ height: `${height}px` }}>
-        {isLoading ? (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-          </div>
-        ) : chartData?.prices && chartData.prices.length > 0 ? (
+        {chartData?.prices && chartData.prices.length > 0 ? (
           <svg
             viewBox={`0 0 800 ${height}`}
             className="w-full h-full"
@@ -164,11 +176,11 @@ export default function GDollarPriceChart({
             {/* Grid lines */}
             <defs>
               <pattern id="grid" width="80" height={height / 5} patternUnits="userSpaceOnUse">
-                <path d={`M 80 0 L 0 0 0 ${height / 5}`} fill="none" stroke="#f3f4f6" strokeWidth="1"/>
+                <path d={`M 80 0 L 0 0 0 ${height / 5}`} fill="none" stroke="#f3f4f6" strokeWidth="1" />
               </pattern>
             </defs>
             <rect width="800" height={height} fill="url(#grid)" />
-            
+
             {/* Price line */}
             <path
               d={svgPath}
@@ -177,23 +189,23 @@ export default function GDollarPriceChart({
               strokeWidth="2"
               className="drop-shadow-sm"
             />
-            
+
             {/* Area fill */}
             <path
               d={`${svgPath} L 800,${height} L 0,${height} Z`}
               fill={chartStats.change >= 0 ? "url(#greenGradient)" : "url(#redGradient)"}
               opacity="0.1"
             />
-            
+
             {/* Gradients */}
             <defs>
               <linearGradient id="greenGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#10b981" stopOpacity="0.3"/>
-                <stop offset="100%" stopColor="#10b981" stopOpacity="0"/>
+                <stop offset="0%" stopColor="#10b981" stopOpacity="0.3" />
+                <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
               </linearGradient>
               <linearGradient id="redGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#ef4444" stopOpacity="0.3"/>
-                <stop offset="100%" stopColor="#ef4444" stopOpacity="0"/>
+                <stop offset="0%" stopColor="#ef4444" stopOpacity="0.3" />
+                <stop offset="100%" stopColor="#ef4444" stopOpacity="0" />
               </linearGradient>
             </defs>
           </svg>

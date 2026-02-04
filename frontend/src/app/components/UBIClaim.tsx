@@ -18,6 +18,11 @@ export default function UBIClaim() {
   const { claimUBI, isLoading: isClaiming, isConfirmed, error } = useClaimUBI();
   const { refetch: refetchBalance } = useGoodDollarBalance();
   const { chain } = useAccount();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const isBase = chain?.id === 8453 || chain?.id === 84532;
 
@@ -86,7 +91,7 @@ export default function UBIClaim() {
     return `${secs}s`;
   };
 
-  if (isLoadingClaimInfo) {
+  if (!mounted || isLoadingClaimInfo) {
     return (
       <div className="bg-white rounded-xl shadow-md p-6">
         <div className="animate-pulse">
@@ -122,8 +127,8 @@ export default function UBIClaim() {
 
         {message && (
           <div className={`mb-6 p-4 rounded-xl font-bold text-sm flex items-center gap-3 backdrop-blur-md animate-in fade-in slide-in-from-top-2 ${message.includes('successfully')
-              ? 'bg-white/90 text-green-800 shadow-lg'
-              : 'bg-red-500/90 text-white shadow-lg'
+            ? 'bg-white/90 text-green-800 shadow-lg'
+            : 'bg-red-500/90 text-white shadow-lg'
             }`}>
             <span>{message.includes('successfully') ? '✅' : '❌'}</span>
             {message}
@@ -135,7 +140,7 @@ export default function UBIClaim() {
             <span className="text-sm opacity-80 font-bold uppercase tracking-widest">Claimable</span>
             <div className="text-right">
               <span className="font-black text-2xl tracking-tighter">
-                {claimableAmountFormatted.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                {claimableAmountFormatted.toLocaleString('en-US', { maximumFractionDigits: 2 })}
                 <span className="text-sm ml-1 opacity-70">G$</span>
               </span>
               <div className="text-xs font-medium opacity-70">
@@ -148,7 +153,7 @@ export default function UBIClaim() {
             <span className="text-sm opacity-80 font-bold uppercase tracking-widest">Daily Rate</span>
             <div className="text-right">
               <span className="font-bold">
-                {dailyUBIFormatted.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                {dailyUBIFormatted.toLocaleString('en-US', { maximumFractionDigits: 2 })}
                 <span className="text-xs ml-1 opacity-70">G$</span>
               </span>
             </div>
@@ -173,8 +178,8 @@ export default function UBIClaim() {
           onClick={handleClaim}
           disabled={!canClaim || isClaiming}
           className={`w-full py-4 px-4 rounded-xl font-black tracking-widest uppercase transition-all shadow-2xl relative group/btn ${canClaim && !isClaiming
-              ? 'bg-white text-gray-900 hover:scale-[1.03] active:scale-95'
-              : 'bg-white/10 text-white/30 cursor-not-allowed'
+            ? 'bg-white text-gray-900 hover:scale-[1.03] active:scale-95'
+            : 'bg-white/10 text-white/30 cursor-not-allowed'
             }`}
         >
           {isClaiming ? (
@@ -185,7 +190,7 @@ export default function UBIClaim() {
           ) : canClaim ? (
             <div className="flex items-center justify-center gap-2">
               <span>Claim</span>
-              <span>{claimableAmountFormatted.toLocaleString(undefined, { maximumFractionDigits: 2 })} G$</span>
+              <span>{claimableAmountFormatted.toLocaleString('en-US', { maximumFractionDigits: 2 })} G$</span>
             </div>
           ) : (
             'Locked'
