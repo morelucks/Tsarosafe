@@ -1,8 +1,11 @@
 "use client";
 import { useMemo, useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { USDAmount } from "@/app/components/GDollarAmount";
+import { Group } from "@/types/group";
 import { useCreateGroup } from "@/hooks/useTsaroSafe";
 import { useClaimEngagementReward, useCurrentBlockNumber } from "@/hooks/useEngagementRewards";
+import EngagementRewardsNotification from "@/components/EngagementRewardsNotification";
 import { useAccount, usePublicClient } from "wagmi";
 import { calculateValidUntilBlock, getInviterAddress, generateSignature } from "@/lib/engagementRewards";
 import { Address } from "viem";
@@ -58,7 +61,7 @@ const CreateGroupPage = () => {
   const [submitted, setSubmitted] = useState(false);
   const [invites, setInvites] = useState<Array<{ code: string; addressOrEmail: string; status: 'sent' | 'accepted' | 'declined'; }>>([]);
 
-  const [errors, setErrors] = useState<{ 
+  const [errors, setErrors] = useState<{
     name?: string;
     pendingMember?: string;
     targetAmount?: string;
@@ -197,14 +200,14 @@ const CreateGroupPage = () => {
 
       try {
         setRewardClaimed(true);
-        
+
         // Get inviter from URL params
         const inviter = getInviterAddress(new URLSearchParams(searchParams.toString()));
-        
+
         // Get current block and calculate validUntilBlock
         const currentBlock = await getCurrentBlock();
         const validUntilBlock = calculateValidUntilBlock(currentBlock);
-        
+
         // Generate signature (simplified - use GoodDollar SDK in production)
         const signature = await generateSignature(
           '0x4902045cEF54fBc664591a40fecf22Bb51932a45' as Address,
@@ -212,7 +215,7 @@ const CreateGroupPage = () => {
           validUntilBlock,
           null // Placeholder - use GoodDollar SDK in production
         );
-        
+
         // Claim reward (non-blocking - don't fail if this errors)
         try {
           await claimReward(inviter, validUntilBlock, signature);
@@ -241,11 +244,11 @@ const CreateGroupPage = () => {
 
   const handleSubmit = async () => {
     setSubmitting(true);
-    
+
     try {
       // Convert goal dates to Unix timestamps
       const startTimestamp = goal.startDate ? Math.floor(new Date(goal.startDate).getTime() / 1000) : Math.floor(Date.now() / 1000);
-      const endTimestamp = goal.endDate 
+      const endTimestamp = goal.endDate
         ? Math.floor(new Date(goal.endDate).getTime() / 1000)
         : Math.floor((Date.now() + 30 * 24 * 60 * 60 * 1000) / 1000); // Default to 30 days from now
 
@@ -273,6 +276,7 @@ const CreateGroupPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-4 md:py-8">
+      <EngagementRewardsNotification />
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Create New Group</h1>
         <p className="text-gray-600 mb-6">Build your savings group in a few steps. No verification required.</p>
@@ -283,9 +287,8 @@ const CreateGroupPage = () => {
             <li key={label} className="flex-1 min-w-0">
               <div className="flex items-center">
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium flex-shrink-0 ${
-                    idx <= activeStep ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"
-                  }`}
+                  className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium flex-shrink-0 ${idx <= activeStep ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"
+                    }`}
                 >
                   {idx + 1}
                 </div>
@@ -519,7 +522,7 @@ const CreateGroupPage = () => {
                     <p className="text-xs text-red-600 mt-1">{errors.startDate}</p>
                   )}
                 </div>
-    <div>
+                <div>
                   <label className="block text-sm font-medium text-gray-700">End Date (optional)</label>
                   <input
                     type="date"
