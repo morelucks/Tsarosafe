@@ -46,7 +46,7 @@ export function GroupCard({ groupId }: { groupId: bigint }) {
                 </div>
             </div>
             <div className="mt-2 text-sm text-gray-600">
-                Goal: ${targetAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                Goal: ${targetAmount.toLocaleString('en-US', { maximumFractionDigits: 2 })}
             </div>
         </Link>
     );

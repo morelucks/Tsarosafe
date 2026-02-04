@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAccount } from "wagmi";
 import { useTsaroSafeOwner, useTsaroSafeAdmin } from "@/hooks/useTsaroSafe";
 import { getGoodDollarAddress } from "@/lib/constants";
@@ -13,10 +13,15 @@ export default function AdminPanel() {
     const [nativeAmount, setNativeAmount] = useState("");
     const [erc20Amount, setErc20Amount] = useState("");
     const [tokenAddress, setTokenAddress] = useState("");
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     const isOwner = address && owner && address.toLowerCase() === owner.toLowerCase();
 
-    if (isLoadingOwner || !isOwner) {
+    if (!mounted || isLoadingOwner || !isOwner) {
         return null;
     }
 

@@ -1,4 +1,5 @@
 "use client";
+import { useState, useEffect } from "react";
 import { useGoodDollarBalance } from "@/hooks/useGoodDollar";
 import { USDAmount } from "./GDollarAmount";
 import { useAccount } from "wagmi";
@@ -6,10 +7,15 @@ import { useAccount } from "wagmi";
 export default function GoodDollarBalance() {
   const { balanceFormatted, isLoading } = useGoodDollarBalance();
   const { chain } = useAccount();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const isBase = chain?.id === 8453 || chain?.id === 84532;
 
-  if (isLoading) {
+  if (!mounted || isLoading) {
     return (
       <div className="bg-white rounded-lg shadow p-4">
         <div className="animate-pulse">
@@ -39,7 +45,7 @@ export default function GoodDollarBalance() {
           <p className="text-sm font-medium opacity-90 tracking-wide uppercase">GoodDollar Balance</p>
           <div className="flex items-baseline gap-2 mt-1">
             <p className="text-3xl font-black tracking-tighter">
-              {balanceFormatted.toLocaleString(undefined, {
+              {balanceFormatted.toLocaleString('en-US', {
                 maximumFractionDigits: 2
               })}
             </p>

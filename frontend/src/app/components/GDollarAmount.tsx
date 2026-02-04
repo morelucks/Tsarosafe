@@ -26,9 +26,9 @@ export default function GDollarAmount({
 
   const formatGDollar = (value: number) => {
     if (format === 'minimal') {
-      return value.toLocaleString(undefined, { maximumFractionDigits: 2 });
+      return value.toLocaleString('en-US', { maximumFractionDigits: 2 });
     }
-    return value.toLocaleString(undefined, { maximumFractionDigits: 2 });
+    return value.toLocaleString('en-US', { maximumFractionDigits: 2 });
   };
 
   const formatUSD = (value: number) => {
@@ -39,7 +39,7 @@ export default function GDollarAmount({
     }
     if (value < 0.0001) return `< $0.0001`;
     if (value < 0.01) return `$${value.toFixed(6)}`;
-    return `$${value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    return `$${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   };
 
   if (isLoading && rate === 0) {

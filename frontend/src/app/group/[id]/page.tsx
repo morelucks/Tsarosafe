@@ -247,7 +247,7 @@ export default function GroupDetailPage() {
                     usdClassName="text-xs text-gray-400"
                   />
                 ) : (
-                  <div>${currentAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })}</div>
+                  <div>${currentAmount.toLocaleString('en-US', { maximumFractionDigits: 2 })}</div>
                 )}
               </div>
               <div className="text-right">
@@ -259,7 +259,7 @@ export default function GroupDetailPage() {
                     usdClassName="text-xs text-gray-400"
                   />
                 ) : (
-                  <div>${targetAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })}</div>
+                  <div>${targetAmount.toLocaleString('en-US', { maximumFractionDigits: 2 })}</div>
                 )}
               </div>
             </div>
@@ -296,9 +296,9 @@ export default function GroupDetailPage() {
                   </div>
                   {selectedToken === "G$" && (
                     <div className="text-xs text-gray-500 mt-1 space-y-1">
-                      <p>Balance: {gdBalance.toLocaleString(undefined, { maximumFractionDigits: 2 })} G$</p>
+                      <p>Balance: {gdBalance.toLocaleString('en-US', { maximumFractionDigits: 2 })} G$</p>
                       {contractAddress && (
-                        <p>Allowance: {gdAllowance.toLocaleString(undefined, { maximumFractionDigits: 2 })} G$</p>
+                        <p>Allowance: {gdAllowance.toLocaleString('en-US', { maximumFractionDigits: 2 })} G$</p>
                       )}
                     </div>
                   )}
@@ -384,7 +384,7 @@ export default function GroupDetailPage() {
                           <InlineGDollarAmount amount={Number(contribution.amount) / 1e18} className="text-gray-900" />
                         ) : (
                           <p className="font-medium text-gray-900">
-                            ${(Number(contribution.amount) / 1e18).toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                            ${(Number(contribution.amount) / 1e18).toLocaleString('en-US', { maximumFractionDigits: 2 })}
                           </p>
                         )}
                         <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${(contribution.tokenType ?? 0) === 0
@@ -434,7 +434,7 @@ export default function GroupDetailPage() {
                       <div>
                         <p className="font-medium text-gray-900">{milestone.description}</p>
                         <p className="text-sm text-gray-600">
-                          Target: ${(Number(milestone.targetAmount) / 1e18).toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                          Target: ${(Number(milestone.targetAmount) / 1e18).toLocaleString('en-US', { maximumFractionDigits: 2 })}
                         </p>
                       </div>
                       {milestone.isReached && (
