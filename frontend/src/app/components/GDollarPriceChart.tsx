@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useGDollarPriceHistory } from "@/hooks/useGDollarPrice";
 import { PRICE_CHART_PERIODS } from "@/lib/constants";
 
