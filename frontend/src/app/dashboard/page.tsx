@@ -14,6 +14,7 @@ import { useUBIClaimInfo } from "@/hooks/useGoodDollar";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import EngagementRewardsNotification from "@/components/EngagementRewardsNotification";
 import EngagementRewardsStatus from "@/app/components/EngagementRewardsStatus";
+import AdminPanel from "@/app/components/AdminPanel";
 import { GroupStatFetcher, GroupContributionsFetcher } from "@/components/dashboard/Fetchers";
 import { CardSkeleton } from "@/components/LoadingSkeleton";
 import { ActivityFeed } from "@/components/ActivityFeed";
@@ -341,6 +342,7 @@ const DashboardPage = () => {
           )}
 
           {/* Quick Actions (Duplicate removed) */}
+          <AdminPanel />
         </div>
       </div>
     </ErrorBoundary>

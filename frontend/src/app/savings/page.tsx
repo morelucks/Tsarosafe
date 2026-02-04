@@ -5,6 +5,11 @@ import { useAccount } from "wagmi";
 import { useUserGroups, useGroup, useGroupStats } from "@/hooks/useTsaroSafe";
 import { Address } from "viem";
 import { Group, GroupStats } from "@/types/group";
+import GoodDollarBalance from "@/app/components/GoodDollarBalance";
+import UBIClaim from "@/app/components/UBIClaim";
+import EngagementRewardsStatus from "@/app/components/EngagementRewardsStatus";
+import EngagementRewardsNotification from "@/components/EngagementRewardsNotification";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 // Component to fetch stats for a single group and report back
 function GroupStatFetcher({ groupId, onAmountUpdate }: { groupId: bigint, onAmountUpdate: (groupId: bigint, current: number, target: number) => void }) {
@@ -34,7 +39,7 @@ function SavingsGroupCard({ groupId }: { groupId: bigint }) {
 
   if (isLoading || !group || !stats) {
     return (
-      <div className="bg-white rounded-lg shadow p-6 animate-pulse">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 animate-pulse">
         <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
         <div className="h-4 bg-gray-200 rounded w-1/2 mb-6"></div>
         <div className="h-2 bg-gray-200 rounded w-full mb-2"></div>
@@ -46,35 +51,51 @@ function SavingsGroupCard({ groupId }: { groupId: bigint }) {
   const currentAmount = Number(stats.currentAmount) / 1e18;
   const targetAmount = Number(group.targetAmount) / 1e18;
   const progress = (currentAmount / targetAmount) * 100;
+  const isCelo = (group.tokenType ?? 0) === 0;
 
   return (
-    <Link href={`/group/${groupId}`} className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-all block">
-      <div className="flex justify-between items-start mb-4">
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900">{group.name}</h3>
-          <p className="text-sm text-gray-600 line-clamp-2">{group.description}</p>
+    <Link href={`/group/${groupId}`} className="group relative bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-xl transition-all duration-300 overflow-hidden block">
+      {/* Decorative background element */}
+      <div className={`absolute top-0 right-0 w-24 h-24 -mr-8 -mt-8 rounded-full opacity-5 ${isCelo ? 'bg-blue-600' : 'bg-green-600'}`}></div>
+
+      <div className="flex justify-between items-start mb-4 relative z-10">
+        <div className="flex-1">
+          <h3 className="text-xl font-black text-gray-900 tracking-tight group-hover:text-blue-600 transition-colors uppercase">{group.name}</h3>
+          <p className="text-sm text-gray-500 line-clamp-2 mt-1 font-medium">{group.description}</p>
         </div>
-        <span className={`px-2 py-1 rounded-full text-xs font-medium ${(group.tokenType ?? 0) === 0 ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'
+        <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black tracking-widest uppercase ${isCelo ? 'bg-blue-50 text-blue-600' : 'bg-green-50 text-green-600'
           }`}>
-          {(group.tokenType ?? 0) === 0 ? "CELO" : "G$"}
-        </span>
+          <span className={`w-1.5 h-1.5 rounded-full ${isCelo ? 'bg-blue-600' : 'bg-green-600'} animate-pulse`}></span>
+          {isCelo ? "CELO" : "G$"}
+        </div>
       </div>
 
-      <div className="mb-4">
-        <div className="flex justify-between text-sm text-gray-600 mb-2">
-          <span>Progress</span>
-          <span>{Math.round(progress)}%</span>
+      <div className="mb-6 relative z-10">
+        <div className="flex justify-between text-[11px] font-black text-gray-400 uppercase tracking-widest mb-2">
+          <span>Current Progress</span>
+          <span className="text-gray-900">{Math.round(progress)}%</span>
         </div>
-        <div className="w-full bg-gray-100 rounded-full h-3">
+        <div className="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
           <div
-            className="bg-[#0f2a56] h-3 rounded-full transition-all duration-300"
+            className={`h-full rounded-full transition-all duration-1000 ease-out ${isCelo ? 'bg-gradient-to-r from-blue-600 to-indigo-600' : 'bg-gradient-to-r from-green-500 to-emerald-600'
+              }`}
             style={{ width: `${Math.min(progress, 100)}%` }}
           ></div>
         </div>
-        <div className="flex justify-between text-sm text-gray-500 mt-2 font-medium">
-          <span>{currentAmount.toLocaleString()}</span>
-          <span>{targetAmount.toLocaleString()}</span>
+        <div className="flex justify-between items-end mt-3">
+          <div className="flex flex-col">
+            <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Saved</span>
+            <span className="text-lg font-black text-gray-900">${currentAmount.toLocaleString()}</span>
+          </div>
+          <div className="flex flex-col text-right">
+            <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Goal</span>
+            <span className="text-sm font-bold text-gray-600">${targetAmount.toLocaleString()}</span>
+          </div>
         </div>
+      </div>
+
+      <div className="flex items-center text-[11px] font-black text-blue-600 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+        Manage Circle <span className="ml-2">→</span>
       </div>
     </Link>
   );
@@ -131,58 +152,72 @@ export default function SavingsPage() {
           <p className="mt-2 text-gray-600">Manage your on-chain savings and collaborative wealth circles.</p>
         </div>
 
-        {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                <span className="text-blue-600 text-lg">💰</span>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Value Saved</p>
-                <p className="text-2xl font-semibold text-gray-900">${totalSaved.toLocaleString()}</p>
-              </div>
-            </div>
-          </div>
+        <ErrorBoundary>
+          <EngagementRewardsNotification />
 
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                <span className="text-green-600 text-lg">🎯</span>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Active Goals</p>
-                <p className="text-2xl font-semibold text-gray-900">{activeGoals}</p>
-              </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+            <div className="lg:col-span-1 space-y-6">
+              <GoodDollarBalance />
+              <UBIClaim />
+              <EngagementRewardsStatus />
             </div>
-          </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                <span className="text-purple-600 text-lg">✅</span>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Completed</p>
-                <p className="text-2xl font-semibold text-gray-900">{completedGoals}</p>
-              </div>
-            </div>
-          </div>
+            <div className="lg:col-span-2">
+              {/* Quick Stats */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div className="bg-white rounded-lg shadow p-6 border border-blue-50">
+                  <div className="flex items-center">
+                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                      <span className="text-blue-600 text-lg">💰</span>
+                    </div>
+                    <div className="ml-4">
+                      <p className="text-sm font-medium text-gray-500">Value Saved</p>
+                      <p className="text-2xl font-bold text-gray-900">${totalSaved.toLocaleString()}</p>
+                    </div>
+                  </div>
+                </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
-                <span className="text-orange-600 text-lg">📊</span>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Total Progress</p>
-                <p className="text-2xl font-semibold text-gray-900">
-                  {totalTarget > 0 ? Math.round((totalSaved / totalTarget) * 100) : 0}%
-                </p>
+                <div className="bg-white rounded-lg shadow p-6 border border-green-50">
+                  <div className="flex items-center">
+                    <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                      <span className="text-green-600 text-lg">🎯</span>
+                    </div>
+                    <div className="ml-4">
+                      <p className="text-sm font-medium text-gray-500">Active Goals</p>
+                      <p className="text-2xl font-bold text-gray-900">{activeGoals}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-lg shadow p-6 border border-purple-50">
+                  <div className="flex items-center">
+                    <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                      <span className="text-purple-600 text-lg">✅</span>
+                    </div>
+                    <div className="ml-4">
+                      <p className="text-sm font-medium text-gray-500">Completed</p>
+                      <p className="text-2xl font-bold text-gray-900">{completedGoals}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-lg shadow p-6 border border-orange-50">
+                  <div className="flex items-center">
+                    <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
+                      <span className="text-orange-600 text-lg">📊</span>
+                    </div>
+                    <div className="ml-4">
+                      <p className="text-sm font-medium text-gray-500">Total Progress</p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {totalTarget > 0 ? Math.round((totalSaved / totalTarget) * 100) : 0}%
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </ErrorBoundary>
 
         {/* Fetchers (Invisible) */}
         {groupIds?.map(id => (

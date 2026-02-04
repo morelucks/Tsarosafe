@@ -172,7 +172,7 @@ export function useJoinGroup() {
  */
 export function useGroup(groupId: bigint | undefined) {
   const contractAddress = useContractAddress()
-  
+
   const { data, isLoading, error, refetch } = useReadContract({
     address: contractAddress as Address | undefined,
     abi: TsaroSafeABI,
@@ -196,7 +196,7 @@ export function useGroup(groupId: bigint | undefined) {
  */
 export function useGroupMembers(groupId: bigint | undefined) {
   const contractAddress = useContractAddress()
-  
+
   const { data, isLoading, error, refetch } = useReadContract({
     address: contractAddress as Address | undefined,
     abi: TsaroSafeABI,
@@ -220,7 +220,7 @@ export function useGroupMembers(groupId: bigint | undefined) {
  */
 export function useGroupStats(groupId: bigint | undefined) {
   const contractAddress = useContractAddress()
-  
+
   const { data, isLoading, error, refetch } = useReadContract({
     address: contractAddress as Address | undefined,
     abi: TsaroSafeABI,
@@ -244,7 +244,7 @@ export function useGroupStats(groupId: bigint | undefined) {
  */
 export function useUserGroups(userAddress: Address | undefined) {
   const contractAddress = useContractAddress()
-  
+
   const { data, isLoading, error, refetch } = useReadContract({
     address: contractAddress as Address | undefined,
     abi: TsaroSafeABI,
@@ -268,7 +268,7 @@ export function useUserGroups(userAddress: Address | undefined) {
  */
 export function usePublicGroups(offset: bigint = 0n, limit: number = 10) {
   const contractAddress = useContractAddress()
-  
+
   const { data, isLoading, error, refetch } = useReadContract({
     address: contractAddress as Address | undefined,
     abi: TsaroSafeABI,
@@ -292,7 +292,7 @@ export function usePublicGroups(offset: bigint = 0n, limit: number = 10) {
  */
 export function useGroupContributions(groupId: bigint | undefined, offset: bigint = 0n, limit: number = 20) {
   const contractAddress = useContractAddress()
-  
+
   const { data, isLoading, error, refetch } = useReadContract({
     address: contractAddress as Address | undefined,
     abi: TsaroSafeABI,
@@ -316,7 +316,7 @@ export function useGroupContributions(groupId: bigint | undefined, offset: bigin
  */
 export function useGroupMilestones(groupId: bigint | undefined) {
   const contractAddress = useContractAddress()
-  
+
   const { data, isLoading, error, refetch } = useReadContract({
     address: contractAddress as Address | undefined,
     abi: TsaroSafeABI,
@@ -340,7 +340,7 @@ export function useGroupMilestones(groupId: bigint | undefined) {
  */
 export function useGroupProgress(groupId: bigint | undefined) {
   const contractAddress = useContractAddress()
-  
+
   const { data, isLoading, error, refetch } = useReadContract({
     address: contractAddress as Address | undefined,
     abi: TsaroSafeABI,
@@ -364,7 +364,7 @@ export function useGroupProgress(groupId: bigint | undefined) {
  */
 export function usePublicGroupsByTokenType(tokenType: number, offset: bigint = 0n, limit: number = 10) {
   const contractAddress = useContractAddress()
-  
+
   const { data, isLoading, error, refetch } = useReadContract({
     address: contractAddress as Address | undefined,
     abi: TsaroSafeABI,
@@ -388,7 +388,7 @@ export function usePublicGroupsByTokenType(tokenType: number, offset: bigint = 0
  */
 export function useGroupTokenType(groupId: bigint | undefined) {
   const contractAddress = useContractAddress()
-  
+
   const { data, isLoading, error, refetch } = useReadContract({
     address: contractAddress as Address | undefined,
     abi: TsaroSafeABI,
@@ -414,3 +414,66 @@ export function useGroupTokenType(groupId: bigint | undefined) {
 
 
 
+/**
+ * Hook to get contract owner
+ */
+export function useTsaroSafeOwner() {
+  const contractAddress = useContractAddress()
+
+  const { data: owner, isLoading, error } = useReadContract({
+    address: contractAddress as Address | undefined,
+    abi: TsaroSafeABI,
+    functionName: 'owner',
+    query: {
+      enabled: !!contractAddress,
+    },
+  })
+
+  return {
+    owner: owner as Address | undefined,
+    isLoading,
+    error,
+  }
+}
+
+/**
+ * Hook for administrative functions
+ */
+export function useTsaroSafeAdmin() {
+  const contractAddress = useContractAddress()
+  const { writeContract, data: hash, isPending, error } = useWriteContract()
+  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
+    hash,
+  })
+
+  const withdrawNative = async (amount: bigint) => {
+    if (!contractAddress) throw new Error('Contract address not found')
+    return writeContract({
+      address: contractAddress as Address,
+      abi: TsaroSafeABI,
+      functionName: 'withdrawNative',
+      args: [amount],
+    })
+  }
+
+  const withdrawERC20 = async (token: Address, amount: bigint) => {
+    if (!contractAddress) throw new Error('Contract address not found')
+    return writeContract({
+      address: contractAddress as Address,
+      abi: TsaroSafeABI,
+      functionName: 'withdrawERC20',
+      args: [token, amount],
+    })
+  }
+
+  return {
+    withdrawNative,
+    withdrawERC20,
+    hash,
+    isPending,
+    isConfirming,
+    isConfirmed,
+    error,
+    isLoading: isPending || isConfirming,
+  }
+}

@@ -123,7 +123,7 @@ export const GDOLLAR_PRICE_CONFIG = {
   COINGECKO_API: 'https://api.coingecko.com/api/v3',
   GDOLLAR_ID: 'gooddollar', // GoodDollar's CoinGecko ID
   UPDATE_INTERVAL: 300000, // 5 minutes
-  FALLBACK_PRICE: 0.001, // Fallback price in USD if API fails
+  FALLBACK_PRICE: 0.00011, // Accurate fallback price in USD
   MAX_RETRIES: 3,
   CACHE_DURATION: 300000, // 5 minutes cache
 } as const
