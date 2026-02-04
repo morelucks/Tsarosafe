@@ -33,10 +33,12 @@ export default function GDollarAmount({
 
   const formatUSD = (value: number) => {
     if (format === 'minimal') {
-      if (value < 0.01) return '<$0.01';
+      if (value < 0.0001) return `<$0.0001`;
+      if (value < 0.01) return `$${value.toFixed(4)}`;
       return `$${value.toFixed(2)}`;
     }
-    if (value < 0.01) return '< $0.01';
+    if (value < 0.0001) return `< $0.0001`;
+    if (value < 0.01) return `$${value.toFixed(6)}`;
     return `$${value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   };
 
@@ -106,12 +108,12 @@ export default function GDollarAmount({
 }
 
 // Utility component for inline G$ amounts with USD conversion
-export function InlineGDollarAmount({ 
-  amount, 
+export function InlineGDollarAmount({
+  amount,
   className = "",
-  showBrackets = true 
-}: { 
-  amount: number; 
+  showBrackets = true
+}: {
+  amount: number;
   className?: string;
   showBrackets?: boolean;
 }) {
@@ -129,11 +131,11 @@ export function InlineGDollarAmount({
 }
 
 // Utility component for USD-only display
-export function USDAmount({ 
-  gdollarAmount, 
-  className = "text-gray-600" 
-}: { 
-  gdollarAmount: number; 
+export function USDAmount({
+  gdollarAmount,
+  className = "text-gray-600"
+}: {
+  gdollarAmount: number;
   className?: string;
 }) {
   return (

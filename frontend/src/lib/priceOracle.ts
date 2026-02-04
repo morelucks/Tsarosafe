@@ -30,9 +30,8 @@ class PriceOracleService {
 
       try {
         try {
-          // Use absolute URL if possible to avoid issues in embedded frames like Farcaster
-          const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
-          const apiUrl = `${baseUrl}/api/price`;
+          // Use relative URL - this is most robust for same-origin requests in iframes
+          const apiUrl = '/api/price';
 
           response = await fetch(apiUrl, {
             headers: {

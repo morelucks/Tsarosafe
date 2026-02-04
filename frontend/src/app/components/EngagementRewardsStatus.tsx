@@ -1,11 +1,12 @@
 "use client";
 import { useEngagementRewardsStatus } from "@/hooks/useEngagementRewardsStatus";
-import { useAccount } from "wagmi";
+import { useAccount, useBlockNumber } from "wagmi";
 import { useEffect, useState } from "react";
 
 export default function EngagementRewardsStatus() {
   const { address } = useAccount();
   const { canClaim, lastClaimBlock, isLoading, error } = useEngagementRewardsStatus();
+  const { data: currentBlock } = useBlockNumber();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -18,7 +19,7 @@ export default function EngagementRewardsStatus() {
 
   if (isLoading) {
     return (
-      <div className="bg-white rounded-lg shadow p-6">
+      <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
         <div className="animate-pulse">
           <div className="h-4 bg-gray-200 rounded w-32 mb-2"></div>
           <div className="h-6 bg-gray-200 rounded w-24"></div>
@@ -28,15 +29,20 @@ export default function EngagementRewardsStatus() {
   }
 
   const formatLastClaim = () => {
-    if (!lastClaimBlock || lastClaimBlock === 0n) {
+    if (!lastClaimBlock || lastClaimBlock === 0n || !currentBlock) {
       return "Never claimed";
     }
+
+    // Correctly calculate blocks ago
+    const blocksAgo = Number(currentBlock) - Number(lastClaimBlock);
+
+    if (blocksAgo < 0) return "Just now"; // Should not happen with real-time blocks
+
     // Convert block number to approximate time (assuming ~5s per block on Celo)
-    const blocksAgo = Number(lastClaimBlock);
     const secondsAgo = blocksAgo * 5;
     const minutesAgo = Math.floor(secondsAgo / 60);
     const hoursAgo = Math.floor(minutesAgo / 60);
-    
+
     if (hoursAgo > 24) {
       const daysAgo = Math.floor(hoursAgo / 24);
       return `${daysAgo} day${daysAgo > 1 ? 's' : ''} ago`;
@@ -62,11 +68,10 @@ export default function EngagementRewardsStatus() {
       <div className="space-y-3">
         <div className="flex justify-between items-center">
           <span className="text-sm opacity-90">Status:</span>
-          <span className={`font-medium px-3 py-1 rounded-full text-xs ${
-            canClaim 
-              ? 'bg-green-200 text-green-800' 
-              : 'bg-blue-200 text-blue-800'
-          }`}>
+          <span className={`font-medium px-3 py-1 rounded-full text-xs ${canClaim
+            ? 'bg-green-200 text-green-800'
+            : 'bg-blue-200 text-blue-800'
+            }`}>
             {canClaim ? 'Available' : 'Active'}
           </span>
         </div>
