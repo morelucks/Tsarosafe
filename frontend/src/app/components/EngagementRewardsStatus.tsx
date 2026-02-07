@@ -78,16 +78,19 @@ export default function EngagementRewardsStatus() {
       );
 
       await claimReward(undefined, validUntil, signature);
+      setLocalMessage("Claim submitted successfully!");
     } catch (err) {
-      console.error(err);
-      setLocalMessage("Failed to initiate claim.");
+      console.error('Claim error:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Failed to initiate claim';
+      setLocalMessage(errorMessage);
     }
   };
 
   useEffect(() => {
     if (isConfirmed) {
-      setLocalMessage("🎉 Reward claim submitted!");
-      setTimeout(() => setLocalMessage(null), 5000);
+      setLocalMessage("🎉 Reward claim confirmed!");
+      const timer = setTimeout(() => setLocalMessage(null), 5000);
+      return () => clearTimeout(timer);
     }
   }, [isConfirmed]);
 

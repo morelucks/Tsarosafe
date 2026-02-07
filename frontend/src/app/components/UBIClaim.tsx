@@ -35,7 +35,14 @@ export default function UBIClaim() {
 
     if (timeUntilNextClaim > 0) {
       const interval = setInterval(() => {
-        setTimeLeft(prev => Math.max(0, prev - 1));
+        setTimeLeft(prev => {
+          const newValue = Math.max(0, prev - 1);
+          // Clear interval when countdown reaches 0
+          if (newValue === 0 && interval) {
+            clearInterval(interval);
+          }
+          return newValue;
+        });
       }, 1000);
 
       return () => clearInterval(interval);
