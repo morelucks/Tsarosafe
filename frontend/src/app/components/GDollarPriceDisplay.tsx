@@ -10,18 +10,26 @@ interface GDollarPriceDisplayProps {
   className?: string;
 }
 
-export default function GDollarPriceDisplay({ 
-  showDetails = false, 
+export default function GDollarPriceDisplay({
+  showDetails = false,
   compact = false,
   className = ""
 }: GDollarPriceDisplayProps) {
+  const [mounted, setMounted] = useState(false);
   const { price, isLoading, error, refetch, lastUpdated } = useGDollarPrice();
   const [showRefresh, setShowRefresh] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [apiHealth, setApiHealth] = useState<{ isHealthy: boolean; lastCheck: number } | null>(null);
 
-  // Check API health on mount and periodically
+  // Prevent hydration mismatch
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Check API health on mount and periodically - only after mounted
+  useEffect(() => {
+    if (!mounted) return;
+
     const checkHealth = async () => {
       const status = await priceHealthChecker.checkHealth();
       setApiHealth({ isHealthy: status.isHealthy, lastCheck: status.lastCheck });
@@ -30,7 +38,7 @@ export default function GDollarPriceDisplay({
     checkHealth();
     const interval = setInterval(checkHealth, 60000); // Check every minute
     return () => clearInterval(interval);
-  }, []);
+  }, [mounted]);
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
@@ -41,7 +49,7 @@ export default function GDollarPriceDisplay({
     }
   };
 
-  if (isLoading && !price) {
+  if (!mounted || (isLoading && !price)) {
     return (
       <div className={`bg-white rounded-lg shadow p-4 ${className}`}>
         <div className="animate-pulse">
@@ -109,11 +117,11 @@ export default function GDollarPriceDisplay({
     const now = Date.now();
     const diff = now - lastUpdated;
     const minutes = Math.floor(diff / 60000);
-    
+
     if (minutes < 1) return 'Just now';
     if (minutes === 1) return '1 minute ago';
     if (minutes < 60) return `${minutes} minutes ago`;
-    
+
     const hours = Math.floor(minutes / 60);
     if (hours === 1) return '1 hour ago';
     return `${hours} hours ago`;
@@ -135,7 +143,7 @@ export default function GDollarPriceDisplay({
   }
 
   return (
-    <div 
+    <div
       className={`bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow p-4 text-white ${className}`}
       onMouseEnter={() => setShowRefresh(true)}
       onMouseLeave={() => setShowRefresh(false)}
@@ -154,10 +162,10 @@ export default function GDollarPriceDisplay({
               className="text-white hover:text-blue-200 transition-colors disabled:opacity-50"
               title="Refresh price"
             >
-              <svg 
-                className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} 
-                fill="none" 
-                stroke="currentColor" 
+              <svg
+                className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`}
+                fill="none"
+                stroke="currentColor"
                 viewBox="0 0 24 24"
               >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -178,9 +186,8 @@ export default function GDollarPriceDisplay({
         {price.change24h !== undefined && (
           <div className="flex justify-between items-center">
             <span className="text-sm opacity-90">24h Change:</span>
-            <span className={`font-medium ${
-              price.change24h >= 0 ? 'text-green-200' : 'text-red-200'
-            }`}>
+            <span className={`font-medium ${price.change24h >= 0 ? 'text-green-200' : 'text-red-200'
+              }`}>
               {formatChange(price.change24h)}
             </span>
           </div>
@@ -215,9 +222,8 @@ export default function GDollarPriceDisplay({
           </div>
           {apiHealth && (
             <div className="flex items-center justify-end mt-1">
-              <div className={`w-2 h-2 rounded-full mr-1 ${
-                apiHealth.isHealthy ? 'bg-green-300' : 'bg-red-300'
-              }`}></div>
+              <div className={`w-2 h-2 rounded-full mr-1 ${apiHealth.isHealthy ? 'bg-green-300' : 'bg-red-300'
+                }`}></div>
               <span className="text-xs opacity-75">
                 {apiHealth.isHealthy ? 'API Online' : 'API Offline'}
               </span>
