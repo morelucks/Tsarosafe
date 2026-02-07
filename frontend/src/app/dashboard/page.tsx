@@ -129,14 +129,39 @@ const DashboardPage = () => {
 
   const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([]);
 
-  const { address, chain } = useAccount();
-  const { switchChain } = useSwitchChain();
-  const isCelo = chain?.id === 42220 || chain?.id === 44787;
-
   // Prevent hydration mismatch by only rendering after mount
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Return early if not mounted to prevent hooks from being called during SSR
+  if (!mounted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-7xl">
+          <CardSkeleton />
+          <CardSkeleton />
+          <CardSkeleton />
+          <CardSkeleton />
+        </div>
+      </div>
+    );
+  }
+
+  return <DashboardContent stats={stats} setStats={setStats} recentActivity={recentActivity} setRecentActivity={setRecentActivity} />;
+};
+
+// Separate component that uses wagmi hooks - only rendered client-side
+function DashboardContent({ stats, setStats, recentActivity, setRecentActivity }: {
+  stats: DashboardStats;
+  setStats: React.Dispatch<React.SetStateAction<DashboardStats>>;
+  recentActivity: RecentActivity[];
+  setRecentActivity: React.Dispatch<React.SetStateAction<RecentActivity[]>>;
+}) {
+  const { address, chain } = useAccount();
+  const { switchChain } = useSwitchChain();
+  const isCelo = chain?.id === 42220 || chain?.id === 44787;
+
   const { groupIds: groupIdsData, isLoading: isLoadingGroups } = useUserGroups(address as Address | undefined);
   const groupIds = groupIdsData as bigint[] | undefined;
   const { claimableAmountFormatted, canClaim } = useUBIClaimInfo();
@@ -204,8 +229,8 @@ const DashboardPage = () => {
   const isLoading = isLoadingGroups;
   const savingsProgress = (stats.totalSavings / stats.monthlyGoal) * 100;
 
-  // Show loading state until mounted to prevent hydration mismatch
-  if (!mounted || isLoading) {
+  // Show loading state while data is being fetched
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center p-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-7xl">
