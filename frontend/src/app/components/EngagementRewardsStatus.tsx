@@ -7,20 +7,30 @@ import { calculateValidUntilBlock, generateSignature } from "@/lib/engagementRew
 import { Address } from "viem";
 
 export default function EngagementRewardsStatus() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
+
+  return <EngagementRewardsStatusContent />;
+}
+
+// Separate component that uses wagmi hooks - only rendered client-side
+function EngagementRewardsStatusContent() {
   const { address, chain } = useAccount();
   const { switchChain } = useSwitchChain();
   const { canClaim, lastClaimBlock, isLoading, error } = useEngagementRewardsStatus();
   const { data: currentBlock } = useBlockNumber();
   const { claimReward, isLoading: isClaiming, isConfirmed } = useClaimEngagementReward();
   const { getCurrentBlock } = useCurrentBlockNumber();
-  const [mounted, setMounted] = useState(false);
   const [localMessage, setLocalMessage] = useState<string | null>(null);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted || !address) {
+  if (!address) {
     return null;
   }
 
