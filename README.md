@@ -10,7 +10,7 @@ Through smart contracts, TsaroSafe automates transactions and eliminates the nee
 
 ## Try It
 
-- **Farcaster Miniapp**=> [https://farcaster.xyz/miniapps/sDESpTl8Yokz/tsarosafe](https://farcaster.xyz/miniapps/sDESpTl8Yokz/tsarosafe)
+- **Farcaster Miniapp** : => [https://farcaster.xyz/miniapps/sDESpTl8Yokz/tsarosafe](https://farcaster.xyz/miniapps/sDESpTl8Yokz/tsarosafe)
 
 ## Mission
 
