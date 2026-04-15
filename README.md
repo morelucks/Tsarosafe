@@ -119,7 +119,7 @@ tsarosafe/
 
 - Node.js 18+ (for frontend)
 - Foundry (for smart contracts)
-- Git
+- version control:Git
 
 ### Installation
 
