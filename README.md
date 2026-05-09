@@ -142,9 +142,9 @@ npm run dev
 
 ## Technology Stack
 
-- **Smart Contracts**: Solidity, Foundry
+- **Smart Contracts**: Solidity, Foundry (EVM), Clarity (Stacks)
 - **Frontend**: Next.js 16, TypeScript, React 19
-- **Blockchains**: Base & Celo (primary deployment targets)
+- **Blockchains**: Base, Celo, & Stacks (primary deployment targets)
 - **Wallet Integration**: Reown (WalletConnect), Wagmi
 - **Token Support**: Native ETH, CELO, GoodDollar (G$), and ERC20 tokens
 
@@ -167,11 +167,13 @@ npm run dev
 
 ## Network Configuration
 
-TsaroSafe is designed to run on **Base** and **Celo**:
+TsaroSafe is designed to run on **Base**, **Celo**, and **Stacks**:
 
 - **Base Mainnet**: Chain ID `8453`
 - **Base Sepolia Testnet**: Chain ID `84532`
 - **Celo Mainnet**: Chain ID `42220`
+- **Stacks Mainnet**: Chain ID `1`
+- **Stacks Testnet**: Chain ID `2147483648`
 
 The smart contracts project (`contracts/`) is configured with RPC endpoints for both Base and Celo in `foundry.toml`, and deployment scripts are provided for:
 
