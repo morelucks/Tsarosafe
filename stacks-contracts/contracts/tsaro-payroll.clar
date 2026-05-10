@@ -124,3 +124,21 @@
 ;; Lower number = higher privilege
 (define-private (has-role (company-id uint) (caller principal) (required-role uint))
   (if (is-company-owner company-id caller)
+    true
+    (match (map-get? company-roles { company-id: company-id, member: caller })
+      role (<= role required-role)
+      false
+    )
+  )
+)
+
+;; ==========================================
+;; Public Functions: Company Management
+;; ==========================================
+
+;; Register a new company
+(define-public (register-company (name (string-ascii 64)) (treasury principal))
+  (let
+    (
+      (company-id (var-get next-company-id))
+    )
