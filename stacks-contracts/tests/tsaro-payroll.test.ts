@@ -232,3 +232,29 @@ describe('tsaro-payroll', () => {
       const result = simnet.callPublicFn(
         'tsaro-payroll',
         'add-employee',
+        [Cl.uint(1), Cl.principal(wallet3), Cl.stringAscii('Alice'), Cl.uint(0)],
+        wallet1
+      );
+      expect(result.result).toBeErr(Cl.uint(1005));
+    });
+
+    it('should update an employee salary', () => {
+      simnet.callPublicFn(
+        'tsaro-payroll',
+        'register-company',
+        [Cl.stringAscii('TsaroCorp'), Cl.principal(wallet1)],
+        wallet1
+      );
+      simnet.callPublicFn(
+        'tsaro-payroll',
+        'add-employee',
+        [Cl.uint(1), Cl.principal(wallet3), Cl.stringAscii('Alice'), Cl.uint(1000000)],
+        wallet1
+      );
+      const result = simnet.callPublicFn(
+        'tsaro-payroll',
+        'update-salary',
+        [Cl.uint(1), Cl.principal(wallet3), Cl.uint(2000000)],
+        wallet1
+      );
+      expect(result.result).toBeOk(Cl.bool(true));
