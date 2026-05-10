@@ -76,3 +76,29 @@ describe('tsaro-payroll', () => {
         })
       );
     });
+
+    it('should look up company by owner', () => {
+      simnet.callPublicFn(
+        'tsaro-payroll',
+        'register-company',
+        [Cl.stringAscii('TsaroCorp'), Cl.principal(wallet1)],
+        wallet1
+      );
+      const result = simnet.callReadOnlyFn(
+        'tsaro-payroll',
+        'get-company-by-owner',
+        [Cl.principal(wallet1)],
+        wallet1
+      );
+      expect(result.result).toBeSome(Cl.uint(1));
+    });
+  });
+
+  // ==========================================
+  // Role Management
+  // ==========================================
+  describe('Role Management', () => {
+    it('should assign a manager role', () => {
+      simnet.callPublicFn(
+        'tsaro-payroll',
+        'register-company',
