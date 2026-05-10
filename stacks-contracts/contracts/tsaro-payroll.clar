@@ -412,3 +412,22 @@
   (map-get? payments payment-id)
 )
 
+;; Get a member's role in a company
+(define-read-only (get-role (company-id uint) (member principal))
+  (map-get? company-roles { company-id: company-id, member: member })
+)
+
+;; Get total payment count for a company
+(define-read-only (get-payment-count (company-id uint))
+  (default-to u0 (map-get? company-payment-count company-id))
+)
+
+;; Check if a principal is an admin for a company
+(define-read-only (is-admin (company-id uint) (member principal))
+  (has-role company-id member ROLE_ADMIN)
+)
+
+;; Check if a principal is at least a manager for a company
+(define-read-only (is-manager (company-id uint) (member principal))
+  (has-role company-id member ROLE_MANAGER)
+)
