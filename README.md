@@ -176,6 +176,11 @@ TsaroSafe is designed to run on **Base**, **Celo**, and **Stacks**:
 - **Stacks Testnet**: Chain ID `2147483648`
 
 The smart contracts project (`contracts/`) is configured with RPC endpoints for both Base and Celo in `foundry.toml`, and deployment scripts are provided for:
+### Deployed Contracts (Mainnet)
+
+#### Stacks
+- **TsaroPayroll**: `SP34MN3DMM07BNAWYJSHTS4B08T8JRVK8AT810X1B.tsaro-payroll`
+
 
 - `TsaroToken` and `TsaroSafe` on Base / Celo
 - `TsaroSafeRewardsAdapter` on **Celo Mainnet** for GoodDollar EngagementRewards integration
