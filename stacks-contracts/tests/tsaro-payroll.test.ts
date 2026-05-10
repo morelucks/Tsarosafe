@@ -102,3 +102,29 @@ describe('tsaro-payroll', () => {
       simnet.callPublicFn(
         'tsaro-payroll',
         'register-company',
+        [Cl.stringAscii('TsaroCorp'), Cl.principal(wallet1)],
+        wallet1
+      );
+      const result = simnet.callPublicFn(
+        'tsaro-payroll',
+        'assign-role',
+        [Cl.uint(1), Cl.principal(wallet2), Cl.uint(ROLE_MANAGER)],
+        wallet1
+      );
+      expect(result.result).toBeOk(Cl.bool(true));
+    });
+
+    it('should prevent non-admins from assigning roles', () => {
+      simnet.callPublicFn(
+        'tsaro-payroll',
+        'register-company',
+        [Cl.stringAscii('TsaroCorp'), Cl.principal(wallet1)],
+        wallet1
+      );
+      const result = simnet.callPublicFn(
+        'tsaro-payroll',
+        'assign-role',
+        [Cl.uint(1), Cl.principal(wallet3), Cl.uint(ROLE_MANAGER)],
+        wallet5
+      );
+      expect(result.result).toBeErr(Cl.uint(1000));
