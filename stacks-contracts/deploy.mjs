@@ -28,9 +28,15 @@ async function run() {
 
   try {
     const transaction = await makeContractDeploy(txOptions);
-    const txid = await broadcastTransaction({ transaction, network });
-    console.log('Contract deployment broadcasted!');
-    console.log('Transaction ID:', txid.txid || txid);
+    console.log('Transaction built, broadcasting...');
+    const result = await broadcastTransaction({ transaction, network });
+    console.log('Broadcast result:', JSON.stringify(result, null, 2));
+    if (result.error) {
+      console.error('Transaction REJECTED:', result.reason);
+    } else {
+      console.log('Contract deployment broadcasted!');
+      console.log('Transaction ID:', result.txid);
+    }
   } catch (error) {
     console.error('Deployment failed:', error);
   }
