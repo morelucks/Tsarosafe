@@ -388,3 +388,29 @@ describe('tsaro-payroll', () => {
           Cl.uint(1),
           Cl.principal(wallet3),
           Cl.uint(500000),
+          Cl.stringAscii('May salary'),
+          Cl.principal(`${deployer}.tsaro-token`),
+        ],
+        deployer
+      );
+      expect(result.result).toBeErr(Cl.uint(1007));
+    });
+
+    it('should track payment history via get-payment', () => {
+      simnet.callPublicFn(
+        'tsaro-payroll',
+        'register-company',
+        [Cl.stringAscii('TsaroCorp'), Cl.principal(deployer)],
+        deployer
+      );
+      simnet.callPublicFn(
+        'tsaro-payroll',
+        'add-employee',
+        [Cl.uint(1), Cl.principal(wallet3), Cl.stringAscii('Alice'), Cl.uint(1000000)],
+        deployer
+      );
+      simnet.callPublicFn(
+        'tsaro-payroll',
+        'pay-employee',
+        [
+          Cl.uint(1),
