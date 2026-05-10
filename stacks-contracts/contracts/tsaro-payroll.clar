@@ -340,3 +340,21 @@
     ;; Amount must be > 0
     (asserts! (> amount u0) ERR_INVALID_AMOUNT)
 
+    ;; Execute the SIP-010 token transfer from treasury to employee
+    (unwrap! (contract-call? token transfer amount treasury employee none) ERR_PAYMENT_FAILED)
+
+    ;; Record the payment
+    (map-set payments payment-id
+      {
+        company-id: company-id,
+        employee: employee,
+        amount: amount,
+        paid-at: burn-block-height,
+        memo: memo
+      }
+    )
+
+    ;; Update employee's payment history
+    (map-set employees
+      { company-id: company-id, employee: employee }
+      (merge emp {
