@@ -358,3 +358,21 @@
     (map-set employees
       { company-id: company-id, employee: employee }
       (merge emp {
+        total-received: (+ (get total-received emp) amount),
+        last-paid-at: burn-block-height
+      })
+    )
+
+    ;; Update company's total paid
+    (map-set companies company-id
+      (merge company { total-paid: (+ (get total-paid company) amount) })
+    )
+
+    ;; Update payment count
+    (map-set company-payment-count company-id
+      (+ (default-to u0 (map-get? company-payment-count company-id)) u1)
+    )
+
+    ;; Increment payment ID
+    (var-set next-payment-id (+ payment-id u1))
+
