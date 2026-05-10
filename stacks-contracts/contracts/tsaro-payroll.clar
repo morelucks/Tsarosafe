@@ -70,3 +70,21 @@
   uint
 )
 
+;; Company roles: { company-id, member } -> role
+(define-map company-roles
+  { company-id: uint, member: principal }
+  uint
+)
+
+;; Employee registry: { company-id, employee-wallet } -> employee details
+(define-map employees
+  { company-id: uint, employee: principal }
+  {
+    name: (string-ascii 64),
+    salary: uint,
+    start-date: uint,
+    active: bool,
+    total-received: uint,
+    last-paid-at: uint
+  }
+)
