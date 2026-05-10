@@ -206,3 +206,29 @@ describe('tsaro-payroll', () => {
         'register-company',
         [Cl.stringAscii('TsaroCorp'), Cl.principal(wallet1)],
         wallet1
+      );
+      simnet.callPublicFn(
+        'tsaro-payroll',
+        'add-employee',
+        [Cl.uint(1), Cl.principal(wallet3), Cl.stringAscii('Alice'), Cl.uint(1000000)],
+        wallet1
+      );
+      const result = simnet.callPublicFn(
+        'tsaro-payroll',
+        'add-employee',
+        [Cl.uint(1), Cl.principal(wallet3), Cl.stringAscii('Alice2'), Cl.uint(2000000)],
+        wallet1
+      );
+      expect(result.result).toBeErr(Cl.uint(1003));
+    });
+
+    it('should reject zero salary', () => {
+      simnet.callPublicFn(
+        'tsaro-payroll',
+        'register-company',
+        [Cl.stringAscii('TsaroCorp'), Cl.principal(wallet1)],
+        wallet1
+      );
+      const result = simnet.callPublicFn(
+        'tsaro-payroll',
+        'add-employee',
