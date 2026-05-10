@@ -52,3 +52,21 @@
 
 ;; Company registry: company-id -> company details
 (define-map companies
+  uint
+  {
+    name: (string-ascii 64),
+    owner: principal,
+    treasury: principal,
+    employee-count: uint,
+    total-paid: uint,
+    created-at: uint,
+    active: bool
+  }
+)
+
+;; Lookup: owner principal -> company-id
+(define-map company-by-owner
+  principal
+  uint
+)
+
