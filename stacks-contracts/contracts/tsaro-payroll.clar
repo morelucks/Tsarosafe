@@ -232,3 +232,21 @@
         start-date: burn-block-height,
         active: true,
         total-received: u0,
+        last-paid-at: u0
+      }
+    )
+
+    ;; Update employee count
+    (map-set companies company-id
+      (merge company { employee-count: (+ (get employee-count company) u1) })
+    )
+
+    (print { event: "employee-added", company-id: company-id, employee: employee, name: name, salary: salary })
+    (ok true)
+  )
+)
+
+;; Update an employee's salary (Admin or Manager)
+(define-public (update-salary (company-id uint) (employee principal) (new-salary uint))
+  (let
+    (
