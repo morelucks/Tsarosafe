@@ -284,3 +284,29 @@ describe('tsaro-payroll', () => {
 
     it('should reactivate an employee', () => {
       simnet.callPublicFn(
+        'tsaro-payroll',
+        'register-company',
+        [Cl.stringAscii('TsaroCorp'), Cl.principal(wallet1)],
+        wallet1
+      );
+      simnet.callPublicFn(
+        'tsaro-payroll',
+        'add-employee',
+        [Cl.uint(1), Cl.principal(wallet3), Cl.stringAscii('Alice'), Cl.uint(1000000)],
+        wallet1
+      );
+      simnet.callPublicFn(
+        'tsaro-payroll',
+        'deactivate-employee',
+        [Cl.uint(1), Cl.principal(wallet3)],
+        wallet1
+      );
+      const result = simnet.callPublicFn(
+        'tsaro-payroll',
+        'reactivate-employee',
+        [Cl.uint(1), Cl.principal(wallet3)],
+        wallet1
+      );
+      expect(result.result).toBeOk(Cl.bool(true));
+    });
+
