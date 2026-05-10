@@ -414,3 +414,29 @@ describe('tsaro-payroll', () => {
         'pay-employee',
         [
           Cl.uint(1),
+          Cl.principal(wallet3),
+          Cl.uint(500000),
+          Cl.stringAscii('May salary'),
+          Cl.principal(`${deployer}.tsaro-token`),
+        ],
+        deployer
+      );
+      const result = simnet.callReadOnlyFn(
+        'tsaro-payroll',
+        'get-payment',
+        [Cl.uint(1)],
+        deployer
+      );
+      expect(result.result).toBeSome(
+        Cl.tuple({
+          'company-id': Cl.uint(1),
+          employee: Cl.principal(wallet3),
+          amount: Cl.uint(500000),
+          'paid-at': Cl.uint(simnet.burnBlockHeight),
+          memo: Cl.stringAscii('May salary'),
+        })
+      );
+    });
+
+    it('should increment the company payment count', () => {
+      simnet.callPublicFn(
