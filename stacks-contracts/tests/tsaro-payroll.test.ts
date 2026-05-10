@@ -180,3 +180,29 @@ describe('tsaro-payroll', () => {
   // ==========================================
   describe('Employee Management', () => {
     it('should add an employee', () => {
+      simnet.callPublicFn(
+        'tsaro-payroll',
+        'register-company',
+        [Cl.stringAscii('TsaroCorp'), Cl.principal(wallet1)],
+        wallet1
+      );
+      const result = simnet.callPublicFn(
+        'tsaro-payroll',
+        'add-employee',
+        [
+          Cl.uint(1),
+          Cl.principal(wallet3),
+          Cl.stringAscii('Alice'),
+          Cl.uint(1000000),
+        ],
+        wallet1
+      );
+      expect(result.result).toBeOk(Cl.bool(true));
+    });
+
+    it('should prevent duplicate employee', () => {
+      simnet.callPublicFn(
+        'tsaro-payroll',
+        'register-company',
+        [Cl.stringAscii('TsaroCorp'), Cl.principal(wallet1)],
+        wallet1
