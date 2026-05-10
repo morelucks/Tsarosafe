@@ -154,3 +154,29 @@ describe('tsaro-payroll', () => {
 
     it('should return correct role for a member', () => {
       simnet.callPublicFn(
+        'tsaro-payroll',
+        'register-company',
+        [Cl.stringAscii('TsaroCorp'), Cl.principal(wallet1)],
+        wallet1
+      );
+      simnet.callPublicFn(
+        'tsaro-payroll',
+        'assign-role',
+        [Cl.uint(1), Cl.principal(wallet2), Cl.uint(ROLE_VIEWER)],
+        wallet1
+      );
+      const result = simnet.callReadOnlyFn(
+        'tsaro-payroll',
+        'get-role',
+        [Cl.uint(1), Cl.principal(wallet2)],
+        wallet1
+      );
+      expect(result.result).toBeSome(Cl.uint(ROLE_VIEWER));
+    });
+  });
+
+  // ==========================================
+  // Employee Management
+  // ==========================================
+  describe('Employee Management', () => {
+    it('should add an employee', () => {
