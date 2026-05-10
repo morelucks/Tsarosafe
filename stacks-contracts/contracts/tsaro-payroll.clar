@@ -196,3 +196,21 @@
 
     (print { event: "role-revoked", company-id: company-id, member: member })
     (ok true)
+  )
+)
+
+;; ==========================================
+;; Public Functions: Employee Management
+;; ==========================================
+
+;; Onboard a new employee (Admin or Manager)
+(define-public (add-employee
+    (company-id uint)
+    (employee principal)
+    (name (string-ascii 64))
+    (salary uint)
+  )
+  (let
+    (
+      (company (unwrap! (map-get? companies company-id) ERR_COMPANY_NOT_FOUND))
+    )
