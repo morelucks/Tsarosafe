@@ -492,3 +492,35 @@ describe('tsaro-payroll', () => {
       );
       expect(adminCheck.result).toBeBool(true);
 
+      const nonAdminCheck = simnet.callReadOnlyFn(
+        'tsaro-payroll',
+        'is-admin',
+        [Cl.uint(1), Cl.principal(wallet5)],
+        wallet1
+      );
+      expect(nonAdminCheck.result).toBeBool(false);
+    });
+
+    it('should correctly report is-manager', () => {
+      simnet.callPublicFn(
+        'tsaro-payroll',
+        'register-company',
+        [Cl.stringAscii('TsaroCorp'), Cl.principal(wallet1)],
+        wallet1
+      );
+      simnet.callPublicFn(
+        'tsaro-payroll',
+        'assign-role',
+        [Cl.uint(1), Cl.principal(wallet2), Cl.uint(ROLE_MANAGER)],
+        wallet1
+      );
+      const managerCheck = simnet.callReadOnlyFn(
+        'tsaro-payroll',
+        'is-manager',
+        [Cl.uint(1), Cl.principal(wallet2)],
+        wallet1
+      );
+      expect(managerCheck.result).toBeBool(true);
+    });
+  });
+});
