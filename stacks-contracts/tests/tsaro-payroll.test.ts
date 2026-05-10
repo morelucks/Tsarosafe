@@ -466,3 +466,29 @@ describe('tsaro-payroll', () => {
       const result = simnet.callReadOnlyFn(
         'tsaro-payroll',
         'get-payment-count',
+        [Cl.uint(1)],
+        deployer
+      );
+      expect(result.result).toBeUint(1);
+    });
+  });
+
+  // ==========================================
+  // Read-Only Helpers
+  // ==========================================
+  describe('Read-Only Helpers', () => {
+    it('should correctly report is-admin', () => {
+      simnet.callPublicFn(
+        'tsaro-payroll',
+        'register-company',
+        [Cl.stringAscii('TsaroCorp'), Cl.principal(wallet1)],
+        wallet1
+      );
+      const adminCheck = simnet.callReadOnlyFn(
+        'tsaro-payroll',
+        'is-admin',
+        [Cl.uint(1), Cl.principal(wallet1)],
+        wallet1
+      );
+      expect(adminCheck.result).toBeBool(true);
+
