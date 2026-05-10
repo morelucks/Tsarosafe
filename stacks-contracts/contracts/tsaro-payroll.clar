@@ -214,3 +214,21 @@
     (
       (company (unwrap! (map-get? companies company-id) ERR_COMPANY_NOT_FOUND))
     )
+    ;; Must be admin or manager
+    (asserts! (has-role company-id tx-sender ROLE_MANAGER) ERR_NOT_AUTHORIZED)
+    ;; Employee must not already exist
+    (asserts! (is-none (map-get? employees { company-id: company-id, employee: employee })) ERR_EMPLOYEE_EXISTS)
+    ;; Check max employees limit
+    (asserts! (< (get employee-count company) MAX_EMPLOYEES_PER_COMPANY) ERR_MAX_EMPLOYEES)
+    ;; Salary must be > 0
+    (asserts! (> salary u0) ERR_INVALID_AMOUNT)
+
+    ;; Create employee record
+    (map-set employees
+      { company-id: company-id, employee: employee }
+      {
+        name: name,
+        salary: salary,
+        start-date: burn-block-height,
+        active: true,
+        total-received: u0,
