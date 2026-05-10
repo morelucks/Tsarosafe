@@ -394,3 +394,21 @@
 
 ;; Get company details
 (define-read-only (get-company (company-id uint))
+  (map-get? companies company-id)
+)
+
+;; Get company ID by owner
+(define-read-only (get-company-by-owner (owner principal))
+  (map-get? company-by-owner owner)
+)
+
+;; Get employee details
+(define-read-only (get-employee (company-id uint) (employee principal))
+  (map-get? employees { company-id: company-id, employee: employee })
+)
+
+;; Get a specific payment record
+(define-read-only (get-payment (payment-id uint))
+  (map-get? payments payment-id)
+)
+
