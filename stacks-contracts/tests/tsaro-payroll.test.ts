@@ -24,3 +24,29 @@ describe('tsaro-payroll', () => {
   // ==========================================
   describe('Company Registration', () => {
     it('should register a new company successfully', () => {
+      const result = simnet.callPublicFn(
+        'tsaro-payroll',
+        'register-company',
+        [Cl.stringAscii('TsaroCorp'), Cl.principal(wallet1)],
+        wallet1
+      );
+      expect(result.result).toBeOk(Cl.uint(1));
+    });
+
+    it('should prevent duplicate company registration', () => {
+      // First registration
+      simnet.callPublicFn(
+        'tsaro-payroll',
+        'register-company',
+        [Cl.stringAscii('TsaroCorp'), Cl.principal(wallet1)],
+        wallet1
+      );
+      // Duplicate attempt
+      const result = simnet.callPublicFn(
+        'tsaro-payroll',
+        'register-company',
+        [Cl.stringAscii('TsaroCorp2'), Cl.principal(wallet1)],
+        wallet1
+      );
+      expect(result.result).toBeErr(Cl.uint(1001));
+    });
