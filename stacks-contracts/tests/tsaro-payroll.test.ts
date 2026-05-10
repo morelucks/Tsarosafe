@@ -362,3 +362,29 @@ describe('tsaro-payroll', () => {
       expect(result.result).toBeOk(Cl.uint(1));
     });
 
+    it('should reject payment to inactive employee', () => {
+      simnet.callPublicFn(
+        'tsaro-payroll',
+        'register-company',
+        [Cl.stringAscii('TsaroCorp'), Cl.principal(deployer)],
+        deployer
+      );
+      simnet.callPublicFn(
+        'tsaro-payroll',
+        'add-employee',
+        [Cl.uint(1), Cl.principal(wallet3), Cl.stringAscii('Alice'), Cl.uint(1000000)],
+        deployer
+      );
+      simnet.callPublicFn(
+        'tsaro-payroll',
+        'deactivate-employee',
+        [Cl.uint(1), Cl.principal(wallet3)],
+        deployer
+      );
+      const result = simnet.callPublicFn(
+        'tsaro-payroll',
+        'pay-employee',
+        [
+          Cl.uint(1),
+          Cl.principal(wallet3),
+          Cl.uint(500000),
