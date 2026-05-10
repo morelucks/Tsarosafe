@@ -336,3 +336,29 @@ describe('tsaro-payroll', () => {
       simnet.callPublicFn(
         'tsaro-payroll',
         'register-company',
+        [Cl.stringAscii('TsaroCorp'), Cl.principal(deployer)],
+        deployer
+      );
+      // Add employee
+      simnet.callPublicFn(
+        'tsaro-payroll',
+        'add-employee',
+        [Cl.uint(1), Cl.principal(wallet3), Cl.stringAscii('Alice'), Cl.uint(1000000)],
+        deployer
+      );
+      // Pay the employee
+      const result = simnet.callPublicFn(
+        'tsaro-payroll',
+        'pay-employee',
+        [
+          Cl.uint(1),
+          Cl.principal(wallet3),
+          Cl.uint(500000),
+          Cl.stringAscii('May salary'),
+          Cl.principal(`${deployer}.tsaro-token`),
+        ],
+        deployer
+      );
+      expect(result.result).toBeOk(Cl.uint(1));
+    });
+
