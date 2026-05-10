@@ -304,3 +304,21 @@
       (merge emp { active: true })
     )
 
+    ;; Increment employee count
+    (map-set companies company-id
+      (merge company { employee-count: (+ (get employee-count company) u1) })
+    )
+
+    (print { event: "employee-reactivated", company-id: company-id, employee: employee })
+    (ok true)
+  )
+)
+
+;; ==========================================
+;; Public Functions: Payments
+;; ==========================================
+
+;; Pay a single employee (Admin or Manager)
+(define-public (pay-employee
+    (company-id uint)
+    (employee principal)
