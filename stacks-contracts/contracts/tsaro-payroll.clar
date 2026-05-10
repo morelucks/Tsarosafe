@@ -178,3 +178,21 @@
     ;; Only admin/owner can assign roles
     (asserts! (has-role company-id tx-sender ROLE_ADMIN) ERR_NOT_AUTHORIZED)
     ;; Validate role value
+    (asserts! (and (>= role ROLE_ADMIN) (<= role ROLE_VIEWER)) ERR_INVALID_ROLE)
+
+    (map-set company-roles { company-id: company-id, member: member } role)
+
+    (print { event: "role-assigned", company-id: company-id, member: member, role: role })
+    (ok true)
+  )
+)
+
+;; Remove a team member's role (Admin only)
+(define-public (revoke-role (company-id uint) (member principal))
+  (begin
+    (asserts! (has-role company-id tx-sender ROLE_ADMIN) ERR_NOT_AUTHORIZED)
+
+    (map-delete company-roles { company-id: company-id, member: member })
+
+    (print { event: "role-revoked", company-id: company-id, member: member })
+    (ok true)
