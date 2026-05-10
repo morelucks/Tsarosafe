@@ -322,3 +322,21 @@
 (define-public (pay-employee
     (company-id uint)
     (employee principal)
+    (amount uint)
+    (memo (string-ascii 128))
+    (token <sip-010-trait>)
+  )
+  (let
+    (
+      (company (unwrap! (map-get? companies company-id) ERR_COMPANY_NOT_FOUND))
+      (emp (unwrap! (map-get? employees { company-id: company-id, employee: employee }) ERR_EMPLOYEE_NOT_FOUND))
+      (payment-id (var-get next-payment-id))
+      (treasury (get treasury company))
+    )
+    ;; Must be admin or manager to pay
+    (asserts! (has-role company-id tx-sender ROLE_MANAGER) ERR_NOT_AUTHORIZED)
+    ;; Employee must be active
+    (asserts! (get active emp) ERR_EMPLOYEE_INACTIVE)
+    ;; Amount must be > 0
+    (asserts! (> amount u0) ERR_INVALID_AMOUNT)
+
