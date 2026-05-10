@@ -268,3 +268,21 @@
 ;; Deactivate an employee (Admin or Manager)
 (define-public (deactivate-employee (company-id uint) (employee principal))
   (let
+    (
+      (emp (unwrap! (map-get? employees { company-id: company-id, employee: employee }) ERR_EMPLOYEE_NOT_FOUND))
+      (company (unwrap! (map-get? companies company-id) ERR_COMPANY_NOT_FOUND))
+    )
+    (asserts! (has-role company-id tx-sender ROLE_MANAGER) ERR_NOT_AUTHORIZED)
+
+    (map-set employees
+      { company-id: company-id, employee: employee }
+      (merge emp { active: false })
+    )
+
+    ;; Decrement employee count
+    (map-set companies company-id
+      (merge company { employee-count: (- (get employee-count company) u1) })
+    )
+
+    (print { event: "employee-deactivated", company-id: company-id, employee: employee })
+    (ok true)
