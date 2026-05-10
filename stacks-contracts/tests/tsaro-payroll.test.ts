@@ -440,3 +440,29 @@ describe('tsaro-payroll', () => {
 
     it('should increment the company payment count', () => {
       simnet.callPublicFn(
+        'tsaro-payroll',
+        'register-company',
+        [Cl.stringAscii('TsaroCorp'), Cl.principal(deployer)],
+        deployer
+      );
+      simnet.callPublicFn(
+        'tsaro-payroll',
+        'add-employee',
+        [Cl.uint(1), Cl.principal(wallet3), Cl.stringAscii('Alice'), Cl.uint(1000000)],
+        deployer
+      );
+      simnet.callPublicFn(
+        'tsaro-payroll',
+        'pay-employee',
+        [
+          Cl.uint(1),
+          Cl.principal(wallet3),
+          Cl.uint(500000),
+          Cl.stringAscii('May salary'),
+          Cl.principal(`${deployer}.tsaro-token`),
+        ],
+        deployer
+      );
+      const result = simnet.callReadOnlyFn(
+        'tsaro-payroll',
+        'get-payment-count',
