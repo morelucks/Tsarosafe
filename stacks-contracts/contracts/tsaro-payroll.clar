@@ -250,3 +250,21 @@
 (define-public (update-salary (company-id uint) (employee principal) (new-salary uint))
   (let
     (
+      (emp (unwrap! (map-get? employees { company-id: company-id, employee: employee }) ERR_EMPLOYEE_NOT_FOUND))
+    )
+    (asserts! (has-role company-id tx-sender ROLE_MANAGER) ERR_NOT_AUTHORIZED)
+    (asserts! (> new-salary u0) ERR_INVALID_AMOUNT)
+
+    (map-set employees
+      { company-id: company-id, employee: employee }
+      (merge emp { salary: new-salary })
+    )
+
+    (print { event: "salary-updated", company-id: company-id, employee: employee, new-salary: new-salary })
+    (ok true)
+  )
+)
+
+;; Deactivate an employee (Admin or Manager)
+(define-public (deactivate-employee (company-id uint) (employee principal))
+  (let
