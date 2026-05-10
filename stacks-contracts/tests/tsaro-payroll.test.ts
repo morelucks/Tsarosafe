@@ -310,3 +310,29 @@ describe('tsaro-payroll', () => {
       expect(result.result).toBeOk(Cl.bool(true));
     });
 
+    it('should prevent unauthorized users from adding employees', () => {
+      simnet.callPublicFn(
+        'tsaro-payroll',
+        'register-company',
+        [Cl.stringAscii('TsaroCorp'), Cl.principal(wallet1)],
+        wallet1
+      );
+      const result = simnet.callPublicFn(
+        'tsaro-payroll',
+        'add-employee',
+        [Cl.uint(1), Cl.principal(wallet3), Cl.stringAscii('Alice'), Cl.uint(1000000)],
+        wallet5
+      );
+      expect(result.result).toBeErr(Cl.uint(1000));
+    });
+  });
+
+  // ==========================================
+  // Payments
+  // ==========================================
+  describe('Payments', () => {
+    it('should pay an employee with tsaro-token', () => {
+      // Register company with deployer as treasury (deployer has the token supply)
+      simnet.callPublicFn(
+        'tsaro-payroll',
+        'register-company',
