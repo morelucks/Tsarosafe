@@ -160,3 +160,21 @@
 
     ;; Map owner to company
     (map-set company-by-owner tx-sender company-id)
+
+    ;; Grant admin role to the owner
+    (map-set company-roles { company-id: company-id, member: tx-sender } ROLE_ADMIN)
+
+    ;; Increment company ID counter
+    (var-set next-company-id (+ company-id u1))
+
+    (print { event: "company-registered", company-id: company-id, name: name, owner: tx-sender })
+    (ok company-id)
+  )
+)
+
+;; Assign a role to a team member (Admin only)
+(define-public (assign-role (company-id uint) (member principal) (role uint))
+  (begin
+    ;; Only admin/owner can assign roles
+    (asserts! (has-role company-id tx-sender ROLE_ADMIN) ERR_NOT_AUTHORIZED)
+    ;; Validate role value
