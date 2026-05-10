@@ -88,3 +88,21 @@
     last-paid-at: uint
   }
 )
+
+;; Payment records: payment-id -> payment details
+(define-map payments
+  uint
+  {
+    company-id: uint,
+    employee: principal,
+    amount: uint,
+    paid-at: uint,
+    memo: (string-ascii 128)
+  }
+)
+
+;; Track payment count per company for analytics
+(define-map company-payment-count
+  uint
+  uint
+)
