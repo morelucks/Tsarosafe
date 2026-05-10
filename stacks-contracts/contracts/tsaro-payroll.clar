@@ -142,3 +142,21 @@
     (
       (company-id (var-get next-company-id))
     )
+    ;; Ensure sender hasn't already registered a company
+    (asserts! (is-none (map-get? company-by-owner tx-sender)) ERR_COMPANY_EXISTS)
+
+    ;; Create the company record
+    (map-set companies company-id
+      {
+        name: name,
+        owner: tx-sender,
+        treasury: treasury,
+        employee-count: u0,
+        total-paid: u0,
+        created-at: burn-block-height,
+        active: true
+      }
+    )
+
+    ;; Map owner to company
+    (map-set company-by-owner tx-sender company-id)
