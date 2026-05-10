@@ -50,3 +50,29 @@ describe('tsaro-payroll', () => {
       );
       expect(result.result).toBeErr(Cl.uint(1001));
     });
+
+    it('should return correct company details via get-company', () => {
+      simnet.callPublicFn(
+        'tsaro-payroll',
+        'register-company',
+        [Cl.stringAscii('TsaroCorp'), Cl.principal(wallet1)],
+        wallet1
+      );
+      const result = simnet.callReadOnlyFn(
+        'tsaro-payroll',
+        'get-company',
+        [Cl.uint(1)],
+        wallet1
+      );
+      expect(result.result).toBeSome(
+        Cl.tuple({
+          name: Cl.stringAscii('TsaroCorp'),
+          owner: Cl.principal(wallet1),
+          treasury: Cl.principal(wallet1),
+          'employee-count': Cl.uint(0),
+          'total-paid': Cl.uint(0),
+          'created-at': Cl.uint(simnet.burnBlockHeight),
+          active: Cl.bool(true),
+        })
+      );
+    });
