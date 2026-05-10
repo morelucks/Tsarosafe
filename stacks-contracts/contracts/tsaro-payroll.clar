@@ -376,3 +376,21 @@
     ;; Increment payment ID
     (var-set next-payment-id (+ payment-id u1))
 
+    (print {
+      event: "employee-paid",
+      payment-id: payment-id,
+      company-id: company-id,
+      employee: employee,
+      amount: amount,
+      memo: memo
+    })
+    (ok payment-id)
+  )
+)
+
+;; ==========================================
+;; Read-Only Functions: Queries
+;; ==========================================
+
+;; Get company details
+(define-read-only (get-company (company-id uint))
