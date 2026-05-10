@@ -11,6 +11,11 @@ contract_id = 'SP3FBR2AGK5H9QBDH3EEN6DF8EK8JY7RX8QJ5SVTE.sip-010-trait-ft-standa
 path = 'contracts/tsaro-token.clar'
 clarity_version = 4
 epoch = 'latest'
+
+[contracts.tsaro-payroll]
+path = 'contracts/tsaro-payroll.clar'
+clarity_version = 4
+epoch = 'latest'
 [repl.analysis]
 passes = ['check_checker']
 
