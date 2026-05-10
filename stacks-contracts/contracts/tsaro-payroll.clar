@@ -106,3 +106,21 @@
   uint
   uint
 )
+
+;; ==========================================
+;; Private Helper Functions
+;; ==========================================
+
+;; Check if caller is the company owner
+(define-private (is-company-owner (company-id uint) (caller principal))
+  (match (map-get? companies company-id)
+    company (is-eq (get owner company) caller)
+    false
+  )
+)
+
+;; Check if caller has at least the required role level
+;; ROLE_ADMIN (1) > ROLE_MANAGER (2) > ROLE_VIEWER (3)
+;; Lower number = higher privilege
+(define-private (has-role (company-id uint) (caller principal) (required-role uint))
+  (if (is-company-owner company-id caller)
