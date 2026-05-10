@@ -34,3 +34,21 @@
 ;; Roles
 (define-constant ROLE_ADMIN u1)
 (define-constant ROLE_MANAGER u2)
+(define-constant ROLE_VIEWER u3)
+
+;; Limits
+(define-constant MAX_EMPLOYEES_PER_COMPANY u200)
+
+;; ==========================================
+;; Data Variables
+;; ==========================================
+
+(define-data-var next-company-id uint u1)
+(define-data-var next-payment-id uint u1)
+
+;; ==========================================
+;; Data Maps
+;; ==========================================
+
+;; Company registry: company-id -> company details
+(define-map companies
