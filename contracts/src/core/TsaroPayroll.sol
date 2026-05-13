@@ -72,4 +72,23 @@ contract TsaroPayroll {
         Biweekly,  // 1 — 14 days
         Monthly    // 2 — 30 days
     }
+
+    // ============================================================
+    //  Structs
+    // ============================================================
+
+    /// @notice Core payroll stream data
+    struct Payroll {
+        uint256   id;
+        string    name;
+        string    description;
+        address   employer;
+        TokenType tokenType;
+        PayPeriod payPeriod;
+        uint256   poolBalance;    // tokens held in contract for this payroll
+        uint256   totalDisbursed; // lifetime disbursements
+        uint256   createdAt;
+        uint256   lastRunAt;      // timestamp of last disbursement run
+        bool      isActive;
+    }
 }
