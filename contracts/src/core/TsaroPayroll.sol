@@ -95,24 +95,37 @@ contract TsaroPayroll {
     event EmployeeAdded(uint256 indexed payrollId, address indexed employee, string name, uint256 salary);
     event EmployeeRemoved(uint256 indexed payrollId, address indexed employee);
     event SalaryUpdated(uint256 indexed payrollId, address indexed employee, uint256 oldSalary, uint256 newSalary);
+    event PaymentDisbursed(uint256 indexed paymentId, uint256 indexed payrollId, address indexed employee, uint256 amount, uint8 tokenType, uint256 periodIndex, uint256 timestamp);
+    event BatchDisbursementCompleted(uint256 indexed payrollId, uint256 periodIndex, uint256 employeeCount, uint256 totalAmount, uint256 timestamp);
 
-    /// @notice Emitted for every individual salary transfer in a payroll run
-    event PaymentDisbursed(
-        uint256 indexed paymentId,
-        uint256 indexed payrollId,
-        address indexed employee,
-        uint256 amount,
-        uint8   tokenType,
-        uint256 periodIndex,
-        uint256 timestamp
-    );
+    // ============================================================
+    //  Modifiers
+    // ============================================================
 
-    /// @notice Emitted once per runPayroll() call summarising the full batch
-    event BatchDisbursementCompleted(
-        uint256 indexed payrollId,
-        uint256 periodIndex,
-        uint256 employeeCount,
-        uint256 totalAmount,
-        uint256 timestamp
-    );
+    modifier onlyOwner() {
+        if (msg.sender != owner) revert NotOwner();
+        _;
+    }
+
+    modifier onlyPayrollEmployer(uint256 payrollId) {
+        if (payrolls[payrollId].employer != msg.sender) revert CallerNotPayrollEmployer();
+        _;
+    }
+
+    modifier payrollExists(uint256 payrollId) {
+        if (payrolls[payrollId].id == 0) revert PayrollNotExists();
+        _;
+    }
+
+    modifier payrollActive(uint256 payrollId) {
+        if (!payrolls[payrollId].isActive) revert PayrollNotActive();
+        _;
+    }
+
+    modifier nonReentrant() {
+        if (_status == _ENTERED) revert ReentrancyGuardReentrantCall();
+        _status = _ENTERED;
+        _;
+        _status = _NOT_ENTERED;
+    }
 }
