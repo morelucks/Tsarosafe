@@ -54,4 +54,22 @@ contract TsaroPayroll {
     error TransferFailed();
     error NothingToClaim();
     error AlreadyClaimed();
+
+    // ============================================================
+    //  Enums
+    // ============================================================
+
+    /// @notice Supported token types — mirrors ITsaroSafeData.TokenType
+    enum TokenType {
+        CELO,   // 0 — native CELO
+        CUSD,   // 1 — Celo Dollar (ERC-20)
+        GSTAR   // 2 — GoodDollar G$ (ERC-20)
+    }
+
+    /// @notice Pay-period cadence
+    enum PayPeriod {
+        Weekly,    // 0 — 7 days
+        Biweekly,  // 1 — 14 days
+        Monthly    // 2 — 30 days
+    }
 }
