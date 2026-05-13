@@ -87,40 +87,32 @@ contract TsaroPayroll {
     mapping(uint256 => uint256)   public currentPeriod;
     mapping(uint256 => PaymentRecord[]) public paymentHistory;
 
-    event PayrollCreated(
-        uint256 indexed payrollId,
-        address indexed employer,
-        string  name,
-        uint8   tokenType,
-        uint8   payPeriod,
-        uint256 createdAt
-    );
+    event PayrollCreated(uint256 indexed payrollId, address indexed employer, string name, uint8 tokenType, uint8 payPeriod, uint256 createdAt);
     event PayrollDeactivated(uint256 indexed payrollId, address indexed employer);
     event PayrollReactivated(uint256 indexed payrollId, address indexed employer);
-    event PayrollFunded(
-        uint256 indexed payrollId,
-        address indexed funder,
-        uint256 amount,
-        uint256 newBalance
-    );
+    event PayrollFunded(uint256 indexed payrollId, address indexed funder, uint256 amount, uint256 newBalance);
     event PoolWithdrawn(uint256 indexed payrollId, address indexed employer, uint256 amount);
+    event EmployeeAdded(uint256 indexed payrollId, address indexed employee, string name, uint256 salary);
+    event EmployeeRemoved(uint256 indexed payrollId, address indexed employee);
+    event SalaryUpdated(uint256 indexed payrollId, address indexed employee, uint256 oldSalary, uint256 newSalary);
 
-    /// @notice Emitted when an employee is added to a payroll
-    event EmployeeAdded(
+    /// @notice Emitted for every individual salary transfer in a payroll run
+    event PaymentDisbursed(
+        uint256 indexed paymentId,
         uint256 indexed payrollId,
         address indexed employee,
-        string  name,
-        uint256 salary
+        uint256 amount,
+        uint8   tokenType,
+        uint256 periodIndex,
+        uint256 timestamp
     );
 
-    /// @notice Emitted when an employee is removed from a payroll
-    event EmployeeRemoved(uint256 indexed payrollId, address indexed employee);
-
-    /// @notice Emitted when an employee's salary is updated
-    event SalaryUpdated(
+    /// @notice Emitted once per runPayroll() call summarising the full batch
+    event BatchDisbursementCompleted(
         uint256 indexed payrollId,
-        address indexed employee,
-        uint256 oldSalary,
-        uint256 newSalary
+        uint256 periodIndex,
+        uint256 employeeCount,
+        uint256 totalAmount,
+        uint256 timestamp
     );
 }
