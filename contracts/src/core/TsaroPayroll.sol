@@ -86,17 +86,23 @@ contract TsaroPayroll {
     mapping(address => uint256[]) public employerPayrolls;
     mapping(uint256 => mapping(address => Employee)) public employees;
     mapping(uint256 => address[]) public employeeList;
-
-    // ============================================================
-    //  Disbursement tracking mappings
-    // ============================================================
-
-    /// @notice payrollId => periodIndex => employee => paid flag
     mapping(uint256 => mapping(uint256 => mapping(address => bool))) public periodClaims;
-
-    /// @notice payrollId => current period index (incremented each run)
-    mapping(uint256 => uint256) public currentPeriod;
-
-    /// @notice payrollId => full ordered payment history
+    mapping(uint256 => uint256)   public currentPeriod;
     mapping(uint256 => PaymentRecord[]) public paymentHistory;
+
+    // ============================================================
+    //  Events — payroll lifecycle
+    // ============================================================
+
+    event PayrollCreated(
+        uint256 indexed payrollId,
+        address indexed employer,
+        string  name,
+        uint8   tokenType,
+        uint8   payPeriod,
+        uint256 createdAt
+    );
+
+    event PayrollDeactivated(uint256 indexed payrollId, address indexed employer);
+    event PayrollReactivated(uint256 indexed payrollId, address indexed employer);
 }
