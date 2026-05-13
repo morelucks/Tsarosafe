@@ -3,11 +3,8 @@ pragma solidity ^0.8.28;
 
 import {IERC20} from "forge-std/interfaces/IERC20.sol";
 
-/**
- * @title TsaroPayroll
- * @notice Decentralized payroll contract for the TsaroSafe platform on Celo
- * @author TsaroSafe Team
- */
+/// @title TsaroPayroll — Decentralized payroll on Celo
+/// @author TsaroSafe Team
 contract TsaroPayroll {
 
     error ReentrancyGuardReentrantCall();
@@ -90,10 +87,6 @@ contract TsaroPayroll {
     mapping(uint256 => uint256)   public currentPeriod;
     mapping(uint256 => PaymentRecord[]) public paymentHistory;
 
-    // ============================================================
-    //  Events — payroll lifecycle
-    // ============================================================
-
     event PayrollCreated(
         uint256 indexed payrollId,
         address indexed employer,
@@ -102,7 +95,17 @@ contract TsaroPayroll {
         uint8   payPeriod,
         uint256 createdAt
     );
-
     event PayrollDeactivated(uint256 indexed payrollId, address indexed employer);
     event PayrollReactivated(uint256 indexed payrollId, address indexed employer);
+
+    /// @notice Emitted whenever the employer tops up the payroll pool
+    event PayrollFunded(
+        uint256 indexed payrollId,
+        address indexed funder,
+        uint256 amount,
+        uint256 newBalance
+    );
+
+    /// @notice Emitted when the employer withdraws unused pool funds
+    event PoolWithdrawn(uint256 indexed payrollId, address indexed employer, uint256 amount);
 }
