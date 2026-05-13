@@ -6,13 +6,6 @@ import {IERC20} from "forge-std/interfaces/IERC20.sol";
 /**
  * @title TsaroPayroll
  * @notice Decentralized payroll contract for the TsaroSafe platform on Celo
- * @dev Enables employers to create payroll streams, register employees, fund
- *      payroll pools, and disburse salaries in CELO (native) or cUSD/G$ (ERC-20).
- *      Design mirrors TsaroSafe conventions:
- *        - Reentrancy guard (inline, no OZ dependency)
- *        - Custom errors
- *        - Multi-token support (CELO native + ERC-20)
- *        - Role separation: owner > employer > employee
  * @author TsaroSafe Team
  */
 contract TsaroPayroll {
@@ -60,14 +53,23 @@ contract TsaroPayroll {
         bool      isActive;
     }
 
-    /// @notice Per-payroll employee record
     struct Employee {
         address wallet;
         string  name;
-        uint256 salary;        // per-period salary in token's smallest unit
-        uint256 totalReceived; // lifetime received
-        uint256 lastPaidAt;    // timestamp of last payment
+        uint256 salary;
+        uint256 totalReceived;
+        uint256 lastPaidAt;
         bool    isActive;
         uint256 addedAt;
+    }
+
+    /// @notice Immutable record written for every salary payment
+    struct PaymentRecord {
+        uint256 payrollId;
+        address employee;
+        uint256 amount;
+        uint8   tokenType;
+        uint256 timestamp;
+        uint256 periodIndex; // sequential pay-period counter
     }
 }
