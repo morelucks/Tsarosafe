@@ -97,15 +97,30 @@ contract TsaroPayroll {
     );
     event PayrollDeactivated(uint256 indexed payrollId, address indexed employer);
     event PayrollReactivated(uint256 indexed payrollId, address indexed employer);
-
-    /// @notice Emitted whenever the employer tops up the payroll pool
     event PayrollFunded(
         uint256 indexed payrollId,
         address indexed funder,
         uint256 amount,
         uint256 newBalance
     );
-
-    /// @notice Emitted when the employer withdraws unused pool funds
     event PoolWithdrawn(uint256 indexed payrollId, address indexed employer, uint256 amount);
+
+    /// @notice Emitted when an employee is added to a payroll
+    event EmployeeAdded(
+        uint256 indexed payrollId,
+        address indexed employee,
+        string  name,
+        uint256 salary
+    );
+
+    /// @notice Emitted when an employee is removed from a payroll
+    event EmployeeRemoved(uint256 indexed payrollId, address indexed employee);
+
+    /// @notice Emitted when an employee's salary is updated
+    event SalaryUpdated(
+        uint256 indexed payrollId,
+        address indexed employee,
+        uint256 oldSalary,
+        uint256 newSalary
+    );
 }
