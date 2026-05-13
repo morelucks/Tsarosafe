@@ -63,13 +63,38 @@ contract TsaroPayroll {
         uint256 addedAt;
     }
 
-    /// @notice Immutable record written for every salary payment
     struct PaymentRecord {
         uint256 payrollId;
         address employee;
         uint256 amount;
         uint8   tokenType;
         uint256 timestamp;
-        uint256 periodIndex; // sequential pay-period counter
+        uint256 periodIndex;
     }
+
+    // ============================================================
+    //  State Variables
+    // ============================================================
+
+    address public owner;
+
+    /// @notice Celo Dollar (cUSD) ERC-20 token address
+    address public cUSDAddress;
+
+    /// @notice GoodDollar (G$) ERC-20 token address
+    address public goodDollarAddress;
+
+    /// @notice Auto-incrementing payroll ID counter (starts at 1)
+    uint256 public nextPayrollId = 1;
+
+    /// @notice Auto-incrementing payment ID counter (starts at 1)
+    uint256 public nextPaymentId = 1;
+
+    // Inline reentrancy guard state
+    uint256 private _status;
+    uint256 private constant _NOT_ENTERED = 1;
+    uint256 private constant _ENTERED     = 2;
+
+    /// @notice Maximum employees per payroll — gas safety cap
+    uint256 public constant MAX_EMPLOYEES = 200;
 }
