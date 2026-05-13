@@ -28,4 +28,16 @@ contract TsaroPayroll {
     error NotEmployer();
     error NotEmployee();
     error CallerNotPayrollEmployer();
+
+    // Payroll validation errors
+    error EmptyName();
+    error NameTooLong();
+    error DescriptionTooLong();
+    error InvalidPayPeriod();
+    error InvalidTokenAddress();
+    error InvalidAmount();
+    error PayrollNotExists();
+    error PayrollNotActive();
+    error PayrollAlreadyActive();
+    error PayrollAlreadyFunded();
 }
