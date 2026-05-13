@@ -16,4 +16,16 @@ import {IERC20} from "forge-std/interfaces/IERC20.sol";
  * @author TsaroSafe Team
  */
 contract TsaroPayroll {
+
+    // ============================================================
+    //  Custom Errors — reentrancy
+    // ============================================================
+
+    error ReentrancyGuardReentrantCall();
+
+    // Access control errors
+    error NotOwner();
+    error NotEmployer();
+    error NotEmployee();
+    error CallerNotPayrollEmployer();
 }
