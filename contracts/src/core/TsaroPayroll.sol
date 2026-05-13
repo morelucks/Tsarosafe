@@ -72,29 +72,29 @@ contract TsaroPayroll {
         uint256 periodIndex;
     }
 
-    // ============================================================
-    //  State Variables
-    // ============================================================
-
     address public owner;
-
-    /// @notice Celo Dollar (cUSD) ERC-20 token address
     address public cUSDAddress;
-
-    /// @notice GoodDollar (G$) ERC-20 token address
     address public goodDollarAddress;
-
-    /// @notice Auto-incrementing payroll ID counter (starts at 1)
     uint256 public nextPayrollId = 1;
-
-    /// @notice Auto-incrementing payment ID counter (starts at 1)
     uint256 public nextPaymentId = 1;
-
-    // Inline reentrancy guard state
     uint256 private _status;
     uint256 private constant _NOT_ENTERED = 1;
     uint256 private constant _ENTERED     = 2;
-
-    /// @notice Maximum employees per payroll — gas safety cap
     uint256 public constant MAX_EMPLOYEES = 200;
+
+    // ============================================================
+    //  Mappings
+    // ============================================================
+
+    /// @notice payrollId => Payroll
+    mapping(uint256 => Payroll) public payrolls;
+
+    /// @notice employer address => list of payroll IDs they own
+    mapping(address => uint256[]) public employerPayrolls;
+
+    /// @notice payrollId => employee wallet => Employee record
+    mapping(uint256 => mapping(address => Employee)) public employees;
+
+    /// @notice payrollId => ordered list of employee wallet addresses
+    mapping(uint256 => address[]) public employeeList;
 }
