@@ -40,4 +40,18 @@ contract TsaroPayroll {
     error PayrollNotActive();
     error PayrollAlreadyActive();
     error PayrollAlreadyFunded();
+
+    // Employee validation errors
+    error AlreadyEmployee();
+    error EmployeeNotFound();
+    error EmployeeNotActive();
+    error SalaryZero();
+    error EmployeeLimitExceeded();
+
+    // Disbursement errors
+    error PayPeriodNotElapsed();
+    error InsufficientPoolBalance();
+    error TransferFailed();
+    error NothingToClaim();
+    error AlreadyClaimed();
 }
