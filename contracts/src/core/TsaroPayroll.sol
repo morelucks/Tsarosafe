@@ -17,19 +17,11 @@ import {IERC20} from "forge-std/interfaces/IERC20.sol";
  */
 contract TsaroPayroll {
 
-    // ============================================================
-    //  Custom Errors — reentrancy
-    // ============================================================
-
     error ReentrancyGuardReentrantCall();
-
-    // Access control errors
     error NotOwner();
     error NotEmployer();
     error NotEmployee();
     error CallerNotPayrollEmployer();
-
-    // Payroll validation errors
     error EmptyName();
     error NameTooLong();
     error DescriptionTooLong();
@@ -40,44 +32,20 @@ contract TsaroPayroll {
     error PayrollNotActive();
     error PayrollAlreadyActive();
     error PayrollAlreadyFunded();
-
-    // Employee validation errors
     error AlreadyEmployee();
     error EmployeeNotFound();
     error EmployeeNotActive();
     error SalaryZero();
     error EmployeeLimitExceeded();
-
-    // Disbursement errors
     error PayPeriodNotElapsed();
     error InsufficientPoolBalance();
     error TransferFailed();
     error NothingToClaim();
     error AlreadyClaimed();
 
-    // ============================================================
-    //  Enums
-    // ============================================================
+    enum TokenType { CELO, CUSD, GSTAR }
+    enum PayPeriod  { Weekly, Biweekly, Monthly }
 
-    /// @notice Supported token types — mirrors ITsaroSafeData.TokenType
-    enum TokenType {
-        CELO,   // 0 — native CELO
-        CUSD,   // 1 — Celo Dollar (ERC-20)
-        GSTAR   // 2 — GoodDollar G$ (ERC-20)
-    }
-
-    /// @notice Pay-period cadence
-    enum PayPeriod {
-        Weekly,    // 0 — 7 days
-        Biweekly,  // 1 — 14 days
-        Monthly    // 2 — 30 days
-    }
-
-    // ============================================================
-    //  Structs
-    // ============================================================
-
-    /// @notice Core payroll stream data
     struct Payroll {
         uint256   id;
         string    name;
@@ -85,10 +53,21 @@ contract TsaroPayroll {
         address   employer;
         TokenType tokenType;
         PayPeriod payPeriod;
-        uint256   poolBalance;    // tokens held in contract for this payroll
-        uint256   totalDisbursed; // lifetime disbursements
+        uint256   poolBalance;
+        uint256   totalDisbursed;
         uint256   createdAt;
-        uint256   lastRunAt;      // timestamp of last disbursement run
+        uint256   lastRunAt;
         bool      isActive;
+    }
+
+    /// @notice Per-payroll employee record
+    struct Employee {
+        address wallet;
+        string  name;
+        uint256 salary;        // per-period salary in token's smallest unit
+        uint256 totalReceived; // lifetime received
+        uint256 lastPaidAt;    // timestamp of last payment
+        bool    isActive;
+        uint256 addedAt;
     }
 }
