@@ -82,19 +82,21 @@ contract TsaroPayroll {
     uint256 private constant _ENTERED     = 2;
     uint256 public constant MAX_EMPLOYEES = 200;
 
-    // ============================================================
-    //  Mappings
-    // ============================================================
-
-    /// @notice payrollId => Payroll
-    mapping(uint256 => Payroll) public payrolls;
-
-    /// @notice employer address => list of payroll IDs they own
+    mapping(uint256 => Payroll)   public payrolls;
     mapping(address => uint256[]) public employerPayrolls;
-
-    /// @notice payrollId => employee wallet => Employee record
     mapping(uint256 => mapping(address => Employee)) public employees;
-
-    /// @notice payrollId => ordered list of employee wallet addresses
     mapping(uint256 => address[]) public employeeList;
+
+    // ============================================================
+    //  Disbursement tracking mappings
+    // ============================================================
+
+    /// @notice payrollId => periodIndex => employee => paid flag
+    mapping(uint256 => mapping(uint256 => mapping(address => bool))) public periodClaims;
+
+    /// @notice payrollId => current period index (incremented each run)
+    mapping(uint256 => uint256) public currentPeriod;
+
+    /// @notice payrollId => full ordered payment history
+    mapping(uint256 => PaymentRecord[]) public paymentHistory;
 }
