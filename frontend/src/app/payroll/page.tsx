@@ -3,29 +3,33 @@ import React, { useState, useEffect } from 'react';
 import { useStacksWallet } from '@/context/StacksWalletContext';
 import { getCompanyIdByOwner, getCompanyDetails } from '@/lib/payroll-contract';
 import { Company } from '@/types/payroll';
-import Link from 'next/link';
+import RegisterCompany from './components/RegisterCompany';
 
 export default function PayrollDashboard() {
   const { isConnected, userAddress, networkName } = useStacksWallet();
   const [company, setCompany] = useState<Company | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (isConnected && userAddress) {
       getCompanyIdByOwner(networkName, userAddress).then(id => {
         if (id) getCompanyDetails(networkName, id).then(setCompany);
+        setIsLoading(false);
       });
+    } else {
+      setIsLoading(false);
     }
   }, [isConnected, userAddress, networkName]);
 
+  if (isLoading) return <div>Loading...</div>;
+
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center border-b border-white/10 pb-6">
-        <h1 className="text-4xl font-black text-white uppercase">Corporate Workspace</h1>
-        <div className="flex gap-4">
-          <Link href="/payroll/payments" className="bg-blue-600 p-3 text-xs uppercase font-bold text-white">Execute Payment</Link>
-          <Link href="/payroll/employees" className="border border-white/10 p-3 text-xs uppercase font-bold text-white">Employees</Link>
-        </div>
-      </div>
+      {!company ? (
+        <RegisterCompany onSuccess={() => {}} />
+      ) : (
+        <h1 className="text-4xl font-black text-white uppercase">{company.name} Workspace</h1>
+      )}
     </div>
   );
 }
