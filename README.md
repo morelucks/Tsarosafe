@@ -210,3 +210,12 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 - **Transaction History**: Added a dedicated page for viewing full transaction history.
 - **Global Notifications**: Integrated a toast notification system for user feedback.
 - **Savings Improvements**: Refactored savings components and standardized data fetching.
+
+## Stacks Payroll Extension (Tsarosafe Payroll)
+
+We have built out a fully decentralized, corporate crypto payroll system backed by Bitcoin consensus layers on Stacks.
+
+- **Dashboard Panel**: Monitor historic salary aggregates, active worker lists, and Treasury balance indicators.
+- **Worker Registry**: Form tools to onboard new members, set salary locked values, and pause or reactivate records.
+- **Payments Console**: Trigger transparent single salary payouts mapped directly to locked smart contract rules.
+- **Administrative Settings**: Grant role access (Admin, Manager, Viewer) to Stacks wallets to audit logs and process payroll runs.
