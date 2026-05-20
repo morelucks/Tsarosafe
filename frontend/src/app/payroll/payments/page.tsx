@@ -1,13 +1,14 @@
 "use client";
 import React, { useState } from 'react';
+import { PaymentRecord } from '@/types/payroll';
 export default function PaymentsPage() {
-  const [tokenAddress, setTokenAddress] = useState('SP3FBR2AGK5H9QBDH3EEN6DF8EK8JY7RX8QJ5SVTE');
-  const [tokenName, setTokenName] = useState('sip-010-trait-ft-standard');
+  const [history] = useState<PaymentRecord[]>([
+    { id: 1, companyId: 1, employee: 'SP1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM', amount: 3500000000, paidAt: 125300, memo: 'April 2026 Salary' }
+  ]);
   return (
     <div className="space-y-6">
       <h1 className="text-4xl font-black text-white uppercase">Payments Console</h1>
-      <input value={tokenAddress} onChange={e => setTokenAddress(e.target.value)} className="p-2 bg-[#112240] text-gray-400 text-xs" />
-      <input value={tokenName} onChange={e => setTokenName(e.target.value)} className="p-2 bg-[#112240] text-gray-400 text-xs" />
+      {history.map(h => <p key={h.id} className="text-white">{h.memo} - {h.amount / 1000000} STX</p>)}
     </div>
   );
 }
