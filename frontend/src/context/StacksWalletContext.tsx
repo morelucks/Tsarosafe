@@ -1,11 +1,10 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { AppConfig, UserSession, showConnect } from '@stacks/connect';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { StacksNetwork, STACKS_MAINNET, STACKS_TESTNET, STACKS_DEVNET } from '@stacks/network';
 
 interface StacksWalletContextType {
-  userSession: UserSession;
+  userSession: any;
   userAddress: string | null;
   isConnected: boolean;
   connect: () => void;
@@ -18,12 +17,38 @@ interface StacksWalletContextType {
 const StacksWalletContext = createContext<StacksWalletContextType | undefined>(undefined);
 
 export function StacksWalletProvider({ children }: { children: React.ReactNode }) {
+  const [mounted, setMounted] = useState(false);
   const [userAddress, setUserAddress] = useState<string | null>(null);
   const [networkName, setNetworkNameState] = useState<'mainnet' | 'testnet' | 'devnet'>('mainnet');
+  const userSessionRef = useRef<any>(null);
 
-  // Stacks App config
-  const appConfig = new AppConfig(['store_write', 'publish_data']);
-  const userSession = new UserSession({ appConfig });
+  // Only initialize @stacks/connect on the client side
+  useEffect(() => {
+    const init = async () => {
+      try {
+        const { AppConfig, UserSession } = await import('@stacks/connect');
+        const appConfig = new AppConfig(['store_write', 'publish_data']);
+        userSessionRef.current = new UserSession({ appConfig });
+
+        // Restore saved network preference
+        const savedNetwork = localStorage.getItem('stacks-network-pref') as 'mainnet' | 'testnet' | 'devnet';
+        if (savedNetwork) {
+          setNetworkNameState(savedNetwork);
+        }
+
+        // Check if user is already signed in
+        if (userSessionRef.current.isUserSignedIn()) {
+          const userData = userSessionRef.current.loadUserData();
+          const address = userData.profile.stxAddress.mainnet;
+          setUserAddress(address);
+        }
+      } catch (err) {
+        console.error('Failed to initialize Stacks SDK:', err);
+      }
+      setMounted(true);
+    };
+    init();
+  }, []);
 
   // Stacks network mapping
   const getNetworkInstance = (name: 'mainnet' | 'testnet' | 'devnet'): StacksNetwork => {
@@ -47,52 +72,43 @@ export function StacksWalletProvider({ children }: { children: React.ReactNode }
     }
   };
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const savedNetwork = localStorage.getItem('stacks-network-pref') as 'mainnet' | 'testnet' | 'devnet';
-      if (savedNetwork) {
-        setNetworkNameState(savedNetwork);
-      }
-    }
-
-    if (userSession.isUserSignedIn()) {
-      const userData = userSession.loadUserData();
-      const address = userData.profile.stxAddress.mainnet; // fallback or testnet depending on preferred network
-      setUserAddress(address);
-    }
-  }, []);
-
   const connect = () => {
-    showConnect({
-      appDetails: {
-        name: 'Tsarosafe Payroll',
-        icon: window.location.origin + '/favicon.ico',
-      },
-      redirectTo: '/',
-      onFinish: () => {
-        const userData = userSession.loadUserData();
-        // Stacks connection finishes, save the user's STX address
-        const address = networkName === 'mainnet' 
-          ? userData.profile.stxAddress.mainnet 
-          : userData.profile.stxAddress.testnet;
-        setUserAddress(address);
-      },
-      onCancel: () => {
-        console.log('Stacks Wallet connection cancelled.');
-      },
-      userSession,
+    if (!userSessionRef.current || typeof window === 'undefined') return;
+
+    import('@stacks/connect').then(({ showConnect }) => {
+      showConnect({
+        appDetails: {
+          name: 'Tsarosafe Payroll',
+          icon: window.location.origin + '/favicon.ico',
+        },
+        redirectTo: '/',
+        onFinish: () => {
+          const userData = userSessionRef.current.loadUserData();
+          // Stacks connection finishes, save the user's STX address
+          const address = networkName === 'mainnet'
+            ? userData.profile.stxAddress.mainnet
+            : userData.profile.stxAddress.testnet;
+          setUserAddress(address);
+        },
+        onCancel: () => {
+          console.log('Stacks Wallet connection cancelled.');
+        },
+        userSession: userSessionRef.current,
+      });
     });
   };
 
   const disconnect = () => {
-    userSession.signUserOut();
+    if (userSessionRef.current) {
+      userSessionRef.current.signUserOut();
+    }
     setUserAddress(null);
   };
 
   return (
     <StacksWalletContext.Provider
       value={{
-        userSession,
+        userSession: userSessionRef.current,
         userAddress,
         isConnected: !!userAddress,
         connect,

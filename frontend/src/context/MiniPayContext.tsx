@@ -1,4 +1,5 @@
 "use client";
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAccount, useConnect, useConnectors } from 'wagmi';
 import { useNotification } from './NotificationContext';
@@ -22,32 +23,19 @@ export function MiniPayProvider({ children }: { children: React.ReactNode }) {
   const [isMiniPay, setIsMiniPay] = useState(false);
   const [minipayBalance, setMinipayBalance] = useState('0.00');
 
+  // Detect MiniPay on mount (client-only)
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const ethereum = (window as any).ethereum;
       const isMP = !!(ethereum?.isMiniPay || (window as any).web3?.currentProvider?.isMiniPay || (typeof navigator !== 'undefined' && /MiniPay/i.test(navigator.userAgent)));
       setIsMiniPay(isMP);
+      if (isMP) {
+        console.log('⚡ MiniPay Integration Booster detected!');
+      }
     }
   }, []);
 
-  const autoConnectMiniPay = () => {
-    if (!isMiniPay || isConnected) return;
-    const injectedConnector = connectors.find((c) => c.id === 'injected');
-    if (injectedConnector) {
-      try {
-        connect({ connector: injectedConnector, chainId: 42220 });
-      } catch (err) {
-        console.warn('MiniPay connection failure:', err);
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (isMiniPay && connectors.length > 0 && !isConnected) {
-      autoConnectMiniPay();
-    }
-  }, [isMiniPay, connectors, isConnected]);
-
+  // Fetch Celo balance when connected inside MiniPay
   useEffect(() => {
     if (isConnected && address && isMiniPay) {
       let isMounted = true;
@@ -80,6 +68,26 @@ export function MiniPayProvider({ children }: { children: React.ReactNode }) {
       };
     }
   }, [isConnected, address, isMiniPay]);
+
+  // Auto-connect to MiniPay's injected provider
+  const autoConnectMiniPay = () => {
+    if (!isMiniPay || isConnected) return;
+    const injectedConnector = connectors.find((c) => c.id === 'injected');
+    if (injectedConnector) {
+      try {
+        connect({ connector: injectedConnector, chainId: 42220 });
+      } catch (err) {
+        console.warn('MiniPay connection failure:', err);
+      }
+    }
+  };
+
+  // Auto-connect on load when inside MiniPay
+  useEffect(() => {
+    if (isMiniPay && connectors.length > 0 && !isConnected) {
+      autoConnectMiniPay();
+    }
+  }, [isMiniPay, connectors, isConnected]);
 
   useEffect(() => {
     if (isConnected && address && isMiniPay) {
