@@ -80,6 +80,40 @@ const NavBar = () => {
           </button>
         </div>
       </div>
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 bg-[#0a192f]/98 backdrop-blur-md z-[110] flex flex-col p-6 animate-in fade-in duration-200">
+          <div className="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
+            <span className="text-sm font-mono font-black text-gray-500 tracking-[0.25em] uppercase">Tsarosafe Workspace</span>
+            <button
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="w-10 h-10 flex items-center justify-center border border-white/10 hover:border-blue-500 text-white rounded transition-colors"
+            >
+              ✕
+            </button>
+          </div>
+          
+          <div className="flex-1 overflow-y-auto pr-2 max-h-[70vh] flex flex-col gap-2">
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="w-full flex items-center justify-between py-3.5 px-4 font-mono text-sm font-bold tracking-widest text-gray-300 border border-white/5 bg-white/[0.01] hover:bg-white/[0.03] hover:border-blue-500/50 hover:text-white rounded transition-all group"
+              >
+                <span>{link.name}</span>
+                <span className="text-gray-600 group-hover:text-blue-400 transition-colors">➔</span>
+              </Link>
+            ))}
+          </div>
+
+          <div className="mt-auto pt-6 border-t border-white/5 flex flex-col gap-2 font-mono text-[9px] text-gray-500 tracking-wider">
+            <div className="flex justify-between">
+              <span>SECURE ON-CHAIN SAVINGS & PAYROLL</span>
+              <span>v2.1.0</span>
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   );
 };
