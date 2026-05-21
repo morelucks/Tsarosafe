@@ -30,6 +30,14 @@ function EngagementRewardsStatusContent() {
   const { getCurrentBlock } = useCurrentBlockNumber();
   const [localMessage, setLocalMessage] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (isConfirmed) {
+      setLocalMessage("🎉 Reward claim confirmed!");
+      const timer = setTimeout(() => setLocalMessage(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [isConfirmed]);
+
   if (!address) {
     return null;
   }
@@ -95,14 +103,6 @@ function EngagementRewardsStatusContent() {
       setLocalMessage(errorMessage);
     }
   };
-
-  useEffect(() => {
-    if (isConfirmed) {
-      setLocalMessage("🎉 Reward claim confirmed!");
-      const timer = setTimeout(() => setLocalMessage(null), 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [isConfirmed]);
 
   const bgGradient = isCelo
     ? "from-purple-600 to-indigo-700"
