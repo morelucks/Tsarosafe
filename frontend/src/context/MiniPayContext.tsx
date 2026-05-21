@@ -1,6 +1,6 @@
 "use client";
 import React, { createContext, useState, useEffect } from 'react';
-import { useAccount } from 'wagmi';
+import { useAccount, useConnect, useDisconnect, useConnectors } from 'wagmi';
 
 interface MiniPayContextType {
   isMiniPay: boolean;
@@ -12,15 +12,10 @@ const MiniPayContext = createContext<MiniPayContextType | undefined>(undefined);
 
 export function MiniPayProvider({ children }: { children: React.ReactNode }) {
   const { isConnected, address } = useAccount();
+  const { connect } = useConnect();
+  const connectors = useConnectors();
   const [isMiniPay, setIsMiniPay] = useState(false);
   const autoConnectMiniPay = () => {};
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const ethereum = (window as any).ethereum;
-      const isMP = !!(ethereum?.isMiniPay || (window as any).web3?.currentProvider?.isMiniPay);
-      setIsMiniPay(isMP);
-    }
-  }, []);
   return (
     <MiniPayContext.Provider value={{ isMiniPay, isMiniPayConnected: isMiniPay && isConnected, minipayBalance: '0.00', autoConnectMiniPay }}>
       {children}
