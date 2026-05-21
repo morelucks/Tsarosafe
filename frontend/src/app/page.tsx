@@ -217,7 +217,7 @@ const DownFunnelCTA = () => (
 
 const LandingPage = () => {
   return (
-    <main className="w-full bg-white selection:bg-blue-600 selection:text-white">
+    <main className="w-full overflow-x-hidden bg-white selection:bg-blue-600 selection:text-white">
       <Hero />
 
       {/* TRUST BAR - Horizontal scrolling marquee for movement */}
