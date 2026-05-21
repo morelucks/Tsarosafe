@@ -13,6 +13,7 @@ const MiniPayContext = createContext<MiniPayContextType | undefined>(undefined);
 export function MiniPayProvider({ children }: { children: React.ReactNode }) {
   const { isConnected, address } = useAccount();
   const [isMiniPay, setIsMiniPay] = useState(false);
+  const autoConnectMiniPay = () => {};
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const ethereum = (window as any).ethereum;
@@ -21,7 +22,7 @@ export function MiniPayProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
   return (
-    <MiniPayContext.Provider value={{ isMiniPay, isMiniPayConnected: isMiniPay && isConnected, minipayBalance: '0.00', autoConnectMiniPay: () => {} }}>
+    <MiniPayContext.Provider value={{ isMiniPay, isMiniPayConnected: isMiniPay && isConnected, minipayBalance: '0.00', autoConnectMiniPay }}>
       {children}
     </MiniPayContext.Provider>
   );
