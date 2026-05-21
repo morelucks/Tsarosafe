@@ -6,3 +6,4 @@ interface MiniPayContextType {
   minipayBalance: string;
   autoConnectMiniPay: () => void;
 }
+const MiniPayContext = createContext<MiniPayContextType | undefined>(undefined);
