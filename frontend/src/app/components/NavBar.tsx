@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useAppKit } from "@reown/appkit/react";
 import { useAccount, useDisconnect } from "wagmi";
 import NetworkStatus from "./NetworkStatus";
+import { useMiniPay } from "@/context/MiniPayContext";
 
 const NavBar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -11,6 +12,7 @@ const NavBar = () => {
   const { open } = useAppKit();
   const { address, isConnected } = useAccount();
   const { disconnect } = useDisconnect();
+  const { isMiniPay } = useMiniPay();
 
   useEffect(() => { setMounted(true); }, []);
 
@@ -44,7 +46,19 @@ const NavBar = () => {
         </div>
         <div className="flex items-center gap-6">
           {mounted && <NetworkStatus />}
-          {mounted && isConnected ? (
+          
+          {mounted && isMiniPay ? (
+            isConnected ? (
+              <div className="border border-yellow-500/30 bg-yellow-500/5 px-5 py-2.5 font-mono text-sm text-yellow-500 flex items-center gap-2">
+                <span className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></span>
+                <span>{shortAddress}</span>
+              </div>
+            ) : (
+              <div className="bg-yellow-500/20 text-yellow-500 border border-yellow-500/30 px-6 py-2.5 text-sm font-black tracking-widest uppercase animate-pulse">
+                ⚡ MiniPay Connected
+              </div>
+            )
+          ) : mounted && isConnected ? (
             <button onClick={() => disconnect()} className="border border-blue-500 bg-blue-500/5 px-5 py-2.5 font-mono text-sm text-blue-400 hover:bg-red-500 hover:text-white hover:border-red-500 transition-all flex items-center gap-2 group">
               <span className="w-2 h-2 bg-blue-500 rounded-full group-hover:bg-white animate-pulse"></span>
               <span className="group-hover:hidden">{shortAddress}</span>
@@ -55,6 +69,7 @@ const NavBar = () => {
           ) : (
             <div className="bg-white/10 text-white px-6 py-2.5 text-sm font-black tracking-widest uppercase">Loading...</div>
           )}
+          
           <button onClick={() => setIsMobileMenuOpen(true)} className="lg:hidden flex flex-col justify-center items-end gap-1.5 p-2 group" aria-label="Open Menu">
             <div className="w-8 h-0.5 bg-white group-hover:bg-blue-500 transition-colors"></div>
             <div className="w-5 h-0.5 bg-white group-hover:bg-blue-500 transition-colors"></div>
