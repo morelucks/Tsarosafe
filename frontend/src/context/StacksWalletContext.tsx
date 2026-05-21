@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { AppConfig, UserSession, showConnect } from '@stacks/connect';
-import { StacksMainnet, StacksTestnet, StacksMocknet } from '@stacks/network';
+import { StacksNetwork, STACKS_MAINNET, STACKS_TESTNET, STACKS_DEVNET } from '@stacks/network';
 
 interface StacksWalletContextType {
   userSession: UserSession;
@@ -10,7 +10,7 @@ interface StacksWalletContextType {
   isConnected: boolean;
   connect: () => void;
   disconnect: () => void;
-  network: StacksMainnet | StacksTestnet | StacksMocknet;
+  network: StacksNetwork;
   networkName: 'mainnet' | 'testnet' | 'devnet';
   setNetworkName: (name: 'mainnet' | 'testnet' | 'devnet') => void;
 }
@@ -26,15 +26,15 @@ export function StacksWalletProvider({ children }: { children: React.ReactNode }
   const userSession = new UserSession({ appConfig });
 
   // Stacks network mapping
-  const getNetworkInstance = (name: 'mainnet' | 'testnet' | 'devnet') => {
+  const getNetworkInstance = (name: 'mainnet' | 'testnet' | 'devnet'): StacksNetwork => {
     switch (name) {
       case 'testnet':
-        return new StacksTestnet();
+        return STACKS_TESTNET;
       case 'devnet':
-        return new StacksMocknet({ url: 'http://localhost:3999' });
+        return STACKS_DEVNET;
       case 'mainnet':
       default:
-        return new StacksMainnet();
+        return STACKS_MAINNET;
     }
   };
 
