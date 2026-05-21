@@ -24,7 +24,7 @@ export default function NetworkStatus() {
             }`}>
             <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${isBase ? "bg-blue-500" : isCelo ? "bg-green-500" : "bg-gray-500"
                 }`}></span>
-            {chain.name}
+            <span className="hidden sm:inline">{chain.name}</span>
         </div>
     );
 }

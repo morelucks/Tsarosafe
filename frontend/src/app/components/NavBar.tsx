@@ -33,8 +33,8 @@ const NavBar = () => {
     <nav className="w-full bg-[#0a192f] border-b border-white/10 sticky top-0 z-[100] h-20 flex items-center">
       <div className="max-w-7xl mx-auto w-full px-6 flex justify-between items-center">
         <Link href="/" className="group">
-          <span className="text-xl md:text-2xl font-black text-white tracking-tighter transition-colors group-hover:text-blue-500">
-            TSAROSAFE<span className="text-blue-500">.</span>
+          <span className="text-lg sm:text-xl md:text-2xl font-black text-white tracking-tighter transition-colors group-hover:text-blue-500">
+            TSAROSAFE<span className="text-blue-500 hidden sm:inline">.</span>
           </span>
         </Link>
         <div className="hidden lg:flex items-center space-x-8">
@@ -44,23 +44,23 @@ const NavBar = () => {
             </Link>
           ))}
         </div>
-        <div className="flex items-center gap-3 md:gap-6">
+        <div className="flex items-center gap-2 sm:gap-3 md:gap-6">
           {mounted && <NetworkStatus />}
           
           {mounted && isMiniPay ? (
             isConnected ? (
-              <div className="border border-yellow-500/30 bg-yellow-500/5 px-3 py-1.5 md:px-5 md:py-2.5 font-mono text-xs md:text-sm text-yellow-500 flex items-center gap-2">
-                <span className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></span>
+              <div className="border border-yellow-500/30 bg-yellow-500/5 px-2 py-1 sm:px-3 sm:py-1.5 md:px-5 md:py-2.5 font-mono text-[10px] sm:text-xs md:text-sm text-yellow-500 flex items-center gap-1.5 sm:gap-2">
+                <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-yellow-500 rounded-full animate-pulse"></span>
                 <span>{shortAddress}</span>
               </div>
             ) : (
-              <div className="bg-yellow-500/20 text-yellow-500 border border-yellow-500/30 px-3 py-1.5 md:px-6 md:py-2.5 text-[10px] md:text-sm font-black tracking-widest uppercase animate-pulse whitespace-nowrap">
+              <div className="bg-yellow-500/20 text-yellow-500 border border-yellow-500/30 px-2 py-1 sm:px-3 sm:py-1.5 md:px-6 md:py-2.5 text-[10px] md:text-sm font-black tracking-widest uppercase animate-pulse whitespace-nowrap">
                 ⚡ MiniPay <span className="hidden sm:inline">Connected</span>
               </div>
             )
           ) : mounted && isConnected ? (
-            <button onClick={() => disconnect()} className="border border-blue-500 bg-blue-500/5 px-3 py-1.5 md:px-5 md:py-2.5 font-mono text-xs md:text-sm text-blue-400 hover:bg-red-500 hover:text-white hover:border-red-500 transition-all flex items-center gap-2 group">
-              <span className="w-2 h-2 bg-blue-500 rounded-full group-hover:bg-white animate-pulse"></span>
+            <button onClick={() => disconnect()} className="border border-blue-500 bg-blue-500/5 px-2 py-1 sm:px-3 sm:py-1.5 md:px-5 md:py-2.5 font-mono text-[10px] sm:text-xs md:text-sm text-blue-400 hover:bg-red-500 hover:text-white hover:border-red-500 transition-all flex items-center gap-1.5 sm:gap-2 group">
+              <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-blue-500 rounded-full group-hover:bg-white animate-pulse"></span>
               <span className="group-hover:hidden">{shortAddress}</span>
               <span className="hidden group-hover:inline text-[10px] uppercase font-black tracking-widest">Disconnect</span>
             </button>
