@@ -1,3 +1,4 @@
+// Price: real-time G$ price tracking page with historical chart
 "use client";
 import Link from "next/link";
 import GDollarPriceDisplay from "@/app/components/GDollarPriceDisplay";
