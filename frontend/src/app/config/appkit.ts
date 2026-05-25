@@ -84,6 +84,7 @@ export const networks: [AppKitNetwork, ...AppKitNetwork[]] = [
   optimism,
   polygon
 ]
+// WagmiAdapter is always initialized — it does not require a valid projectId to construct
 export const wagmiAdapter = new WagmiAdapter({
   storage: createStorage({
     storage: cookieStorage
