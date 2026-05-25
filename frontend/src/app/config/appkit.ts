@@ -57,7 +57,7 @@ if (!isProjectIdValid) {
   }
 }
 
-// Celo Mainnet network configuration
+// Celo Mainnet — primary network for TsaroSafe (low fees, mobile-first)
 // Using type assertion with unknown first to satisfy TypeScript
 const celo = {
   id: 42220,
