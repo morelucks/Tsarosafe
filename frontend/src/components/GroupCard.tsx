@@ -1,3 +1,4 @@
+// GroupCard: card component for displaying savings group summary info
 import Link from "next/link";
 import { Group } from "@/types/group";
 import { useGroup, useGroupMembers } from "@/hooks/useTsaroSafe";
