@@ -125,4 +125,4 @@ try {
 export { modal }
 
 export const config = wagmiAdapter.wagmiConfig
-// INVESTIGATION: tracing crash origin on Vercel deployment
+// ROOT CAUSE: createAppKit throws when projectId is invalid or missing
