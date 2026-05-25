@@ -25,6 +25,7 @@ export const metadata: Metadata = {
   }
 };
 
+// RootLayout: AppKitProvider is safe to render even when modal init fails
 export default function RootLayout({
   children,
 }: Readonly<{
