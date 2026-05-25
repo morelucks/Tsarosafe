@@ -1,3 +1,4 @@
+// Invest: page for managing DeFi investment positions
 "use client";
 import { useState, useEffect } from "react";
 import SavingsGoalCard from "@/app/components/SavingsGoalCard";
