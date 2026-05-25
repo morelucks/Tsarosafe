@@ -1,3 +1,4 @@
+// ProgressChart: visualizes savings group progress toward goal
 "use client";
 import { useState, useEffect } from "react";
 
