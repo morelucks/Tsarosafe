@@ -1,5 +1,7 @@
 "use client";
-import { useAccount } from "wagmi";
+
+// NetworkStatus: displays the currently connected chain name in the navbar
+mport { useAccount } from "wagmi";
 import { useEffect, useState } from "react";
 
 export default function NetworkStatus() {
