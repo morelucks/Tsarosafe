@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useAppKit } from "@reown/appkit/react";
+import { modal } from "../config/appkit";
 import { useAccount, useDisconnect } from "wagmi";
 import NetworkStatus from "./NetworkStatus";
 import { useMiniPay } from "@/context/MiniPayContext";
