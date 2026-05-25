@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useAppKit } from "@reown/appkit/react";
+// modal may be null when NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID is not set
 import { modal } from "../config/appkit";
 import { useAccount, useDisconnect } from "wagmi";
 import NetworkStatus from "./NetworkStatus";
