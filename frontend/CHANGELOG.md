@@ -16,3 +16,6 @@
 
 ### Changed
 - Improved inline documentation across all components and context providers.
+
+### Verified
+- Production build passes with `next build --turbopack` ✓
