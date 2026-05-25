@@ -1,3 +1,4 @@
+// Home: landing page with hero section, WhyUs, and HowItWorks
 "use client";
 
 import Image from "next/image";
