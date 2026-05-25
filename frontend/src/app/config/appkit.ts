@@ -125,4 +125,4 @@ try {
 export { modal }
 
 export const config = wagmiAdapter.wagmiConfig
-// TODO: investigate Vercel client-side crash on load
+// INVESTIGATION: tracing crash origin on Vercel deployment
