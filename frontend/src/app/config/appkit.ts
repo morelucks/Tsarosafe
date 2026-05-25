@@ -125,6 +125,7 @@ try {
   })
 } catch (err) {
   console.warn('⚠️ AppKit modal could not be initialized:', err)
+    // App continues to render — wallet features are simply unavailable
 }
 export { modal }
 
