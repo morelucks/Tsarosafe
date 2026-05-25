@@ -1,3 +1,4 @@
+// GroupDetail: detailed view of a single savings group with member list
 "use client";
 import { useState, useEffect } from "react";
 import { useParams, useSearchParams } from "next/navigation";
