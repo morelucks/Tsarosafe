@@ -5,6 +5,10 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: __dirname,
   },
+  // Allow images from external domains used by AppKit and GoodDollar
+  images: {
+    domains: ["tsarosafe.com", "gooddollar.org"],
+  },
 };
 
 export default nextConfig;
