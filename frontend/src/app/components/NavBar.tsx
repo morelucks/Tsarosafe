@@ -71,7 +71,7 @@ const NavBar = () => {
             </button>
           ) : mounted ? (
             <button
-              onClick={() => open()}
+              onClick={() => { if (modal) open(); }}
               className="bg-white text-[#0a192f] px-6 py-2.5 text-sm font-black tracking-widest uppercase hover:bg-blue-500 hover:text-white transition-all"
             >
               Connect
