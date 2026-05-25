@@ -131,3 +131,5 @@ try {
 export { modal }
 
 export const config = wagmiAdapter.wagmiConfig
+
+// End of appkit configuration
