@@ -1,3 +1,4 @@
+// SavingsGroupCard: extended card with contribution and member details
 import Link from "next/link";
 import { Group, GroupStats } from "@/types/group";
 import { useGroup, useGroupStats } from "@/hooks/useTsaroSafe";
