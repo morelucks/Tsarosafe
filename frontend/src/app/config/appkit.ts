@@ -8,6 +8,7 @@ import { cookieStorage, createStorage } from '@wagmi/core'
 // 1. Get projectId from https://cloud.reown.com
 // Using a placeholder if not set - wallet connection won't work but app will load
 const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || '00000000000000000000000000000000'
+// Validate projectId: must be a real Reown project ID, not the placeholder
 const isProjectIdValid = projectId !== '00000000000000000000000000000000' && !!process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID
 
 if (!isProjectIdValid) {
