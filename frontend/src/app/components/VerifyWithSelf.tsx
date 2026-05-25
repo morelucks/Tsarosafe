@@ -1,3 +1,4 @@
+// VerifyWithSelf: Self protocol identity verification for group joining
 "use client";
 
 import React, { useState, useEffect } from 'react';
