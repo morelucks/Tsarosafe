@@ -66,7 +66,7 @@ const celo = {
   rpcUrl: 'https://forno.celo.org'
 } as unknown as AppKitNetwork
 
-// Celo Alfajores Testnet network configuration
+// Celo Alfajores — testnet for staging and QA deployments
 const celoAlfajores = {
   id: 44787,
   name: 'Celo Alfajores',
