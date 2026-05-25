@@ -1,3 +1,4 @@
+// JoinGroup: page for discovering and joining existing savings groups
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import VerifyWithSelf from "@/app/components/VerifyWithSelf";
