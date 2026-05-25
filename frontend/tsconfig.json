@@ -37,6 +37,5 @@
   ],
   "exclude": [
     "node_modules"
-  ],
-  "_comment": "TypeScript config for Next.js 16 with strict mode and path aliases"
+  ]
 }
