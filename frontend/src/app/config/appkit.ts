@@ -127,6 +127,7 @@ try {
   console.warn('⚠️ AppKit modal could not be initialized:', err)
     // App continues to render — wallet features are simply unavailable
 }
+// Export modal — consumers must null-check before calling modal methods
 export { modal }
 
 export const config = wagmiAdapter.wagmiConfig
