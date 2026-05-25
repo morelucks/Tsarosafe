@@ -1,3 +1,4 @@
+// API Route: proxies G$ price data from external oracle to avoid CORS
 /**
  * Next.js API route to proxy CoinGecko price requests
  * This avoids CORS issues in Farcaster and other embedded environments

@@ -1,3 +1,4 @@
+// EngagementRewardsNotification: toast notification for new engagement rewards
 "use client";
 
 import { useEffect, useState } from "react";

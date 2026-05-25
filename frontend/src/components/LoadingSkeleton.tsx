@@ -1,3 +1,4 @@
+// LoadingSkeleton: animated placeholder shown while data is loading
 import React from 'react';
 
 

@@ -1,3 +1,4 @@
+// WhyUs: landing page section highlighting platform advantages
 import Image from "next/image";
 
 const benefits = [

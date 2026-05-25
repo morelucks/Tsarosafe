@@ -1,3 +1,4 @@
+// ErrorBoundary: catches React render errors and shows a fallback UI
 "use client";
 
 import React, { Component, ErrorInfo, ReactNode } from "react";

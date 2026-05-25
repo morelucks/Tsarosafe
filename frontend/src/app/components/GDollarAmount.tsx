@@ -1,3 +1,4 @@
+// GDollarAmount: formats and displays G$ token amounts with USD conversion
 "use client";
 import { useGDollarConversion } from "@/hooks/useGDollarPrice";
 

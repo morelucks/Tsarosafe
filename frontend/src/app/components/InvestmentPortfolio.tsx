@@ -1,3 +1,4 @@
+// InvestmentPortfolio: displays user investment positions and returns
 "use client";
 import { useState } from "react";
 

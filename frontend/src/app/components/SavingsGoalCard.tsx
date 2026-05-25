@@ -1,3 +1,4 @@
+// SavingsGoalCard: card component showing individual savings goal details
 "use client";
 import { useState } from "react";
 

@@ -1,3 +1,4 @@
+// UBIClaim: allows users to claim GoodDollar Universal Basic Income
 "use client";
 import { useState, useEffect } from "react";
 import { useUBIClaimInfo, useClaimUBI, useGoodDollarBalance } from "@/hooks/useGoodDollar";
