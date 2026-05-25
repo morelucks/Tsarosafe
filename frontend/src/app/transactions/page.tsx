@@ -1,3 +1,4 @@
+// Transactions: full transaction history page for the connected wallet
 "use client";
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useAccount } from "wagmi";
