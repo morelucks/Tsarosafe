@@ -74,6 +74,7 @@ const celoAlfajores = {
   rpcUrl: 'https://alfajores-forno.celo-testnet.org'
 } as unknown as AppKitNetwork
 
+// Supported networks — Celo first as default, then EVM chains
 export const networks: [AppKitNetwork, ...AppKitNetwork[]] = [
   celo,
   celoAlfajores,
