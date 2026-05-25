@@ -125,4 +125,3 @@ try {
 export { modal }
 
 export const config = wagmiAdapter.wagmiConfig
-// ROOT CAUSE: createAppKit throws when projectId is invalid or missing
