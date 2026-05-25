@@ -92,29 +92,37 @@ export const wagmiAdapter = new WagmiAdapter({
   networks
 })
 
-// 3. Create modal
-export const modal = createAppKit({
-  adapters: [wagmiAdapter],
-  projectId,
-  networks,
-  defaultNetwork: celo, // Set Celo as default network
-  metadata: {
-    name: 'Tsarosafe',
-    description: 'Save smarter, together or individually',
-    url: 'https://tsarosafe.com',
-    icons: ['https://tsarosafe.com/icon.png']
-  },
-  features: {
-    analytics: true,
-    email: true,
-    socials: ['google', 'x', 'github', 'discord', 'apple', 'facebook'],
-    emailShowWallets: true
-  },
-  themeMode: 'light',
-  themeVariables: {
-    '--w3m-accent': '#0f2a56',
-    '--w3m-border-radius-master': '8px'
-  }
-})
+// 3. Create modal — wrapped in try/catch so a missing/invalid projectId
+//    does not crash the entire client-side app on Vercel.
+let modal: ReturnType<typeof createAppKit> | null = null
+try {
+  modal = createAppKit({
+    adapters: [wagmiAdapter],
+    projectId,
+    networks,
+    defaultNetwork: celo, // Set Celo as default network
+    metadata: {
+      name: 'Tsarosafe',
+      description: 'Save smarter, together or individually',
+      url: 'https://tsarosafe.com',
+      icons: ['https://tsarosafe.com/icon.png']
+    },
+    features: {
+      analytics: true,
+      email: true,
+      socials: ['google', 'x', 'github', 'discord', 'apple', 'facebook'],
+      emailShowWallets: true
+    },
+    themeMode: 'light',
+    themeVariables: {
+      '--w3m-accent': '#0f2a56',
+      '--w3m-border-radius-master': '8px'
+    }
+  })
+} catch (err) {
+  console.warn('⚠️ AppKit modal could not be initialized:', err)
+}
+export { modal }
 
 export const config = wagmiAdapter.wagmiConfig
+// TODO: investigate Vercel client-side crash on load
