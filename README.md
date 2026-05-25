@@ -205,3 +205,9 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 - **Transaction History**: Added a dedicated page for viewing full transaction history.
 - **Global Notifications**: Integrated a toast notification system for user feedback.
 - **Savings Improvements**: Refactored savings components and standardized data fetching.
+
+## Recent Fixes
+
+- **fix/appkit-crash-safe-init**: Resolved a Vercel client-side crash caused by
+  `createAppKit` throwing when `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` is missing.
+  The modal is now initialized inside a try/catch and exported as nullable.
