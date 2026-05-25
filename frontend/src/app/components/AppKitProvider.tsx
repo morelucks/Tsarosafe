@@ -11,7 +11,11 @@ import { config, modal } from '../config/appkit'
 // but that is handled gracefully — the app will still render without wallet features).
 void modal
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { retry: 1, staleTime: 30_000 },
+  },
+})
 
 export function AppKitProvider({ children }: { children: ReactNode }) {
   return (
