@@ -95,6 +95,7 @@ export const wagmiAdapter = new WagmiAdapter({
   networks
 })
 
+// ---------------------------------------------------------------------------
 // 3. Create modal — wrapped in try/catch so a missing/invalid projectId
 //    does not crash the entire client-side app on Vercel.
 let modal: ReturnType<typeof createAppKit> | null = null
