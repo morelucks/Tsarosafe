@@ -1,3 +1,4 @@
+// EngagementRewardsStatus: shows GoodDollar engagement rewards status and claims
 "use client";
 import { useEngagementRewardsStatus } from "@/hooks/useEngagementRewardsStatus";
 import { useClaimEngagementReward, useCurrentBlockNumber } from "@/hooks/useEngagementRewards";
