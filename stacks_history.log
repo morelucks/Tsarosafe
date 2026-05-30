@@ -347,3 +347,4 @@ Commit 346/367: refactor(stacks-payroll): optimize read-only calls for stacks co
 Commit 347/367: refactor(stacks-payroll): improve stacks wallet connect event listener management [part 347]
 Commit 348/367: refactor(stacks-payroll): modularize stacks dashboard stat fetcher logic [part 348]
 Commit 349/367: refactor(stacks-payroll): clean up stacks main dashboard UI container styles [part 349]
+Commit 350/367: refactor(stacks-payroll): refactor stacks payment dispatcher to support batching [part 350]
