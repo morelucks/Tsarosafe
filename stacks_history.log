@@ -339,3 +339,4 @@ Commit 338/367: feat(stacks-payroll): retrieve total disbursements historical co
 Commit 339/367: feat(stacks-payroll): build dashboard helper guide for stacks users [part 339]
 Commit 340/367: feat(stacks-payroll): manage employee permissions inside stacks corporate workspace [part 340]
 Commit 341/367: feat(stacks-payroll): create register company form with stacks wallet connect [part 341]
+Commit 342/367: feat(stacks-payroll): add wallet provider wrapper for stacks app login state [part 342]
