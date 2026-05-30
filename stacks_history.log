@@ -65,3 +65,4 @@ Commit 64/367: chore(stacks-payroll): format stacks codebase using project prett
 Commit 65/367: feat(stacks-payroll): initialize workspace configuration for stacks connection [part 65]
 Commit 66/367: feat(stacks-payroll): define type interfaces for stacks payroll data models [part 66]
 Commit 67/367: feat(stacks-payroll): integrate stacks wallet login status listeners [part 67]
+Commit 68/367: feat(stacks-payroll): setup clarinet configuration for stacks deployment [part 68]
