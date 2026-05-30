@@ -1,3 +1,4 @@
 Commit 1/367: feat(stacks-payroll): initialize workspace configuration for stacks connection [part 1]
 Commit 2/367: feat(stacks-payroll): define type interfaces for stacks payroll data models [part 2]
 Commit 3/367: feat(stacks-payroll): integrate stacks wallet login status listeners [part 3]
+Commit 4/367: feat(stacks-payroll): setup clarinet configuration for stacks deployment [part 4]
