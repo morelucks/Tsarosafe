@@ -349,3 +349,4 @@ Commit 348/367: refactor(stacks-payroll): modularize stacks dashboard stat fetch
 Commit 349/367: refactor(stacks-payroll): clean up stacks main dashboard UI container styles [part 349]
 Commit 350/367: refactor(stacks-payroll): refactor stacks payment dispatcher to support batching [part 350]
 Commit 351/367: refactor(stacks-payroll): simplify stacks role validation logic flow [part 351]
+Commit 352/367: refactor(stacks-payroll): restructure stacks settings components architecture [part 352]
