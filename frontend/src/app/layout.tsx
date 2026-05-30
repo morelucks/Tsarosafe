@@ -6,6 +6,7 @@ import Footer from "./components/Footer";
 import { FarcasterProvider } from "./components/farcaster-provider"
 import { AppKitProvider } from "./components/AppKitProvider"
 import { NotificationProvider } from "@/context/NotificationContext";
+import { StacksWalletProvider } from "@/context/StacksWalletContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,11 +38,13 @@ export default function RootLayout({
       >
         <AppKitProvider>
           <FarcasterProvider>
-            <NotificationProvider>
-              <NavBar />
-              {children}
-            </NotificationProvider>
-            <Footer />
+            <StacksWalletProvider>
+              <NotificationProvider>
+                <NavBar />
+                {children}
+              </NotificationProvider>
+              <Footer />
+            </StacksWalletProvider>
           </FarcasterProvider>
         </AppKitProvider>
       </body>
