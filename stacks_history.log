@@ -274,3 +274,4 @@ Commit 273/367: feat(stacks-payroll): retrieve employee salary rates from stacks
 Commit 274/367: feat(stacks-payroll): retrieve total disbursements historical counts on stacks [part 274]
 Commit 275/367: feat(stacks-payroll): build dashboard helper guide for stacks users [part 275]
 Commit 276/367: feat(stacks-payroll): manage employee permissions inside stacks corporate workspace [part 276]
+Commit 277/367: feat(stacks-payroll): create register company form with stacks wallet connect [part 277]
