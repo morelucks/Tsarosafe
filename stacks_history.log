@@ -204,3 +204,4 @@ Commit 203/367: feat(stacks-payroll): implement single payout disbursement with 
 Commit 204/367: feat(stacks-payroll): configure stacks local mocknet rpc settings [part 204]
 Commit 205/367: feat(stacks-payroll): add support for sip-010 token transfer details on stacks [part 205]
 Commit 206/367: feat(stacks-payroll): implement role authority checks for stacks members [part 206]
+Commit 207/367: feat(stacks-payroll): deactivate worker registration state in stacks contract [part 207]
