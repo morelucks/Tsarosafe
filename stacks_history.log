@@ -276,3 +276,4 @@ Commit 275/367: feat(stacks-payroll): build dashboard helper guide for stacks us
 Commit 276/367: feat(stacks-payroll): manage employee permissions inside stacks corporate workspace [part 276]
 Commit 277/367: feat(stacks-payroll): create register company form with stacks wallet connect [part 277]
 Commit 278/367: feat(stacks-payroll): add wallet provider wrapper for stacks app login state [part 278]
+Commit 279/367: feat(stacks-payroll): update navbar menu options to route stacks payroll module [part 279]
