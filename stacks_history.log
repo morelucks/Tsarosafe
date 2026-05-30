@@ -100,3 +100,4 @@ Commit 99/367: refactor(stacks-payroll): enhance loader animations on stacks dat
 Commit 100/367: refactor(stacks-payroll): refactor stacks address truncation display helper [part 100]
 Commit 101/367: refactor(stacks-payroll): streamline metadata fields in stacks model typings [part 101]
 Commit 102/367: fix(stacks-payroll): resolve crash on missing stacks wallet provider context [part 102]
+Commit 103/367: fix(stacks-payroll): fix decimal conversion error during stacks payment submit [part 103]
