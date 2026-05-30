@@ -229,3 +229,4 @@ Commit 228/367: refactor(stacks-payroll): refactor stacks address truncation dis
 Commit 229/367: refactor(stacks-payroll): streamline metadata fields in stacks model typings [part 229]
 Commit 230/367: fix(stacks-payroll): resolve crash on missing stacks wallet provider context [part 230]
 Commit 231/367: fix(stacks-payroll): fix decimal conversion error during stacks payment submit [part 231]
+Commit 232/367: fix(stacks-payroll): correct network fallback behaviour for stacks devnet mode [part 232]
