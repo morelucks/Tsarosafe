@@ -56,3 +56,4 @@ Commit 55/367: test(stacks-payroll): implement tests for onboarding employees in
 Commit 56/367: test(stacks-payroll): add payout execution tests under stacks mock conditions [part 56]
 Commit 57/367: test(stacks-payroll): verify role authorization scenarios in stacks vitest environment [part 57]
 Commit 58/367: test(stacks-payroll): assert employee active status toggles in stacks contract suite [part 58]
+Commit 59/367: test(stacks-payroll): mock stacks block height responses in frontend unit tests [part 59]
