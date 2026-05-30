@@ -237,3 +237,4 @@ Commit 236/367: fix(stacks-payroll): adjust stacks explorer links to route corre
 Commit 237/367: fix(stacks-payroll): fix alignment of stacks dashboard cards on mobile viewports [part 237]
 Commit 238/367: fix(stacks-payroll): correct typo in stacks employee onboarding modal input label [part 238]
 Commit 239/367: fix(stacks-payroll): fix stacks user role mapping checks in client settings [part 239]
+Commit 240/367: docs(stacks-payroll): add installation guides for stacks clarinet local environment [part 240]
