@@ -360,3 +360,4 @@ Commit 359/367: fix(stacks-payroll): fix decimal conversion error during stacks 
 Commit 360/367: fix(stacks-payroll): correct network fallback behaviour for stacks devnet mode [part 360]
 Commit 361/367: fix(stacks-payroll): fix incorrect stacks principal verification checks [part 361]
 Commit 362/367: fix(stacks-payroll): resolve memory leak in stacks blockchain status pollers [part 362]
+Commit 363/367: fix(stacks-payroll): fix stacks transaction broadcast finish event handler [part 363]
