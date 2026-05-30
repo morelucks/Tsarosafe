@@ -185,3 +185,4 @@ Commit 184/367: test(stacks-payroll): add payout execution tests under stacks mo
 Commit 185/367: test(stacks-payroll): verify role authorization scenarios in stacks vitest environment [part 185]
 Commit 186/367: test(stacks-payroll): assert employee active status toggles in stacks contract suite [part 186]
 Commit 187/367: test(stacks-payroll): mock stacks block height responses in frontend unit tests [part 187]
+Commit 188/367: chore(stacks-payroll): update stacks web packages and dependency structures [part 188]
