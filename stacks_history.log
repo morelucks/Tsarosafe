@@ -154,3 +154,4 @@ Commit 153/367: feat(stacks-payroll): track transaction confirmation status on s
 Commit 154/367: refactor(stacks-payroll): optimize read-only calls for stacks contract execution [part 154]
 Commit 155/367: refactor(stacks-payroll): improve stacks wallet connect event listener management [part 155]
 Commit 156/367: refactor(stacks-payroll): modularize stacks dashboard stat fetcher logic [part 156]
+Commit 157/367: refactor(stacks-payroll): clean up stacks main dashboard UI container styles [part 157]
