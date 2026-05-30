@@ -176,3 +176,4 @@ Commit 175/367: fix(stacks-payroll): fix stacks user role mapping checks in clie
 Commit 176/367: docs(stacks-payroll): add installation guides for stacks clarinet local environment [part 176]
 Commit 177/367: docs(stacks-payroll): document stacks custom token deployment parameters [part 177]
 Commit 178/367: docs(stacks-payroll): add technical instructions for stacks smart contract validation [part 178]
+Commit 179/367: docs(stacks-payroll): document user roles and permissions for stacks workspaces [part 179]
