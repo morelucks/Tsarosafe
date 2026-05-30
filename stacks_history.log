@@ -169,3 +169,4 @@ Commit 168/367: fix(stacks-payroll): correct network fallback behaviour for stac
 Commit 169/367: fix(stacks-payroll): fix incorrect stacks principal verification checks [part 169]
 Commit 170/367: fix(stacks-payroll): resolve memory leak in stacks blockchain status pollers [part 170]
 Commit 171/367: fix(stacks-payroll): fix stacks transaction broadcast finish event handler [part 171]
+Commit 172/367: fix(stacks-payroll): adjust stacks explorer links to route correctly per network [part 172]
