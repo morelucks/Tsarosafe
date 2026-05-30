@@ -7,3 +7,4 @@ Commit 6/367: feat(stacks-payroll): implement stacks company registration contra
 Commit 7/367: feat(stacks-payroll): onboard stacks employee addresses to workspace registry [part 7]
 Commit 8/367: feat(stacks-payroll): verify stacks wallet address format compatibility [part 8]
 Commit 9/367: feat(stacks-payroll): design stacks dashboard statistics summary panel [part 9]
+Commit 10/367: feat(stacks-payroll): add stacks transaction hash explorer link mapping [part 10]
