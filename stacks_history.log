@@ -132,3 +132,4 @@ Commit 131/367: feat(stacks-payroll): integrate stacks wallet login status liste
 Commit 132/367: feat(stacks-payroll): setup clarinet configuration for stacks deployment [part 132]
 Commit 133/367: feat(stacks-payroll): deploy tsaro-token contract on stacks testnet [part 133]
 Commit 134/367: feat(stacks-payroll): implement stacks company registration contract call bindings [part 134]
+Commit 135/367: feat(stacks-payroll): onboard stacks employee addresses to workspace registry [part 135]
