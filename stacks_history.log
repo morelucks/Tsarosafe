@@ -270,3 +270,4 @@ Commit 269/367: feat(stacks-payroll): add support for sip-010 token transfer det
 Commit 270/367: feat(stacks-payroll): implement role authority checks for stacks members [part 270]
 Commit 271/367: feat(stacks-payroll): deactivate worker registration state in stacks contract [part 271]
 Commit 272/367: feat(stacks-payroll): reactivate worker registration state in stacks contract [part 272]
+Commit 273/367: feat(stacks-payroll): retrieve employee salary rates from stacks map variables [part 273]
