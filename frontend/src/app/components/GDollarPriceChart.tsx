@@ -1,3 +1,4 @@
+// GDollarPriceChart: renders historical G$ price chart using canvas
 "use client";
 import { useState, useMemo, useEffect } from "react";
 import { useGDollarPriceHistory } from "@/hooks/useGDollarPrice";

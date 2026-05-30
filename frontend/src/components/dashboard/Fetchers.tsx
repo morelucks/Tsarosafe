@@ -1,3 +1,4 @@
+// Fetchers: data-fetching components for the dashboard page
 "use client";
 import { useEffect } from "react";
 import { useGroup, useGroupStats, useGroupContributions } from "@/hooks/useTsaroSafe";

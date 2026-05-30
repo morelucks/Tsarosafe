@@ -1,3 +1,4 @@
+// GDollarPriceDisplay: shows real-time G$ to USD price with trend indicator
 "use client";
 import { useState, useEffect } from "react";
 import { useGDollarPrice } from "@/hooks/useGDollarPrice";

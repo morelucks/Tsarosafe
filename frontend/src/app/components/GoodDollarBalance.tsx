@@ -1,3 +1,4 @@
+// GoodDollarBalance: displays the user G$ token balance
 "use client";
 import { useState, useEffect } from "react";
 import { useGoodDollarBalance } from "@/hooks/useGoodDollar";

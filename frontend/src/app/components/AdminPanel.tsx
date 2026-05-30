@@ -1,3 +1,4 @@
+// AdminPanel: group admin controls for managing members and settings
 "use client";
 import { useState, useEffect } from "react";
 import { useAccount } from "wagmi";

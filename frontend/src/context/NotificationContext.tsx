@@ -1,4 +1,6 @@
 "use client";
+
+// NotificationContext: global toast notification system for user feedback
 import { ReactNode, createContext, useContext, useState, useCallback } from 'react';
 
 type NotificationType = 'success' | 'error' | 'info';
