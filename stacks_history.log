@@ -147,3 +147,4 @@ Commit 146/367: feat(stacks-payroll): retrieve total disbursements historical co
 Commit 147/367: feat(stacks-payroll): build dashboard helper guide for stacks users [part 147]
 Commit 148/367: feat(stacks-payroll): manage employee permissions inside stacks corporate workspace [part 148]
 Commit 149/367: feat(stacks-payroll): create register company form with stacks wallet connect [part 149]
+Commit 150/367: feat(stacks-payroll): add wallet provider wrapper for stacks app login state [part 150]
