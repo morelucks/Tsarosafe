@@ -101,3 +101,4 @@ Commit 100/367: refactor(stacks-payroll): refactor stacks address truncation dis
 Commit 101/367: refactor(stacks-payroll): streamline metadata fields in stacks model typings [part 101]
 Commit 102/367: fix(stacks-payroll): resolve crash on missing stacks wallet provider context [part 102]
 Commit 103/367: fix(stacks-payroll): fix decimal conversion error during stacks payment submit [part 103]
+Commit 104/367: fix(stacks-payroll): correct network fallback behaviour for stacks devnet mode [part 104]
