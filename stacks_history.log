@@ -250,3 +250,4 @@ Commit 249/367: test(stacks-payroll): verify role authorization scenarios in sta
 Commit 250/367: test(stacks-payroll): assert employee active status toggles in stacks contract suite [part 250]
 Commit 251/367: test(stacks-payroll): mock stacks block height responses in frontend unit tests [part 251]
 Commit 252/367: chore(stacks-payroll): update stacks web packages and dependency structures [part 252]
+Commit 253/367: chore(stacks-payroll): configure environment variable keys for stacks network rpc [part 253]
