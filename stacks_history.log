@@ -303,3 +303,4 @@ Commit 302/367: fix(stacks-payroll): correct typo in stacks employee onboarding 
 Commit 303/367: fix(stacks-payroll): fix stacks user role mapping checks in client settings [part 303]
 Commit 304/367: docs(stacks-payroll): add installation guides for stacks clarinet local environment [part 304]
 Commit 305/367: docs(stacks-payroll): document stacks custom token deployment parameters [part 305]
+Commit 306/367: docs(stacks-payroll): add technical instructions for stacks smart contract validation [part 306]
