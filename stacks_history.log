@@ -43,3 +43,4 @@ Commit 42/367: fix(stacks-payroll): resolve memory leak in stacks blockchain sta
 Commit 43/367: fix(stacks-payroll): fix stacks transaction broadcast finish event handler [part 43]
 Commit 44/367: fix(stacks-payroll): adjust stacks explorer links to route correctly per network [part 44]
 Commit 45/367: fix(stacks-payroll): fix alignment of stacks dashboard cards on mobile viewports [part 45]
+Commit 46/367: fix(stacks-payroll): correct typo in stacks employee onboarding modal input label [part 46]
