@@ -136,3 +136,4 @@ Commit 135/367: feat(stacks-payroll): onboard stacks employee addresses to works
 Commit 136/367: feat(stacks-payroll): verify stacks wallet address format compatibility [part 136]
 Commit 137/367: feat(stacks-payroll): design stacks dashboard statistics summary panel [part 137]
 Commit 138/367: feat(stacks-payroll): add stacks transaction hash explorer link mapping [part 138]
+Commit 139/367: feat(stacks-payroll): implement single payout disbursement with stacks wallet [part 139]
