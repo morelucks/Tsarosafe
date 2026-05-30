@@ -163,3 +163,4 @@ Commit 162/367: refactor(stacks-payroll): improve error code mapping for stacks 
 Commit 163/367: refactor(stacks-payroll): enhance loader animations on stacks database fetch events [part 163]
 Commit 164/367: refactor(stacks-payroll): refactor stacks address truncation display helper [part 164]
 Commit 165/367: refactor(stacks-payroll): streamline metadata fields in stacks model typings [part 165]
+Commit 166/367: fix(stacks-payroll): resolve crash on missing stacks wallet provider context [part 166]
