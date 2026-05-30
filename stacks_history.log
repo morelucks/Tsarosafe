@@ -209,3 +209,4 @@ Commit 208/367: feat(stacks-payroll): reactivate worker registration state in st
 Commit 209/367: feat(stacks-payroll): retrieve employee salary rates from stacks map variables [part 209]
 Commit 210/367: feat(stacks-payroll): retrieve total disbursements historical counts on stacks [part 210]
 Commit 211/367: feat(stacks-payroll): build dashboard helper guide for stacks users [part 211]
+Commit 212/367: feat(stacks-payroll): manage employee permissions inside stacks corporate workspace [part 212]
