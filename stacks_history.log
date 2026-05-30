@@ -124,3 +124,4 @@ Commit 123/367: test(stacks-payroll): mock stacks block height responses in fron
 Commit 124/367: chore(stacks-payroll): update stacks web packages and dependency structures [part 124]
 Commit 125/367: chore(stacks-payroll): configure environment variable keys for stacks network rpc [part 125]
 Commit 126/367: chore(stacks-payroll): add gitkeep files to empty stacks app folder placeholders [part 126]
+Commit 127/367: chore(stacks-payroll): ignore node cache directories for stacks project workspace [part 127]
