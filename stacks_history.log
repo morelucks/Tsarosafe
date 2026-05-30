@@ -134,3 +134,4 @@ Commit 133/367: feat(stacks-payroll): deploy tsaro-token contract on stacks test
 Commit 134/367: feat(stacks-payroll): implement stacks company registration contract call bindings [part 134]
 Commit 135/367: feat(stacks-payroll): onboard stacks employee addresses to workspace registry [part 135]
 Commit 136/367: feat(stacks-payroll): verify stacks wallet address format compatibility [part 136]
+Commit 137/367: feat(stacks-payroll): design stacks dashboard statistics summary panel [part 137]
