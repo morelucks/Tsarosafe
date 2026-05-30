@@ -171,3 +171,4 @@ Commit 170/367: fix(stacks-payroll): resolve memory leak in stacks blockchain st
 Commit 171/367: fix(stacks-payroll): fix stacks transaction broadcast finish event handler [part 171]
 Commit 172/367: fix(stacks-payroll): adjust stacks explorer links to route correctly per network [part 172]
 Commit 173/367: fix(stacks-payroll): fix alignment of stacks dashboard cards on mobile viewports [part 173]
+Commit 174/367: fix(stacks-payroll): correct typo in stacks employee onboarding modal input label [part 174]
