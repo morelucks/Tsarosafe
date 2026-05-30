@@ -202,3 +202,4 @@ Commit 201/367: feat(stacks-payroll): design stacks dashboard statistics summary
 Commit 202/367: feat(stacks-payroll): add stacks transaction hash explorer link mapping [part 202]
 Commit 203/367: feat(stacks-payroll): implement single payout disbursement with stacks wallet [part 203]
 Commit 204/367: feat(stacks-payroll): configure stacks local mocknet rpc settings [part 204]
+Commit 205/367: feat(stacks-payroll): add support for sip-010 token transfer details on stacks [part 205]
