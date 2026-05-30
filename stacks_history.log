@@ -239,3 +239,4 @@ Commit 238/367: fix(stacks-payroll): correct typo in stacks employee onboarding 
 Commit 239/367: fix(stacks-payroll): fix stacks user role mapping checks in client settings [part 239]
 Commit 240/367: docs(stacks-payroll): add installation guides for stacks clarinet local environment [part 240]
 Commit 241/367: docs(stacks-payroll): document stacks custom token deployment parameters [part 241]
+Commit 242/367: docs(stacks-payroll): add technical instructions for stacks smart contract validation [part 242]
