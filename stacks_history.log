@@ -166,3 +166,4 @@ Commit 165/367: refactor(stacks-payroll): streamline metadata fields in stacks m
 Commit 166/367: fix(stacks-payroll): resolve crash on missing stacks wallet provider context [part 166]
 Commit 167/367: fix(stacks-payroll): fix decimal conversion error during stacks payment submit [part 167]
 Commit 168/367: fix(stacks-payroll): correct network fallback behaviour for stacks devnet mode [part 168]
+Commit 169/367: fix(stacks-payroll): fix incorrect stacks principal verification checks [part 169]
