@@ -168,3 +168,4 @@ Commit 167/367: fix(stacks-payroll): fix decimal conversion error during stacks 
 Commit 168/367: fix(stacks-payroll): correct network fallback behaviour for stacks devnet mode [part 168]
 Commit 169/367: fix(stacks-payroll): fix incorrect stacks principal verification checks [part 169]
 Commit 170/367: fix(stacks-payroll): resolve memory leak in stacks blockchain status pollers [part 170]
+Commit 171/367: fix(stacks-payroll): fix stacks transaction broadcast finish event handler [part 171]
