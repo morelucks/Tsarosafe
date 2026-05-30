@@ -302,3 +302,4 @@ Commit 301/367: fix(stacks-payroll): fix alignment of stacks dashboard cards on 
 Commit 302/367: fix(stacks-payroll): correct typo in stacks employee onboarding modal input label [part 302]
 Commit 303/367: fix(stacks-payroll): fix stacks user role mapping checks in client settings [part 303]
 Commit 304/367: docs(stacks-payroll): add installation guides for stacks clarinet local environment [part 304]
+Commit 305/367: docs(stacks-payroll): document stacks custom token deployment parameters [part 305]
