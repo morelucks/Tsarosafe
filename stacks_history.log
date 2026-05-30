@@ -141,3 +141,4 @@ Commit 140/367: feat(stacks-payroll): configure stacks local mocknet rpc setting
 Commit 141/367: feat(stacks-payroll): add support for sip-010 token transfer details on stacks [part 141]
 Commit 142/367: feat(stacks-payroll): implement role authority checks for stacks members [part 142]
 Commit 143/367: feat(stacks-payroll): deactivate worker registration state in stacks contract [part 143]
+Commit 144/367: feat(stacks-payroll): reactivate worker registration state in stacks contract [part 144]
