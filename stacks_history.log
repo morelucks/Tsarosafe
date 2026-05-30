@@ -139,3 +139,4 @@ Commit 138/367: feat(stacks-payroll): add stacks transaction hash explorer link 
 Commit 139/367: feat(stacks-payroll): implement single payout disbursement with stacks wallet [part 139]
 Commit 140/367: feat(stacks-payroll): configure stacks local mocknet rpc settings [part 140]
 Commit 141/367: feat(stacks-payroll): add support for sip-010 token transfer details on stacks [part 141]
+Commit 142/367: feat(stacks-payroll): implement role authority checks for stacks members [part 142]
