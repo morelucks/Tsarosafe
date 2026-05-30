@@ -245,3 +245,4 @@ Commit 244/367: docs(stacks-payroll): update readme to include stacks decentrali
 Commit 245/367: docs(stacks-payroll): document troubleshooting steps for stacks transaction rejects [part 245]
 Commit 246/367: test(stacks-payroll): add unit tests for stacks company registration function [part 246]
 Commit 247/367: test(stacks-payroll): implement tests for onboarding employees in stacks contract [part 247]
+Commit 248/367: test(stacks-payroll): add payout execution tests under stacks mock conditions [part 248]
