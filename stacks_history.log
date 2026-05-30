@@ -98,3 +98,4 @@ Commit 97/367: refactor(stacks-payroll): extract stacks wallet providers to core
 Commit 98/367: refactor(stacks-payroll): improve error code mapping for stacks clarinet errors [part 98]
 Commit 99/367: refactor(stacks-payroll): enhance loader animations on stacks database fetch events [part 99]
 Commit 100/367: refactor(stacks-payroll): refactor stacks address truncation display helper [part 100]
+Commit 101/367: refactor(stacks-payroll): streamline metadata fields in stacks model typings [part 101]
