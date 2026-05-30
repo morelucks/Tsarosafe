@@ -149,3 +149,4 @@ Commit 148/367: feat(stacks-payroll): manage employee permissions inside stacks 
 Commit 149/367: feat(stacks-payroll): create register company form with stacks wallet connect [part 149]
 Commit 150/367: feat(stacks-payroll): add wallet provider wrapper for stacks app login state [part 150]
 Commit 151/367: feat(stacks-payroll): update navbar menu options to route stacks payroll module [part 151]
+Commit 152/367: feat(stacks-payroll): implement custom sip-010 token contract verification on stacks [part 152]
