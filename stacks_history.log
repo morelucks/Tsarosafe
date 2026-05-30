@@ -3,3 +3,4 @@ Commit 2/367: feat(stacks-payroll): define type interfaces for stacks payroll da
 Commit 3/367: feat(stacks-payroll): integrate stacks wallet login status listeners [part 3]
 Commit 4/367: feat(stacks-payroll): setup clarinet configuration for stacks deployment [part 4]
 Commit 5/367: feat(stacks-payroll): deploy tsaro-token contract on stacks testnet [part 5]
+Commit 6/367: feat(stacks-payroll): implement stacks company registration contract call bindings [part 6]
