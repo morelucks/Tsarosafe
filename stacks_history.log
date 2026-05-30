@@ -106,3 +106,4 @@ Commit 105/367: fix(stacks-payroll): fix incorrect stacks principal verification
 Commit 106/367: fix(stacks-payroll): resolve memory leak in stacks blockchain status pollers [part 106]
 Commit 107/367: fix(stacks-payroll): fix stacks transaction broadcast finish event handler [part 107]
 Commit 108/367: fix(stacks-payroll): adjust stacks explorer links to route correctly per network [part 108]
+Commit 109/367: fix(stacks-payroll): fix alignment of stacks dashboard cards on mobile viewports [part 109]
