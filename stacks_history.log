@@ -52,3 +52,4 @@ Commit 51/367: docs(stacks-payroll): document user roles and permissions for sta
 Commit 52/367: docs(stacks-payroll): update readme to include stacks decentralized payroll features [part 52]
 Commit 53/367: docs(stacks-payroll): document troubleshooting steps for stacks transaction rejects [part 53]
 Commit 54/367: test(stacks-payroll): add unit tests for stacks company registration function [part 54]
+Commit 55/367: test(stacks-payroll): implement tests for onboarding employees in stacks contract [part 55]
