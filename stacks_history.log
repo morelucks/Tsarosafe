@@ -207,3 +207,4 @@ Commit 206/367: feat(stacks-payroll): implement role authority checks for stacks
 Commit 207/367: feat(stacks-payroll): deactivate worker registration state in stacks contract [part 207]
 Commit 208/367: feat(stacks-payroll): reactivate worker registration state in stacks contract [part 208]
 Commit 209/367: feat(stacks-payroll): retrieve employee salary rates from stacks map variables [part 209]
+Commit 210/367: feat(stacks-payroll): retrieve total disbursements historical counts on stacks [part 210]
