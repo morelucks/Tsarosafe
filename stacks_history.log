@@ -156,3 +156,4 @@ Commit 155/367: refactor(stacks-payroll): improve stacks wallet connect event li
 Commit 156/367: refactor(stacks-payroll): modularize stacks dashboard stat fetcher logic [part 156]
 Commit 157/367: refactor(stacks-payroll): clean up stacks main dashboard UI container styles [part 157]
 Commit 158/367: refactor(stacks-payroll): refactor stacks payment dispatcher to support batching [part 158]
+Commit 159/367: refactor(stacks-payroll): simplify stacks role validation logic flow [part 159]
