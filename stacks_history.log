@@ -344,3 +344,4 @@ Commit 343/367: feat(stacks-payroll): update navbar menu options to route stacks
 Commit 344/367: feat(stacks-payroll): implement custom sip-010 token contract verification on stacks [part 344]
 Commit 345/367: feat(stacks-payroll): track transaction confirmation status on stacks blockchain [part 345]
 Commit 346/367: refactor(stacks-payroll): optimize read-only calls for stacks contract execution [part 346]
+Commit 347/367: refactor(stacks-payroll): improve stacks wallet connect event listener management [part 347]
