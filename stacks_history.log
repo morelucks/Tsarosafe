@@ -246,3 +246,4 @@ Commit 245/367: docs(stacks-payroll): document troubleshooting steps for stacks 
 Commit 246/367: test(stacks-payroll): add unit tests for stacks company registration function [part 246]
 Commit 247/367: test(stacks-payroll): implement tests for onboarding employees in stacks contract [part 247]
 Commit 248/367: test(stacks-payroll): add payout execution tests under stacks mock conditions [part 248]
+Commit 249/367: test(stacks-payroll): verify role authorization scenarios in stacks vitest environment [part 249]
