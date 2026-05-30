@@ -159,3 +159,4 @@ Commit 158/367: refactor(stacks-payroll): refactor stacks payment dispatcher to 
 Commit 159/367: refactor(stacks-payroll): simplify stacks role validation logic flow [part 159]
 Commit 160/367: refactor(stacks-payroll): restructure stacks settings components architecture [part 160]
 Commit 161/367: refactor(stacks-payroll): extract stacks wallet providers to core layout component [part 161]
+Commit 162/367: refactor(stacks-payroll): improve error code mapping for stacks clarinet errors [part 162]
