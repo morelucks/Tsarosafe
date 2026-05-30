@@ -288,3 +288,4 @@ Commit 287/367: refactor(stacks-payroll): simplify stacks role validation logic 
 Commit 288/367: refactor(stacks-payroll): restructure stacks settings components architecture [part 288]
 Commit 289/367: refactor(stacks-payroll): extract stacks wallet providers to core layout component [part 289]
 Commit 290/367: refactor(stacks-payroll): improve error code mapping for stacks clarinet errors [part 290]
+Commit 291/367: refactor(stacks-payroll): enhance loader animations on stacks database fetch events [part 291]
