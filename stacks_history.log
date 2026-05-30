@@ -258,3 +258,4 @@ Commit 257/367: feat(stacks-payroll): initialize workspace configuration for sta
 Commit 258/367: feat(stacks-payroll): define type interfaces for stacks payroll data models [part 258]
 Commit 259/367: feat(stacks-payroll): integrate stacks wallet login status listeners [part 259]
 Commit 260/367: feat(stacks-payroll): setup clarinet configuration for stacks deployment [part 260]
+Commit 261/367: feat(stacks-payroll): deploy tsaro-token contract on stacks testnet [part 261]
