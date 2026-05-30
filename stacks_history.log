@@ -116,3 +116,4 @@ Commit 115/367: docs(stacks-payroll): document user roles and permissions for st
 Commit 116/367: docs(stacks-payroll): update readme to include stacks decentralized payroll features [part 116]
 Commit 117/367: docs(stacks-payroll): document troubleshooting steps for stacks transaction rejects [part 117]
 Commit 118/367: test(stacks-payroll): add unit tests for stacks company registration function [part 118]
+Commit 119/367: test(stacks-payroll): implement tests for onboarding employees in stacks contract [part 119]
