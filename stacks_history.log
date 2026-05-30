@@ -44,3 +44,4 @@ Commit 43/367: fix(stacks-payroll): fix stacks transaction broadcast finish even
 Commit 44/367: fix(stacks-payroll): adjust stacks explorer links to route correctly per network [part 44]
 Commit 45/367: fix(stacks-payroll): fix alignment of stacks dashboard cards on mobile viewports [part 45]
 Commit 46/367: fix(stacks-payroll): correct typo in stacks employee onboarding modal input label [part 46]
+Commit 47/367: fix(stacks-payroll): fix stacks user role mapping checks in client settings [part 47]
