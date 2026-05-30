@@ -103,3 +103,4 @@ Commit 102/367: fix(stacks-payroll): resolve crash on missing stacks wallet prov
 Commit 103/367: fix(stacks-payroll): fix decimal conversion error during stacks payment submit [part 103]
 Commit 104/367: fix(stacks-payroll): correct network fallback behaviour for stacks devnet mode [part 104]
 Commit 105/367: fix(stacks-payroll): fix incorrect stacks principal verification checks [part 105]
+Commit 106/367: fix(stacks-payroll): resolve memory leak in stacks blockchain status pollers [part 106]
