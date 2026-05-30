@@ -33,3 +33,4 @@ Commit 32/367: refactor(stacks-payroll): restructure stacks settings components 
 Commit 33/367: refactor(stacks-payroll): extract stacks wallet providers to core layout component [part 33]
 Commit 34/367: refactor(stacks-payroll): improve error code mapping for stacks clarinet errors [part 34]
 Commit 35/367: refactor(stacks-payroll): enhance loader animations on stacks database fetch events [part 35]
+Commit 36/367: refactor(stacks-payroll): refactor stacks address truncation display helper [part 36]
