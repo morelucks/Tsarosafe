@@ -73,3 +73,4 @@ Commit 72/367: feat(stacks-payroll): verify stacks wallet address format compati
 Commit 73/367: feat(stacks-payroll): design stacks dashboard statistics summary panel [part 73]
 Commit 74/367: feat(stacks-payroll): add stacks transaction hash explorer link mapping [part 74]
 Commit 75/367: feat(stacks-payroll): implement single payout disbursement with stacks wallet [part 75]
+Commit 76/367: feat(stacks-payroll): configure stacks local mocknet rpc settings [part 76]
