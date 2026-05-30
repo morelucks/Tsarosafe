@@ -128,3 +128,4 @@ Commit 127/367: chore(stacks-payroll): ignore node cache directories for stacks 
 Commit 128/367: chore(stacks-payroll): format stacks codebase using project prettier guidelines [part 128]
 Commit 129/367: feat(stacks-payroll): initialize workspace configuration for stacks connection [part 129]
 Commit 130/367: feat(stacks-payroll): define type interfaces for stacks payroll data models [part 130]
+Commit 131/367: feat(stacks-payroll): integrate stacks wallet login status listeners [part 131]
