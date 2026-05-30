@@ -272,3 +272,4 @@ Commit 271/367: feat(stacks-payroll): deactivate worker registration state in st
 Commit 272/367: feat(stacks-payroll): reactivate worker registration state in stacks contract [part 272]
 Commit 273/367: feat(stacks-payroll): retrieve employee salary rates from stacks map variables [part 273]
 Commit 274/367: feat(stacks-payroll): retrieve total disbursements historical counts on stacks [part 274]
+Commit 275/367: feat(stacks-payroll): build dashboard helper guide for stacks users [part 275]
