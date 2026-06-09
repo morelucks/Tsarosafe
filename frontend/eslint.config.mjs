@@ -1,3 +1,4 @@
+// ESLint config: Next.js recommended rules with TypeScript support
 import nextPlugin from "@next/eslint-plugin-next";
 import tsPlugin from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";

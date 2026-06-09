@@ -1,3 +1,4 @@
+// Footer: site-wide footer with branding and links
 import Link from "next/link";
 
 const Footer = () => {

@@ -1,3 +1,4 @@
+// HowItWorks: landing page section explaining the platform steps
 const steps = [
   {
     number: "01",

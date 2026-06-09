@@ -1,3 +1,4 @@
+// ActivityFeed: displays recent on-chain activity for a savings group
 import Link from "next/link";
 import { RecentActivity } from "@/types/activity";
 

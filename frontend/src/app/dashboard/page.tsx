@@ -1,3 +1,4 @@
+// Dashboard: main user dashboard showing groups, balances, and activity
 "use client";
 import { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";

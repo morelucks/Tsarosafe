@@ -1,15 +1,21 @@
 "use client";
 
+// AppKitProvider wraps the app with Wagmi + React Query.
+// It is safe to render even when the AppKit modal failed to initialize.
 import { ReactNode } from 'react'
 import { WagmiProvider } from 'wagmi'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { config, modal } from '../config/appkit'
 
-// Import modal to ensure it's initialized before useAppKit is called
-// The modal variable is used to ensure the module is evaluated
+// Ensure the modal module is evaluated (it may be null if projectId is missing,
+// but that is handled gracefully — the app will still render without wallet features).
 void modal
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { retry: 1, staleTime: 30_000 },
+  },
+})
 
 export function AppKitProvider({ children }: { children: ReactNode }) {
   return (
