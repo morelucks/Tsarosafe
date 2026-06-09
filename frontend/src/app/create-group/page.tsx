@@ -1,19 +1,12 @@
 // CreateGroup: form page for creating a new savings group on-chain
 "use client";
 import { useMemo, useState, useEffect, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { USDAmount } from "@/app/components/GDollarAmount";
-import { Group } from "@/types/group";
+import { useRouter } from "next/navigation";
 import { useCreateGroup } from "@/hooks/useTsaroSafe";
-import { useClaimEngagementReward, useCurrentBlockNumber } from "@/hooks/useEngagementRewards";
-import EngagementRewardsNotification from "@/components/EngagementRewardsNotification";
-import { useAccount, usePublicClient } from "wagmi";
-import { calculateValidUntilBlock, getInviterAddress, generateSignature } from "@/lib/engagementRewards";
-import { Address } from "viem";
+import { useAccount } from "wagmi";
 
 type Privacy = "public" | "private";
 type MemberRole = "admin" | "member";
-type TokenType = "CELO" | "GSTAR";
 
 interface Member {
   id: string;
@@ -25,7 +18,6 @@ interface GroupSettings {
   name: string;
   description: string;
   privacy: Privacy;
-  tokenType: TokenType;
 }
 
 interface SavingsGoal {
@@ -39,7 +31,6 @@ const initialSettings: GroupSettings = {
   name: "",
   description: "",
   privacy: "private",
-  tokenType: "CELO",
 };
 
 const initialGoal: SavingsGoal = {
@@ -72,7 +63,6 @@ const CreateGroupPage = () => {
   }>({});
 
   const isValidEmail = (value: string): boolean => {
-    // Basic RFC-like email pattern
     return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
   };
 
@@ -83,7 +73,6 @@ const CreateGroupPage = () => {
   const validateSettings = (s: GroupSettings) => {
     const next: typeof errors = {};
     if (s.name.trim().length < 3) next.name = "Name must be at least 3 characters.";
-    if (!s.tokenType) next.name = "Token type is required.";
     setErrors(prev => ({ ...prev, ...next }));
     return Object.keys(next).length === 0;
   };
@@ -139,7 +128,6 @@ const CreateGroupPage = () => {
     return true;
   }, [activeStep, settings, members, goal]);
 
-
   const addMember = () => {
     const value = pendingMember.trim();
     if (!validatePendingMember(value)) return;
@@ -186,52 +174,7 @@ const CreateGroupPage = () => {
   const back = () => setActiveStep(s => Math.max(s - 1, 0));
 
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const { address } = useAccount();
-  const publicClient = usePublicClient();
   const { createGroup, isLoading: isCreating, isConfirmed, error: createError } = useCreateGroup();
-  const { claimReward, isLoading: isClaimingReward } = useClaimEngagementReward();
-  const { getCurrentBlock } = useCurrentBlockNumber();
-  const [rewardClaimed, setRewardClaimed] = useState(false);
-
-  // Claim engagement rewards after group is successfully created
-  useEffect(() => {
-    const claimRewardsAfterGroupCreation = async () => {
-      if (!isConfirmed || rewardClaimed || !address || !publicClient) return;
-
-      try {
-        setRewardClaimed(true);
-
-        // Get inviter from URL params
-        const inviter = getInviterAddress(new URLSearchParams(searchParams.toString()));
-
-        // Get current block and calculate validUntilBlock
-        const currentBlock = await getCurrentBlock();
-        const validUntilBlock = calculateValidUntilBlock(currentBlock);
-
-        // Generate signature (simplified - use GoodDollar SDK in production)
-        const signature = await generateSignature(
-          '0x4902045cEF54fBc664591a40fecf22Bb51932a45' as Address,
-          inviter,
-          validUntilBlock,
-          null // Placeholder - use GoodDollar SDK in production
-        );
-
-        // Claim reward (non-blocking - don't fail if this errors)
-        try {
-          await claimReward(inviter, validUntilBlock, signature);
-        } catch (rewardError) {
-          console.warn('Failed to claim engagement reward:', rewardError);
-          // Don't block user flow if reward claim fails
-        }
-      } catch (error) {
-        console.error('Error in reward claim flow:', error);
-        // Don't block user flow
-      }
-    };
-
-    claimRewardsAfterGroupCreation();
-  }, [isConfirmed, rewardClaimed, address, publicClient, searchParams, getCurrentBlock, claimReward]);
 
   useEffect(() => {
     if (isConfirmed) {
@@ -253,11 +196,8 @@ const CreateGroupPage = () => {
         ? Math.floor(new Date(goal.endDate).getTime() / 1000)
         : Math.floor((Date.now() + 30 * 24 * 60 * 60 * 1000) / 1000); // Default to 30 days from now
 
-      // Convert target amount to wei (assuming USD, we'll use 18 decimals)
+      // Convert target amount to wei (assuming CELO, we'll use 18 decimals)
       const targetAmountWei = BigInt(Math.floor(goal.targetAmount * 1e18));
-
-      // Convert token type to enum (0 = CELO, 1 = GSTAR)
-      const tokenTypeEnum = settings.tokenType === "CELO" ? 0 : 1;
 
       // Create group on contract
       await createGroup(
@@ -267,7 +207,7 @@ const CreateGroupPage = () => {
         targetAmountWei,
         members.length + 1, // Include creator
         BigInt(endTimestamp),
-        tokenTypeEnum
+        0 // tokenTypeEnum: 0 = CELO
       );
     } catch (error) {
       console.error('Failed to create group:', error);
@@ -277,7 +217,6 @@ const CreateGroupPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-4 md:py-8">
-      <EngagementRewardsNotification />
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Create New Group</h1>
         <p className="text-gray-600 mb-6">Build your savings group in a few steps. No verification required.</p>
@@ -352,37 +291,6 @@ const CreateGroupPage = () => {
                     <span>
                       <span className="block text-sm font-medium text-gray-900">Discoverable (Public)</span>
                       <span className="block text-xs text-gray-500">Group is visible in search/browse. Admin approval may still be required to join.</span>
-                    </span>
-                  </label>
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Contribution Currency</label>
-                <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <label className="flex items-start gap-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="tokenType"
-                      className="mt-1"
-                      checked={settings.tokenType === "CELO"}
-                      onChange={() => setSettings({ ...settings, tokenType: "CELO" })}
-                    />
-                    <span>
-                      <span className="block text-sm font-medium text-gray-900">CELO</span>
-                      <span className="block text-xs text-gray-500">Celo native token for contributions and payouts.</span>
-                    </span>
-                  </label>
-                  <label className="flex items-start gap-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="tokenType"
-                      className="mt-1"
-                      checked={settings.tokenType === "GSTAR"}
-                      onChange={() => setSettings({ ...settings, tokenType: "GSTAR" })}
-                    />
-                    <span>
-                      <span className="block text-sm font-medium text-gray-900">G$ (GoodDollar)</span>
-                      <span className="block text-xs text-gray-500">GoodDollar token for inclusive financial access.</span>
                     </span>
                   </label>
                 </div>
@@ -487,7 +395,7 @@ const CreateGroupPage = () => {
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Target Amount (USD)</label>
+                  <label className="block text-sm font-medium text-gray-700">Target Amount (CELO)</label>
                   <input
                     type="number"
                     min={0}
@@ -547,7 +455,7 @@ const CreateGroupPage = () => {
                   <p className="font-semibold">Settings</p>
                   <p className="mt-1 text-gray-800">Name: <span className="font-medium">{settings.name}</span></p>
                   <p className="mt-1 text-gray-800">Privacy: <span className="font-medium">{settings.privacy}</span></p>
-                  <p className="mt-1 text-gray-800">Currency: <span className="font-medium">{settings.tokenType === "CELO" ? "CELO" : "G$ (GoodDollar)"}</span></p>
+                  <p className="mt-1 text-gray-800">Currency: <span className="font-medium">CELO</span></p>
                   {settings.description && <p className="mt-1 text-gray-800">Description: <span className="font-medium">{settings.description}</span></p>}
                 </div>
                 <div className="p-3 rounded border text-gray-900">
@@ -560,7 +468,7 @@ const CreateGroupPage = () => {
                 </div>
                 <div className="p-3 rounded border text-gray-900">
                   <p className="font-semibold">Goal</p>
-                  <p className="mt-1 text-gray-800">Target: <span className="font-medium">${goal.targetAmount.toLocaleString()}</span></p>
+                  <p className="mt-1 text-gray-800">Target: <span className="font-medium">{goal.targetAmount.toLocaleString()} CELO</span></p>
                   <p className="mt-1 text-gray-800">Cadence: <span className="font-medium">{goal.cadence}</span></p>
                   <p className="mt-1 text-gray-800">Start: <span className="font-medium">{goal.startDate || "-"}</span></p>
                   <p className="mt-1 text-gray-800">End: <span className="font-medium">{goal.endDate || "-"}</span></p>

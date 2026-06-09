@@ -3,11 +3,6 @@
     "type": "constructor",
     "inputs": [
       {
-        "name": "goodDollarAddress_",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
         "name": "celoAddress_",
         "type": "address",
         "internalType": "address"
@@ -1162,19 +1157,6 @@
   },
   {
     "type": "function",
-    "name": "goodDollarAddress",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
     "name": "groupActiveRound",
     "inputs": [
       {
@@ -1918,19 +1900,6 @@
   {
     "type": "function",
     "name": "setCeloAddress",
-    "inputs": [
-      {
-        "name": "newAddress",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "setGoodDollarAddress",
     "inputs": [
       {
         "name": "newAddress",
