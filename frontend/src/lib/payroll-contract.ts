@@ -36,7 +36,9 @@ async function callReadOnly(
   // Serialize args to hex strings
   const serializedArgs = args.map((arg) => {
     const buffer = serializeCV(arg);
-    return Buffer.from(buffer).toString('hex');
+    return Array.from(buffer)
+      .map((b) => Number(b).toString(16).padStart(2, '0'))
+      .join('');
   });
 
   const response = await fetch(url, {
