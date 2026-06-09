@@ -5,10 +5,6 @@ import { useAccount } from "wagmi";
 import { useUserGroups, useGroup, useGroupStats } from "@/hooks/useTsaroSafe";
 import { Address } from "viem";
 import { Group, GroupStats } from "@/types/group";
-import GoodDollarBalance from "@/app/components/GoodDollarBalance";
-import UBIClaim from "@/app/components/UBIClaim";
-import EngagementRewardsStatus from "@/app/components/EngagementRewardsStatus";
-import EngagementRewardsNotification from "@/components/EngagementRewardsNotification";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 // Component to fetch stats for a single group and report back
@@ -51,22 +47,20 @@ function SavingsGroupCard({ groupId }: { groupId: bigint }) {
   const currentAmount = Number(stats.currentAmount) / 1e18;
   const targetAmount = Number(group.targetAmount) / 1e18;
   const progress = (currentAmount / targetAmount) * 100;
-  const isCelo = (group.tokenType ?? 0) === 0;
 
   return (
     <Link href={`/group/${groupId}`} className="group relative bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-xl transition-all duration-300 overflow-hidden block">
       {/* Decorative background element */}
-      <div className={`absolute top-0 right-0 w-24 h-24 -mr-8 -mt-8 rounded-full opacity-5 ${isCelo ? 'bg-blue-600' : 'bg-green-600'}`}></div>
+      <div className="absolute top-0 right-0 w-24 h-24 -mr-8 -mt-8 rounded-full opacity-5 bg-blue-600"></div>
 
       <div className="flex justify-between items-start mb-4 relative z-10">
         <div className="flex-1">
           <h3 className="text-xl font-black text-gray-900 tracking-tight group-hover:text-blue-600 transition-colors uppercase">{group.name}</h3>
           <p className="text-sm text-gray-500 line-clamp-2 mt-1 font-medium">{group.description}</p>
         </div>
-        <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black tracking-widest uppercase ${isCelo ? 'bg-blue-50 text-blue-600' : 'bg-green-50 text-green-600'
-          }`}>
-          <span className={`w-1.5 h-1.5 rounded-full ${isCelo ? 'bg-blue-600' : 'bg-green-600'} animate-pulse`}></span>
-          {isCelo ? "CELO" : "G$"}
+        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black tracking-widest uppercase bg-blue-50 text-blue-600">
+          <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span>
+          CELO
         </div>
       </div>
 
@@ -77,8 +71,7 @@ function SavingsGroupCard({ groupId }: { groupId: bigint }) {
         </div>
         <div className="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
           <div
-            className={`h-full rounded-full transition-all duration-1000 ease-out ${isCelo ? 'bg-gradient-to-r from-blue-600 to-indigo-600' : 'bg-gradient-to-r from-green-500 to-emerald-600'
-              }`}
+            className="h-full rounded-full transition-all duration-1000 ease-out bg-gradient-to-r from-blue-600 to-indigo-600"
             style={{ width: `${Math.min(progress, 100)}%` }}
           ></div>
         </div>
@@ -153,66 +146,54 @@ export default function SavingsPage() {
         </div>
 
         <ErrorBoundary>
-          <EngagementRewardsNotification />
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-            <div className="lg:col-span-1 space-y-6">
-              <GoodDollarBalance />
-              <UBIClaim />
-              <EngagementRewardsStatus />
+          {/* Quick Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div className="bg-white rounded-lg shadow p-6 border border-blue-50">
+              <div className="flex items-center">
+                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                  <span className="text-blue-600 text-lg">💰</span>
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-500">Value Saved</p>
+                  <p className="text-2xl font-bold text-gray-900">${totalSaved.toLocaleString()}</p>
+                </div>
+              </div>
             </div>
 
-            <div className="lg:col-span-2">
-              {/* Quick Stats */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <div className="bg-white rounded-lg shadow p-6 border border-blue-50">
-                  <div className="flex items-center">
-                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                      <span className="text-blue-600 text-lg">💰</span>
-                    </div>
-                    <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-500">Value Saved</p>
-                      <p className="text-2xl font-bold text-gray-900">${totalSaved.toLocaleString()}</p>
-                    </div>
-                  </div>
+            <div className="bg-white rounded-lg shadow p-6 border border-green-50">
+              <div className="flex items-center">
+                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                  <span className="text-green-600 text-lg">🎯</span>
                 </div>
-
-                <div className="bg-white rounded-lg shadow p-6 border border-green-50">
-                  <div className="flex items-center">
-                    <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                      <span className="text-green-600 text-lg">🎯</span>
-                    </div>
-                    <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-500">Active Goals</p>
-                      <p className="text-2xl font-bold text-gray-900">{activeGoals}</p>
-                    </div>
-                  </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-500">Active Goals</p>
+                  <p className="text-2xl font-bold text-gray-900">{activeGoals}</p>
                 </div>
+              </div>
+            </div>
 
-                <div className="bg-white rounded-lg shadow p-6 border border-purple-50">
-                  <div className="flex items-center">
-                    <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
-                      <span className="text-purple-600 text-lg">✅</span>
-                    </div>
-                    <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-500">Completed</p>
-                      <p className="text-2xl font-bold text-gray-900">{completedGoals}</p>
-                    </div>
-                  </div>
+            <div className="bg-white rounded-lg shadow p-6 border border-purple-50">
+              <div className="flex items-center">
+                <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                  <span className="text-purple-600 text-lg">✅</span>
                 </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-500">Completed</p>
+                  <p className="text-2xl font-bold text-gray-900">{completedGoals}</p>
+                </div>
+              </div>
+            </div>
 
-                <div className="bg-white rounded-lg shadow p-6 border border-orange-50">
-                  <div className="flex items-center">
-                    <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
-                      <span className="text-orange-600 text-lg">📊</span>
-                    </div>
-                    <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-500">Total Progress</p>
-                      <p className="text-2xl font-bold text-gray-900">
-                        {totalTarget > 0 ? Math.round((totalSaved / totalTarget) * 100) : 0}%
-                      </p>
-                    </div>
-                  </div>
+            <div className="bg-white rounded-lg shadow p-6 border border-orange-50">
+              <div className="flex items-center">
+                <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
+                  <span className="text-orange-600 text-lg">📊</span>
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-500">Total Progress</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {totalTarget > 0 ? Math.round((totalSaved / totalTarget) * 100) : 0}%
+                  </p>
                 </div>
               </div>
             </div>

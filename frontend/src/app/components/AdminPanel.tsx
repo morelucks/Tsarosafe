@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import { useAccount } from "wagmi";
 import { useTsaroSafeOwner, useTsaroSafeAdmin } from "@/hooks/useTsaroSafe";
-import { getGoodDollarAddress } from "@/lib/constants";
 import { Address } from "viem";
 
 export default function AdminPanel() {
@@ -42,13 +41,6 @@ export default function AdminPanel() {
             setErc20Amount("");
         } catch (err) {
             console.error(err);
-        }
-    };
-
-    const setGdollarAddress = () => {
-        if (chain) {
-            const gaddr = getGoodDollarAddress(chain.id);
-            if (gaddr) setTokenAddress(gaddr);
         }
     };
 
@@ -103,12 +95,6 @@ export default function AdminPanel() {
                                     placeholder="0x..."
                                     className="flex-1 bg-black/50 border border-white/10 rounded-lg px-4 py-2 text-white text-xs font-mono focus:outline-none focus:ring-1 focus:ring-green-600"
                                 />
-                                <button
-                                    onClick={setGdollarAddress}
-                                    className="bg-green-600/20 text-green-400 px-3 rounded-lg text-[10px] font-black uppercase tracking-widest border border-green-600/30 hover:bg-green-600 hover:text-white"
-                                >
-                                    G$
-                                </button>
                             </div>
                         </div>
                         <div>

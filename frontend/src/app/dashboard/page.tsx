@@ -4,16 +4,8 @@ import Link from "next/link";
 import { useAccount, useSwitchChain } from "wagmi";
 import { useUserGroups, useGroup, useGroupMembers } from "@/hooks/useTsaroSafe";
 import { Address } from "viem";
-import GoodDollarBalance from "@/app/components/GoodDollarBalance";
-import UBIClaim from "@/app/components/UBIClaim";
-import GDollarPriceDisplay from "@/app/components/GDollarPriceDisplay";
-import GDollarPriceChart from "@/app/components/GDollarPriceChart";
-import { USDAmount } from "@/app/components/GDollarAmount";
 import { Group } from "@/types/group";
-import { useUBIClaimInfo } from "@/hooks/useGoodDollar";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
-import EngagementRewardsNotification from "@/components/EngagementRewardsNotification";
-import EngagementRewardsStatus from "@/app/components/EngagementRewardsStatus";
 import AdminPanel from "@/app/components/AdminPanel";
 import { GroupStatFetcher, GroupContributionsFetcher } from "@/components/dashboard/Fetchers";
 import { CardSkeleton } from "@/components/LoadingSkeleton";
@@ -35,7 +27,6 @@ interface RecentActivity {
   timestamp: string;
   status: 'completed' | 'pending' | 'failed';
 }
-
 
 // Component to display a single group card
 function GroupCard({ groupId }: { groupId: bigint }) {
@@ -73,16 +64,13 @@ function GroupCard({ groupId }: { groupId: bigint }) {
             }`}>
             {privacy}
           </span>
-          <span className={`px-2 py-1 rounded text-xs ${(group.tokenType ?? 0) === 0
-            ? 'bg-yellow-100 text-yellow-800'
-            : 'bg-green-100 text-green-800'
-            }`}>
-            {(group.tokenType ?? 0) === 0 ? "CELO" : "G$"}
+          <span className="px-2 py-1 rounded text-xs bg-yellow-100 text-yellow-800">
+            CELO
           </span>
         </div>
       </div>
       <div className="mt-2 text-sm text-gray-600">
-        Goal: ${targetAmount.toLocaleString('en-US', { maximumFractionDigits: 2 })}
+        Goal: {targetAmount.toLocaleString('en-US', { maximumFractionDigits: 2 })} CELO
       </div>
     </Link>
   );
@@ -164,7 +152,6 @@ function DashboardContent({ stats, setStats, recentActivity, setRecentActivity }
 
   const { groupIds: groupIdsData, isLoading: isLoadingGroups } = useUserGroups(address as Address | undefined);
   const groupIds = groupIdsData as bigint[] | undefined;
-  const { claimableAmountFormatted, canClaim } = useUBIClaimInfo();
 
   const [groupAmounts, setGroupAmounts] = useState<Map<string, number>>(new Map());
   const [allActivities, setAllActivities] = useState<Map<string, RecentActivity[]>>(new Map());
@@ -246,7 +233,6 @@ function DashboardContent({ stats, setStats, recentActivity, setRecentActivity }
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-gray-50 py-8">
-        <EngagementRewardsNotification />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="mb-8">
@@ -254,19 +240,9 @@ function DashboardContent({ stats, setStats, recentActivity, setRecentActivity }
             <p className="mt-2 text-gray-600">Welcome back! Here&apos;s your financial overview.</p>
           </div>
 
-          {/* Engagement Rewards Status */}
-          <div className="mb-6">
-            <EngagementRewardsStatus />
-          </div>
-
           {/* Stats Section */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-            <div className="lg:col-span-1 space-y-6">
-              <GoodDollarBalance />
-              <UBIClaim />
-            </div>
-
-            <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
                 <div className="flex items-center">
                   <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mr-4">
@@ -274,7 +250,7 @@ function DashboardContent({ stats, setStats, recentActivity, setRecentActivity }
                   </div>
                   <div>
                     <p className="text-sm font-bold text-gray-500 uppercase tracking-wider">Total Savings</p>
-                    <p className="text-3xl font-black text-gray-900">${stats.totalSavings.toLocaleString('en-US')}</p>
+                    <p className="text-3xl font-black text-gray-900">{stats.totalSavings.toLocaleString('en-US')} CELO</p>
                   </div>
                 </div>
               </div>
@@ -291,10 +267,10 @@ function DashboardContent({ stats, setStats, recentActivity, setRecentActivity }
                 </div>
               </div>
 
-              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 md:col-span-2">
-                <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">Monthly Goal Progress</h3>
-                <div className="flex justify-between text-sm font-bold text-gray-900 mb-2">
-                  <span>${stats.totalSavings.toLocaleString('en-US')} of ${stats.monthlyGoal.toLocaleString('en-US')}</span>
+              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">Monthly Goal Progress</h3>
+                <div className="flex justify-between text-sm font-bold text-gray-900 mb-1">
+                  <span>{stats.totalSavings.toLocaleString('en-US')} of {stats.monthlyGoal.toLocaleString('en-US')} CELO</span>
                   <span>{Math.round(savingsProgress)}%</span>
                 </div>
                 <div className="w-full bg-gray-100 rounded-full h-4 relative overflow-hidden">
@@ -345,9 +321,6 @@ function DashboardContent({ stats, setStats, recentActivity, setRecentActivity }
                   </Link>
                 </div>
               </div>
-
-              {/* G$ Price Chart */}
-              <GDollarPriceChart height={250} />
             </div>
 
             {/* Recent Activity */}
@@ -398,7 +371,6 @@ function DashboardContent({ stats, setStats, recentActivity, setRecentActivity }
             </div>
           )}
 
-          {/* Quick Actions (Duplicate removed) */}
           <AdminPanel />
         </div>
       </div>

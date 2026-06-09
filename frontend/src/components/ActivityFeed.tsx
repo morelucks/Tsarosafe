@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { RecentActivity } from "@/types/activity";
-import { InlineGDollarAmount } from "@/app/components/GDollarAmount";
 
 interface ActivityFeedProps {
     activities: RecentActivity[];
@@ -40,17 +39,10 @@ export function ActivityFeed({ activities, limit, showViewAll }: ActivityFeedPro
     };
 
     const renderAmount = (activity: RecentActivity) => {
-        if (activity.tokenType === 1) {
-            return (
-                <span className="text-sm text-gray-600">
-                    <InlineGDollarAmount amount={activity.amount || 0} className="text-gray-900" />
-                </span>
-            );
-        }
         if (activity.amount !== undefined) {
             return (
-                <span className="text-sm text-gray-600">
-                    ${activity.amount.toLocaleString('en-US')}
+                <span className="text-sm font-bold text-gray-900">
+                    {activity.amount.toLocaleString('en-US')} CELO
                 </span>
             );
         }
@@ -99,7 +91,7 @@ export function ActivityFeed({ activities, limit, showViewAll }: ActivityFeedPro
             {showViewAll && displayActivities.length > 0 && (
                 <div className="mt-4">
                     <Link
-                        href="/transactions" // Pointing to the new transactions page I plan to build
+                        href="/transactions"
                         className="text-blue-600 text-sm hover:text-blue-800"
                     >
                         View all activity →
