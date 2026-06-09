@@ -4,12 +4,12 @@ pragma solidity 0.8.28;
 import {IERC20} from "forge-std/interfaces/IERC20.sol";
 
 /**
- * @title MockGoodDollar
- * @notice Mock ERC20 token for testing G$ approval flow
+ * @title MockERC20
+ * @notice Mock ERC20 token for testing ERC20 transfer and approval flow
  */
-contract MockGoodDollar is IERC20 {
-    string public name = "GoodDollar";
-    string public symbol = "G$";
+contract MockERC20 is IERC20 {
+    string public name = "MockERC20";
+    string public symbol = "MOCK";
     uint8 public decimals = 18;
     uint256 public totalSupply;
 

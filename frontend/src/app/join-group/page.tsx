@@ -6,7 +6,6 @@ import { usePublicGroups, usePublicGroupsByTokenType, useJoinGroup } from "@/hoo
 import { Group } from "@/types/group";
 
 type Privacy = "public" | "private";
-type TokenType = "CELO" | "GSTAR";
 
 interface GroupRow {
   id: string;
@@ -14,10 +13,8 @@ interface GroupRow {
   privacy: Privacy;
   members: number;
   description?: string;
-  tokenType?: TokenType;
+  tokenType?: string;
 }
-
-
 
 interface VerificationData {
   isHuman: boolean;
@@ -30,7 +27,6 @@ const PAGE_SIZE = 3;
 const JoinGroupPage = () => {
   const [query, setQuery] = useState("");
   const [privacy, setPrivacy] = useState<"all" | Privacy>("all");
-  const [tokenType, setTokenType] = useState<"all" | TokenType>("all");
   const [page, setPage] = useState(1);
   const [inviteCode, setInviteCode] = useState("");
   const [message, setMessage] = useState<string | null>(null);
@@ -41,27 +37,12 @@ const JoinGroupPage = () => {
   const [verificationData, setVerificationData] = useState<VerificationData | null>(null);
   const [showVerification, setShowVerification] = useState(false);
 
-  // Load public groups from contract based on token filter
-  const { groups: allPublicGroupsData, isLoading: isLoadingAllGroups } = usePublicGroups(0n, 50);
-  const { groups: celoGroupsData, isLoading: isLoadingCeloGroups } = usePublicGroupsByTokenType(0, 0n, 50);
-  const { groups: gstarGroupsData, isLoading: isLoadingGstarGroups } = usePublicGroupsByTokenType(1, 0n, 50);
+  // Load public groups from contract
+  const { groups: allPublicGroupsData, isLoading: isLoadingGroups } = usePublicGroups(0n, 50);
   const { joinGroup, isLoading: isJoining, isConfirmed: isJoined } = useJoinGroup();
 
   // Type assertions for proper TypeScript support
   const allPublicGroups = allPublicGroupsData as Group[] | undefined;
-  const celoGroups = celoGroupsData as Group[] | undefined;
-  const gstarGroups = gstarGroupsData as Group[] | undefined;
-
-  // Determine which groups to use based on token filter
-  const publicGroups = useMemo(() => {
-    if (tokenType === "CELO") return celoGroups;
-    if (tokenType === "GSTAR") return gstarGroups;
-    return allPublicGroups;
-  }, [tokenType, celoGroups, gstarGroups, allPublicGroups]);
-
-  const isLoadingGroups = tokenType === "CELO" ? isLoadingCeloGroups : 
-                         tokenType === "GSTAR" ? isLoadingGstarGroups : 
-                         isLoadingAllGroups;
 
   // Load invites and verification from localStorage (these are UI-only, not contract data)
   useEffect(() => {
@@ -94,13 +75,13 @@ const JoinGroupPage = () => {
     const q = query.trim().toLowerCase();
     
     // Convert contract groups to GroupRow format
-    const contractGroupRows: GroupRow[] = (publicGroups || []).map((g: Group) => ({
+    const contractGroupRows: GroupRow[] = (allPublicGroups || []).map((g: Group) => ({
       id: g.id.toString(),
       name: g.name,
       privacy: g.isPrivate ? 'private' : 'public',
       members: 0, // Will be fetched separately if needed
       description: g.description,
-      tokenType: (g.tokenType ?? 0) === 0 ? 'CELO' : 'GSTAR'
+      tokenType: 'CELO'
     }));
     
     // Filter by search query and privacy
@@ -110,10 +91,10 @@ const JoinGroupPage = () => {
     if (privacy !== "all") rows = rows.filter(g => g.privacy === privacy);
     
     return rows;
-  }, [query, privacy, publicGroups]);
+  }, [query, privacy, allPublicGroups]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  useEffect(() => { setPage(1); }, [query, privacy, tokenType]);
+  useEffect(() => { setPage(1); }, [query, privacy]);
   const pageRows = useMemo(() => {
     const start = (page - 1) * PAGE_SIZE;
     return filtered.slice(start, start + PAGE_SIZE);
@@ -207,11 +188,6 @@ const JoinGroupPage = () => {
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Join a Group</h1>
         <p className="text-gray-600 mb-6">
           Discover public groups or join directly with an invite code.
-          {tokenType !== "all" && (
-            <span className="ml-2 inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-800">
-              Filtering by {tokenType === "CELO" ? "CELO" : "G$ (GoodDollar)"}
-            </span>
-          )}
         </p>
 
         {message && (
@@ -293,15 +269,6 @@ const JoinGroupPage = () => {
             <option value="public">Public</option>
             <option value="private">Private</option>
           </select>
-          <select
-            value={tokenType}
-            onChange={e => setTokenType(e.target.value as "all" | TokenType)}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-gray-900 bg-white"
-          >
-            <option value="all">All Tokens</option>
-            <option value="CELO">CELO</option>
-            <option value="GSTAR">G$ (GoodDollar)</option>
-          </select>
         </div>
 
         {/* Results */}
@@ -319,15 +286,9 @@ const JoinGroupPage = () => {
                     <p className="text-xs text-gray-500 mt-1">{g.description}</p>
                     <div className="mt-2 flex gap-3 text-xs text-gray-600 flex-wrap">
                       <span className="inline-flex items-center px-2 py-1 rounded bg-gray-100">{g.privacy}</span>
-                      {g.tokenType && (
-                        <span className={`inline-flex items-center px-2 py-1 rounded ${
-                          g.tokenType === 'CELO' 
-                            ? 'bg-yellow-100 text-yellow-800' 
-                            : 'bg-green-100 text-green-800'
-                        }`}>
-                          {g.tokenType === 'CELO' ? 'CELO' : 'G$'}
-                        </span>
-                      )}
+                      <span className="inline-flex items-center px-2 py-1 rounded bg-yellow-100 text-yellow-800">
+                        CELO
+                      </span>
                       <span>{g.members} members</span>
                     </div>
                   </div>

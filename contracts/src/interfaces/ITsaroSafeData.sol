@@ -8,8 +8,7 @@ pragma solidity ^0.8.28;
 interface ITsaroSafeData {
     // Token type enum
     enum TokenType {
-        CELO,
-        GSTAR
+        CELO
     }
 
     // Group Management Structures

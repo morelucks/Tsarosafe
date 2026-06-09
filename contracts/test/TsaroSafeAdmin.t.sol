@@ -3,19 +3,19 @@ pragma solidity 0.8.28;
 
 import {Test, console} from "forge-std/Test.sol";
 import {TsaroSafe} from "../src/core/TsaroSafe.sol";
-import {MockGoodDollar} from "./mocks/MockGoodDollar.sol";
+import {MockERC20} from "./mocks/MockERC20.sol";
 
 contract TsaroSafeAdminTest is Test {
     TsaroSafe public tsaroSafe;
-    MockGoodDollar public mockGoodDollar;
+    MockERC20 public mockERC20;
     address public owner;
     address public nonOwner;
 
     function setUp() public {
         owner = address(this);
         nonOwner = makeAddr("nonOwner");
-        mockGoodDollar = new MockGoodDollar();
-        tsaroSafe = new TsaroSafe(address(mockGoodDollar), address(0));
+        mockERC20 = new MockERC20();
+        tsaroSafe = new TsaroSafe(address(0));
     }
 
     function testOwnerCanWithdrawNative() public {
@@ -44,24 +44,24 @@ contract TsaroSafeAdminTest is Test {
 
     function testOwnerCanWithdrawERC20() public {
         uint256 amount = 500 ether;
-        mockGoodDollar.mint(address(tsaroSafe), amount);
+        mockERC20.mint(address(tsaroSafe), amount);
         
-        uint256 ownerInitialBalance = mockGoodDollar.balanceOf(owner);
+        uint256 ownerInitialBalance = mockERC20.balanceOf(owner);
         
         // Withdraw as owner
-        tsaroSafe.withdrawERC20(address(mockGoodDollar), amount);
+        tsaroSafe.withdrawERC20(address(mockERC20), amount);
         
-        assertEq(mockGoodDollar.balanceOf(address(tsaroSafe)), 0);
-        assertEq(mockGoodDollar.balanceOf(owner), ownerInitialBalance + amount);
+        assertEq(mockERC20.balanceOf(address(tsaroSafe)), 0);
+        assertEq(mockERC20.balanceOf(owner), ownerInitialBalance + amount);
     }
 
     function testNonOwnerCannotWithdrawERC20() public {
         uint256 amount = 500 ether;
-        mockGoodDollar.mint(address(tsaroSafe), amount);
+        mockERC20.mint(address(tsaroSafe), amount);
         
         vm.startPrank(nonOwner);
         vm.expectRevert(); // Should revert due to onlyOwner
-        tsaroSafe.withdrawERC20(address(mockGoodDollar), amount);
+        tsaroSafe.withdrawERC20(address(mockERC20), amount);
         vm.stopPrank();
     }
 
