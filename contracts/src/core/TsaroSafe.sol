@@ -77,7 +77,6 @@ contract TsaroSafe is ITsaroSafeData {
     // ============ State Variables ============
     
     // Token addresses for ERC20 support
-    address public goodDollarAddress;
     address public celoAddress;
     address public owner;
 
@@ -233,12 +232,9 @@ contract TsaroSafe is ITsaroSafeData {
 
     /**
      * @notice Constructor to initialize token addresses
-     * @param goodDollarAddress_ Address of GoodDollar token
      * @param celoAddress_ Address of CELO token (can be zero address for native CELO)
      */
-    constructor(address goodDollarAddress_, address celoAddress_) {
-        if (goodDollarAddress_ == address(0)) revert InvalidTokenAddress();
-        goodDollarAddress = goodDollarAddress_;
+    constructor(address celoAddress_) {
         celoAddress = celoAddress_;
         owner = msg.sender;
         _status = _NOT_ENTERED;
@@ -254,14 +250,7 @@ contract TsaroSafe is ITsaroSafeData {
         owner = newOwner;
     }
 
-    /**
-     * @notice Update GoodDollar token address
-     * @param newAddress New GoodDollar token address
-     */
-    function setGoodDollarAddress(address newAddress) external onlyOwner {
-        if (newAddress == address(0)) revert InvalidTokenAddress();
-        goodDollarAddress = newAddress;
-    }
+
 
     /**
      * @notice Update CELO token address
@@ -621,11 +610,11 @@ contract TsaroSafe is ITsaroSafeData {
     }
 
     /**
-     * @notice Make a contribution to a group using ERC20 tokens (CELO or G$)
+     * @notice Make a contribution to a group using ERC20 tokens (CELO)
      * @param _groupId Group ID
      * @param _amount Contribution amount in token units
      * @param _description Contribution description
-     * @param _tokenType Token type (0 = CELO, 1 = G$)
+     * @param _tokenType Token type (0 = CELO)
      */
     // Index-based tracking for contribution verification
     function makeContributionWithToken(
@@ -644,7 +633,7 @@ contract TsaroSafe is ITsaroSafeData {
         if (bytes(_description).length > 200) revert DescriptionTooLong();
         if (_amount == 0) revert InvalidAmount();
         if (bytes(_description).length > 200) revert DescriptionTooLong();
-        if (_tokenType > uint8(ITsaroSafeData.TokenType.GSTAR)) revert InvalidAmount();
+        if (_tokenType > uint8(ITsaroSafeData.TokenType.CELO)) revert InvalidAmount();
 
         Group storage group = groups[_groupId];
         if (block.timestamp >= group.endDate) revert GroupEnded();
@@ -1344,11 +1333,6 @@ contract TsaroSafe is ITsaroSafeData {
             if (address(this).balance < withdrawalAmount) revert InsufficientContractBalance();
             (bool success, ) = msg.sender.call{value: withdrawalAmount}("");
             if (!success) revert WithdrawalFailed();
-        } else if (tokenType == 1) {
-            // G$ (GoodDollar) transfer
-            if (goodDollarAddress == address(0)) revert InvalidTokenAddress();
-            bool success = IERC20(goodDollarAddress).transfer(msg.sender, withdrawalAmount);
-            if (!success) revert TokenTransferFailed();
         }
 
         emit WithdrawalCompleted(_groupId, _contributionId, msg.sender, withdrawalAmount, tokenType, block.timestamp);
@@ -1471,30 +1455,10 @@ contract TsaroSafe is ITsaroSafeData {
         emit ProgressUpdated(groupId, goal.currentAmount, goal.targetAmount, goal.progressPercentage);
     }
     
-    /**
-     * @notice Internal function to handle token transfers for contributions
-     * @param tokenType Token type (0 = CELO, 1 = G$)
-     * @param amount Amount to transfer
-     */
     function _handleTokenTransfer(uint8 tokenType, uint256 amount) internal {
         if (tokenType == 0) {
             // CELO transfer (native token)
             if (msg.value != amount) revert InvalidAmount();
-        } else if (tokenType == 1) {
-            // G$ (GoodDollar) transfer
-            if (goodDollarAddress == address(0)) revert InvalidTokenAddress();
-            
-            // Check user's balance
-            uint256 userBalance = IERC20(goodDollarAddress).balanceOf(msg.sender);
-            if (userBalance < amount) revert InvalidAmount();
-            
-            // Check allowance
-            uint256 allowance = IERC20(goodDollarAddress).allowance(msg.sender, address(this));
-            if (allowance < amount) revert InsufficientAllowance();
-            
-            // Transfer G$ from user to contract
-            bool success = IERC20(goodDollarAddress).transferFrom(msg.sender, address(this), amount);
-            if (!success) revert TokenTransferFailed();
         }
     }
     

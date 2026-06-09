@@ -38,57 +38,6 @@ export const EXPLORER_URLS = {
   84532: 'https://sepolia-explorer.base.org',
 } as const
 
-// GoodDollar (G$) Token Addresses
-export const GOODDOLLAR_ADDRESSES = {
-  // Celo Mainnet
-  42220: '0x62B8B11039FcfE5aB0C56E502b1C372A3d2a9c7A',
-  // Celo Alfajores Testnet (if available)
-  44787: '0x62B8B11039FcfE5aB0C56E502b1C372A3d2a9c7A',
-  8453: '0xba16bCCCC6CD3385750889154743207E09736531', // Base Mainnet G$ address from GoodDollar docs
-  84532: '0xba16bCCCC6CD3385750889154743207E09736531', // Placeholder/Base Sepolia G$ if available
-} as const
-
-// Engagement Rewards Configuration
-export const ENGAGEMENT_REWARDS_ADDRESSES = {
-  // Celo Mainnet (Production)
-  42220: '0x25db74CF4E7BA120526fd87e159CF656d94bAE43',
-  // Celo Alfajores Testnet (Development)
-  44787: '0xb44fC3A592aDaA257AECe1Ae8956019EA53d0465',
-  8453: '0x25db74CF4E7BA120526fd87e159CF656d94bAE43', // Placeholder
-  84532: '0xb44fC3A592aDaA257AECe1Ae8956019EA53d0465', // Placeholder
-} as const
-
-// TsaroSafe Rewards Adapter Addresses
-export const TSAROSAFE_REWARDS_ADAPTER_ADDRESSES = {
-  // Celo Mainnet
-  42220: '0x4902045cEF54fBc664591a40fecf22Bb51932a45',
-  // Celo Alfajores Testnet (update when deployed)
-  44787: '0x4902045cEF54fBc664591a40fecf22Bb51932a45',
-  8453: '0x4902045cEF54fBc664591a40fecf22Bb51932a45', // Placeholder
-  84532: '0x4902045cEF54fBc664591a40fecf22Bb51932a45', // Placeholder
-} as const
-
-/**
- * Get GoodDollar token address for a given chain ID
- */
-export function getGoodDollarAddress(chainId: number): string | undefined {
-  return GOODDOLLAR_ADDRESSES[chainId as keyof typeof GOODDOLLAR_ADDRESSES]
-}
-
-/**
- * Get Engagement Rewards contract address for a given chain ID
- */
-export function getEngagementRewardsAddress(chainId: number): string | undefined {
-  return ENGAGEMENT_REWARDS_ADDRESSES[chainId as keyof typeof ENGAGEMENT_REWARDS_ADDRESSES]
-}
-
-/**
- * Get TsaroSafe Rewards Adapter address for a given chain ID
- */
-export function getRewardsAdapterAddress(chainId: number): string | undefined {
-  return TSAROSAFE_REWARDS_ADAPTER_ADDRESSES[chainId as keyof typeof TSAROSAFE_REWARDS_ADAPTER_ADDRESSES]
-}
-
 /**
  * Get contract address for a given chain ID
  */
@@ -117,25 +66,5 @@ export function getExplorerUrl(chainId: number): string | undefined {
   return EXPLORER_URLS[chainId as keyof typeof EXPLORER_URLS]
 }
 
-// G$ Price Oracle Configuration
-export const GDOLLAR_PRICE_CONFIG = {
-  // CoinGecko API for G$ price data
-  COINGECKO_API: 'https://api.coingecko.com/api/v3',
-  GDOLLAR_ID: 'gooddollar', // GoodDollar's CoinGecko ID
-  UPDATE_INTERVAL: 300000, // 5 minutes
-  FALLBACK_PRICE: 0.00011, // Accurate fallback price in USD
-  MAX_RETRIES: 3,
-  CACHE_DURATION: 300000, // 5 minutes cache
-} as const
-
-// Price chart periods
-export const PRICE_CHART_PERIODS = {
-  '1h': { days: 1, interval: 'hourly' },
-  '24h': { days: 1, interval: 'hourly' },
-  '7d': { days: 7, interval: 'daily' },
-  '30d': { days: 30, interval: 'daily' },
-  '90d': { days: 90, interval: 'daily' },
-  '1y': { days: 365, interval: 'daily' },
-} as const
 
 

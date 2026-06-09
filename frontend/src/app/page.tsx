@@ -48,21 +48,21 @@ const Hero = () => {
               {isConnected ? (
                 <Link
                   href="/savings"
-                  className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-5 px-10 rounded-none transition-all text-center"
+                  className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 px-6 md:py-5 md:px-10 text-sm md:text-base rounded-none transition-all text-center"
                 >
                   LAUNCH APP
                 </Link>
               ) : (
                 <button
                   onClick={() => open()}
-                  className="bg-white hover:bg-gray-200 text-[#0a192f] font-bold py-5 px-10 rounded-none transition-all"
+                  className="bg-white hover:bg-gray-200 text-[#0a192f] font-bold py-4 px-6 md:py-5 md:px-10 text-sm md:text-base rounded-none transition-all"
                 >
                   CONNECT WALLET
                 </button>
               )}
               <a
                 href="#howitworks"
-                className="border border-white/20 text-white hover:bg-white/10 font-bold py-5 px-10 rounded-none transition-all text-center"
+                className="border border-white/20 text-white hover:bg-white/10 font-bold py-4 px-6 md:py-5 md:px-10 text-sm md:text-base rounded-none transition-all text-center"
               >
                 LEARN MORE
               </a>
@@ -218,7 +218,7 @@ const DownFunnelCTA = () => (
 
 const LandingPage = () => {
   return (
-    <main className="w-full bg-white selection:bg-blue-600 selection:text-white">
+    <main className="w-full overflow-x-hidden bg-white selection:bg-blue-600 selection:text-white">
       <Hero />
 
       {/* TRUST BAR - Horizontal scrolling marquee for movement */}
