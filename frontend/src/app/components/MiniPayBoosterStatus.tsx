@@ -13,7 +13,9 @@ export default function MiniPayBoosterStatus() {
         <span className="flex h-2.5 w-2.5 relative">
           <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-yellow-500"></span>
         </span>
-        <span>MiniPay Status</span>
+        <span className="font-mono font-black text-yellow-500 tracking-[0.2em] uppercase flex items-center gap-1.5">
+          ⚡ MiniPay Integration Booster
+        </span>
       </div>
       <div className="flex items-center gap-4 relative z-10">
         {isMiniPayConnected ? (
