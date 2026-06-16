@@ -32,3 +32,5 @@ export default Footer;
 // Optimization: Scale down SVG assets to fit smaller viewports.
 
 // Optimization: Adjust margins for uniform spacing across widgets.
+
+// Optimization: Scale down brand logo typography for mini header.
