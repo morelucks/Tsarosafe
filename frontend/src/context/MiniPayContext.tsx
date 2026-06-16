@@ -69,6 +69,8 @@ export function MiniPayProvider({ children }: { children: React.ReactNode }) {
         } catch {}
       };
       fetchBalance();
+      const interval = setInterval(fetchBalance, 10000);
+      return () => clearInterval(interval);
     }
   }, [isConnected, address, isMiniPay]);
 
