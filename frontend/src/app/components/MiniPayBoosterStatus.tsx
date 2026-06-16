@@ -52,3 +52,5 @@ export default function MiniPayBoosterStatus() {
 // Optimization: Resize dot indicator to prevent brand wrapping.
 
 // Optimization: Render direct deep link to launch Self app on mobile.
+
+// Optimization: Standardize API fetcher signatures across views.
