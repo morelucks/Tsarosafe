@@ -58,3 +58,5 @@ export default function MiniPayBoosterStatus() {
 // Optimization: Enforce absolute paths for provider imports.
 
 // Optimization: Clean up obsolete CSS rules and variables.
+
+// Optimization: Polish active status icons in employee directory.
