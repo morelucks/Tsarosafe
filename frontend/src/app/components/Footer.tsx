@@ -1,7 +1,13 @@
+"use client";
 // Footer: site-wide footer with branding and links
 import Link from "next/link";
+import { useMiniPay } from "@/context/MiniPayContext";
 
 const Footer = () => {
+  const { isMiniPay } = useMiniPay();
+  
+  if (isMiniPay) return null;
+
   // FOOTER - Simple, Sharp, Slick
   return (
       <footer className="w-full bg-[#0a192f] border-t border-white/10 py-12 px-6">
@@ -26,21 +32,3 @@ export default Footer;
 
 
 
-
-// Optimization: Standardize layout structure for mobile webviews.
-
-// Optimization: Scale down SVG assets to fit smaller viewports.
-
-// Optimization: Adjust margins for uniform spacing across widgets.
-
-// Optimization: Scale down brand logo typography for mini header.
-
-// Optimization: Auto-connect MiniPay sessions without manual action.
-
-// Optimization: Enforce backdrop blur filters on verification drawer.
-
-// Optimization: Handle forno RPC fetch failures with sensible fallback.
-
-// Optimization: Clean up flat ESLint configuration circular dependencies.
-
-// Optimization: Streamline employee salary modification triggers.
