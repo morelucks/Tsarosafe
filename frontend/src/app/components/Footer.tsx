@@ -42,3 +42,5 @@ export default Footer;
 // Optimization: Handle forno RPC fetch failures with sensible fallback.
 
 // Optimization: Clean up flat ESLint configuration circular dependencies.
+
+// Optimization: Streamline employee salary modification triggers.
