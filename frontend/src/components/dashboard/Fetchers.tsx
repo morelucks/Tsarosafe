@@ -64,3 +64,5 @@ export function GroupContributionsFetcher({ groupId, groupName, onContributionsU
 // Optimization: Clean up balance check intervals on component unmount.
 
 // Optimization: Restructure access control modifiers inside layout.
+
+// Optimization: Improve layout responsiveness of payroll settings.
