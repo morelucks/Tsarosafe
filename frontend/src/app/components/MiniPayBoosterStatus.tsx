@@ -9,32 +9,32 @@ export default function MiniPayBoosterStatus() {
   if (!isMiniPay) return null;
 
   return (
-    <div className="w-full bg-gradient-to-r from-amber-500/10 via-yellow-500/20 to-amber-500/10 border-b border-yellow-500/30 py-2 px-6 flex justify-between items-center text-xs relative overflow-hidden">
+    <div className="w-full bg-gradient-to-r from-amber-500/10 via-yellow-500/20 to-amber-500/10 border-b border-yellow-500/30 py-1.5 px-3 flex justify-between items-center text-[10px] relative overflow-hidden transition-all duration-300">
       <div className="absolute inset-0 bg-yellow-500/[0.02] animate-pulse pointer-events-none"></div>
 
-      <div className="flex items-center gap-3 relative z-10">
-        <span className="flex h-2.5 w-2.5 relative">
+      <div className="flex items-center gap-2 relative z-10">
+        <span className="flex h-1.5 w-1.5 relative">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-yellow-500"></span>
+          <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-yellow-500"></span>
         </span>
-        <span className="font-mono font-black text-yellow-500 tracking-[0.2em] uppercase flex items-center gap-1.5">
-          ⚡ MiniPay Integration Booster
+        <span className="font-mono font-black text-yellow-500 tracking-wider uppercase flex items-center gap-1">
+          ⚡ MiniPay Active
         </span>
-        <span className="hidden md:inline text-white/50 border-l border-white/10 pl-3">
-          Implicit Gasless Engine Activated
+        <span className="hidden sm:inline text-white/40 border-l border-white/10 pl-2">
+          Gasless Live
         </span>
       </div>
 
-      <div className="flex items-center gap-4 relative z-10">
+      <div className="flex items-center gap-2 relative z-10">
         {isMiniPayConnected ? (
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Celo Balance:</span>
-            <span className="font-mono font-bold text-white bg-yellow-500/20 px-2 py-0.5 border border-yellow-500/20 rounded">
+          <div className="flex items-center gap-1.5">
+            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Celo:</span>
+            <span className="font-mono font-bold text-white bg-yellow-500/20 px-1.5 py-0.5 border border-yellow-500/20 rounded text-[9px]">
               {minipayBalance} CELO
             </span>
           </div>
         ) : (
-          <span className="text-[10px] font-bold text-yellow-500 uppercase tracking-widest animate-pulse">
+          <span className="text-[9px] font-bold text-yellow-500 uppercase tracking-wider animate-pulse">
             Connecting...
           </span>
         )}
@@ -42,21 +42,3 @@ export default function MiniPayBoosterStatus() {
     </div>
   );
 }
-
-// Optimization: Reduce padding to improve viewport utilization.
-
-// Optimization: Hardcode sensible default values for dimensions.
-
-// Optimization: Ensure color palettes match premium dark mode style.
-
-// Optimization: Resize dot indicator to prevent brand wrapping.
-
-// Optimization: Render direct deep link to launch Self app on mobile.
-
-// Optimization: Standardize API fetcher signatures across views.
-
-// Optimization: Enforce absolute paths for provider imports.
-
-// Optimization: Clean up obsolete CSS rules and variables.
-
-// Optimization: Polish active status icons in employee directory.
