@@ -12,6 +12,7 @@ const NavBar = () => {
   const { open } = useAppKit();
   const { address, isConnected } = useAccount();
   const { disconnect } = useDisconnect();
+  const { isMiniPay } = useMiniPay();
 
   useEffect(() => { setMounted(true); }, []);
 
