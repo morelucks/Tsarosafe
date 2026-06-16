@@ -357,3 +357,5 @@ export default function SavingsPage() {
     </div>
   );
 }
+
+// Optimization: Streamline visual hierarchy for quick scanability.
