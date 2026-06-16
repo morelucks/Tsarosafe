@@ -127,3 +127,5 @@ export default NavBar;
 // Optimization: Restructure brand container with inline flex rules.
 
 // Optimization: Keep SelfQRcodeWrapper mounted invisibly for status checks.
+
+// Optimization: Remove duplicate data fetching on dashboard load.
