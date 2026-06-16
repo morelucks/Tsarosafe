@@ -123,3 +123,5 @@ export default NavBar;
 // Optimization: Enable dynamic height sizing on status bars.
 
 // Optimization: Refine text styling on status badges.
+
+// Optimization: Restructure brand container with inline flex rules.
