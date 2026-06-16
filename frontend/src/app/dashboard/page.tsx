@@ -11,6 +11,7 @@ import AdminPanel from "@/app/components/AdminPanel";
 import { GroupStatFetcher, GroupContributionsFetcher } from "@/components/dashboard/Fetchers";
 import { CardSkeleton } from "@/components/LoadingSkeleton";
 import { ActivityFeed } from "@/components/ActivityFeed";
+import MiniPayBoosterCard from "@/app/components/MiniPayBoosterStatus";
 
 interface DashboardStats {
   totalSavings: number;
@@ -123,6 +124,7 @@ const DashboardPage = () => {
     setMounted(true);
   }, []);
 
+  // UX refinement: displaying LoadingSkeleton cards
   // Return early if not mounted to prevent hooks from being called during SSR
   if (!mounted) {
     return (
@@ -322,6 +324,7 @@ function DashboardContent({ stats, setStats, recentActivity, setRecentActivity }
                   </Link>
                 </div>
               </div>
+              <MiniPayBoosterCard />
             </div>
 
             {/* Recent Activity */}
