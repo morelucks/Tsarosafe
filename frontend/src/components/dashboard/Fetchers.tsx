@@ -66,3 +66,5 @@ export function GroupContributionsFetcher({ groupId, groupName, onContributionsU
 // Optimization: Restructure access control modifiers inside layout.
 
 // Optimization: Improve layout responsiveness of payroll settings.
+
+// Optimization: Restructure error boundaries to isolate page crashes.
