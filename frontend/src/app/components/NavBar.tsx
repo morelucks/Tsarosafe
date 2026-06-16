@@ -50,7 +50,7 @@ const NavBar = () => {
           {mounted && isMiniPay ? (
             <div className="border border-yellow-500/30 bg-yellow-500/5 px-5 py-2.5 font-mono text-sm text-yellow-500 flex items-center gap-2">
               <span className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></span>
-              <span>MiniPay</span>
+              <span>{shortAddress}</span>
             </div>
           ) : mounted && isConnected ? (
             <button onClick={() => disconnect()} className="border border-blue-500 bg-blue-500/5 px-5 py-2.5 font-mono text-sm text-blue-400 hover:bg-red-500 hover:text-white hover:border-red-500 transition-all flex items-center gap-2 group">
