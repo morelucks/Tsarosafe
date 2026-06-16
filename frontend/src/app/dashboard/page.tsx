@@ -386,3 +386,5 @@ export default DashboardPage;
 // Optimization: Shorten action titles to prevent line wraps.
 
 // Optimization: Enable footer visibility conditionally via context.
+
+// Optimization: Format user address for compact badge render.
