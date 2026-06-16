@@ -48,7 +48,9 @@ export function MiniPayProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (isConnected && address && isMiniPay) {
+      let isMounted = true;
       const fetchBalance = async () => {
+        if (typeof document !== 'undefined' && document.hidden) return;
         try {
           const res = await fetch('https://forno.celo.org', {
             method: 'POST',
@@ -61,7 +63,7 @@ export function MiniPayProvider({ children }: { children: React.ReactNode }) {
             }),
           });
           const data = await res.json();
-          if (data.result) {
+          if (data.result && isMounted) {
             const wei = BigInt(data.result);
             const celoVal = Number(wei) / 1e18;
             setMinipayBalance(celoVal.toFixed(2));
@@ -70,7 +72,10 @@ export function MiniPayProvider({ children }: { children: React.ReactNode }) {
       };
       fetchBalance();
       const interval = setInterval(fetchBalance, 10000);
-      return () => clearInterval(interval);
+      return () => {
+        isMounted = false;
+        clearInterval(interval);
+      };
     }
   }, [isConnected, address, isMiniPay]);
 
