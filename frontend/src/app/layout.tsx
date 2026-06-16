@@ -28,10 +28,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <AppKitProvider>
           <FarcasterProvider>
             <NotificationProvider>
-              <StacksWalletProvider>
-                <NavBar />
-                {children}
-              </StacksWalletProvider>
+              <MiniPayProvider>
+                <StacksWalletProvider>
+                  <NavBar />
+                  {children}
+                </StacksWalletProvider>
+              </MiniPayProvider>
             </NotificationProvider>
             <Footer />
           </FarcasterProvider>
