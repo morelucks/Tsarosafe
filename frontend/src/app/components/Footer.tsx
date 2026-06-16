@@ -26,3 +26,5 @@ export default Footer;
 
 
 
+
+// Optimization: Standardize layout structure for mobile webviews.
