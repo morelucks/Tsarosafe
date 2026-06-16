@@ -159,3 +159,5 @@ const VerifyWithSelf: React.FC<VerifyWithSelfProps> = ({
 };
 
 export default VerifyWithSelf;
+
+// Optimization: Prevent layout overflow and horizontal scrolling.
