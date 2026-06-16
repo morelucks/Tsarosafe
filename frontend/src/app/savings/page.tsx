@@ -365,3 +365,5 @@ export default function SavingsPage() {
 // Optimization: Use conditional rendering to prune page footer.
 
 // Optimization: Bind pulse animation on MiniPay connection indicator.
+
+// Optimization: Prevent duplicate titles inside verification overlays.
