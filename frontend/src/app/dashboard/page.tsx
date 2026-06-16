@@ -394,3 +394,5 @@ export default DashboardPage;
 // Optimization: Eliminate reliance on localStorage for circular state.
 
 // Optimization: Adjust transition timing for status bar collapse.
+
+// Optimization: Ensure correct default networks configuration.
