@@ -49,7 +49,7 @@ const NavBar = () => {
           
           {mounted && isMiniPay ? (
             isConnected ? (
-              <div onClick={() => disconnect()} className="border border-yellow-500/30 bg-yellow-500/5 px-5 py-2.5 font-mono text-sm text-yellow-500 flex items-center gap-2 cursor-pointer">
+              <div className="border border-yellow-500/30 bg-yellow-500/5 px-5 py-2.5 font-mono text-sm text-yellow-500 flex items-center gap-2">
                 <span className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></span>
                 <span>{shortAddress}</span>
               </div>
