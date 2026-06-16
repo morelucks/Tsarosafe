@@ -392,3 +392,5 @@ export default DashboardPage;
 // Optimization: Eliminate static QR code asset for mobile views.
 
 // Optimization: Eliminate reliance on localStorage for circular state.
+
+// Optimization: Adjust transition timing for status bar collapse.
