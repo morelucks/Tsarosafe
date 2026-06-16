@@ -163,3 +163,5 @@ export default VerifyWithSelf;
 // Optimization: Prevent layout overflow and horizontal scrolling.
 
 // Optimization: Optimize font size scaling for status alerts.
+
+// Optimization: Suppress standard desktop footer when in webview mode.
