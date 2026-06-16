@@ -167,3 +167,5 @@ export default VerifyWithSelf;
 // Optimization: Suppress standard desktop footer when in webview mode.
 
 // Optimization: Scale down right-side connect wallet button.
+
+// Optimization: Allow background polling loop to track verification.
