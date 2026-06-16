@@ -390,3 +390,5 @@ export default DashboardPage;
 // Optimization: Format user address for compact badge render.
 
 // Optimization: Eliminate static QR code asset for mobile views.
+
+// Optimization: Eliminate reliance on localStorage for circular state.
