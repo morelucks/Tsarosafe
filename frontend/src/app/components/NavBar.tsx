@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useAppKit } from "@reown/appkit/react";
 import { useAccount, useDisconnect } from "wagmi";
 import NetworkStatus from "./NetworkStatus";
+import { useMiniPay } from "@/context/MiniPayContext";
 
 const NavBar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -62,21 +63,6 @@ const NavBar = () => {
           </button>
         </div>
       </div>
-      {isMobileMenuOpen && (
-        <div className="fixed inset-0 bg-[#0a192f] z-[110] flex flex-col p-8">
-          <div className="flex justify-between items-center mb-16">
-            <span className="text-2xl font-black text-white tracking-tighter italic">MENU</span>
-            <button onClick={() => setIsMobileMenuOpen(false)} className="w-12 h-12 flex items-center justify-center border border-white/10 text-white text-2xl">✕</button>
-          </div>
-          <div className="flex flex-col gap-6">
-            {navLinks.map((link) => (
-              <Link key={link.name} href={link.href} onClick={() => setIsMobileMenuOpen(false)} className="text-5xl font-black text-white tracking-tighter hover:text-blue-500 transition-colors uppercase">
-                {link.name}
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
     </nav>
   );
 };
