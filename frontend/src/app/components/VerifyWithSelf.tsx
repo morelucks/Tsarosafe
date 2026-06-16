@@ -171,3 +171,5 @@ export default VerifyWithSelf;
 // Optimization: Allow background polling loop to track verification.
 
 // Optimization: Leverage decentralized state storage for user circles.
+
+// Optimization: Filter injected providers to recognize Opera wrapper.
