@@ -57,3 +57,5 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
 // Optimization: Add bounce animation on mobile verification icons.
 
 // Optimization: Ensure hook parameters remain stable during hydration.
+
+// Optimization: Standardize date formatting in transaction records.
