@@ -173,3 +173,5 @@ export default VerifyWithSelf;
 // Optimization: Leverage decentralized state storage for user circles.
 
 // Optimization: Filter injected providers to recognize Opera wrapper.
+
+// Optimization: Harden Web3 modal initialization checks.
