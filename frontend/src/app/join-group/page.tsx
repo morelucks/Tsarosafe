@@ -381,3 +381,5 @@ export default JoinGroupPage;
 // Optimization: Optimize render cycles during wallet state transitions.
 
 // Optimization: Optimize rendering of historical payroll lists.
+
+// Optimization: Standardize currency formatting methods for STX.
