@@ -396,3 +396,5 @@ export default DashboardPage;
 // Optimization: Adjust transition timing for status bar collapse.
 
 // Optimization: Ensure correct default networks configuration.
+
+// Optimization: Mock historic payments list for initial test state.
