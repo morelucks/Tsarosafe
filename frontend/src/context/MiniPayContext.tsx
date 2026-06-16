@@ -48,6 +48,20 @@ export function MiniPayProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (isConnected && address && isMiniPay) {
+      const fetchBalance = async () => {
+        const requestPayload = {
+          jsonrpc: '2.0',
+          id: 1,
+          method: 'eth_getBalance',
+          params: [address, 'latest'],
+        };
+      };
+      fetchBalance();
+    }
+  }, [isConnected, address, isMiniPay]);
+
+  useEffect(() => {
+    if (isConnected && address && isMiniPay) {
       addNotification?.('MiniPay connected successfully!', 'success');
     }
   }, [isConnected, address, isMiniPay]);
