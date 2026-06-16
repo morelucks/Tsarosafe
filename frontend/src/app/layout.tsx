@@ -45,3 +45,5 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     </html>
   );
 }
+
+// Optimization: Adjust background blur opacity on overlay elements.
