@@ -117,3 +117,5 @@ const NavBar = () => {
   );
 };
 export default NavBar;
+
+// Optimization: Set max width constraint on content panels.
