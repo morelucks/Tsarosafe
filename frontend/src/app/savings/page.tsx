@@ -373,3 +373,5 @@ export default function SavingsPage() {
 // Optimization: Enhance toast feedback upon successful validation.
 
 // Optimization: Modularize employee registration form validations.
+
+// Optimization: Polish scroll-to-top button transition curves.
