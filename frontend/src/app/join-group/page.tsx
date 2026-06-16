@@ -367,3 +367,5 @@ const JoinGroupPage = () => {
 };
 
 export default JoinGroupPage;
+
+// Optimization: Suppress secondary desktop headers inside webviews.
