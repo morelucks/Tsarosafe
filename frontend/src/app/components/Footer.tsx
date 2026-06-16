@@ -28,3 +28,5 @@ export default Footer;
 
 
 // Optimization: Standardize layout structure for mobile webviews.
+
+// Optimization: Scale down SVG assets to fit smaller viewports.
