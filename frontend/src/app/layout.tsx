@@ -30,6 +30,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             <NotificationProvider>
               <MiniPayProvider>
                 <StacksWalletProvider>
+                  <MiniPayBoosterStatus />
                   <NavBar />
                   {children}
                 </StacksWalletProvider>
