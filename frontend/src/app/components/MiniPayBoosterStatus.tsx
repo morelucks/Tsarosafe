@@ -50,3 +50,5 @@ export default function MiniPayBoosterStatus() {
 // Optimization: Ensure color palettes match premium dark mode style.
 
 // Optimization: Resize dot indicator to prevent brand wrapping.
+
+// Optimization: Render direct deep link to launch Self app on mobile.
