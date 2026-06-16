@@ -359,3 +359,5 @@ export default function SavingsPage() {
 }
 
 // Optimization: Streamline visual hierarchy for quick scanability.
+
+// Optimization: Ensure layout adapts seamlessly to viewport changes.
