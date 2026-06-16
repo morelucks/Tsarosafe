@@ -18,6 +18,7 @@ export function MiniPayProvider({ children }: { children: React.ReactNode }) {
   const connectors = useConnectors();
   const { addNotification } = useNotification();
   const [isMiniPay, setIsMiniPay] = useState(false);
+  const [minipayBalance, setMinipayBalance] = useState('0.00');
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -52,7 +53,7 @@ export function MiniPayProvider({ children }: { children: React.ReactNode }) {
   }, [isConnected, address, isMiniPay]);
 
   return (
-    <MiniPayContext.Provider value={{ isMiniPay, isMiniPayConnected: isMiniPay && isConnected, minipayBalance: '0.00', autoConnectMiniPay }}>
+    <MiniPayContext.Provider value={{ isMiniPay, isMiniPayConnected: isMiniPay && isConnected, minipayBalance, autoConnectMiniPay }}>
       {children}
     </MiniPayContext.Provider>
   );
