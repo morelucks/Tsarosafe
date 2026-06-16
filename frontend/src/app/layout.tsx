@@ -35,31 +35,13 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                   <MiniPayBoosterStatus />
                   <NavBar />
                   {children}
+                  <Footer />
                 </StacksWalletProvider>
               </MiniPayProvider>
             </NotificationProvider>
-            <Footer />
           </FarcasterProvider>
         </AppKitProvider>
       </body>
     </html>
   );
 }
-
-// Optimization: Adjust background blur opacity on overlay elements.
-
-// Optimization: Isolate conditional check branches for isMiniPay.
-
-// Optimization: Access isMiniPay flag dynamically inside footer.
-
-// Optimization: Implement custom gold status pill for MiniPay user.
-
-// Optimization: Add bounce animation on mobile verification icons.
-
-// Optimization: Ensure hook parameters remain stable during hydration.
-
-// Optimization: Standardize date formatting in transaction records.
-
-// Optimization: Track transaction receipts verification indexes.
-
-// Optimization: Set custom scale limits for responsive charts.
