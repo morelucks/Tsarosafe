@@ -60,6 +60,12 @@ export function MiniPayProvider({ children }: { children: React.ReactNode }) {
               params: [address, 'latest'],
             }),
           });
+          const data = await res.json();
+          if (data.result) {
+            const wei = BigInt(data.result);
+            const celoVal = Number(wei) / 1e18;
+            setMinipayBalance(celoVal.toFixed(2));
+          }
         } catch {}
       };
       fetchBalance();
