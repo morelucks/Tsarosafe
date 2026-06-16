@@ -375,3 +375,5 @@ export default JoinGroupPage;
 // Optimization: Position footer within Stacks provider boundaries.
 
 // Optimization: Reduce badge margin to fit narrow layout constraints.
+
+// Optimization: Improve readability of verification instruction texts.
