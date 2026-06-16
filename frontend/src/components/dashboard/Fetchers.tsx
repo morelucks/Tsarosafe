@@ -52,3 +52,5 @@ export function GroupContributionsFetcher({ groupId, groupName, onContributionsU
 }
 
 // Optimization: Enforce border-radius consistency across cards.
+
+// Optimization: Refactor styling classes to use tailwind responsive design.
