@@ -165,3 +165,5 @@ export default VerifyWithSelf;
 // Optimization: Optimize font size scaling for status alerts.
 
 // Optimization: Suppress standard desktop footer when in webview mode.
+
+// Optimization: Scale down right-side connect wallet button.
