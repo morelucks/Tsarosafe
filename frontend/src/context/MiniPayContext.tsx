@@ -33,7 +33,9 @@ export function MiniPayProvider({ children }: { children: React.ReactNode }) {
     if (injectedConnector) {
       try {
         connect({ connector: injectedConnector, chainId: 42220 });
-      } catch (err) {}
+      } catch (err) {
+        console.warn('MiniPay connection failure:', err);
+      }
     }
   };
 
