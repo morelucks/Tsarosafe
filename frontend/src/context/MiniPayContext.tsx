@@ -49,12 +49,18 @@ export function MiniPayProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (isConnected && address && isMiniPay) {
       const fetchBalance = async () => {
-        const requestPayload = {
-          jsonrpc: '2.0',
-          id: 1,
-          method: 'eth_getBalance',
-          params: [address, 'latest'],
-        };
+        try {
+          const res = await fetch('https://forno.celo.org', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              jsonrpc: '2.0',
+              id: 1,
+              method: 'eth_getBalance',
+              params: [address, 'latest'],
+            }),
+          });
+        } catch {}
       };
       fetchBalance();
     }
