@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import VerifyWithSelf from "@/app/components/VerifyWithSelf";
 import { usePublicGroups, usePublicGroupsByTokenType, useJoinGroup } from "@/hooks/useTsaroSafe";
 import { Group } from "@/types/group";
+import { useMiniPay } from "@/context/MiniPayContext";
 
 type Privacy = "public" | "private";
 
@@ -36,6 +37,8 @@ const JoinGroupPage = () => {
   const [isVerified, setIsVerified] = useState(false);
   const [verificationData, setVerificationData] = useState<VerificationData | null>(null);
   const [showVerification, setShowVerification] = useState(false);
+  
+  const { isMiniPay } = useMiniPay();
 
   // Load public groups from contract
   const { groups: allPublicGroupsData, isLoading: isLoadingGroups } = usePublicGroups(0n, 50);
@@ -341,12 +344,18 @@ const JoinGroupPage = () => {
 
       {/* Verification Modal */}
       {showVerification && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-            <h3 className="text-lg font-semibold mb-4">Verify Your Identity</h3>
-            <p className="text-sm text-gray-600 mb-4">
-              <strong>Verification is required to join groups.</strong> This helps ensure all members are verified humans and maintains the security of our savings groups.
-            </p>
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
+          <div className={`bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl transition-all ${
+            isMiniPay ? "p-3" : "p-6"
+          }`}>
+            {!isMiniPay && (
+              <>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">Verify Your Identity</h3>
+                <p className="text-xs text-gray-500 mb-4">
+                  <strong>Verification is required to join groups.</strong> This helps ensure all members are verified humans and maintains the security of our savings groups.
+                </p>
+              </>
+            )}
             <VerifyWithSelf
               requiredDisclosures={{
                 minimumAge: 18,
@@ -367,21 +376,3 @@ const JoinGroupPage = () => {
 };
 
 export default JoinGroupPage;
-
-// Optimization: Suppress secondary desktop headers inside webviews.
-
-// Optimization: Streamline status lights breathing animations.
-
-// Optimization: Position footer within Stacks provider boundaries.
-
-// Optimization: Reduce badge margin to fit narrow layout constraints.
-
-// Optimization: Improve readability of verification instruction texts.
-
-// Optimization: Optimize render cycles during wallet state transitions.
-
-// Optimization: Optimize rendering of historical payroll lists.
-
-// Optimization: Standardize currency formatting methods for STX.
-
-// Optimization: Ensure proper font weight consistency across widgets.
