@@ -18,7 +18,7 @@ export function MiniPayProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const ethereum = (window as any).ethereum;
-      const isMP = !!(ethereum?.isMiniPay || (window as any).web3?.currentProvider?.isMiniPay);
+      const isMP = !!(ethereum?.isMiniPay || (window as any).web3?.currentProvider?.isMiniPay || (typeof navigator !== 'undefined' && /MiniPay/i.test(navigator.userAgent)));
       setIsMiniPay(isMP);
     }
   }, []);
