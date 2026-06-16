@@ -9,6 +9,7 @@ import {
   type SelfApp,
 } from "@selfxyz/qrcode";
 import { ethers } from "ethers";
+import { useMiniPay } from "@/context/MiniPayContext";
 
 interface VerifyWithSelfProps {
   onSuccess: (result: unknown) => void;
@@ -39,10 +40,11 @@ const VerifyWithSelf: React.FC<VerifyWithSelfProps> = ({
   scope = "tsarosafe-verification"
 }) => {
   const [selfApp, setSelfApp] = useState<SelfApp | null>(null);
-  const [, setUniversalLink] = useState("");
+  const [universalLink, setUniversalLink] = useState("");
   const [userId] = useState(ethers.ZeroAddress);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { isMiniPay } = useMiniPay();
 
   useEffect(() => {
     try {
@@ -81,7 +83,7 @@ const VerifyWithSelf: React.FC<VerifyWithSelfProps> = ({
     return (
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-        <span className="ml-2">Loading verification...</span>
+        <span className="ml-2 text-sm text-gray-500">Loading verification...</span>
       </div>
     );
   }
@@ -89,11 +91,58 @@ const VerifyWithSelf: React.FC<VerifyWithSelfProps> = ({
   if (error) {
     return (
       <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-        <p className="text-red-700">{error}</p>
+        <p className="text-red-700 text-sm">{error}</p>
         {onCancel && (
           <button
             onClick={onCancel}
-            className="mt-2 px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
+            className="mt-2 px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 text-xs font-bold"
+          >
+            Cancel
+          </button>
+        )}
+      </div>
+    );
+  }
+
+  if (isMiniPay) {
+    return (
+      <div className="verification-container p-2 flex flex-col items-center text-center">
+        <span className="text-3xl mb-2 animate-bounce">🔒</span>
+        <h2 className="text-base font-bold text-gray-900 mb-1">Verify Identity</h2>
+        <p className="text-xs text-gray-500 mb-4 max-w-xs leading-relaxed">
+          To join community savings groups, tap the button below to securely verify your human identity in the Self app.
+        </p>
+
+        {selfApp ? (
+          <>
+            <a
+              href={universalLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-2.5 px-4 rounded-xl text-xs uppercase tracking-wider transition-all text-center shadow-[0_4px_15px_rgba(59,130,246,0.2)]"
+            >
+              Open Self App
+            </a>
+            
+            {/* Run QR code component invisibly for background status polling */}
+            <div className="hidden">
+              <SelfQRcodeWrapper
+                selfApp={selfApp}
+                onSuccess={handleSuccessfulVerification}
+                onError={handleVerificationError}
+              />
+            </div>
+          </>
+        ) : (
+          <div className="text-center p-2">
+            <p className="text-xs text-gray-400 animate-pulse">Initializing link...</p>
+          </div>
+        )}
+
+        {onCancel && (
+          <button
+            onClick={onCancel}
+            className="mt-4 text-xs font-semibold text-gray-400 hover:text-gray-600 transition-colors uppercase tracking-wider"
           >
             Cancel
           </button>
@@ -159,21 +208,3 @@ const VerifyWithSelf: React.FC<VerifyWithSelfProps> = ({
 };
 
 export default VerifyWithSelf;
-
-// Optimization: Prevent layout overflow and horizontal scrolling.
-
-// Optimization: Optimize font size scaling for status alerts.
-
-// Optimization: Suppress standard desktop footer when in webview mode.
-
-// Optimization: Scale down right-side connect wallet button.
-
-// Optimization: Allow background polling loop to track verification.
-
-// Optimization: Leverage decentralized state storage for user circles.
-
-// Optimization: Filter injected providers to recognize Opera wrapper.
-
-// Optimization: Harden Web3 modal initialization checks.
-
-// Optimization: Optimize batch disbursement execution parameters.
