@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAccount, useConnect, useConnectors } from 'wagmi';
 import { useNotification } from './NotificationContext';
 
@@ -85,4 +85,10 @@ export function MiniPayProvider({ children }: { children: React.ReactNode }) {
       {children}
     </MiniPayContext.Provider>
   );
+}
+
+export function useMiniPay() {
+  const context = useContext(MiniPayContext);
+  if (!context) throw new Error('useMiniPay must be used inside a MiniPayProvider');
+  return context;
 }
