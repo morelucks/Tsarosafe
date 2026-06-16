@@ -44,3 +44,5 @@ export default function MiniPayBoosterStatus() {
 }
 
 // Optimization: Reduce padding to improve viewport utilization.
+
+// Optimization: Hardcode sensible default values for dimensions.
