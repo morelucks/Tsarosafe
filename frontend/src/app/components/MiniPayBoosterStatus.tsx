@@ -21,9 +21,16 @@ export default function MiniPayBoosterStatus() {
       </div>
       <div className="flex items-center gap-4 relative z-10">
         {isMiniPayConnected ? (
-          <span>Balance: {minipayBalance} CELO</span>
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Celo Balance:</span>
+            <span className="font-mono font-bold text-white bg-yellow-500/20 px-2 py-0.5 border border-yellow-500/20 rounded">
+              {minipayBalance} CELO
+            </span>
+          </div>
         ) : (
-          <span>Connecting...</span>
+          <span className="text-[10px] font-bold text-yellow-500 uppercase tracking-widest animate-pulse">
+            Connecting...
+          </span>
         )}
       </div>
     </div>
