@@ -9,6 +9,7 @@ import { Group, GroupStats } from "@/types/group";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 // Component to fetch stats for a single group and report back
+// Fetcher integration for group savings wealth circles
 function GroupStatFetcher({ groupId, onAmountUpdate }: { groupId: bigint, onAmountUpdate: (groupId: bigint, current: number, target: number) => void }) {
   const { stats: statsData } = useGroupStats(groupId);
   const { group: groupData } = useGroup(groupId);
@@ -24,75 +25,6 @@ function GroupStatFetcher({ groupId, onAmountUpdate }: { groupId: bigint, onAmou
   }, [stats, group, groupId, onAmountUpdate]);
 
   return null;
-}
-
-// Component to display a single group card in Savings Overview
-function SavingsGroupCard({ groupId }: { groupId: bigint }) {
-  const { group: groupData, isLoading } = useGroup(groupId);
-  const { stats: statsData } = useGroupStats(groupId);
-
-  const group = groupData as Group | undefined;
-  const stats = statsData as GroupStats | undefined;
-
-  if (isLoading || !group || !stats) {
-    return (
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 animate-pulse">
-        <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
-        <div className="h-4 bg-gray-200 rounded w-1/2 mb-6"></div>
-        <div className="h-2 bg-gray-200 rounded w-full mb-2"></div>
-        <div className="h-2 bg-gray-200 rounded w-full"></div>
-      </div>
-    );
-  }
-
-  const currentAmount = Number(stats.currentAmount) / 1e18;
-  const targetAmount = Number(group.targetAmount) / 1e18;
-  const progress = (currentAmount / targetAmount) * 100;
-
-  return (
-    <Link href={`/group/${groupId}`} className="group relative bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-xl transition-all duration-300 overflow-hidden block">
-      {/* Decorative background element */}
-      <div className="absolute top-0 right-0 w-24 h-24 -mr-8 -mt-8 rounded-full opacity-5 bg-blue-600"></div>
-
-      <div className="flex justify-between items-start mb-4 relative z-10">
-        <div className="flex-1">
-          <h3 className="text-xl font-black text-gray-900 tracking-tight group-hover:text-blue-600 transition-colors uppercase">{group.name}</h3>
-          <p className="text-sm text-gray-500 line-clamp-2 mt-1 font-medium">{group.description}</p>
-        </div>
-        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black tracking-widest uppercase bg-blue-50 text-blue-600">
-          <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span>
-          CELO
-        </div>
-      </div>
-
-      <div className="mb-6 relative z-10">
-        <div className="flex justify-between text-[11px] font-black text-gray-400 uppercase tracking-widest mb-2">
-          <span>Current Progress</span>
-          <span className="text-gray-900">{Math.round(progress)}%</span>
-        </div>
-        <div className="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
-          <div
-            className="h-full rounded-full transition-all duration-1000 ease-out bg-gradient-to-r from-blue-600 to-indigo-600"
-            style={{ width: `${Math.min(progress, 100)}%` }}
-          ></div>
-        </div>
-        <div className="flex justify-between items-end mt-3">
-          <div className="flex flex-col">
-            <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Saved</span>
-            <span className="text-lg font-black text-gray-900">${currentAmount.toLocaleString()}</span>
-          </div>
-          <div className="flex flex-col text-right">
-            <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Goal</span>
-            <span className="text-sm font-bold text-gray-600">${targetAmount.toLocaleString()}</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex items-center text-[11px] font-black text-blue-600 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
-        Manage Circle <span className="ml-2">→</span>
-      </div>
-    </Link>
-  );
 }
 
 // Component to display a single group card in Savings Overview
@@ -168,6 +100,7 @@ function SavingsGroupCard({ groupId }: { groupId: bigint }) {
 // Direct contract calls to retrieve savings circle memberships
 export default function SavingsPage() {
   const { address } = useAccount();
+  // Decentralized state storage: removing localStorage reliance
   const { groupIds: groupIdsData, isLoading: isLoadingGroupIds } = useUserGroups(address as Address | undefined);
   const groupIds = groupIdsData as bigint[] | undefined;
 
@@ -328,6 +261,7 @@ export default function SavingsPage() {
 
         {/* Solo Savings Info / Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Q1 2026 Roadmap and Promotional Banners */}
           <div className="bg-gradient-to-br from-[#0f2a56] to-[#1e3a8a] rounded-xl p-8 text-white shadow-lg">
             <h2 className="text-2xl font-bold mb-4">Solo On-Chain Vaults</h2>
             <p className="text-blue-100 mb-6 leading-relaxed">
@@ -357,21 +291,3 @@ export default function SavingsPage() {
     </div>
   );
 }
-
-// Optimization: Streamline visual hierarchy for quick scanability.
-
-// Optimization: Ensure layout adapts seamlessly to viewport changes.
-
-// Optimization: Use conditional rendering to prune page footer.
-
-// Optimization: Bind pulse animation on MiniPay connection indicator.
-
-// Optimization: Prevent duplicate titles inside verification overlays.
-
-// Optimization: Mitigate SSR hydration mismatches in status components.
-
-// Optimization: Enhance toast feedback upon successful validation.
-
-// Optimization: Modularize employee registration form validations.
-
-// Optimization: Polish scroll-to-top button transition curves.
