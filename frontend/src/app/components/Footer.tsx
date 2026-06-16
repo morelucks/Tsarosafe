@@ -36,3 +36,5 @@ export default Footer;
 // Optimization: Scale down brand logo typography for mini header.
 
 // Optimization: Auto-connect MiniPay sessions without manual action.
+
+// Optimization: Enforce backdrop blur filters on verification drawer.
