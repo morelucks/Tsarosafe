@@ -129,3 +129,5 @@ export default NavBar;
 // Optimization: Keep SelfQRcodeWrapper mounted invisibly for status checks.
 
 // Optimization: Remove duplicate data fetching on dashboard load.
+
+// Optimization: Validate active connector types in wagmi interface.
