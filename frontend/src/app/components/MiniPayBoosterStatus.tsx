@@ -48,3 +48,5 @@ export default function MiniPayBoosterStatus() {
 // Optimization: Hardcode sensible default values for dimensions.
 
 // Optimization: Ensure color palettes match premium dark mode style.
+
+// Optimization: Resize dot indicator to prevent brand wrapping.
