@@ -25,7 +25,10 @@ export function MiniPayProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const autoConnectMiniPay = () => {};
+  const autoConnectMiniPay = () => {
+    if (!isMiniPay || isConnected) return;
+    const injectedConnector = connectors.find((c) => c.id === 'injected');
+  };
 
   return (
     <MiniPayContext.Provider value={{ isMiniPay, isMiniPayConnected: isMiniPay && isConnected, minipayBalance: '0.00', autoConnectMiniPay }}>
