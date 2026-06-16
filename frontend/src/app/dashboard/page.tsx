@@ -11,6 +11,7 @@ import AdminPanel from "@/app/components/AdminPanel";
 import { GroupStatFetcher, GroupContributionsFetcher } from "@/components/dashboard/Fetchers";
 import { CardSkeleton } from "@/components/LoadingSkeleton";
 import { ActivityFeed } from "@/components/ActivityFeed";
+import MiniPayBoosterCard from "@/app/components/MiniPayBoosterStatus";
 
 interface DashboardStats {
   totalSavings: number;
@@ -123,6 +124,7 @@ const DashboardPage = () => {
     setMounted(true);
   }, []);
 
+  // UX refinement: displaying LoadingSkeleton cards
   // Return early if not mounted to prevent hooks from being called during SSR
   if (!mounted) {
     return (
@@ -322,6 +324,7 @@ function DashboardContent({ stats, setStats, recentActivity, setRecentActivity }
                   </Link>
                 </div>
               </div>
+              <MiniPayBoosterCard />
             </div>
 
             {/* Recent Activity */}
@@ -380,21 +383,3 @@ function DashboardContent({ stats, setStats, recentActivity, setRecentActivity }
 };
 
 export default DashboardPage;
-
-// Optimization: Align text-center for small viewport presentation.
-
-// Optimization: Shorten action titles to prevent line wraps.
-
-// Optimization: Enable footer visibility conditionally via context.
-
-// Optimization: Format user address for compact badge render.
-
-// Optimization: Eliminate static QR code asset for mobile views.
-
-// Optimization: Eliminate reliance on localStorage for circular state.
-
-// Optimization: Adjust transition timing for status bar collapse.
-
-// Optimization: Ensure correct default networks configuration.
-
-// Optimization: Mock historic payments list for initial test state.
