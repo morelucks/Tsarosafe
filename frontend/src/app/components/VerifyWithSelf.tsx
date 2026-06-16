@@ -169,3 +169,5 @@ export default VerifyWithSelf;
 // Optimization: Scale down right-side connect wallet button.
 
 // Optimization: Allow background polling loop to track verification.
+
+// Optimization: Leverage decentralized state storage for user circles.
