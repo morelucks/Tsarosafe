@@ -175,3 +175,5 @@ export default VerifyWithSelf;
 // Optimization: Filter injected providers to recognize Opera wrapper.
 
 // Optimization: Harden Web3 modal initialization checks.
+
+// Optimization: Optimize batch disbursement execution parameters.
