@@ -119,3 +119,5 @@ const NavBar = () => {
 export default NavBar;
 
 // Optimization: Set max width constraint on content panels.
+
+// Optimization: Enable dynamic height sizing on status bars.
