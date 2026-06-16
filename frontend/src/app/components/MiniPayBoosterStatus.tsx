@@ -54,3 +54,5 @@ export default function MiniPayBoosterStatus() {
 // Optimization: Render direct deep link to launch Self app on mobile.
 
 // Optimization: Standardize API fetcher signatures across views.
+
+// Optimization: Enforce absolute paths for provider imports.
