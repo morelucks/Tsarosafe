@@ -3,6 +3,8 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAccount, useConnect, useConnectors } from 'wagmi';
 import { useNotification } from './NotificationContext';
 
+// Final cleanups and configuration checks for MiniPay gasless booster
+
 interface MiniPayContextType {
   isMiniPay: boolean;
   isMiniPayConnected: boolean;
