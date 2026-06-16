@@ -7,6 +7,7 @@ import { FarcasterProvider } from "./components/farcaster-provider"
 import { AppKitProvider } from "./components/AppKitProvider"
 import { NotificationProvider } from "@/context/NotificationContext";
 import { StacksWalletProvider } from "@/context/StacksWalletContext";
+import { MiniPayProvider } from "@/context/MiniPayContext";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
