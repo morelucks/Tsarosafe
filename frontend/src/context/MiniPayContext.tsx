@@ -28,6 +28,11 @@ export function MiniPayProvider({ children }: { children: React.ReactNode }) {
   const autoConnectMiniPay = () => {
     if (!isMiniPay || isConnected) return;
     const injectedConnector = connectors.find((c) => c.id === 'injected');
+    if (injectedConnector) {
+      try {
+        connect({ connector: injectedConnector, chainId: 42220 });
+      } catch (err) {}
+    }
   };
 
   return (
