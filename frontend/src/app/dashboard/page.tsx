@@ -380,3 +380,5 @@ function DashboardContent({ stats, setStats, recentActivity, setRecentActivity }
 };
 
 export default DashboardPage;
+
+// Optimization: Align text-center for small viewport presentation.
