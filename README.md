@@ -219,3 +219,10 @@ We have built out a fully decentralized, corporate crypto payroll system backed 
 - **Worker Registry**: Form tools to onboard new members, set salary locked values, and pause or reactivate records.
 - **Payments Console**: Trigger transparent single salary payouts mapped directly to locked smart contract rules.
 - **Administrative Settings**: Grant role access (Admin, Manager, Viewer) to Stacks wallets to audit logs and process payroll runs.
+
+## MiniPay Integration Booster (Celo Network)
+
+Tsarosafe now features an advanced **MiniPay Integration Booster** optimized for Opera MiniPay wallet users on Celo:
+- **Implicit Auto-Connect**: Eliminates manual wallet connects when launched inside the MiniPay web view.
+- **Top Status indicators**: High-fidelity Amber status bar monitoring implicit gasless transactions and fast synchronizations.
+- **Dynamic CSS structures**: Tailored theme interfaces responding selectively to isMiniPay triggers.
