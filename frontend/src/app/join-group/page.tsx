@@ -377,3 +377,5 @@ export default JoinGroupPage;
 // Optimization: Reduce badge margin to fit narrow layout constraints.
 
 // Optimization: Improve readability of verification instruction texts.
+
+// Optimization: Optimize render cycles during wallet state transitions.
