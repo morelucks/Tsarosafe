@@ -1,5 +1,6 @@
 "use client";
 import React, { createContext, useState, useEffect } from 'react';
+import { useAccount } from 'wagmi';
 
 interface MiniPayContextType {
   isMiniPay: boolean;
@@ -11,6 +12,7 @@ interface MiniPayContextType {
 const MiniPayContext = createContext<MiniPayContextType | undefined>(undefined);
 
 export function MiniPayProvider({ children }: { children: React.ReactNode }) {
+  const { isConnected, address } = useAccount();
   const [isMiniPay, setIsMiniPay] = useState(false);
 
   useEffect(() => {
@@ -22,7 +24,7 @@ export function MiniPayProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <MiniPayContext.Provider value={{ isMiniPay, isMiniPayConnected: false, minipayBalance: '0.00', autoConnectMiniPay: () => {} }}>
+    <MiniPayContext.Provider value={{ isMiniPay, isMiniPayConnected: isMiniPay && isConnected, minipayBalance: '0.00', autoConnectMiniPay: () => {} }}>
       {children}
     </MiniPayContext.Provider>
   );
