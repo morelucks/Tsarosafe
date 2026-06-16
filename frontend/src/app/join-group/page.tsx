@@ -383,3 +383,5 @@ export default JoinGroupPage;
 // Optimization: Optimize rendering of historical payroll lists.
 
 // Optimization: Standardize currency formatting methods for STX.
+
+// Optimization: Ensure proper font weight consistency across widgets.
