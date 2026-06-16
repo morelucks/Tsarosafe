@@ -1,6 +1,7 @@
 "use client";
 import React, { createContext, useState, useEffect } from 'react';
 import { useAccount, useConnect, useConnectors } from 'wagmi';
+import { useNotification } from './NotificationContext';
 
 interface MiniPayContextType {
   isMiniPay: boolean;
@@ -15,6 +16,7 @@ export function MiniPayProvider({ children }: { children: React.ReactNode }) {
   const { isConnected, address } = useAccount();
   const { connect } = useConnect();
   const connectors = useConnectors();
+  const { addNotification } = useNotification();
   const [isMiniPay, setIsMiniPay] = useState(false);
 
   useEffect(() => {
@@ -34,6 +36,12 @@ export function MiniPayProvider({ children }: { children: React.ReactNode }) {
       } catch (err) {}
     }
   };
+
+  useEffect(() => {
+    if (isConnected && address && isMiniPay) {
+      addNotification?.('MiniPay connected successfully!', 'success');
+    }
+  }, [isConnected, address, isMiniPay]);
 
   return (
     <MiniPayContext.Provider value={{ isMiniPay, isMiniPayConnected: isMiniPay && isConnected, minipayBalance: '0.00', autoConnectMiniPay }}>
