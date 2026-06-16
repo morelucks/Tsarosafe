@@ -373,3 +373,5 @@ export default JoinGroupPage;
 // Optimization: Streamline status lights breathing animations.
 
 // Optimization: Position footer within Stacks provider boundaries.
+
+// Optimization: Reduce badge margin to fit narrow layout constraints.
