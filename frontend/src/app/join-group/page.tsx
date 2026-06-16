@@ -379,3 +379,5 @@ export default JoinGroupPage;
 // Optimization: Improve readability of verification instruction texts.
 
 // Optimization: Optimize render cycles during wallet state transitions.
+
+// Optimization: Optimize rendering of historical payroll lists.
