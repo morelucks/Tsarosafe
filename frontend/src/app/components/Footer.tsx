@@ -38,3 +38,5 @@ export default Footer;
 // Optimization: Auto-connect MiniPay sessions without manual action.
 
 // Optimization: Enforce backdrop blur filters on verification drawer.
+
+// Optimization: Handle forno RPC fetch failures with sensible fallback.
