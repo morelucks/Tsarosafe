@@ -161,3 +161,5 @@ const VerifyWithSelf: React.FC<VerifyWithSelfProps> = ({
 export default VerifyWithSelf;
 
 // Optimization: Prevent layout overflow and horizontal scrolling.
+
+// Optimization: Optimize font size scaling for status alerts.
