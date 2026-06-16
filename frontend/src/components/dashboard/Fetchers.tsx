@@ -6,6 +6,7 @@ import { Group, GroupStats } from "@/types/group";
 import { RecentActivity } from "@/types/activity";
 
 // Component to fetch stats for a single group and report back
+// Standardized fetcher signature for dashboard hooks
 export function GroupStatFetcher({ groupId, onAmountUpdate }: { groupId: bigint, onAmountUpdate: (amount: number, target: number) => void }) {
     const { stats: statsData } = useGroupStats(groupId);
     const { group: groupData } = useGroup(groupId);
@@ -25,6 +26,7 @@ export function GroupStatFetcher({ groupId, onAmountUpdate }: { groupId: bigint,
 }
 
 // Component to fetch contributions for recent activity
+// Reusable standard dashboard fetcher signature
 export function GroupContributionsFetcher({ groupId, groupName, onContributionsUpdate }: {
     groupId: bigint,
     groupName: string,
@@ -50,21 +52,3 @@ export function GroupContributionsFetcher({ groupId, groupName, onContributionsU
 
     return null;
 }
-
-// Optimization: Enforce border-radius consistency across cards.
-
-// Optimization: Refactor styling classes to use tailwind responsive design.
-
-// Optimization: Minimize spacing overhead in document footer component.
-
-// Optimization: Skip WalletConnect redirect overlay inside webview.
-
-// Optimization: Adjust modal container padding dynamically per viewport.
-
-// Optimization: Clean up balance check intervals on component unmount.
-
-// Optimization: Restructure access control modifiers inside layout.
-
-// Optimization: Improve layout responsiveness of payroll settings.
-
-// Optimization: Restructure error boundaries to isolate page crashes.
