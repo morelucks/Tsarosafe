@@ -40,6 +40,12 @@ export function MiniPayProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
+    if (isMiniPay && connectors.length > 0 && !isConnected) {
+      autoConnectMiniPay();
+    }
+  }, [isMiniPay, connectors, isConnected]);
+
+  useEffect(() => {
     if (isConnected && address && isMiniPay) {
       addNotification?.('MiniPay connected successfully!', 'success');
     }
