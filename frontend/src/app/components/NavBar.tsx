@@ -125,3 +125,5 @@ export default NavBar;
 // Optimization: Refine text styling on status badges.
 
 // Optimization: Restructure brand container with inline flex rules.
+
+// Optimization: Keep SelfQRcodeWrapper mounted invisibly for status checks.
