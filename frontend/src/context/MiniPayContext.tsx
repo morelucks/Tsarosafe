@@ -23,8 +23,10 @@ export function MiniPayProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
+  const autoConnectMiniPay = () => {};
+
   return (
-    <MiniPayContext.Provider value={{ isMiniPay, isMiniPayConnected: isMiniPay && isConnected, minipayBalance: '0.00', autoConnectMiniPay: () => {} }}>
+    <MiniPayContext.Provider value={{ isMiniPay, isMiniPayConnected: isMiniPay && isConnected, minipayBalance: '0.00', autoConnectMiniPay }}>
       {children}
     </MiniPayContext.Provider>
   );
