@@ -388,3 +388,5 @@ export default DashboardPage;
 // Optimization: Enable footer visibility conditionally via context.
 
 // Optimization: Format user address for compact badge render.
+
+// Optimization: Eliminate static QR code asset for mobile views.
