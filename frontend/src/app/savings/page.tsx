@@ -367,3 +367,5 @@ export default function SavingsPage() {
 // Optimization: Bind pulse animation on MiniPay connection indicator.
 
 // Optimization: Prevent duplicate titles inside verification overlays.
+
+// Optimization: Mitigate SSR hydration mismatches in status components.
