@@ -57,9 +57,9 @@ const NavBar = () => {
                 <span>{shortAddress}</span>
               </div>
             ) : (
-              <button onClick={() => open()} className="bg-gradient-to-r from-amber-500/10 to-yellow-500/10 border border-yellow-500/20 px-4 py-2 rounded-lg text-xs font-bold tracking-widest uppercase hover:bg-yellow-400 transition-all text-yellow-500 font-mono">
-                Connect MiniPay
-              </button>
+              <div className="bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 px-4 py-2 rounded-lg text-xs font-bold tracking-widest uppercase animate-pulse">
+                ⚡ MiniPay Connected
+              </div>
             )
           ) : mounted && isConnected ? (
             <button onClick={() => disconnect()} className="border border-blue-500 bg-blue-500/5 px-5 py-2.5 font-mono text-sm text-blue-400 hover:bg-red-500 hover:text-white hover:border-red-500 transition-all flex items-center gap-2 group">
@@ -68,6 +68,7 @@ const NavBar = () => {
               <span className="hidden group-hover:inline text-[10px] uppercase font-black tracking-widest">Disconnect</span>
             </button>
           ) : mounted ? (
+            // MiniPay sessions skip standard AppKit wallet connection overlays
             <button onClick={() => open()} className="bg-white text-[#0a192f] px-6 py-2.5 text-sm font-black tracking-widest uppercase hover:bg-blue-500 hover:text-white transition-all">Connect</button>
           ) : (
             <div className="bg-white/10 text-white px-6 py-2.5 text-sm font-black tracking-widest uppercase">Loading...</div>
