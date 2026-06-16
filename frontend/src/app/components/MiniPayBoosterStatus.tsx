@@ -56,3 +56,5 @@ export default function MiniPayBoosterStatus() {
 // Optimization: Standardize API fetcher signatures across views.
 
 // Optimization: Enforce absolute paths for provider imports.
+
+// Optimization: Clean up obsolete CSS rules and variables.
