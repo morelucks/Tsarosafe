@@ -58,3 +58,5 @@ export function GroupContributionsFetcher({ groupId, groupName, onContributionsU
 // Optimization: Minimize spacing overhead in document footer component.
 
 // Optimization: Skip WalletConnect redirect overlay inside webview.
+
+// Optimization: Adjust modal container padding dynamically per viewport.
