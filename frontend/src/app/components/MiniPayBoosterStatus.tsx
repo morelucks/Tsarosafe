@@ -8,7 +8,7 @@ export default function MiniPayBoosterStatus() {
   if (!isMiniPay) return null;
 
   return (
-    <div className="w-full bg-gradient-to-r from-amber-500/10 via-yellow-500/20 to-amber-500/10 border-b border-yellow-500/30 py-2 px-6 flex justify-between items-center text-xs relative overflow-hidden">
+    <div className="w-full bg-gradient-to-r from-amber-500/10 via-yellow-500/20 to-amber-500/10 border-b border-yellow-500/30 py-2 px-6 flex justify-between items-center text-xs relative overflow-hidden backdrop-blur-md">
       <div className="absolute inset-0 bg-yellow-500/[0.02] animate-pulse pointer-events-none"></div>
       <div className="flex items-center gap-3 relative z-10">
         <span className="flex h-2.5 w-2.5 relative">
