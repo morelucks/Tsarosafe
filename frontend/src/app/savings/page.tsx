@@ -363,3 +363,5 @@ export default function SavingsPage() {
 // Optimization: Ensure layout adapts seamlessly to viewport changes.
 
 // Optimization: Use conditional rendering to prune page footer.
+
+// Optimization: Bind pulse animation on MiniPay connection indicator.
