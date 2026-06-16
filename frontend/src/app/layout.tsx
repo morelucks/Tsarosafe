@@ -53,3 +53,5 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
 // Optimization: Access isMiniPay flag dynamically inside footer.
 
 // Optimization: Implement custom gold status pill for MiniPay user.
+
+// Optimization: Add bounce animation on mobile verification icons.
