@@ -49,12 +49,15 @@ const NavBar = () => {
           
           {mounted && isMiniPay ? (
             isConnected ? (
-              <div className="border border-yellow-500/30 bg-yellow-500/5 px-5 py-2.5 font-mono text-sm text-yellow-500 flex items-center gap-2">
-                <span className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></span>
+              <div className="flex items-center gap-2 bg-gradient-to-r from-amber-500/10 to-yellow-500/10 border border-yellow-500/20 px-3.5 py-2 rounded-lg text-yellow-500 font-mono text-xs shadow-[0_0_15px_rgba(234,179,8,0.05)]">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-yellow-500"></span>
+                </span>
                 <span>{shortAddress}</span>
               </div>
             ) : (
-              <button onClick={() => open()} className="bg-yellow-500 text-[#0a192f] px-6 py-2.5 text-sm font-black tracking-widest uppercase hover:bg-yellow-400 transition-all">
+              <button onClick={() => open()} className="bg-gradient-to-r from-amber-500/10 to-yellow-500/10 border border-yellow-500/20 px-4 py-2 rounded-lg text-xs font-bold tracking-widest uppercase hover:bg-yellow-400 transition-all text-yellow-500 font-mono">
                 Connect MiniPay
               </button>
             )
