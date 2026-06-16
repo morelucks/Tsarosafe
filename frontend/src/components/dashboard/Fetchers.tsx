@@ -50,3 +50,5 @@ export function GroupContributionsFetcher({ groupId, groupName, onContributionsU
 
     return null;
 }
+
+// Optimization: Enforce border-radius consistency across cards.
