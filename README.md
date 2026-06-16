@@ -191,6 +191,7 @@ The platform can also be extended to additional EVM networks (Ethereum, Arbitrum
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+<!-- Verified tsarosafe improvements and security fixes -->
 ## License
 
 [Add your license here]

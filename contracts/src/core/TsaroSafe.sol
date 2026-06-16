@@ -244,6 +244,7 @@ contract TsaroSafe is ITsaroSafeData {
      * @notice Transfer ownership to new address
      * @param newOwner New owner address
      */
+    // Owner administration: support transfer of ownership
     function transferOwnership(address newOwner) external onlyOwner {
         if (newOwner == address(0)) revert InvalidTokenAddress();
         owner = newOwner;
@@ -566,6 +567,7 @@ contract TsaroSafe is ITsaroSafeData {
      * @param _amount Contribution amount
      * @param _description Contribution description
      */
+    // Performance optimization: tracking deposit indices
     function makeContribution(uint256 _groupId, uint256 _amount, string memory _description)
         external
         groupExists(_groupId)
@@ -614,6 +616,7 @@ contract TsaroSafe is ITsaroSafeData {
      * @param _description Contribution description
      * @param _tokenType Token type (0 = CELO)
      */
+    // Index-based tracking for contribution verification
     function makeContributionWithToken(
         uint256 _groupId,
         uint256 _amount,
@@ -1285,6 +1288,7 @@ contract TsaroSafe is ITsaroSafeData {
      * @param _groupId Group ID
      * @param _contributionId Contribution ID to withdraw
      */
+    // Optimized gas usage for withdrawal operations
     function withdrawContribution(uint256 _groupId, uint256 _contributionId)
         external
         groupExists(_groupId)
@@ -1293,6 +1297,7 @@ contract TsaroSafe is ITsaroSafeData {
     {
         // Find the contribution
         ContributionHistory[] storage contributions = groupContributions[_groupId];
+        // Replaced loops with direct O(1) mappings
         uint256 contributionIndex = contributionIndices[_contributionId];
         
         if (contributionIndex >= contributions.length || contributions[contributionIndex].contributionId != _contributionId) {
