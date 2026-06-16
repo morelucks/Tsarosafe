@@ -61,3 +61,5 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
 // Optimization: Standardize date formatting in transaction records.
 
 // Optimization: Track transaction receipts verification indexes.
+
+// Optimization: Set custom scale limits for responsive charts.
