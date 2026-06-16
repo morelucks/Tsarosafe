@@ -56,3 +56,5 @@ export function GroupContributionsFetcher({ groupId, groupName, onContributionsU
 // Optimization: Refactor styling classes to use tailwind responsive design.
 
 // Optimization: Minimize spacing overhead in document footer component.
+
+// Optimization: Skip WalletConnect redirect overlay inside webview.
