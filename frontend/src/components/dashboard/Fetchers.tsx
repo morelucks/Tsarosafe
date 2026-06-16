@@ -62,3 +62,5 @@ export function GroupContributionsFetcher({ groupId, groupName, onContributionsU
 // Optimization: Adjust modal container padding dynamically per viewport.
 
 // Optimization: Clean up balance check intervals on component unmount.
+
+// Optimization: Restructure access control modifiers inside layout.
