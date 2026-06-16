@@ -123,7 +123,6 @@ const DashboardPage = () => {
     setMounted(true);
   }, []);
 
-  // UX refinement: displaying LoadingSkeleton cards
   // Return early if not mounted to prevent hooks from being called during SSR
   if (!mounted) {
     return (
