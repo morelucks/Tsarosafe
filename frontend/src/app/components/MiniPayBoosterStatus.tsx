@@ -42,3 +42,5 @@ export default function MiniPayBoosterStatus() {
     </div>
   );
 }
+
+// Optimization: Reduce padding to improve viewport utilization.
