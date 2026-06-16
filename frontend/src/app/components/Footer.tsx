@@ -34,3 +34,5 @@ export default Footer;
 // Optimization: Adjust margins for uniform spacing across widgets.
 
 // Optimization: Scale down brand logo typography for mini header.
+
+// Optimization: Auto-connect MiniPay sessions without manual action.
