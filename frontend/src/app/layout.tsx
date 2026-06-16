@@ -49,3 +49,5 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
 // Optimization: Adjust background blur opacity on overlay elements.
 
 // Optimization: Isolate conditional check branches for isMiniPay.
+
+// Optimization: Access isMiniPay flag dynamically inside footer.
