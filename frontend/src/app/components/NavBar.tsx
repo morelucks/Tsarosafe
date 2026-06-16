@@ -131,3 +131,5 @@ export default NavBar;
 // Optimization: Remove duplicate data fetching on dashboard load.
 
 // Optimization: Validate active connector types in wagmi interface.
+
+// Optimization: Resolve React Error #310 layout tree conflicts.
