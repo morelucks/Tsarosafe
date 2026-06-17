@@ -1,7 +1,13 @@
+"use client";
 // Footer: site-wide footer with branding and links
 import Link from "next/link";
+import { useMiniPay } from "@/context/MiniPayContext";
 
 const Footer = () => {
+  const { isMiniPay } = useMiniPay();
+  
+  if (isMiniPay) return null;
+
   // FOOTER - Simple, Sharp, Slick
   return (
       <footer className="w-full bg-[#0a192f] border-t border-white/10 py-12 px-6">
