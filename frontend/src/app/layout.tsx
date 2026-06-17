@@ -26,7 +26,22 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className="overflow-x-hidden">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased mx-auto overflow-x-hidden`}>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                  document.documentElement.classList.add('dark')
+                } else {
+                  document.documentElement.classList.remove('dark')
+                }
+              } catch (_) {}
+            `,
+          }}
+        />
+      </head>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased mx-auto overflow-x-hidden bg-slate-50 dark:bg-[#030014] text-slate-900 dark:text-white transition-colors duration-300`}>
         <AppKitProvider>
           <FarcasterProvider>
             <NotificationProvider>
