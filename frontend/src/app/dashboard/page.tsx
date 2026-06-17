@@ -137,7 +137,7 @@ const DashboardPage = () => {
   // Return early if not mounted to prevent hooks from being called during SSR
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-[#030014] flex items-center justify-center p-8">
+      <div className="min-h-screen bg-slate-50 dark:bg-[#030014] flex items-center justify-center p-8 transition-colors duration-300">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-7xl">
           <CardSkeleton />
           <CardSkeleton />
@@ -231,7 +231,7 @@ function DashboardContent({ stats, setStats, recentActivity, setRecentActivity }
   // Show loading state while data is being fetched
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#030014] flex items-center justify-center p-8">
+      <div className="min-h-screen bg-slate-50 dark:bg-[#030014] flex items-center justify-center p-8 transition-colors duration-300">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-7xl">
           <CardSkeleton />
           <CardSkeleton />
@@ -244,27 +244,27 @@ function DashboardContent({ stats, setStats, recentActivity, setRecentActivity }
 
   return (
     <ErrorBoundary>
-      <div className="min-h-screen bg-[#030014] text-white py-12 relative overflow-hidden">
+      <div className="min-h-screen bg-slate-50 dark:bg-[#030014] text-slate-800 dark:text-white py-12 relative overflow-hidden transition-colors duration-300">
         {/* Background decorative glowing meshes */}
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-[120px] pointer-events-none"></div>
-        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-indigo-600/5 rounded-full blur-[150px] pointer-events-none"></div>
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-cyan-500/[0.03] dark:bg-cyan-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-indigo-600/[0.03] dark:bg-indigo-600/5 rounded-full blur-[150px] pointer-events-none"></div>
 
         {/* Grid overlay */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-10 pointer-events-none"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#cbd5e1_1px,transparent_1px),linear-gradient(to_bottom,#cbd5e1_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-20 dark:opacity-10 pointer-events-none"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           {/* Header */}
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-12 pb-6 border-b border-white/5">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-12 pb-6 border-b border-slate-200 dark:border-white/5">
             <div>
-              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white uppercase leading-none">
+              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white uppercase leading-none">
                 Dashboard <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent font-black">Overview</span>
               </h1>
-              <p className="mt-2 text-slate-400 text-sm font-medium">
+              <p className="mt-2 text-slate-500 dark:text-slate-400 text-sm font-medium">
                 Welcome back! Monitor your digital wealth, community savings, and active circles.
               </p>
             </div>
             {address && (
-              <div className="mt-4 md:mt-0 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-slate-300">
+              <div className="mt-4 md:mt-0 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-mono text-slate-600 dark:text-slate-300">
                 <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
                 <span>{address.slice(0, 6)}...{address.slice(-4)}</span>
               </div>
@@ -274,45 +274,45 @@ function DashboardContent({ stats, setStats, recentActivity, setRecentActivity }
           {/* Stats Section */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
             {/* Total Savings Card */}
-            <div className="relative group bg-[#0b0c16]/80 border border-white/5 hover:border-cyan-500/30 rounded-2xl p-6 transition-all duration-500 hover:shadow-[0_0_30px_rgba(6,182,212,0.1)] hover:-translate-y-1 overflow-hidden">
+            <div className="relative group bg-white dark:bg-[#0b0c16]/80 border border-slate-200 dark:border-white/5 hover:border-cyan-500/30 rounded-2xl p-6 transition-all duration-500 hover:shadow-[0_0_30px_rgba(6,182,212,0.1)] hover:-translate-y-1 overflow-hidden shadow-sm dark:shadow-none">
               <div className="absolute -top-10 -right-10 w-24 h-24 bg-cyan-500/10 rounded-full blur-2xl group-hover:bg-cyan-500/20 transition-all duration-500 pointer-events-none"></div>
               <div className="relative flex items-center">
                 <div className="w-12 h-12 bg-cyan-500/10 border border-cyan-500/25 rounded-xl flex items-center justify-center mr-4 text-cyan-400 text-2xl group-hover:scale-110 transition-transform">
                   💰
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total Savings</p>
-                  <p className="text-2xl font-black text-white mt-1">{stats.totalSavings.toLocaleString('en-US')} CELO</p>
+                  <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Total Savings</p>
+                  <p className="text-2xl font-black text-slate-900 dark:text-white mt-1">{stats.totalSavings.toLocaleString('en-US')} CELO</p>
                 </div>
               </div>
             </div>
 
             {/* Active Groups Card */}
-            <div className="relative group bg-[#0b0c16]/80 border border-white/5 hover:border-indigo-500/30 rounded-2xl p-6 transition-all duration-500 hover:shadow-[0_0_30px_rgba(99,102,241,0.1)] hover:-translate-y-1 overflow-hidden">
+            <div className="relative group bg-white dark:bg-[#0b0c16]/80 border border-slate-200 dark:border-white/5 hover:border-indigo-500/30 rounded-2xl p-6 transition-all duration-500 hover:shadow-[0_0_30px_rgba(99,102,241,0.1)] hover:-translate-y-1 overflow-hidden shadow-sm dark:shadow-none">
               <div className="absolute -top-10 -right-10 w-24 h-24 bg-indigo-500/10 rounded-full blur-2xl group-hover:bg-indigo-500/20 transition-all duration-500 pointer-events-none"></div>
               <div className="relative flex items-center">
                 <div className="w-12 h-12 bg-indigo-500/10 border border-indigo-500/25 rounded-xl flex items-center justify-center mr-4 text-indigo-400 text-2xl group-hover:scale-110 transition-transform">
                   👥
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Active Groups</p>
-                  <p className="text-2xl font-black text-white mt-1">{stats.activeGroups}</p>
+                  <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Active Groups</p>
+                  <p className="text-2xl font-black text-slate-900 dark:text-white mt-1">{stats.activeGroups}</p>
                 </div>
               </div>
             </div>
 
             {/* Goal Progress Card */}
-            <div className="relative group bg-[#0b0c16]/80 border border-white/5 hover:border-blue-500/30 rounded-2xl p-6 transition-all duration-500 hover:shadow-[0_0_30px_rgba(59,130,246,0.1)] hover:-translate-y-1 overflow-hidden">
+            <div className="relative group bg-white dark:bg-[#0b0c16]/80 border border-slate-200 dark:border-white/5 hover:border-blue-500/30 rounded-2xl p-6 transition-all duration-500 hover:shadow-[0_0_30px_rgba(59,130,246,0.1)] hover:-translate-y-1 overflow-hidden shadow-sm dark:shadow-none">
               <div className="absolute -top-10 -right-10 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-all duration-500 pointer-events-none"></div>
               <div className="relative">
                 <div className="flex justify-between items-center mb-2">
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Monthly Goal Progress</p>
-                  <span className="text-xs font-bold text-blue-400">{Math.round(savingsProgress)}%</span>
+                  <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Monthly Goal Progress</p>
+                  <span className="text-xs font-bold text-blue-500 dark:text-blue-400">{Math.round(savingsProgress)}%</span>
                 </div>
-                <div className="flex justify-between text-sm font-bold text-white mb-2">
+                <div className="flex justify-between text-sm font-bold text-slate-800 dark:text-white mb-2">
                   <span>{stats.totalSavings.toLocaleString('en-US')} of {stats.monthlyGoal.toLocaleString('en-US')} CELO</span>
                 </div>
-                <div className="w-full bg-slate-900 rounded-full h-3.5 relative overflow-hidden border border-white/5">
+                <div className="w-full bg-slate-200 dark:bg-slate-900 rounded-full h-3.5 relative overflow-hidden border border-slate-300 dark:border-white/5">
                   <div
                     className="bg-gradient-to-r from-cyan-400 to-blue-500 h-full rounded-full transition-all duration-1000 ease-out"
                     style={{ width: `${Math.min(savingsProgress, 100)}%` }}
@@ -328,12 +328,12 @@ function DashboardContent({ stats, setStats, recentActivity, setRecentActivity }
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
             <div className="lg:col-span-2 flex flex-col gap-8">
               {/* Quick Actions Card */}
-              <div className="bg-[#0b0c16]/70 border border-white/5 rounded-2xl p-6 relative overflow-hidden shadow-2xl backdrop-blur-xl flex-1 flex flex-col justify-between">
-                <div className="absolute bottom-4 right-6 text-3xl font-black tracking-widest text-white/[0.015] select-none pointer-events-none font-mono">
+              <div className="bg-white dark:bg-[#0b0c16]/70 border border-slate-200 dark:border-white/5 rounded-2xl p-6 relative overflow-hidden shadow-lg dark:shadow-2xl backdrop-blur-xl flex-1 flex flex-col justify-between">
+                <div className="absolute bottom-4 right-6 text-3xl font-black tracking-widest text-slate-800/[0.03] dark:text-white/[0.015] select-none pointer-events-none font-mono">
                   TSAROSAFE
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-white mb-6 flex items-center gap-2 uppercase tracking-wide">
+                  <h2 className="text-lg font-bold text-slate-800 dark:text-white mb-6 flex items-center gap-2 uppercase tracking-wide">
                     <span className="text-cyan-400">🚀</span> Quick Actions
                   </h2>
 
@@ -391,8 +391,8 @@ function DashboardContent({ stats, setStats, recentActivity, setRecentActivity }
           {/* Your Groups */}
           {groupIds && groupIds.length > 0 ? (
             <div className="mt-12">
-              <div className="bg-[#0b0c16]/75 border border-white/5 rounded-2xl p-6 shadow-2xl backdrop-blur-xl">
-                <h2 className="text-xl font-bold text-white mb-6 uppercase tracking-wider border-b border-white/5 pb-4">
+              <div className="bg-white dark:bg-[#0b0c16]/75 border border-slate-200 dark:border-white/5 rounded-2xl p-6 shadow-lg dark:shadow-2xl backdrop-blur-xl">
+                <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-6 uppercase tracking-wider border-b border-slate-200 dark:border-white/5 pb-4">
                   Your Savings Circles
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -403,13 +403,13 @@ function DashboardContent({ stats, setStats, recentActivity, setRecentActivity }
               </div>
             </div>
           ) : (
-            <div className="mt-12 text-center p-12 bg-[#0b0c16]/70 border border-dashed border-white/10 rounded-2xl shadow-2xl backdrop-blur-xl relative overflow-hidden">
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-cyan-500/5 rounded-full blur-[80px] pointer-events-none"></div>
+            <div className="mt-12 text-center p-12 bg-white dark:bg-[#0b0c16]/70 border border-dashed border-slate-300 dark:border-white/10 rounded-2xl shadow-lg dark:shadow-2xl backdrop-blur-xl relative overflow-hidden">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-cyan-500/[0.03] dark:bg-cyan-500/5 rounded-full blur-[80px] pointer-events-none"></div>
               <div className="relative z-10">
                 <div className="text-4xl mb-4 animate-bounce">🔍</div>
-                <h3 className="text-lg font-bold text-white uppercase tracking-wider animate-pulse">No Active Groups Found</h3>
-                <p className="text-sm text-slate-400 max-w-sm mx-auto mt-2 leading-relaxed font-medium">
-                  We couldn&apos;t find any community savings groups registered for your address on the <strong className="text-cyan-400">{chain?.name || 'current'}</strong> network.
+                <h3 className="text-lg font-bold text-slate-800 dark:text-white uppercase tracking-wider animate-pulse">No Active Groups Found</h3>
+                <p className="text-sm text-slate-500 dark:text-slate-400 max-w-sm mx-auto mt-2 leading-relaxed font-medium">
+                  We couldn&apos;t find any community savings groups registered for your address on the <strong className="text-cyan-600 dark:text-cyan-400">{chain?.name || 'current'}</strong> network.
                 </p>
                 <div className="mt-6 flex flex-wrap justify-center gap-4">
                   {!isCelo && (
@@ -428,7 +428,7 @@ function DashboardContent({ stats, setStats, recentActivity, setRecentActivity }
                   </Link>
                   <Link
                     href="/join-group"
-                    className="inline-flex items-center gap-2 border border-white/10 hover:bg-white/5 text-white font-bold py-3 px-8 rounded-full transition-all active:scale-95 text-xs uppercase tracking-wider"
+                    className="inline-flex items-center gap-2 border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/5 text-slate-800 dark:text-white font-bold py-3 px-8 rounded-full transition-all active:scale-95 text-xs uppercase tracking-wider"
                   >
                     <span>🔍</span> Find Circles
                   </Link>

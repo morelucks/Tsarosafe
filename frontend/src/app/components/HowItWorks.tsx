@@ -33,7 +33,8 @@ const steps = [
   },
 ];
 
-const HowItWorks = () => (
+const HowItWorks = () => {
+  return (
   <section className="py-32 w-full bg-[#05031b] overflow-hidden relative border-t border-white/5" id="howitworks">
     {/* Decorative blur circle */}
     <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-500/5 rounded-full blur-[130px] pointer-events-none"></div>
@@ -70,15 +71,6 @@ const HowItWorks = () => (
                 {step.icon}
               </div>
             </div>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-none">
-              Built for the <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 bg-clip-text text-transparent font-black">modern saver.</span>
-            </h2>
-          </div>
-          <p className="text-slate-400 text-base max-w-sm leading-relaxed font-medium">
-            A streamlined three-step process designed to get your digital capital working for you immediately.
-          </p>
-        </div>
-
             <div className="relative z-10">
               <h3 className="text-xl font-bold text-white mb-3 tracking-tight group-hover:text-cyan-400 transition-colors">
                 {step.title}
@@ -107,9 +99,10 @@ const HowItWorks = () => (
                   />
                 </svg>
               </div>
-            ))}
+            )}
           </div>
-        </div>
+        ))}
+      </div>
 
       </div>
 

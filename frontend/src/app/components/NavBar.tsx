@@ -11,6 +11,7 @@ const NavBar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
   const pathname = usePathname();
   const { open } = useAppKit();
   const { address, isConnected } = useAccount();
@@ -19,7 +20,23 @@ const NavBar = () => {
 
   useEffect(() => {
     setMounted(true);
+    const root = document.documentElement;
+    const initialTheme = root.classList.contains("dark") ? "dark" : "light";
+    setTheme(initialTheme);
   }, []);
+
+  const toggleTheme = () => {
+    const root = document.documentElement;
+    if (theme === "dark") {
+      root.classList.remove("dark");
+      localStorage.theme = "light";
+      setTheme("light");
+    } else {
+      root.classList.add("dark");
+      localStorage.theme = "dark";
+      setTheme("dark");
+    }
+  };
 
   const shortAddress = address ? `${address.slice(0, 6)}...${address.slice(-4)}` : "";
 
@@ -49,14 +66,14 @@ const NavBar = () => {
   ];
 
   return (
-    <nav className={`w-full bg-[#030712]/80 backdrop-blur-lg border-b border-white/5 sticky top-0 z-[100] flex items-center transition-all duration-300 ${
+    <nav className={`w-full bg-white/80 dark:bg-[#030712]/80 backdrop-blur-lg border-b border-slate-200/50 dark:border-white/5 sticky top-0 z-[100] flex items-center transition-all duration-300 ${
       isMiniPay ? "h-14" : "h-20"
     }`}>
       <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 flex justify-between items-center">
         
         {/* Brand Logo */}
         <Link href="/" className="group flex items-center gap-1">
-          <span className={`font-black tracking-tight text-white transition-all ${
+          <span className={`font-black tracking-tight text-slate-900 dark:text-white transition-all ${
             isMiniPay ? "text-base" : "text-xl md:text-2xl"
           }`}>
             TSARO
@@ -78,8 +95,8 @@ const NavBar = () => {
               href={link.href}
               className={`relative px-4 py-2 text-[11px] font-bold tracking-[0.15em] transition-all rounded-lg ${
                 isActive(link.href)
-                  ? "text-white bg-white/5"
-                  : "text-gray-400 hover:text-white hover:bg-white/[0.02]"
+                  ? "text-slate-900 dark:text-white bg-slate-100 dark:bg-white/5"
+                  : "text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-white/[0.02]"
               }`}
             >
               {link.name}
@@ -95,8 +112,8 @@ const NavBar = () => {
             <button
               className={`flex items-center gap-1 px-4 py-2 text-[11px] font-bold tracking-[0.15em] transition-all rounded-lg ${
                 savingsDropdownLinks.some(link => pathname === link.href)
-                  ? "text-white bg-white/5"
-                  : "text-gray-400 hover:text-white hover:bg-white/[0.02]"
+                  ? "text-slate-900 dark:text-white bg-slate-100 dark:bg-white/5"
+                  : "text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-white/[0.02]"
               }`}
             >
               SAVINGS
@@ -111,7 +128,7 @@ const NavBar = () => {
             </button>
 
             {/* Dropdown Menu */}
-            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-72 bg-[#0b0f19] border border-white/5 p-2 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform group-hover:translate-y-0 translate-y-1 z-50">
+            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-72 bg-white dark:bg-[#0b0f19] border border-slate-200 dark:border-white/5 p-2 rounded-xl shadow-lg dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform group-hover:translate-y-0 translate-y-1 z-50">
               <div className="grid grid-cols-1 gap-1">
                 {savingsDropdownLinks.map((link) => (
                   <Link
@@ -119,12 +136,12 @@ const NavBar = () => {
                     href={link.href}
                     className={`flex flex-col p-2.5 rounded-lg transition-all ${
                       pathname === link.href
-                        ? "bg-blue-600/10 border-l-2 border-blue-500 pl-2 text-white"
-                        : "hover:bg-white/5 text-gray-300 hover:text-white"
+                        ? "bg-blue-600/10 border-l-2 border-blue-500 pl-2 text-blue-600 dark:text-white"
+                        : "hover:bg-slate-50 dark:hover:bg-white/5 text-slate-700 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white"
                     }`}
                   >
                     <span className="text-[11px] font-bold tracking-wider">{link.name}</span>
-                    <span className="text-[9px] text-gray-500 mt-0.5 font-medium leading-tight">
+                    <span className="text-[9px] text-slate-500 dark:text-gray-500 mt-0.5 font-medium leading-tight">
                       {link.desc}
                     </span>
                   </Link>
@@ -140,8 +157,8 @@ const NavBar = () => {
               href={link.href}
               className={`relative px-4 py-2 text-[11px] font-bold tracking-[0.15em] transition-all rounded-lg ${
                 isActive(link.href)
-                  ? "text-white bg-white/5"
-                  : "text-gray-400 hover:text-white hover:bg-white/[0.02]"
+                  ? "text-slate-900 dark:text-white bg-slate-100 dark:bg-white/5"
+                  : "text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-white/[0.02]"
               }`}
             >
               {link.name}
@@ -149,8 +166,26 @@ const NavBar = () => {
           ))}
         </div>
 
-        {/* Right Side Actions (Wallet Connection / Network) */}
+        {/* Right Side Actions (Wallet Connection / Network / Theme Toggle) */}
         <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+          {mounted && (
+            <button
+              onClick={toggleTheme}
+              className="p-2.5 rounded-lg border border-slate-200 dark:border-white/5 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/[0.05] text-slate-800 dark:text-gray-300 transition-all active:scale-95 flex items-center justify-center"
+              aria-label="Toggle Theme"
+            >
+              {theme === "dark" ? (
+                <svg className="w-4 h-4 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M14 12a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+              ) : (
+                <svg className="w-4 h-4 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+              )}
+            </button>
+          )}
+
           {mounted && <NetworkStatus />}
           
           {mounted && isMiniPay ? (
@@ -170,11 +205,11 @@ const NavBar = () => {
           ) : mounted && isConnected ? (
             <button
               onClick={() => disconnect()}
-              className="flex items-center gap-2 border border-white/10 hover:border-red-500/30 bg-white/5 hover:bg-red-500/10 px-3.5 py-2 rounded-lg font-mono text-xs text-gray-300 hover:text-red-400 transition-all group"
+              className="flex items-center gap-2 border border-slate-200 dark:border-white/10 hover:border-red-500/30 bg-slate-100 dark:bg-white/5 hover:bg-red-500/10 px-3.5 py-2 rounded-lg font-mono text-xs text-slate-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-400 transition-all group"
             >
               <span className="w-1.5 h-1.5 bg-green-500 rounded-full group-hover:bg-red-500 transition-colors animate-pulse"></span>
               <span>{shortAddress}</span>
-              <span className="text-[9px] uppercase tracking-wider text-gray-500 group-hover:text-red-400 ml-1">Disconnect</span>
+              <span className="text-[9px] uppercase tracking-wider text-slate-400 dark:text-gray-500 group-hover:text-red-500 dark:group-hover:text-red-400 ml-1">Disconnect</span>
             </button>
           ) : mounted ? (
             <button
@@ -204,14 +239,14 @@ const NavBar = () => {
 
       {/* Mobile Drawer Navigation */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 bg-[#030712]/98 backdrop-blur-lg z-[110] flex flex-col p-6 animate-in fade-in duration-200">
-          <div className="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
+        <div className="fixed inset-0 bg-white/98 dark:bg-[#030712]/98 backdrop-blur-lg z-[110] flex flex-col p-6 animate-in fade-in duration-200">
+          <div className="flex justify-between items-center mb-8 border-b border-slate-200 dark:border-white/5 pb-4">
             <span className="text-xs font-mono font-black text-gray-500 tracking-[0.25em] uppercase">
               Tsarosafe Menu
             </span>
             <button
               onClick={() => setIsMobileMenuOpen(false)}
-              className="w-10 h-10 flex items-center justify-center border border-white/10 hover:border-red-500/50 text-white rounded-lg transition-colors"
+              className="w-10 h-10 flex items-center justify-center border border-slate-200 dark:border-white/10 hover:border-red-500/50 text-slate-800 dark:text-white rounded-lg transition-colors"
             >
               ✕
             </button>
@@ -224,16 +259,16 @@ const NavBar = () => {
               onClick={() => setIsMobileMenuOpen(false)}
               className={`w-full py-3 px-4 font-mono text-sm font-bold tracking-wider border rounded-xl transition-all ${
                 pathname === "/dashboard"
-                  ? "bg-blue-600/10 border-blue-500 text-white"
-                  : "border-white/5 bg-white/[0.01] text-gray-300 hover:text-white"
+                  ? "bg-blue-600/10 border-blue-500 text-blue-600 dark:text-white"
+                  : "border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-white/[0.01] text-slate-700 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white"
               }`}
             >
               DASHBOARD
             </Link>
 
             {/* Savings section */}
-            <div className="border border-white/5 bg-white/[0.01] rounded-xl p-3">
-              <span className="text-[10px] font-black text-gray-500 tracking-widest block mb-2 px-1">
+            <div className="border border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-white/[0.01] rounded-xl p-3">
+              <span className="text-[10px] font-black text-slate-400 dark:text-gray-500 tracking-widest block mb-2 px-1">
                 SAVINGS VAULTS
               </span>
               <div className="flex flex-col gap-2">
@@ -244,8 +279,8 @@ const NavBar = () => {
                     onClick={() => setIsMobileMenuOpen(false)}
                     className={`py-2 px-3 text-xs font-bold tracking-wider rounded-lg transition-all ${
                       pathname === link.href
-                        ? "bg-blue-600/10 border-l-2 border-blue-500 pl-2 text-white"
-                        : "text-gray-400 hover:text-white hover:bg-white/5"
+                        ? "bg-blue-600/10 border-l-2 border-blue-500 pl-2 text-blue-600 dark:text-white"
+                        : "text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5"
                     }`}
                   >
                     {link.name}
