@@ -1,22 +1,35 @@
 // HowItWorks: landing page section explaining the platform steps
+import React from 'react';
+
 const steps = [
   {
     number: "01",
-    icon: "🪪",
     title: "Connect Wallet",
     desc: "Seamlessly link your Web3 wallet to begin your secure decentralized financial journey.",
   },
   {
     number: "02",
-    icon: "👥",
     title: "Choose Your Path",
     desc: "Set up a private vault for solo growth or launch a collective goal with friends.",
+    color: "from-indigo-400 to-indigo-600",
+    glowColor: "rgba(99, 102, 241, 0.15)",
+    icon: (
+      <svg className="w-6 h-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+      </svg>
+    ),
   },
   {
     number: "03",
-    icon: "💸",
     title: "Automate & Earn",
     desc: "Deposit funds and let smart contracts handle the rest. Secure, transparent, and rewarding.",
+    color: "from-emerald-400 to-emerald-600",
+    glowColor: "rgba(16, 185, 129, 0.15)",
+    icon: (
+      <svg className="w-6 h-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+      </svg>
+    ),
   },
 ];
 
@@ -57,6 +70,14 @@ const HowItWorks = () => (
                 {step.icon}
               </div>
             </div>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-none">
+              Built for the <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 bg-clip-text text-transparent font-black">modern saver.</span>
+            </h2>
+          </div>
+          <p className="text-slate-400 text-base max-w-sm leading-relaxed font-medium">
+            A streamlined three-step process designed to get your digital capital working for you immediately.
+          </p>
+        </div>
 
             <div className="relative z-10">
               <h3 className="text-xl font-bold text-white mb-3 tracking-tight group-hover:text-cyan-400 transition-colors">
@@ -86,12 +107,24 @@ const HowItWorks = () => (
                   />
                 </svg>
               </div>
-            )}
+            ))}
           </div>
-        ))}
+        </div>
+
       </div>
-    </div>
-  </section>
-);
+
+      <style dangerouslySetInnerHTML={{__html: `
+        @keyframes lineShine {
+          0% { background-position: 200% 0; }
+          100% { background-position: -200% 0; }
+        }
+        .animate-shine {
+          background-size: 200% auto;
+          animation: lineShine 8s linear infinite;
+        }
+      `}} />
+    </section>
+  );
+};
 
 export default HowItWorks;
