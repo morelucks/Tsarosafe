@@ -256,8 +256,8 @@ function DashboardContent({ stats, setStats, recentActivity, setRecentActivity }
           {/* Header */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-12 pb-6 border-b border-white/5">
             <div>
-              <h1 className="text-4xl font-extrabold tracking-tight text-white uppercase">
-                Dashboard Overview
+              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white uppercase leading-none">
+                Dashboard <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent font-black">Overview</span>
               </h1>
               <p className="mt-2 text-slate-400 text-sm font-medium">
                 Welcome back! Monitor your digital wealth, community savings, and active circles.
@@ -274,8 +274,8 @@ function DashboardContent({ stats, setStats, recentActivity, setRecentActivity }
           {/* Stats Section */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
             {/* Total Savings Card */}
-            <div className="relative group bg-[#0b0c16]/75 border border-white/10 rounded-2xl p-6 transition-all duration-300 hover:border-cyan-500/30 hover:shadow-[0_0_20px_rgba(6,182,212,0.05)] hover:-translate-y-0.5">
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl blur opacity-0 group-hover:opacity-10 transition duration-500"></div>
+            <div className="relative group bg-[#0b0c16]/80 border border-white/5 hover:border-cyan-500/30 rounded-2xl p-6 transition-all duration-500 hover:shadow-[0_0_30px_rgba(6,182,212,0.1)] hover:-translate-y-1 overflow-hidden">
+              <div className="absolute -top-10 -right-10 w-24 h-24 bg-cyan-500/10 rounded-full blur-2xl group-hover:bg-cyan-500/20 transition-all duration-500 pointer-events-none"></div>
               <div className="relative flex items-center">
                 <div className="w-12 h-12 bg-cyan-500/10 border border-cyan-500/25 rounded-xl flex items-center justify-center mr-4 text-cyan-400 text-2xl group-hover:scale-110 transition-transform">
                   💰
@@ -288,8 +288,8 @@ function DashboardContent({ stats, setStats, recentActivity, setRecentActivity }
             </div>
 
             {/* Active Groups Card */}
-            <div className="relative group bg-[#0b0c16]/75 border border-white/10 rounded-2xl p-6 transition-all duration-300 hover:border-indigo-500/30 hover:shadow-[0_0_20px_rgba(99,102,241,0.05)] hover:-translate-y-0.5">
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-2xl blur opacity-0 group-hover:opacity-10 transition duration-500"></div>
+            <div className="relative group bg-[#0b0c16]/80 border border-white/5 hover:border-indigo-500/30 rounded-2xl p-6 transition-all duration-500 hover:shadow-[0_0_30px_rgba(99,102,241,0.1)] hover:-translate-y-1 overflow-hidden">
+              <div className="absolute -top-10 -right-10 w-24 h-24 bg-indigo-500/10 rounded-full blur-2xl group-hover:bg-indigo-500/20 transition-all duration-500 pointer-events-none"></div>
               <div className="relative flex items-center">
                 <div className="w-12 h-12 bg-indigo-500/10 border border-indigo-500/25 rounded-xl flex items-center justify-center mr-4 text-indigo-400 text-2xl group-hover:scale-110 transition-transform">
                   👥
@@ -302,8 +302,8 @@ function DashboardContent({ stats, setStats, recentActivity, setRecentActivity }
             </div>
 
             {/* Goal Progress Card */}
-            <div className="relative group bg-[#0b0c16]/75 border border-white/10 rounded-2xl p-6 transition-all duration-300 hover:border-blue-500/30 hover:shadow-[0_0_20px_rgba(59,130,246,0.05)] hover:-translate-y-0.5">
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl blur opacity-0 group-hover:opacity-10 transition duration-500"></div>
+            <div className="relative group bg-[#0b0c16]/80 border border-white/5 hover:border-blue-500/30 rounded-2xl p-6 transition-all duration-500 hover:shadow-[0_0_30px_rgba(59,130,246,0.1)] hover:-translate-y-1 overflow-hidden">
+              <div className="absolute -top-10 -right-10 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-all duration-500 pointer-events-none"></div>
               <div className="relative">
                 <div className="flex justify-between items-center mb-2">
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Monthly Goal Progress</p>
@@ -325,42 +325,44 @@ function DashboardContent({ stats, setStats, recentActivity, setRecentActivity }
           </div>
 
           {/* Quick Actions & Recent Activity Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 space-y-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+            <div className="lg:col-span-2 flex flex-col gap-8">
               {/* Quick Actions Card */}
-              <div className="bg-[#0b0c16]/70 border border-white/5 rounded-2xl p-6 relative overflow-hidden shadow-2xl backdrop-blur-xl">
-                <div className="absolute top-0 right-0 p-6 opacity-[0.02] font-black text-6xl tracking-tighter select-none pointer-events-none">
+              <div className="bg-[#0b0c16]/70 border border-white/5 rounded-2xl p-6 relative overflow-hidden shadow-2xl backdrop-blur-xl flex-1 flex flex-col justify-between">
+                <div className="absolute bottom-4 right-6 text-3xl font-black tracking-widest text-white/[0.015] select-none pointer-events-none font-mono">
                   TSAROSAFE
                 </div>
-                <h2 className="text-lg font-bold text-white mb-6 flex items-center gap-2 uppercase tracking-wide">
-                  <span className="text-cyan-400">🚀</span> Quick Actions
-                </h2>
+                <div>
+                  <h2 className="text-lg font-bold text-white mb-6 flex items-center gap-2 uppercase tracking-wide">
+                    <span className="text-cyan-400">🚀</span> Quick Actions
+                  </h2>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <Link
-                    href="/savings"
-                    className="group relative flex items-center justify-center gap-2 p-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-xl transition-all shadow-[0_4px_15px_rgba(59,130,246,0.15)] hover:shadow-[0_4px_25px_rgba(59,130,246,0.3)] active:scale-95 text-sm uppercase tracking-wider text-center"
-                  >
-                    <span>💰</span> Add Savings
-                  </Link>
-                  <Link
-                    href="/create-group"
-                    className="group relative flex items-center justify-center gap-2 p-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold rounded-xl transition-all shadow-[0_4px_15px_rgba(99,102,241,0.15)] hover:shadow-[0_4px_25px_rgba(99,102,241,0.3)] active:scale-95 text-sm uppercase tracking-wider text-center"
-                  >
-                    <span>👥</span> Create Group
-                  </Link>
-                  <Link
-                    href="/join-group"
-                    className="group relative flex items-center justify-center gap-2 p-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold rounded-xl transition-all shadow-[0_4px_15px_rgba(168,85,247,0.15)] hover:shadow-[0_4px_25px_rgba(168,85,247,0.3)] active:scale-95 text-sm uppercase tracking-wider text-center"
-                  >
-                    <span>🔍</span> Join Group
-                  </Link>
-                  <Link
-                    href="/invest"
-                    className="group relative flex items-center justify-center gap-2 p-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold rounded-xl transition-all shadow-[0_4px_15px_rgba(16,185,129,0.15)] hover:shadow-[0_4px_25px_rgba(16,185,129,0.3)] active:scale-95 text-sm uppercase tracking-wider text-center"
-                  >
-                    <span>📈</span> Portfolio
-                  </Link>
+                  <div className="grid grid-cols-2 gap-4">
+                    <Link
+                      href="/savings"
+                      className="group relative flex items-center justify-center gap-2 p-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-xl transition-all shadow-[0_4px_15px_rgba(59,130,246,0.15)] hover:shadow-[0_4px_25px_rgba(59,130,246,0.3)] active:scale-95 text-sm uppercase tracking-wider text-center"
+                    >
+                      <span>💰</span> Add Savings
+                    </Link>
+                    <Link
+                      href="/create-group"
+                      className="group relative flex items-center justify-center gap-2 p-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold rounded-xl transition-all shadow-[0_4px_15px_rgba(99,102,241,0.15)] hover:shadow-[0_4px_25px_rgba(99,102,241,0.3)] active:scale-95 text-sm uppercase tracking-wider text-center"
+                    >
+                      <span>👥</span> Create Group
+                    </Link>
+                    <Link
+                      href="/join-group"
+                      className="group relative flex items-center justify-center gap-2 p-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold rounded-xl transition-all shadow-[0_4px_15px_rgba(168,85,247,0.15)] hover:shadow-[0_4px_25px_rgba(168,85,247,0.3)] active:scale-95 text-sm uppercase tracking-wider text-center"
+                    >
+                      <span>🔍</span> Join Group
+                    </Link>
+                    <Link
+                      href="/invest"
+                      className="group relative flex items-center justify-center gap-2 p-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold rounded-xl transition-all shadow-[0_4px_15px_rgba(16,185,129,0.15)] hover:shadow-[0_4px_25px_rgba(16,185,129,0.3)] active:scale-95 text-sm uppercase tracking-wider text-center"
+                    >
+                      <span>📈</span> Portfolio
+                    </Link>
+                  </div>
                 </div>
               </div>
 
@@ -369,7 +371,7 @@ function DashboardContent({ stats, setStats, recentActivity, setRecentActivity }
             </div>
 
             {/* Recent Activity */}
-            <div className="flex flex-col">
+            <div className="lg:col-span-1 flex flex-col h-full">
               <ActivityFeed activities={recentActivity} showViewAll={true} />
             </div>
           </div>
@@ -403,20 +405,37 @@ function DashboardContent({ stats, setStats, recentActivity, setRecentActivity }
               </div>
             </div>
           ) : (
-            <div className="mt-12 text-center p-12 bg-[#0b0c16]/70 border border-dashed border-white/10 rounded-2xl shadow-2xl backdrop-blur-xl">
-              <div className="text-4xl mb-4 animate-bounce">🔍</div>
-              <h3 className="text-lg font-bold text-white uppercase tracking-wider animate-pulse">No Active Groups Found</h3>
-              <p className="text-sm text-slate-400 max-w-sm mx-auto mt-2 leading-relaxed font-medium">
-                We couldn&apos;t find any community savings groups registered for your address on the <strong className="text-cyan-400">{chain?.name || 'current'}</strong> network.
-              </p>
-              {!isCelo && (
-                <button
-                  onClick={() => switchChain({ chainId: 42220 })}
-                  className="mt-6 inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold py-3 px-8 rounded-full transition-all active:scale-95 text-xs uppercase tracking-wider shadow-[0_0_20px_rgba(6,182,212,0.2)]"
-                >
-                  <span>🌍</span> Switch to Celo Network
-                </button>
-              )}
+            <div className="mt-12 text-center p-12 bg-[#0b0c16]/70 border border-dashed border-white/10 rounded-2xl shadow-2xl backdrop-blur-xl relative overflow-hidden">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-cyan-500/5 rounded-full blur-[80px] pointer-events-none"></div>
+              <div className="relative z-10">
+                <div className="text-4xl mb-4 animate-bounce">🔍</div>
+                <h3 className="text-lg font-bold text-white uppercase tracking-wider animate-pulse">No Active Groups Found</h3>
+                <p className="text-sm text-slate-400 max-w-sm mx-auto mt-2 leading-relaxed font-medium">
+                  We couldn&apos;t find any community savings groups registered for your address on the <strong className="text-cyan-400">{chain?.name || 'current'}</strong> network.
+                </p>
+                <div className="mt-6 flex flex-wrap justify-center gap-4">
+                  {!isCelo && (
+                    <button
+                      onClick={() => switchChain({ chainId: 42220 })}
+                      className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold py-3 px-8 rounded-full transition-all active:scale-95 text-xs uppercase tracking-wider shadow-[0_0_20px_rgba(6,182,212,0.2)]"
+                    >
+                      <span>🌍</span> Switch to Celo Network
+                    </button>
+                  )}
+                  <Link
+                    href="/create-group"
+                    className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white font-bold py-3 px-8 rounded-full transition-all active:scale-95 text-xs uppercase tracking-wider shadow-[0_0_20px_rgba(99,102,241,0.2)]"
+                  >
+                    <span>👥</span> Create Savings Circle
+                  </Link>
+                  <Link
+                    href="/join-group"
+                    className="inline-flex items-center gap-2 border border-white/10 hover:bg-white/5 text-white font-bold py-3 px-8 rounded-full transition-all active:scale-95 text-xs uppercase tracking-wider"
+                  >
+                    <span>🔍</span> Find Circles
+                  </Link>
+                </div>
+              </div>
             </div>
           )}
 
