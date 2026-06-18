@@ -9,7 +9,6 @@ import {
   ClarityType,
   serializeCV,
 } from '@stacks/transactions';
-import { openContractCall } from '@stacks/connect';
 import {
   PAYROLL_CONTRACT_ADDRESSES,
   PAYROLL_CONTRACT_NAME,
@@ -236,11 +235,12 @@ interface ContractCallOptions {
 }
 
 // Register Company
-export function registerCompanyTx(
+export async function registerCompanyTx(
   options: ContractCallOptions,
   name: string,
   treasury: string
 ) {
+  const { openContractCall } = await import('@stacks/connect');
   const { address } = getContractInfo(options.networkName);
   
   return openContractCall({
@@ -259,13 +259,14 @@ export function registerCompanyTx(
 }
 
 // Onboard / Add Employee
-export function addEmployeeTx(
+export async function addEmployeeTx(
   options: ContractCallOptions,
   companyId: number,
   employeeWallet: string,
   name: string,
   salary: number
 ) {
+  const { openContractCall } = await import('@stacks/connect');
   const { address } = getContractInfo(options.networkName);
 
   return openContractCall({
@@ -286,7 +287,7 @@ export function addEmployeeTx(
 }
 
 // Pay single Employee using SIP-010 token (or custom)
-export function payEmployeeTx(
+export async function payEmployeeTx(
   options: ContractCallOptions,
   companyId: number,
   employeeWallet: string,
@@ -295,6 +296,7 @@ export function payEmployeeTx(
   tokenTraitAddress: string,
   tokenTraitName: string
 ) {
+  const { openContractCall } = await import('@stacks/connect');
   const { address } = getContractInfo(options.networkName);
 
   return openContractCall({
@@ -316,12 +318,13 @@ export function payEmployeeTx(
 }
 
 // Update Employee salary
-export function updateSalaryTx(
+export async function updateSalaryTx(
   options: ContractCallOptions,
   companyId: number,
   employeeWallet: string,
   newSalary: number
 ) {
+  const { openContractCall } = await import('@stacks/connect');
   const { address } = getContractInfo(options.networkName);
 
   return openContractCall({
@@ -341,11 +344,12 @@ export function updateSalaryTx(
 }
 
 // Deactivate Employee
-export function deactivateEmployeeTx(
+export async function deactivateEmployeeTx(
   options: ContractCallOptions,
   companyId: number,
   employeeWallet: string
 ) {
+  const { openContractCall } = await import('@stacks/connect');
   const { address } = getContractInfo(options.networkName);
 
   return openContractCall({
@@ -364,11 +368,12 @@ export function deactivateEmployeeTx(
 }
 
 // Reactivate Employee
-export function reactivateEmployeeTx(
+export async function reactivateEmployeeTx(
   options: ContractCallOptions,
   companyId: number,
   employeeWallet: string
 ) {
+  const { openContractCall } = await import('@stacks/connect');
   const { address } = getContractInfo(options.networkName);
 
   return openContractCall({
@@ -387,12 +392,13 @@ export function reactivateEmployeeTx(
 }
 
 // Assign role
-export function assignRoleTx(
+export async function assignRoleTx(
   options: ContractCallOptions,
   companyId: number,
   member: string,
   role: UserRole
 ) {
+  const { openContractCall } = await import('@stacks/connect');
   const { address } = getContractInfo(options.networkName);
 
   return openContractCall({
@@ -412,11 +418,12 @@ export function assignRoleTx(
 }
 
 // Revoke role
-export function revokeRoleTx(
+export async function revokeRoleTx(
   options: ContractCallOptions,
   companyId: number,
   member: string
 ) {
+  const { openContractCall } = await import('@stacks/connect');
   const { address } = getContractInfo(options.networkName);
 
   return openContractCall({
