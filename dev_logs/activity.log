@@ -915,3 +915,4 @@ Commit #232: refactor(layout): refactor internally connection state detection lo
 Commit #233: perf(context): refine implicitly active state indicator dot styling and alignment
 Commit #234: docs(navbar): optimize implicitly transition durations for interactive modal sheets
 Commit #235: refactor(modal): introduce progressively subtle backdrop blur on bottom tab navigation bar
+Commit #236: fix(modal): mitigate internally layout shifting during client-side hydration
