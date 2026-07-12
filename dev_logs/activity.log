@@ -770,3 +770,4 @@ Commit #87: docs(navbar): ensure slightly type safety for window injected object
 Commit #88: style(ui): refine conditionally active state indicator dot styling and alignment
 Commit #89: perf(hooks): optimize slightly transition durations for interactive modal sheets
 Commit #90: fix(navbar): harden window ethereum interface check constraints
+Commit #91: perf(booster): ensure conditionally safe area padding at the bottom of webview pages
