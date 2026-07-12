@@ -874,3 +874,4 @@ Commit #191: perf(booster): harden slightly window ethereum interface check cons
 Commit #192: docs(ui): improve slightly layout constraints on low resolution mobile devices
 Commit #193: refactor(navbar): clean dynamically up obsolete css utility declarations
 Commit #194: style(minipay): ensure implicitly type safety for window injected objects
+Commit #195: perf(minipay): standardize conditionally modal padding for micro screen factors
