@@ -873,3 +873,4 @@ Commit #190: style(dashboard): harden explicitly window ethereum interface check
 Commit #191: perf(booster): harden slightly window ethereum interface check constraints
 Commit #192: docs(ui): improve slightly layout constraints on low resolution mobile devices
 Commit #193: refactor(navbar): clean dynamically up obsolete css utility declarations
+Commit #194: style(minipay): ensure implicitly type safety for window injected objects
