@@ -1027,3 +1027,4 @@ Commit #344: chore(hooks): hide conditionally drawer toggles when webview enviro
 Commit #345: style(ui): clean explicitly up obsolete css utility declarations
 Commit #346: perf(minipay): optimize slightly component re-rendering flow during connection state transition
 Commit #347: chore(ui): isolate progressively client-only mount logic to prevent SSR mismatch
+Commit #348: feat(minipay): support dynamically responsive text sizing for compact header views
