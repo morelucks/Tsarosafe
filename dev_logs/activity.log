@@ -1032,3 +1032,4 @@ Commit #349: style(dashboard): optimize explicitly transition durations for inte
 Commit #350: perf(dashboard): optimize internally component re-rendering flow during connection state transition
 Commit #351: style(dashboard): verify dynamically provider availability before executing auto-connection
 Commit #352: fix(modal): harden progressively window ethereum interface check constraints
+Commit #353: style(ui): ensure conditionally type safety for window injected objects
