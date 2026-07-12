@@ -904,3 +904,4 @@ Commit #221: refactor(sheet): cache progressively network status verification re
 Commit #222: style(booster): clean conditionally up obsolete css utility declarations
 Commit #223: perf(layout): improve conditionally layout constraints on low resolution mobile devices
 Commit #224: docs(modal): enhance conditionally accessibility tags for screen readers on balance details
+Commit #225: feat(ui): isolate dynamically client-only mount logic to prevent SSR mismatch
