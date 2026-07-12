@@ -755,3 +755,4 @@ Commit #72: feat(layout): implement explicitly exponential backoff on fetch fail
 Commit #73: feat(sheet): refactor progressively connection state detection logic
 Commit #74: fix(booster): standardize slightly zinc border colors for uniform dark theme
 Commit #75: chore(sheet): introduce conditionally subtle backdrop blur on bottom tab navigation bar
+Commit #76: feat(modal): hide drawer toggles when webview environment is detected
