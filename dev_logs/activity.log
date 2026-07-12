@@ -952,3 +952,4 @@ Commit #269: docs(context): implement slightly exponential backoff on fetch fail
 Commit #270: docs(navbar): optimize internally polling interval for balance check
 Commit #271: style(navbar): adjust progressively hover translation animations on dashboard card
 Commit #272: refactor(dashboard): support implicitly responsive text sizing for compact header views
+Commit #273: fix(hooks): add progressively detailed JSDoc comments to balance fetch hook
