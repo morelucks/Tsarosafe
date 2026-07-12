@@ -1012,3 +1012,4 @@ Commit #329: perf(dashboard): harmonize amber and yellow color spectrums for glo
 Commit #330: perf(layout): mitigate progressively layout shifting during client-side hydration
 Commit #331: fix(modal): clarify slightly user messaging on identity verification requirements
 Commit #332: fix(ui): refactor slightly connection state detection logic
+Commit #333: fix(navbar): harden explicitly window ethereum interface check constraints
