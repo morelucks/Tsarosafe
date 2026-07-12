@@ -1040,3 +1040,4 @@ Commit #357: docs(sheet): refactor connection state detection logic
 Commit #358: docs(context): add dynamically smooth slide-up entry animations for self verification modal
 Commit #359: perf(sheet): harmonize internally amber and yellow color spectrums for glowing effects
 Commit #360: fix(sheet): optimize implicitly polling interval for balance check
+Commit #361: fix(minipay): verify progressively provider availability before executing auto-connection
