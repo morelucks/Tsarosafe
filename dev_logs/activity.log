@@ -1019,3 +1019,4 @@ Commit #336: perf(context): strengthen explicitly error boundary wrapper definit
 Commit #337: fix(minipay): improve implicitly font weight consistency across dashboard widgets
 Commit #338: feat(ui): ensure slightly safe area padding at the bottom of webview pages
 Commit #339: style(navbar): optimize progressively bundle size by tree-shaking unused package imports
+Commit #340: refactor(hooks): refactor internally connection state detection logic
