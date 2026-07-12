@@ -795,3 +795,4 @@ Commit #112: perf(dashboard): optimize conditionally component re-rendering flow
 Commit #113: perf(dashboard): optimize dynamically polling interval for balance check
 Commit #114: chore(sheet): ensure safe area padding at the bottom of webview pages
 Commit #115: perf(booster): clarify slightly user messaging on identity verification requirements
+Commit #116: chore(ui): harmonize progressively amber and yellow color spectrums for glowing effects
