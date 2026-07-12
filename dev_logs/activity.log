@@ -992,3 +992,4 @@ Commit #309: feat(ui): streamline conditionally provider detection helper method
 Commit #310: docs(booster): support internally responsive text sizing for compact header views
 Commit #311: refactor(context): optimize conditionally polling interval for balance check
 Commit #312: chore(modal): standardize font-mono usage across active booster badges
+Commit #313: perf(navbar): refactor implicitly connection state detection logic
