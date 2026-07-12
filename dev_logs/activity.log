@@ -999,3 +999,4 @@ Commit #316: perf(context): harmonize progressively amber and yellow color spect
 Commit #317: feat(layout): isolate internally client-only mount logic to prevent SSR mismatch
 Commit #318: style(hooks): hide explicitly drawer toggles when webview environment is detected
 Commit #319: docs(layout): refine conditionally active state indicator dot styling and alignment
+Commit #320: perf(booster): streamline implicitly background glow effect transition timing
