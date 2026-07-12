@@ -108,8 +108,8 @@ const VerifyWithSelf: React.FC<VerifyWithSelfProps> = ({
     return (
       <div className="verification-container p-2 flex flex-col items-center text-center">
         <span className="text-3xl mb-2 animate-bounce">🔒</span>
-        <h2 className="text-base font-bold text-gray-900 mb-1">Verify Identity</h2>
-        <p className="text-xs text-gray-500 mb-4 max-w-xs leading-relaxed">
+        <h2 className="text-base font-bold text-slate-900 dark:text-white mb-1">Verify Identity</h2>
+        <p className="text-xs text-slate-500 dark:text-slate-400 mb-4 max-w-xs leading-relaxed">
           To join community savings groups, tap the button below to securely verify your human identity in the Self app.
         </p>
 
@@ -119,7 +119,7 @@ const VerifyWithSelf: React.FC<VerifyWithSelfProps> = ({
               href={universalLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-2.5 px-4 rounded-xl text-xs uppercase tracking-wider transition-all text-center shadow-[0_4px_15px_rgba(59,130,246,0.2)]"
+              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-2.5 px-4 rounded-xl text-xs uppercase tracking-wider transition-all text-center shadow-[0_4px_15px_rgba(59,130,246,0.2)] hover:shadow-[0_4px_25px_rgba(59,130,246,0.35)] active:scale-98"
             >
               Open Self App
             </a>
@@ -135,14 +135,14 @@ const VerifyWithSelf: React.FC<VerifyWithSelfProps> = ({
           </>
         ) : (
           <div className="text-center p-2">
-            <p className="text-xs text-gray-400 animate-pulse">Initializing link...</p>
+            <p className="text-xs text-slate-400 dark:text-slate-500 animate-pulse">Initializing link...</p>
           </div>
         )}
 
         {onCancel && (
           <button
             onClick={onCancel}
-            className="mt-4 text-xs font-semibold text-gray-400 hover:text-gray-600 transition-colors uppercase tracking-wider"
+            className="mt-4 text-xs font-semibold text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 transition-colors uppercase tracking-wider"
           >
             Cancel
           </button>
@@ -152,9 +152,9 @@ const VerifyWithSelf: React.FC<VerifyWithSelfProps> = ({
   }
 
   return (
-    <div className="verification-container p-6 bg-white rounded-lg shadow">
-      <h2 className="text-xl font-semibold text-gray-900 mb-2">Verify Your Identity</h2>
-      <p className="text-gray-600 mb-4">
+    <div className="verification-container p-4 bg-transparent">
+      <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">Verify Your Identity</h2>
+      <p className="text-slate-600 dark:text-slate-400 mb-4 text-sm leading-relaxed">
         Scan this QR code with the Self app to verify your identity and prove you&apos;re human.
       </p>
       
@@ -166,24 +166,24 @@ const VerifyWithSelf: React.FC<VerifyWithSelfProps> = ({
             onError={handleVerificationError}
           />
           <div className="mt-4 text-center">
-            <p className="text-sm text-gray-500 mb-2">
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-2">
               Don&apos;t have the Self app? Download it from:
             </p>
-            <div className="flex gap-2 justify-center">
+            <div className="flex gap-2 justify-center text-sm font-medium">
               <a
                 href="https://apps.apple.com/app/self-protocol/id6446204440"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 hover:text-blue-800 text-sm"
+                className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
               >
                 iOS App Store
               </a>
-              <span className="text-gray-400">•</span>
+              <span className="text-slate-300 dark:text-slate-700">•</span>
               <a
-                href="https://play.google.com/store/apps/details?id=xyz.self.app"
+                href="https://play.google.com/store/xyz.self.app"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 hover:text-blue-800 text-sm"
+                className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
               >
                 Google Play
               </a>
@@ -192,7 +192,7 @@ const VerifyWithSelf: React.FC<VerifyWithSelfProps> = ({
           {onCancel && (
             <button
               onClick={onCancel}
-              className="mt-4 px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
+              className="mt-6 px-5 py-2 bg-slate-100 dark:bg-white/5 text-slate-800 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-white/10 text-xs font-bold uppercase tracking-wider transition-all active:scale-95"
             >
               Cancel Verification
             </button>
@@ -200,7 +200,7 @@ const VerifyWithSelf: React.FC<VerifyWithSelfProps> = ({
         </div>
       ) : (
         <div className="text-center p-4">
-          <p className="text-gray-500">Loading QR Code...</p>
+          <p className="text-slate-500 dark:text-slate-400 animate-pulse">Loading QR Code...</p>
         </div>
       )}
     </div>
