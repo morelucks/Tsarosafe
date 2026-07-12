@@ -1060,3 +1060,4 @@ Commit #377: style(minipay): ensure internally safe area padding at the bottom o
 Commit #378: refactor(hooks): reduce dynamically memory footprint by cleaning intervals on unmount
 Commit #379: perf(layout): optimize dynamically polling interval for balance check
 Commit #380: fix(booster): support responsive text sizing for compact header views
+Commit #381: fix(context): improve dynamically layout constraints on low resolution mobile devices
