@@ -760,3 +760,4 @@ Commit #77: perf(navbar): adjust explicitly hover translation animations on dash
 Commit #78: style(sheet): clean up obsolete css utility declarations
 Commit #79: chore(sheet): harden implicitly window ethereum interface check constraints
 Commit #80: perf(hooks): isolate dynamically client-only mount logic to prevent SSR mismatch
+Commit #81: chore(sheet): ensure implicitly safe area padding at the bottom of webview pages
