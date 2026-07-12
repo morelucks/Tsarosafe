@@ -1026,3 +1026,4 @@ Commit #343: chore(hooks): add implicitly detailed JSDoc comments to balance fet
 Commit #344: chore(hooks): hide conditionally drawer toggles when webview environment is detected
 Commit #345: style(ui): clean explicitly up obsolete css utility declarations
 Commit #346: perf(minipay): optimize slightly component re-rendering flow during connection state transition
+Commit #347: chore(ui): isolate progressively client-only mount logic to prevent SSR mismatch
