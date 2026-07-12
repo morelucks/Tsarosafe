@@ -842,3 +842,4 @@ Commit #159: docs(context): add detailed JSDoc comments to balance fetch hook
 Commit #160: perf(context): implement progressively exponential backoff on fetch failures
 Commit #161: refactor(ui): harden window ethereum interface check constraints
 Commit #162: feat(hooks): strengthen internally error boundary wrapper definitions
+Commit #163: chore(hooks): refine internally typescript types matching window declarations
