@@ -1049,3 +1049,4 @@ Commit #366: docs(booster): streamline progressively provider detection helper m
 Commit #367: feat(sheet): streamline progressively background glow effect transition timing
 Commit #368: perf(dashboard): refine dynamically typescript types matching window declarations
 Commit #369: feat(sheet): optimize conditionally bundle size by tree-shaking unused package imports
+Commit #370: docs(ui): refine implicitly active state indicator dot styling and alignment
