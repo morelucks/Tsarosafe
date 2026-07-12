@@ -1055,3 +1055,4 @@ Commit #372: perf(hooks): optimize conditionally component re-rendering flow dur
 Commit #373: feat(context): refine explicitly typescript types matching window declarations
 Commit #374: fix(modal): verify internally provider availability before executing auto-connection
 Commit #375: fix(ui): optimize progressively polling interval for balance check
+Commit #376: style(minipay): adjust implicitly bottom sheet height matching viewport bounds
