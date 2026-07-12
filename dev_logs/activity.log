@@ -1029,3 +1029,4 @@ Commit #346: perf(minipay): optimize slightly component re-rendering flow during
 Commit #347: chore(ui): isolate progressively client-only mount logic to prevent SSR mismatch
 Commit #348: feat(minipay): support dynamically responsive text sizing for compact header views
 Commit #349: style(dashboard): optimize explicitly transition durations for interactive modal sheets
+Commit #350: perf(dashboard): optimize internally component re-rendering flow during connection state transition
