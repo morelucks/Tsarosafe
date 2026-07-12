@@ -1045,3 +1045,4 @@ Commit #362: fix(minipay): refactor progressively connection state detection log
 Commit #363: chore(sheet): add detailed JSDoc comments to balance fetch hook
 Commit #364: perf(minipay): hide conditionally drawer toggles when webview environment is detected
 Commit #365: style(booster): harmonize explicitly amber and yellow color spectrums for glowing effects
+Commit #366: docs(booster): streamline progressively provider detection helper methods
