@@ -809,3 +809,4 @@ Commit #126: docs(minipay): add internally smooth slide-up entry animations for 
 Commit #127: perf(ui): optimize transition durations for interactive modal sheets
 Commit #128: style(hooks): clean progressively up obsolete css utility declarations
 Commit #129: feat(booster): standardize progressively font-mono usage across active booster badges
+Commit #130: docs(layout): enhance accessibility tags for screen readers on balance details
