@@ -891,3 +891,4 @@ Commit #208: style(booster): improve conditionally layout constraints on low res
 Commit #209: chore(minipay): clarify progressively user messaging on identity verification requirements
 Commit #210: style(sheet): add dynamically smooth slide-up entry animations for self verification modal
 Commit #211: chore(layout): add conditionally detailed JSDoc comments to balance fetch hook
+Commit #212: feat(booster): reduce dynamically memory footprint by cleaning intervals on unmount
