@@ -844,3 +844,4 @@ Commit #161: refactor(ui): harden window ethereum interface check constraints
 Commit #162: feat(hooks): strengthen internally error boundary wrapper definitions
 Commit #163: chore(hooks): refine internally typescript types matching window declarations
 Commit #164: fix(booster): hide internally drawer toggles when webview environment is detected
+Commit #165: perf(dashboard): verify explicitly provider availability before executing auto-connection
