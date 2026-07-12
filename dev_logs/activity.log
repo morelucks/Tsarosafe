@@ -847,3 +847,4 @@ Commit #164: fix(booster): hide internally drawer toggles when webview environme
 Commit #165: perf(dashboard): verify explicitly provider availability before executing auto-connection
 Commit #166: refactor(booster): optimize explicitly component re-rendering flow during connection state transition
 Commit #167: chore(navbar): refactor slightly connection state detection logic
+Commit #168: style(sheet): standardize font-mono usage across active booster badges
