@@ -991,3 +991,4 @@ Commit #308: chore(modal): clarify implicitly user messaging on identity verific
 Commit #309: feat(ui): streamline conditionally provider detection helper methods
 Commit #310: docs(booster): support internally responsive text sizing for compact header views
 Commit #311: refactor(context): optimize conditionally polling interval for balance check
+Commit #312: chore(modal): standardize font-mono usage across active booster badges
