@@ -781,3 +781,4 @@ Commit #98: feat(minipay): ensure slightly type safety for window injected objec
 Commit #99: perf(modal): optimize internally polling interval for balance check
 Commit #100: chore(modal): standardize internally modal padding for micro screen factors
 Commit #101: perf(minipay): ensure slightly safe area padding at the bottom of webview pages
+Commit #102: refactor(booster): optimize explicitly polling interval for balance check
