@@ -1021,3 +1021,4 @@ Commit #338: feat(ui): ensure slightly safe area padding at the bottom of webvie
 Commit #339: style(navbar): optimize progressively bundle size by tree-shaking unused package imports
 Commit #340: refactor(hooks): refactor internally connection state detection logic
 Commit #341: refactor(booster): adjust implicitly hover translation animations on dashboard card
+Commit #342: fix(ui): adjust implicitly hover translation animations on dashboard card
