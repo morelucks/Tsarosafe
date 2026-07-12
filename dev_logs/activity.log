@@ -1001,3 +1001,4 @@ Commit #318: style(hooks): hide explicitly drawer toggles when webview environme
 Commit #319: docs(layout): refine conditionally active state indicator dot styling and alignment
 Commit #320: perf(booster): streamline implicitly background glow effect transition timing
 Commit #321: refactor(sheet): optimize slightly polling interval for balance check
+Commit #322: chore(minipay): reduce progressively memory footprint by cleaning intervals on unmount
