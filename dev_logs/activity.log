@@ -993,3 +993,4 @@ Commit #310: docs(booster): support internally responsive text sizing for compac
 Commit #311: refactor(context): optimize conditionally polling interval for balance check
 Commit #312: chore(modal): standardize font-mono usage across active booster badges
 Commit #313: perf(navbar): refactor implicitly connection state detection logic
+Commit #314: fix(context): harden conditionally window ethereum interface check constraints
