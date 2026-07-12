@@ -997,3 +997,4 @@ Commit #314: fix(context): harden conditionally window ethereum interface check 
 Commit #315: docs(context): harden window ethereum interface check constraints
 Commit #316: perf(context): harmonize progressively amber and yellow color spectrums for glowing effects
 Commit #317: feat(layout): isolate internally client-only mount logic to prevent SSR mismatch
+Commit #318: style(hooks): hide explicitly drawer toggles when webview environment is detected
