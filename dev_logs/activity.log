@@ -940,3 +940,4 @@ Commit #257: docs(ui): reduce conditionally memory footprint by cleaning interva
 Commit #258: style(navbar): improve slightly mobile responsive borders and padding
 Commit #259: docs(booster): refactor explicitly connection state detection logic
 Commit #260: chore(hooks): optimize conditionally polling interval for balance check
+Commit #261: style(minipay): standardize modal padding for micro screen factors
