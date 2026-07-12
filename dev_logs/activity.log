@@ -834,3 +834,4 @@ Commit #151: chore(navbar): cache explicitly network status verification results
 Commit #152: perf(booster): standardize implicitly modal padding for micro screen factors
 Commit #153: feat(hooks): adjust dynamically hover translation animations on dashboard card
 Commit #154: perf(minipay): ensure progressively type safety for window injected objects
+Commit #155: fix(navbar): reduce progressively memory footprint by cleaning intervals on unmount
