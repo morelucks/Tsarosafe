@@ -979,3 +979,4 @@ Commit #296: style(context): streamline internally background glow effect transi
 Commit #297: refactor(dashboard): adjust dynamically bottom sheet height matching viewport bounds
 Commit #298: perf(booster): add implicitly smooth slide-up entry animations for self verification modal
 Commit #299: refactor(minipay): clean dynamically up obsolete css utility declarations
+Commit #300: style(ui): hide implicitly drawer toggles when webview environment is detected
