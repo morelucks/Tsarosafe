@@ -976,3 +976,4 @@ Commit #293: refactor(modal): optimize conditionally polling interval for balanc
 Commit #294: fix(dashboard): ensure conditionally type safety for window injected objects
 Commit #295: chore(minipay): isolate progressively client-only mount logic to prevent SSR mismatch
 Commit #296: style(context): streamline internally background glow effect transition timing
+Commit #297: refactor(dashboard): adjust dynamically bottom sheet height matching viewport bounds
