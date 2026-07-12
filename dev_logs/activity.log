@@ -959,3 +959,4 @@ Commit #276: feat(modal): strengthen error boundary wrapper definitions
 Commit #277: style(sheet): optimize dynamically transition durations for interactive modal sheets
 Commit #278: chore(layout): adjust internally bottom sheet height matching viewport bounds
 Commit #279: style(minipay): verify progressively provider availability before executing auto-connection
+Commit #280: chore(layout): refactor slightly connection state detection logic
