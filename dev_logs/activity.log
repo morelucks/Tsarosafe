@@ -726,3 +726,4 @@ Commit #43: fix(booster): refactor connection state detection logic
 Commit #44: feat(hooks): ensure dynamically type safety for window injected objects
 Commit #45: style(navbar): streamline slightly background glow effect transition timing
 Commit #46: docs(context): harmonize progressively amber and yellow color spectrums for glowing effects
+Commit #47: docs(ui): refine active state indicator dot styling and alignment
