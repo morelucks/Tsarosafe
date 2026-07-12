@@ -344,14 +344,18 @@ const JoinGroupPage = () => {
 
       {/* Verification Modal */}
       {showVerification && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
-          <div className={`bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl transition-all ${
-            isMiniPay ? "p-3" : "p-6"
+        <div className={`fixed inset-0 bg-black/80 backdrop-blur-sm flex z-50 transition-all duration-300 ${
+          isMiniPay ? "items-end justify-center" : "items-center justify-center p-4 animate-in fade-in duration-200"
+        }`}>
+          <div className={`bg-white dark:bg-[#0b0c16] border border-slate-200 dark:border-white/10 shadow-2xl transition-all w-full overflow-hidden ${
+            isMiniPay 
+              ? "rounded-t-3xl rounded-b-none max-w-md p-5 pb-8 animate-in slide-in-from-bottom duration-300" 
+              : "rounded-2xl max-w-sm p-6"
           }`}>
             {!isMiniPay && (
               <>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">Verify Your Identity</h3>
-                <p className="text-xs text-gray-500 mb-4">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Verify Your Identity</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
                   <strong>Verification is required to join groups.</strong> This helps ensure all members are verified humans and maintains the security of our savings groups.
                 </p>
               </>

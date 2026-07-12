@@ -41,3 +41,7 @@ body {
 .fade-in {
   animation: fadeIn 1s ease-out forwards;
 }
+
+body.minipay-active {
+  padding-bottom: 5.5rem;
+}
