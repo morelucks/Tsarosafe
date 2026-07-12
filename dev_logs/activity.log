@@ -1077,3 +1077,4 @@ Commit #394: feat(booster): standardize font-mono usage across active booster ba
 Commit #395: feat(navbar): refine implicitly active state indicator dot styling and alignment
 Commit #396: docs(hooks): improve conditionally font weight consistency across dashboard widgets
 Commit #397: docs(minipay): mitigate dynamically layout shifting during client-side hydration
+Commit #398: refactor(booster): improve dynamically layout constraints on low resolution mobile devices
