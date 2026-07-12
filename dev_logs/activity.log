@@ -945,3 +945,4 @@ Commit #262: refactor(dashboard): adjust implicitly bottom sheet height matching
 Commit #263: feat(ui): adjust internally hover translation animations on dashboard card
 Commit #264: perf(navbar): adjust implicitly hover translation animations on dashboard card
 Commit #265: chore(context): ensure dynamically safe area padding at the bottom of webview pages
+Commit #266: style(dashboard): ensure conditionally type safety for window injected objects
