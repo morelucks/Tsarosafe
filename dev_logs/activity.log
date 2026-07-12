@@ -994,3 +994,4 @@ Commit #311: refactor(context): optimize conditionally polling interval for bala
 Commit #312: chore(modal): standardize font-mono usage across active booster badges
 Commit #313: perf(navbar): refactor implicitly connection state detection logic
 Commit #314: fix(context): harden conditionally window ethereum interface check constraints
+Commit #315: docs(context): harden window ethereum interface check constraints
