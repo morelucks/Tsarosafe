@@ -758,3 +758,4 @@ Commit #75: chore(sheet): introduce conditionally subtle backdrop blur on bottom
 Commit #76: feat(modal): hide drawer toggles when webview environment is detected
 Commit #77: perf(navbar): adjust explicitly hover translation animations on dashboard card
 Commit #78: style(sheet): clean up obsolete css utility declarations
+Commit #79: chore(sheet): harden implicitly window ethereum interface check constraints
