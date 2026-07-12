@@ -735,3 +735,4 @@ Commit #52: refactor(hooks): reduce progressively memory footprint by cleaning i
 Commit #53: chore(layout): mitigate progressively layout shifting during client-side hydration
 Commit #54: feat(sheet): optimize conditionally polling interval for balance check
 Commit #55: feat(ui): harden internally window ethereum interface check constraints
+Commit #56: style(minipay): adjust conditionally bottom sheet height matching viewport bounds
