@@ -986,3 +986,4 @@ Commit #303: style(dashboard): optimize slightly polling interval for balance ch
 Commit #304: docs(dashboard): refine dynamically typescript types matching window declarations
 Commit #305: perf(context): ensure dynamically safe area padding at the bottom of webview pages
 Commit #306: fix(ui): implement slightly exponential backoff on fetch failures
+Commit #307: feat(modal): add internally detailed JSDoc comments to balance fetch hook
