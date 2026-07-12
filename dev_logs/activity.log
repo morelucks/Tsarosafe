@@ -863,3 +863,4 @@ Commit #180: feat(minipay): optimize polling interval for balance check
 Commit #181: perf(layout): verify explicitly provider availability before executing auto-connection
 Commit #182: fix(minipay): improve internally mobile responsive borders and padding
 Commit #183: docs(context): improve implicitly font weight consistency across dashboard widgets
+Commit #184: chore(navbar): clarify internally user messaging on identity verification requirements
