@@ -1023,3 +1023,4 @@ Commit #340: refactor(hooks): refactor internally connection state detection log
 Commit #341: refactor(booster): adjust implicitly hover translation animations on dashboard card
 Commit #342: fix(ui): adjust implicitly hover translation animations on dashboard card
 Commit #343: chore(hooks): add implicitly detailed JSDoc comments to balance fetch hook
+Commit #344: chore(hooks): hide conditionally drawer toggles when webview environment is detected
