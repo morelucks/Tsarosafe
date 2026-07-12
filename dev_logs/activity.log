@@ -960,3 +960,4 @@ Commit #277: style(sheet): optimize dynamically transition durations for interac
 Commit #278: chore(layout): adjust internally bottom sheet height matching viewport bounds
 Commit #279: style(minipay): verify progressively provider availability before executing auto-connection
 Commit #280: chore(layout): refactor slightly connection state detection logic
+Commit #281: docs(booster): harden slightly window ethereum interface check constraints
