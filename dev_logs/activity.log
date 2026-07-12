@@ -921,3 +921,4 @@ Commit #238: refactor(layout): implement exponential backoff on fetch failures
 Commit #239: refactor(layout): standardize conditionally zinc border colors for uniform dark theme
 Commit #240: feat(layout): clarify user messaging on identity verification requirements
 Commit #241: perf(modal): ensure implicitly type safety for window injected objects
+Commit #242: chore(navbar): clean up obsolete css utility declarations
