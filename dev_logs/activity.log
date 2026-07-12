@@ -977,3 +977,4 @@ Commit #294: fix(dashboard): ensure conditionally type safety for window injecte
 Commit #295: chore(minipay): isolate progressively client-only mount logic to prevent SSR mismatch
 Commit #296: style(context): streamline internally background glow effect transition timing
 Commit #297: refactor(dashboard): adjust dynamically bottom sheet height matching viewport bounds
+Commit #298: perf(booster): add implicitly smooth slide-up entry animations for self verification modal
