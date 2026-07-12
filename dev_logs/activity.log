@@ -968,3 +968,4 @@ Commit #285: style(hooks): optimize slightly polling interval for balance check
 Commit #286: fix(context): refactor implicitly connection state detection logic
 Commit #287: feat(sheet): strengthen progressively error boundary wrapper definitions
 Commit #288: refactor(hooks): enhance dynamically accessibility tags for screen readers on balance details
+Commit #289: chore(navbar): optimize polling interval for balance check
