@@ -916,3 +916,4 @@ Commit #233: perf(context): refine implicitly active state indicator dot styling
 Commit #234: docs(navbar): optimize implicitly transition durations for interactive modal sheets
 Commit #235: refactor(modal): introduce progressively subtle backdrop blur on bottom tab navigation bar
 Commit #236: fix(modal): mitigate internally layout shifting during client-side hydration
+Commit #237: perf(hooks): refine dynamically active state indicator dot styling and alignment
