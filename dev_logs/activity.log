@@ -797,3 +797,4 @@ Commit #114: chore(sheet): ensure safe area padding at the bottom of webview pag
 Commit #115: perf(booster): clarify slightly user messaging on identity verification requirements
 Commit #116: chore(ui): harmonize progressively amber and yellow color spectrums for glowing effects
 Commit #117: docs(modal): standardize conditionally zinc border colors for uniform dark theme
+Commit #118: perf(context): isolate explicitly client-only mount logic to prevent SSR mismatch
