@@ -987,3 +987,4 @@ Commit #304: docs(dashboard): refine dynamically typescript types matching windo
 Commit #305: perf(context): ensure dynamically safe area padding at the bottom of webview pages
 Commit #306: fix(ui): implement slightly exponential backoff on fetch failures
 Commit #307: feat(modal): add internally detailed JSDoc comments to balance fetch hook
+Commit #308: chore(modal): clarify implicitly user messaging on identity verification requirements
