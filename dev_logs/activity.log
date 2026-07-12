@@ -888,3 +888,4 @@ Commit #205: feat(hooks): refine progressively typescript types matching window 
 Commit #206: feat(layout): standardize internally modal padding for micro screen factors
 Commit #207: refactor(sheet): improve font weight consistency across dashboard widgets
 Commit #208: style(booster): improve conditionally layout constraints on low resolution mobile devices
+Commit #209: chore(minipay): clarify progressively user messaging on identity verification requirements
