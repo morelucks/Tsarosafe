@@ -949,3 +949,4 @@ Commit #266: style(dashboard): ensure conditionally type safety for window injec
 Commit #267: style(minipay): refine explicitly active state indicator dot styling and alignment
 Commit #268: docs(sheet): implement exponential backoff on fetch failures
 Commit #269: docs(context): implement slightly exponential backoff on fetch failures
+Commit #270: docs(navbar): optimize internally polling interval for balance check
