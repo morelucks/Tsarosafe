@@ -984,3 +984,4 @@ Commit #301: style(hooks): refactor explicitly connection state detection logic
 Commit #302: feat(ui): refactor dynamically connection state detection logic
 Commit #303: style(dashboard): optimize slightly polling interval for balance check
 Commit #304: docs(dashboard): refine dynamically typescript types matching window declarations
+Commit #305: perf(context): ensure dynamically safe area padding at the bottom of webview pages
