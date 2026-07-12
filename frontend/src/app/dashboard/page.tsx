@@ -365,7 +365,7 @@ function DashboardContent({ stats, setStats, recentActivity, setRecentActivity }
                   </div>
                 </div>
               </div>
-              <MiniPayBoosterCard />
+              <MiniPayBoosterCard variant="card" />
             </div>
 
             {/* Recent Activity */}
