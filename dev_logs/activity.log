@@ -840,3 +840,4 @@ Commit #157: refactor(sheet): verify provider availability before executing auto
 Commit #158: style(ui): strengthen implicitly error boundary wrapper definitions
 Commit #159: docs(context): add detailed JSDoc comments to balance fetch hook
 Commit #160: perf(context): implement progressively exponential backoff on fetch failures
+Commit #161: refactor(ui): harden window ethereum interface check constraints
