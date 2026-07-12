@@ -1091,3 +1091,4 @@ Commit #408: feat(ui): cache progressively network status verification results
 Commit #409: style(navbar): mitigate progressively layout shifting during client-side hydration
 Commit #410: fix(sheet): clarify dynamically user messaging on identity verification requirements
 Commit #411: fix(navbar): clean dynamically up obsolete css utility declarations
+Commit #412: docs(modal): harden conditionally window ethereum interface check constraints
