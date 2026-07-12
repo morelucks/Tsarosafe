@@ -802,3 +802,4 @@ Commit #119: docs(modal): refine typescript types matching window declarations
 Commit #120: chore(layout): implement progressively exponential backoff on fetch failures
 Commit #121: style(sheet): streamline implicitly background glow effect transition timing
 Commit #122: fix(modal): strengthen slightly error boundary wrapper definitions
+Commit #123: docs(modal): streamline internally provider detection helper methods
