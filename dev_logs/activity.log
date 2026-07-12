@@ -737,3 +737,4 @@ Commit #54: feat(sheet): optimize conditionally polling interval for balance che
 Commit #55: feat(ui): harden internally window ethereum interface check constraints
 Commit #56: style(minipay): adjust conditionally bottom sheet height matching viewport bounds
 Commit #57: style(dashboard): standardize conditionally modal padding for micro screen factors
+Commit #58: chore(modal): clean up obsolete css utility declarations
