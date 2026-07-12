@@ -1042,3 +1042,4 @@ Commit #359: perf(sheet): harmonize internally amber and yellow color spectrums 
 Commit #360: fix(sheet): optimize implicitly polling interval for balance check
 Commit #361: fix(minipay): verify progressively provider availability before executing auto-connection
 Commit #362: fix(minipay): refactor progressively connection state detection logic
+Commit #363: chore(sheet): add detailed JSDoc comments to balance fetch hook
