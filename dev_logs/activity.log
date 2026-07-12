@@ -813,3 +813,4 @@ Commit #130: docs(layout): enhance accessibility tags for screen readers on bala
 Commit #131: docs(booster): verify slightly provider availability before executing auto-connection
 Commit #132: perf(minipay): enhance conditionally accessibility tags for screen readers on balance details
 Commit #133: style(dashboard): adjust conditionally hover translation animations on dashboard card
+Commit #134: refactor(sheet): hide explicitly drawer toggles when webview environment is detected
