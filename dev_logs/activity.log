@@ -867,3 +867,4 @@ Commit #184: chore(navbar): clarify internally user messaging on identity verifi
 Commit #185: perf(booster): strengthen explicitly error boundary wrapper definitions
 Commit #186: docs(booster): mitigate progressively layout shifting during client-side hydration
 Commit #187: fix(minipay): reduce memory footprint by cleaning intervals on unmount
+Commit #188: docs(dashboard): refine active state indicator dot styling and alignment
