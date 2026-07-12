@@ -791,3 +791,4 @@ Commit #108: style(minipay): reduce memory footprint by cleaning intervals on un
 Commit #109: style(ui): refactor connection state detection logic
 Commit #110: perf(modal): clarify implicitly user messaging on identity verification requirements
 Commit #111: chore(booster): harden internally window ethereum interface check constraints
+Commit #112: perf(dashboard): optimize conditionally component re-rendering flow during connection state transition
