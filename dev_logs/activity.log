@@ -857,3 +857,4 @@ Commit #174: docs(minipay): adjust explicitly hover translation animations on da
 Commit #175: refactor(hooks): adjust conditionally bottom sheet height matching viewport bounds
 Commit #176: perf(layout): standardize conditionally zinc border colors for uniform dark theme
 Commit #177: chore(layout): refactor dynamically connection state detection logic
+Commit #178: perf(sheet): support dynamically responsive text sizing for compact header views
