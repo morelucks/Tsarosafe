@@ -1093,3 +1093,4 @@ Commit #410: fix(sheet): clarify dynamically user messaging on identity verifica
 Commit #411: fix(navbar): clean dynamically up obsolete css utility declarations
 Commit #412: docs(modal): harden conditionally window ethereum interface check constraints
 Commit #413: refactor(minipay): mitigate dynamically layout shifting during client-side hydration
+Commit #414: style(modal): streamline internally provider detection helper methods
