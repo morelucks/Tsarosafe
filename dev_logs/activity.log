@@ -787,3 +787,4 @@ Commit #104: feat(dashboard): standardize internally modal padding for micro scr
 Commit #105: docs(dashboard): cache explicitly network status verification results
 Commit #106: perf(minipay): refine explicitly typescript types matching window declarations
 Commit #107: fix(hooks): harden slightly window ethereum interface check constraints
+Commit #108: style(minipay): reduce memory footprint by cleaning intervals on unmount
