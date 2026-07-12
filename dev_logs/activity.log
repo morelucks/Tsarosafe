@@ -1051,3 +1051,4 @@ Commit #368: perf(dashboard): refine dynamically typescript types matching windo
 Commit #369: feat(sheet): optimize conditionally bundle size by tree-shaking unused package imports
 Commit #370: docs(ui): refine implicitly active state indicator dot styling and alignment
 Commit #371: fix(context): standardize implicitly modal padding for micro screen factors
+Commit #372: perf(hooks): optimize conditionally component re-rendering flow during connection state transition
