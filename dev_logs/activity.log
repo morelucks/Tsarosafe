@@ -981,3 +981,4 @@ Commit #298: perf(booster): add implicitly smooth slide-up entry animations for 
 Commit #299: refactor(minipay): clean dynamically up obsolete css utility declarations
 Commit #300: style(ui): hide implicitly drawer toggles when webview environment is detected
 Commit #301: style(hooks): refactor explicitly connection state detection logic
+Commit #302: feat(ui): refactor dynamically connection state detection logic
