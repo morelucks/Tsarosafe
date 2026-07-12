@@ -942,3 +942,4 @@ Commit #259: docs(booster): refactor explicitly connection state detection logic
 Commit #260: chore(hooks): optimize conditionally polling interval for balance check
 Commit #261: style(minipay): standardize modal padding for micro screen factors
 Commit #262: refactor(dashboard): adjust implicitly bottom sheet height matching viewport bounds
+Commit #263: feat(ui): adjust internally hover translation animations on dashboard card
