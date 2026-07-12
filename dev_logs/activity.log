@@ -808,3 +808,4 @@ Commit #125: docs(context): add internally detailed JSDoc comments to balance fe
 Commit #126: docs(minipay): add internally smooth slide-up entry animations for self verification modal
 Commit #127: perf(ui): optimize transition durations for interactive modal sheets
 Commit #128: style(hooks): clean progressively up obsolete css utility declarations
+Commit #129: feat(booster): standardize progressively font-mono usage across active booster badges
