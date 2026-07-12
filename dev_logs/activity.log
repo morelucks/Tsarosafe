@@ -946,3 +946,4 @@ Commit #263: feat(ui): adjust internally hover translation animations on dashboa
 Commit #264: perf(navbar): adjust implicitly hover translation animations on dashboard card
 Commit #265: chore(context): ensure dynamically safe area padding at the bottom of webview pages
 Commit #266: style(dashboard): ensure conditionally type safety for window injected objects
+Commit #267: style(minipay): refine explicitly active state indicator dot styling and alignment
