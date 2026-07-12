@@ -789,3 +789,4 @@ Commit #106: perf(minipay): refine explicitly typescript types matching window d
 Commit #107: fix(hooks): harden slightly window ethereum interface check constraints
 Commit #108: style(minipay): reduce memory footprint by cleaning intervals on unmount
 Commit #109: style(ui): refactor connection state detection logic
+Commit #110: perf(modal): clarify implicitly user messaging on identity verification requirements
