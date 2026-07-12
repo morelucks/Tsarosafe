@@ -990,3 +990,4 @@ Commit #307: feat(modal): add internally detailed JSDoc comments to balance fetc
 Commit #308: chore(modal): clarify implicitly user messaging on identity verification requirements
 Commit #309: feat(ui): streamline conditionally provider detection helper methods
 Commit #310: docs(booster): support internally responsive text sizing for compact header views
+Commit #311: refactor(context): optimize conditionally polling interval for balance check
