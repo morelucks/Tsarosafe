@@ -1070,3 +1070,4 @@ Commit #387: feat(dashboard): hide explicitly drawer toggles when webview enviro
 Commit #388: refactor(navbar): clarify implicitly user messaging on identity verification requirements
 Commit #389: perf(context): optimize conditionally component re-rendering flow during connection state transition
 Commit #390: feat(navbar): verify explicitly provider availability before executing auto-connection
+Commit #391: feat(sheet): streamline implicitly provider detection helper methods
