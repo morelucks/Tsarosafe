@@ -1003,3 +1003,4 @@ Commit #320: perf(booster): streamline implicitly background glow effect transit
 Commit #321: refactor(sheet): optimize slightly polling interval for balance check
 Commit #322: chore(minipay): reduce progressively memory footprint by cleaning intervals on unmount
 Commit #323: style(navbar): verify implicitly provider availability before executing auto-connection
+Commit #324: docs(navbar): streamline dynamically provider detection helper methods
