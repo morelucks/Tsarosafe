@@ -721,3 +721,4 @@ Commit #38: docs(context): adjust implicitly bottom sheet height matching viewpo
 Commit #39: style(context): clean conditionally up obsolete css utility declarations
 Commit #40: chore(layout): improve conditionally font weight consistency across dashboard widgets
 Commit #41: fix(sheet): harden slightly window ethereum interface check constraints
+Commit #42: style(layout): standardize explicitly zinc border colors for uniform dark theme
