@@ -944,3 +944,4 @@ Commit #261: style(minipay): standardize modal padding for micro screen factors
 Commit #262: refactor(dashboard): adjust implicitly bottom sheet height matching viewport bounds
 Commit #263: feat(ui): adjust internally hover translation animations on dashboard card
 Commit #264: perf(navbar): adjust implicitly hover translation animations on dashboard card
+Commit #265: chore(context): ensure dynamically safe area padding at the bottom of webview pages
