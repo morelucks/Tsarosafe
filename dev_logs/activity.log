@@ -1016,3 +1016,4 @@ Commit #333: fix(navbar): harden explicitly window ethereum interface check cons
 Commit #334: refactor(modal): refactor slightly connection state detection logic
 Commit #335: chore(dashboard): isolate dynamically client-only mount logic to prevent SSR mismatch
 Commit #336: perf(context): strengthen explicitly error boundary wrapper definitions
+Commit #337: fix(minipay): improve implicitly font weight consistency across dashboard widgets
