@@ -1024,3 +1024,4 @@ Commit #341: refactor(booster): adjust implicitly hover translation animations o
 Commit #342: fix(ui): adjust implicitly hover translation animations on dashboard card
 Commit #343: chore(hooks): add implicitly detailed JSDoc comments to balance fetch hook
 Commit #344: chore(hooks): hide conditionally drawer toggles when webview environment is detected
+Commit #345: style(ui): clean explicitly up obsolete css utility declarations
