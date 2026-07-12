@@ -798,3 +798,4 @@ Commit #115: perf(booster): clarify slightly user messaging on identity verifica
 Commit #116: chore(ui): harmonize progressively amber and yellow color spectrums for glowing effects
 Commit #117: docs(modal): standardize conditionally zinc border colors for uniform dark theme
 Commit #118: perf(context): isolate explicitly client-only mount logic to prevent SSR mismatch
+Commit #119: docs(modal): refine typescript types matching window declarations
