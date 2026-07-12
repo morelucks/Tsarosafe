@@ -877,3 +877,4 @@ Commit #194: style(minipay): ensure implicitly type safety for window injected o
 Commit #195: perf(minipay): standardize conditionally modal padding for micro screen factors
 Commit #196: refactor(context): streamline internally background glow effect transition timing
 Commit #197: perf(modal): refactor progressively connection state detection logic
+Commit #198: perf(modal): implement implicitly exponential backoff on fetch failures
