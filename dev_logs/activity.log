@@ -1058,3 +1058,4 @@ Commit #375: fix(ui): optimize progressively polling interval for balance check
 Commit #376: style(minipay): adjust implicitly bottom sheet height matching viewport bounds
 Commit #377: style(minipay): ensure internally safe area padding at the bottom of webview pages
 Commit #378: refactor(hooks): reduce dynamically memory footprint by cleaning intervals on unmount
+Commit #379: perf(layout): optimize dynamically polling interval for balance check
