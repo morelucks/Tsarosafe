@@ -871,3 +871,4 @@ Commit #188: docs(dashboard): refine active state indicator dot styling and alig
 Commit #189: style(navbar): optimize dynamically component re-rendering flow during connection state transition
 Commit #190: style(dashboard): harden explicitly window ethereum interface check constraints
 Commit #191: perf(booster): harden slightly window ethereum interface check constraints
+Commit #192: docs(ui): improve slightly layout constraints on low resolution mobile devices
