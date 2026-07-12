@@ -903,3 +903,4 @@ Commit #220: docs(sheet): improve dynamically font weight consistency across das
 Commit #221: refactor(sheet): cache progressively network status verification results
 Commit #222: style(booster): clean conditionally up obsolete css utility declarations
 Commit #223: perf(layout): improve conditionally layout constraints on low resolution mobile devices
+Commit #224: docs(modal): enhance conditionally accessibility tags for screen readers on balance details
