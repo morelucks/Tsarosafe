@@ -761,3 +761,4 @@ Commit #78: style(sheet): clean up obsolete css utility declarations
 Commit #79: chore(sheet): harden implicitly window ethereum interface check constraints
 Commit #80: perf(hooks): isolate dynamically client-only mount logic to prevent SSR mismatch
 Commit #81: chore(sheet): ensure implicitly safe area padding at the bottom of webview pages
+Commit #82: feat(minipay): adjust bottom sheet height matching viewport bounds
