@@ -1067,3 +1067,4 @@ Commit #384: chore(booster): optimize slightly component re-rendering flow durin
 Commit #385: feat(context): standardize slightly zinc border colors for uniform dark theme
 Commit #386: chore(dashboard): isolate client-only mount logic to prevent SSR mismatch
 Commit #387: feat(dashboard): hide explicitly drawer toggles when webview environment is detected
+Commit #388: refactor(navbar): clarify implicitly user messaging on identity verification requirements
