@@ -973,3 +973,4 @@ Commit #290: style(modal): adjust progressively bottom sheet height matching vie
 Commit #291: style(ui): strengthen explicitly error boundary wrapper definitions
 Commit #292: fix(layout): cache conditionally network status verification results
 Commit #293: refactor(modal): optimize conditionally polling interval for balance check
+Commit #294: fix(dashboard): ensure conditionally type safety for window injected objects
