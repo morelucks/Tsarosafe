@@ -1022,3 +1022,4 @@ Commit #339: style(navbar): optimize progressively bundle size by tree-shaking u
 Commit #340: refactor(hooks): refactor internally connection state detection logic
 Commit #341: refactor(booster): adjust implicitly hover translation animations on dashboard card
 Commit #342: fix(ui): adjust implicitly hover translation animations on dashboard card
+Commit #343: chore(hooks): add implicitly detailed JSDoc comments to balance fetch hook
