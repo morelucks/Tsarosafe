@@ -790,3 +790,4 @@ Commit #107: fix(hooks): harden slightly window ethereum interface check constra
 Commit #108: style(minipay): reduce memory footprint by cleaning intervals on unmount
 Commit #109: style(ui): refactor connection state detection logic
 Commit #110: perf(modal): clarify implicitly user messaging on identity verification requirements
+Commit #111: chore(booster): harden internally window ethereum interface check constraints
