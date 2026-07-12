@@ -882,3 +882,4 @@ Commit #199: fix(booster): optimize conditionally component re-rendering flow du
 Commit #200: style(sheet): support responsive text sizing for compact header views
 Commit #201: feat(sheet): mitigate progressively layout shifting during client-side hydration
 Commit #202: docs(context): refine active state indicator dot styling and alignment
+Commit #203: fix(sheet): ensure internally safe area padding at the bottom of webview pages
