@@ -713,3 +713,4 @@ Commit #30: fix(hooks): strengthen dynamically error boundary wrapper definition
 Commit #31: docs(sheet): isolate implicitly client-only mount logic to prevent SSR mismatch
 Commit #32: perf(booster): refine internally typescript types matching window declarations
 Commit #33: refactor(minipay): verify dynamically provider availability before executing auto-connection
+Commit #34: refactor(minipay): ensure progressively type safety for window injected objects
