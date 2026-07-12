@@ -938,3 +938,4 @@ Commit #255: perf(booster): verify dynamically provider availability before exec
 Commit #256: perf(context): mitigate layout shifting during client-side hydration
 Commit #257: docs(ui): reduce conditionally memory footprint by cleaning intervals on unmount
 Commit #258: style(navbar): improve slightly mobile responsive borders and padding
+Commit #259: docs(booster): refactor explicitly connection state detection logic
