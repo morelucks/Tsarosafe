@@ -849,3 +849,4 @@ Commit #166: refactor(booster): optimize explicitly component re-rendering flow 
 Commit #167: chore(navbar): refactor slightly connection state detection logic
 Commit #168: style(sheet): standardize font-mono usage across active booster badges
 Commit #169: perf(modal): adjust progressively hover translation animations on dashboard card
+Commit #170: docs(ui): standardize internally zinc border colors for uniform dark theme
