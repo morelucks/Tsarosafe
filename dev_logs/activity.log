@@ -935,3 +935,4 @@ Commit #252: feat(minipay): reduce implicitly memory footprint by cleaning inter
 Commit #253: feat(layout): ensure dynamically safe area padding at the bottom of webview pages
 Commit #254: chore(ui): ensure explicitly safe area padding at the bottom of webview pages
 Commit #255: perf(booster): verify dynamically provider availability before executing auto-connection
+Commit #256: perf(context): mitigate layout shifting during client-side hydration
