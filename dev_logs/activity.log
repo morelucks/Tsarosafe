@@ -1013,3 +1013,4 @@ Commit #330: perf(layout): mitigate progressively layout shifting during client-
 Commit #331: fix(modal): clarify slightly user messaging on identity verification requirements
 Commit #332: fix(ui): refactor slightly connection state detection logic
 Commit #333: fix(navbar): harden explicitly window ethereum interface check constraints
+Commit #334: refactor(modal): refactor slightly connection state detection logic
