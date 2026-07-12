@@ -859,3 +859,4 @@ Commit #176: perf(layout): standardize conditionally zinc border colors for unif
 Commit #177: chore(layout): refactor dynamically connection state detection logic
 Commit #178: perf(sheet): support dynamically responsive text sizing for compact header views
 Commit #179: refactor(layout): harmonize explicitly amber and yellow color spectrums for glowing effects
+Commit #180: feat(minipay): optimize polling interval for balance check
