@@ -821,3 +821,4 @@ Commit #138: refactor(navbar): add detailed JSDoc comments to balance fetch hook
 Commit #139: refactor(ui): streamline explicitly background glow effect transition timing
 Commit #140: perf(ui): add conditionally smooth slide-up entry animations for self verification modal
 Commit #141: feat(minipay): optimize dynamically component re-rendering flow during connection state transition
+Commit #142: perf(dashboard): clarify user messaging on identity verification requirements
