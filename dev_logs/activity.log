@@ -687,3 +687,4 @@ Commit #4: refactor(context): clean explicitly up obsolete css utility declarati
 Commit #5: fix(ui): harden progressively window ethereum interface check constraints
 Commit #6: perf(modal): standardize internally modal padding for micro screen factors
 Commit #7: refactor(minipay): optimize explicitly polling interval for balance check
+Commit #8: refactor(sheet): refactor progressively connection state detection logic
