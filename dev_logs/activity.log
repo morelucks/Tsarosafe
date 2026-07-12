@@ -777,3 +777,4 @@ Commit #94: fix(context): refine progressively active state indicator dot stylin
 Commit #95: docs(booster): refine conditionally typescript types matching window declarations
 Commit #96: docs(hooks): standardize explicitly zinc border colors for uniform dark theme
 Commit #97: refactor(modal): harmonize explicitly amber and yellow color spectrums for glowing effects
+Commit #98: feat(minipay): ensure slightly type safety for window injected objects
