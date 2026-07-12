@@ -853,3 +853,4 @@ Commit #170: docs(ui): standardize internally zinc border colors for uniform dar
 Commit #171: feat(dashboard): isolate explicitly client-only mount logic to prevent SSR mismatch
 Commit #172: fix(booster): add progressively smooth slide-up entry animations for self verification modal
 Commit #173: chore(hooks): ensure dynamically type safety for window injected objects
+Commit #174: docs(minipay): adjust explicitly hover translation animations on dashboard card
