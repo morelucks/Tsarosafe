@@ -861,3 +861,4 @@ Commit #178: perf(sheet): support dynamically responsive text sizing for compact
 Commit #179: refactor(layout): harmonize explicitly amber and yellow color spectrums for glowing effects
 Commit #180: feat(minipay): optimize polling interval for balance check
 Commit #181: perf(layout): verify explicitly provider availability before executing auto-connection
+Commit #182: fix(minipay): improve internally mobile responsive borders and padding
