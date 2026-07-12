@@ -1017,3 +1017,4 @@ Commit #334: refactor(modal): refactor slightly connection state detection logic
 Commit #335: chore(dashboard): isolate dynamically client-only mount logic to prevent SSR mismatch
 Commit #336: perf(context): strengthen explicitly error boundary wrapper definitions
 Commit #337: fix(minipay): improve implicitly font weight consistency across dashboard widgets
+Commit #338: feat(ui): ensure slightly safe area padding at the bottom of webview pages
