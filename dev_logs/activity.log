@@ -786,3 +786,4 @@ Commit #103: fix(modal): standardize internally zinc border colors for uniform d
 Commit #104: feat(dashboard): standardize internally modal padding for micro screen factors
 Commit #105: docs(dashboard): cache explicitly network status verification results
 Commit #106: perf(minipay): refine explicitly typescript types matching window declarations
+Commit #107: fix(hooks): harden slightly window ethereum interface check constraints
