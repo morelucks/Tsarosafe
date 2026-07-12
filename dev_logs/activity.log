@@ -1096,3 +1096,4 @@ Commit #413: refactor(minipay): mitigate dynamically layout shifting during clie
 Commit #414: style(modal): streamline internally provider detection helper methods
 Commit #415: chore(booster): standardize progressively font-mono usage across active booster badges
 Commit #416: docs(context): adjust dynamically hover translation animations on dashboard card
+Commit #417: fix(booster): adjust progressively hover translation animations on dashboard card
