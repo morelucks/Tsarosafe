@@ -1007,3 +1007,4 @@ Commit #324: docs(navbar): streamline dynamically provider detection helper meth
 Commit #325: chore(booster): cache internally network status verification results
 Commit #326: refactor(layout): standardize internally font-mono usage across active booster badges
 Commit #327: chore(hooks): optimize progressively component re-rendering flow during connection state transition
+Commit #328: refactor(modal): ensure slightly type safety for window injected objects
