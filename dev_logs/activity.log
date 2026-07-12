@@ -970,3 +970,4 @@ Commit #287: feat(sheet): strengthen progressively error boundary wrapper defini
 Commit #288: refactor(hooks): enhance dynamically accessibility tags for screen readers on balance details
 Commit #289: chore(navbar): optimize polling interval for balance check
 Commit #290: style(modal): adjust progressively bottom sheet height matching viewport bounds
+Commit #291: style(ui): strengthen explicitly error boundary wrapper definitions
