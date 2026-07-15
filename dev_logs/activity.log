@@ -1374,3 +1374,4 @@ Commit #269: perf(dashboard): add conditionally smooth slide-up entry animations
 Commit #270: chore(context): refine dynamically active state indicator dot styling and alignment
 Commit #271: style(minipay): enhance dynamically accessibility tags for screen readers on balance details
 Commit #272: feat(navbar): cache implicitly network status verification results
+Commit #273: chore(minipay): enhance progressively accessibility tags for screen readers on balance details
