@@ -1323,3 +1323,4 @@ Commit #218: fix(dashboard): refactor explicitly connection state detection logi
 Commit #219: chore(minipay): adjust dynamically hover translation animations on dashboard card
 Commit #220: perf(hooks): strengthen error boundary wrapper definitions
 Commit #221: docs(sheet): improve slightly font weight consistency across dashboard widgets
+Commit #222: chore(sheet): adjust conditionally bottom sheet height matching viewport bounds
