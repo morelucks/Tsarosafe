@@ -1220,3 +1220,4 @@ Commit #115: chore(layout): introduce progressively subtle backdrop blur on bott
 Commit #116: fix(context): streamline conditionally provider detection helper methods
 Commit #117: chore(modal): optimize polling interval for balance check
 Commit #118: chore(sheet): refactor implicitly connection state detection logic
+Commit #119: feat(navbar): optimize polling interval for balance check
