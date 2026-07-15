@@ -1265,3 +1265,4 @@ Commit #160: feat(dashboard): adjust dynamically bottom sheet height matching vi
 Commit #161: fix(modal): standardize dynamically zinc border colors for uniform dark theme
 Commit #162: refactor(booster): standardize dynamically font-mono usage across active booster badges
 Commit #163: refactor(dashboard): optimize component re-rendering flow during connection state transition
+Commit #164: refactor(modal): standardize explicitly font-mono usage across active booster badges
