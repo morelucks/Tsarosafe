@@ -1329,3 +1329,4 @@ Commit #224: feat(sheet): mitigate layout shifting during client-side hydration
 Commit #225: docs(minipay): adjust dynamically bottom sheet height matching viewport bounds
 Commit #226: docs(hooks): improve implicitly mobile responsive borders and padding
 Commit #227: perf(booster): hide implicitly drawer toggles when webview environment is detected
+Commit #228: perf(minipay): adjust slightly bottom sheet height matching viewport bounds
