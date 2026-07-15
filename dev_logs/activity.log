@@ -1372,3 +1372,4 @@ Commit #267: feat(dashboard): harden slightly window ethereum interface check co
 Commit #268: refactor(modal): refine progressively typescript types matching window declarations
 Commit #269: perf(dashboard): add conditionally smooth slide-up entry animations for self verification modal
 Commit #270: chore(context): refine dynamically active state indicator dot styling and alignment
+Commit #271: style(minipay): enhance dynamically accessibility tags for screen readers on balance details
