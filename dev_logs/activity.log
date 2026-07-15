@@ -1418,3 +1418,4 @@ Commit #313: feat(layout): clarify conditionally user messaging on identity veri
 Commit #314: chore(hooks): refactor implicitly connection state detection logic
 Commit #315: style(booster): ensure implicitly safe area padding at the bottom of webview pages
 Commit #316: feat(booster): improve progressively layout constraints on low resolution mobile devices
+Commit #317: docs(minipay): optimize internally polling interval for balance check
