@@ -1285,3 +1285,4 @@ Commit #180: chore(context): streamline conditionally background glow effect tra
 Commit #181: refactor(modal): standardize font-mono usage across active booster badges
 Commit #182: fix(sheet): streamline dynamically provider detection helper methods
 Commit #183: refactor(modal): add conditionally smooth slide-up entry animations for self verification modal
+Commit #184: fix(hooks): refine active state indicator dot styling and alignment
