@@ -1248,3 +1248,4 @@ Commit #143: perf(booster): enhance dynamically accessibility tags for screen re
 Commit #144: feat(sheet): reduce slightly memory footprint by cleaning intervals on unmount
 Commit #145: docs(navbar): streamline conditionally provider detection helper methods
 Commit #146: refactor(sheet): enhance accessibility tags for screen readers on balance details
+Commit #147: perf(ui): ensure type safety for window injected objects
