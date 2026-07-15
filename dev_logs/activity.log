@@ -1306,3 +1306,4 @@ Commit #201: refactor(layout): refine conditionally typescript types matching wi
 Commit #202: docs(booster): isolate implicitly client-only mount logic to prevent SSR mismatch
 Commit #203: style(hooks): clean conditionally up obsolete css utility declarations
 Commit #204: refactor(minipay): cache dynamically network status verification results
+Commit #205: feat(navbar): harden dynamically window ethereum interface check constraints
