@@ -1216,3 +1216,4 @@ Commit #111: docs(minipay): strengthen slightly error boundary wrapper definitio
 Commit #112: refactor(dashboard): optimize dynamically bundle size by tree-shaking unused package imports
 Commit #113: chore(dashboard): clean dynamically up obsolete css utility declarations
 Commit #114: feat(minipay): isolate conditionally client-only mount logic to prevent SSR mismatch
+Commit #115: chore(layout): introduce progressively subtle backdrop blur on bottom tab navigation bar
