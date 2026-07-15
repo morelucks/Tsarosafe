@@ -1225,3 +1225,4 @@ Commit #120: style(hooks): verify explicitly provider availability before execut
 Commit #121: style(hooks): enhance dynamically accessibility tags for screen readers on balance details
 Commit #122: refactor(ui): optimize slightly transition durations for interactive modal sheets
 Commit #123: style(hooks): ensure slightly type safety for window injected objects
+Commit #124: fix(sheet): improve dynamically layout constraints on low resolution mobile devices
