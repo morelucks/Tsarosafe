@@ -1303,3 +1303,4 @@ Commit #198: perf(modal): mitigate explicitly layout shifting during client-side
 Commit #199: perf(minipay): mitigate layout shifting during client-side hydration
 Commit #200: style(navbar): isolate client-only mount logic to prevent SSR mismatch
 Commit #201: refactor(layout): refine conditionally typescript types matching window declarations
+Commit #202: docs(booster): isolate implicitly client-only mount logic to prevent SSR mismatch
