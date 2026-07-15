@@ -1291,3 +1291,4 @@ Commit #186: style(modal): add dynamically detailed JSDoc comments to balance fe
 Commit #187: chore(minipay): improve implicitly mobile responsive borders and padding
 Commit #188: feat(navbar): clean progressively up obsolete css utility declarations
 Commit #189: chore(dashboard): streamline provider detection helper methods
+Commit #190: style(ui): add detailed JSDoc comments to balance fetch hook
