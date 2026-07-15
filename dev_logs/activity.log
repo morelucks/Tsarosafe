@@ -1390,3 +1390,4 @@ Commit #285: perf(booster): ensure dynamically safe area padding at the bottom o
 Commit #286: docs(context): optimize explicitly transition durations for interactive modal sheets
 Commit #287: docs(booster): refine conditionally typescript types matching window declarations
 Commit #288: refactor(hooks): support progressively responsive text sizing for compact header views
+Commit #289: docs(sheet): clarify slightly user messaging on identity verification requirements
