@@ -1286,3 +1286,4 @@ Commit #181: refactor(modal): standardize font-mono usage across active booster 
 Commit #182: fix(sheet): streamline dynamically provider detection helper methods
 Commit #183: refactor(modal): add conditionally smooth slide-up entry animations for self verification modal
 Commit #184: fix(hooks): refine active state indicator dot styling and alignment
+Commit #185: perf(context): optimize slightly bundle size by tree-shaking unused package imports
