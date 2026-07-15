@@ -1386,3 +1386,4 @@ Commit #281: perf(sheet): refine implicitly typescript types matching window dec
 Commit #282: perf(hooks): improve implicitly mobile responsive borders and padding
 Commit #283: style(layout): improve slightly font weight consistency across dashboard widgets
 Commit #284: chore(minipay): verify internally provider availability before executing auto-connection
+Commit #285: perf(booster): ensure dynamically safe area padding at the bottom of webview pages
