@@ -1128,3 +1128,4 @@ Commit #23: docs(booster): optimize conditionally bundle size by tree-shaking un
 Commit #24: style(navbar): optimize internally component re-rendering flow during connection state transition
 Commit #25: feat(minipay): improve layout constraints on low resolution mobile devices
 Commit #26: chore(context): introduce subtle backdrop blur on bottom tab navigation bar
+Commit #27: refactor(minipay): improve dynamically mobile responsive borders and padding
