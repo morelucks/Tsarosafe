@@ -1299,3 +1299,4 @@ Commit #194: chore(booster): strengthen implicitly error boundary wrapper defini
 Commit #195: style(booster): standardize zinc border colors for uniform dark theme
 Commit #196: refactor(minipay): harden conditionally window ethereum interface check constraints
 Commit #197: fix(dashboard): improve conditionally font weight consistency across dashboard widgets
+Commit #198: perf(modal): mitigate explicitly layout shifting during client-side hydration
