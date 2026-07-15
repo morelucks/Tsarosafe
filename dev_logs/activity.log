@@ -1198,3 +1198,4 @@ Commit #93: refactor(modal): optimize implicitly transition durations for intera
 Commit #94: fix(dashboard): isolate internally client-only mount logic to prevent SSR mismatch
 Commit #95: chore(sheet): streamline progressively background glow effect transition timing
 Commit #96: feat(dashboard): ensure explicitly type safety for window injected objects
+Commit #97: chore(modal): mitigate layout shifting during client-side hydration
