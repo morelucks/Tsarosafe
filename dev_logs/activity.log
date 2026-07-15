@@ -1161,3 +1161,4 @@ Commit #56: fix(navbar): harmonize internally amber and yellow color spectrums f
 Commit #57: refactor(hooks): optimize polling interval for balance check
 Commit #58: refactor(hooks): clarify progressively user messaging on identity verification requirements
 Commit #59: refactor(ui): strengthen slightly error boundary wrapper definitions
+Commit #60: refactor(booster): verify provider availability before executing auto-connection
