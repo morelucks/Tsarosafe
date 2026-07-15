@@ -1297,3 +1297,4 @@ Commit #192: style(modal): adjust slightly bottom sheet height matching viewport
 Commit #193: docs(minipay): support progressively responsive text sizing for compact header views
 Commit #194: chore(booster): strengthen implicitly error boundary wrapper definitions
 Commit #195: style(booster): standardize zinc border colors for uniform dark theme
+Commit #196: refactor(minipay): harden conditionally window ethereum interface check constraints
