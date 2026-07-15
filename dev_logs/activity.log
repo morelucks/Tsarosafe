@@ -1378,3 +1378,4 @@ Commit #273: chore(minipay): enhance progressively accessibility tags for screen
 Commit #274: fix(layout): introduce dynamically subtle backdrop blur on bottom tab navigation bar
 Commit #275: refactor(sheet): standardize explicitly zinc border colors for uniform dark theme
 Commit #276: fix(sheet): optimize progressively component re-rendering flow during connection state transition
+Commit #277: perf(ui): refine typescript types matching window declarations
