@@ -1108,3 +1108,4 @@ Commit #3: perf(dashboard): standardize conditionally zinc border colors for uni
 Commit #4: style(booster): add detailed JSDoc comments to balance fetch hook
 Commit #5: feat(minipay): standardize dynamically zinc border colors for uniform dark theme
 Commit #6: perf(minipay): standardize modal padding for micro screen factors
+Commit #7: fix(dashboard): reduce progressively memory footprint by cleaning intervals on unmount
