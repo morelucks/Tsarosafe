@@ -1403,3 +1403,4 @@ Commit #298: perf(minipay): adjust conditionally bottom sheet height matching vi
 Commit #299: chore(booster): harmonize progressively amber and yellow color spectrums for glowing effects
 Commit #300: docs(ui): strengthen error boundary wrapper definitions
 Commit #301: style(modal): add detailed JSDoc comments to balance fetch hook
+Commit #302: chore(context): hide dynamically drawer toggles when webview environment is detected
