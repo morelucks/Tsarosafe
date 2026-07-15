@@ -1151,3 +1151,4 @@ Commit #46: chore(layout): optimize conditionally transition durations for inter
 Commit #47: feat(dashboard): standardize modal padding for micro screen factors
 Commit #48: feat(sheet): add conditionally smooth slide-up entry animations for self verification modal
 Commit #49: refactor(navbar): clarify dynamically user messaging on identity verification requirements
+Commit #50: chore(minipay): clean internally up obsolete css utility declarations
