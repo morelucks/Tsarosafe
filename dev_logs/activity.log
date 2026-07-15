@@ -1315,3 +1315,4 @@ Commit #210: refactor(layout): standardize dynamically modal padding for micro s
 Commit #211: feat(sheet): harmonize implicitly amber and yellow color spectrums for glowing effects
 Commit #212: docs(ui): standardize explicitly modal padding for micro screen factors
 Commit #213: fix(layout): harmonize slightly amber and yellow color spectrums for glowing effects
+Commit #214: chore(navbar): clean dynamically up obsolete css utility declarations
