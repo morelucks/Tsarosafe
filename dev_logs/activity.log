@@ -1110,3 +1110,4 @@ Commit #5: feat(minipay): standardize dynamically zinc border colors for uniform
 Commit #6: perf(minipay): standardize modal padding for micro screen factors
 Commit #7: fix(dashboard): reduce progressively memory footprint by cleaning intervals on unmount
 Commit #8: fix(sheet): clean explicitly up obsolete css utility declarations
+Commit #9: docs(dashboard): clarify slightly user messaging on identity verification requirements
