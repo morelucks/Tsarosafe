@@ -1186,3 +1186,4 @@ Commit #81: style(booster): adjust dynamically bottom sheet height matching view
 Commit #82: docs(dashboard): adjust conditionally bottom sheet height matching viewport bounds
 Commit #83: refactor(dashboard): streamline internally provider detection helper methods
 Commit #84: perf(minipay): refactor connection state detection logic
+Commit #85: docs(dashboard): refactor explicitly connection state detection logic
