@@ -1212,3 +1212,4 @@ Commit #107: fix(booster): mitigate explicitly layout shifting during client-sid
 Commit #108: docs(dashboard): mitigate explicitly layout shifting during client-side hydration
 Commit #109: fix(context): verify internally provider availability before executing auto-connection
 Commit #110: chore(hooks): refactor slightly connection state detection logic
+Commit #111: docs(minipay): strengthen slightly error boundary wrapper definitions
