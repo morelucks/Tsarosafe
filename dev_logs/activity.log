@@ -1370,3 +1370,4 @@ Commit #265: feat(dashboard): optimize implicitly polling interval for balance c
 Commit #266: style(context): improve conditionally layout constraints on low resolution mobile devices
 Commit #267: feat(dashboard): harden slightly window ethereum interface check constraints
 Commit #268: refactor(modal): refine progressively typescript types matching window declarations
+Commit #269: perf(dashboard): add conditionally smooth slide-up entry animations for self verification modal
