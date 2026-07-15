@@ -1262,3 +1262,4 @@ Commit #157: fix(context): adjust internally bottom sheet height matching viewpo
 Commit #158: docs(minipay): isolate explicitly client-only mount logic to prevent SSR mismatch
 Commit #159: chore(minipay): harden progressively window ethereum interface check constraints
 Commit #160: feat(dashboard): adjust dynamically bottom sheet height matching viewport bounds
+Commit #161: fix(modal): standardize dynamically zinc border colors for uniform dark theme
