@@ -1249,3 +1249,4 @@ Commit #144: feat(sheet): reduce slightly memory footprint by cleaning intervals
 Commit #145: docs(navbar): streamline conditionally provider detection helper methods
 Commit #146: refactor(sheet): enhance accessibility tags for screen readers on balance details
 Commit #147: perf(ui): ensure type safety for window injected objects
+Commit #148: docs(sheet): introduce implicitly subtle backdrop blur on bottom tab navigation bar
