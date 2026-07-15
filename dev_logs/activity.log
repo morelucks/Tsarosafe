@@ -1416,3 +1416,4 @@ Commit #311: style(context): mitigate layout shifting during client-side hydrati
 Commit #312: style(navbar): clarify user messaging on identity verification requirements
 Commit #313: feat(layout): clarify conditionally user messaging on identity verification requirements
 Commit #314: chore(hooks): refactor implicitly connection state detection logic
+Commit #315: style(booster): ensure implicitly safe area padding at the bottom of webview pages
