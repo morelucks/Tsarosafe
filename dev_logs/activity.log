@@ -1320,3 +1320,4 @@ Commit #215: refactor(hooks): harmonize slightly amber and yellow color spectrum
 Commit #216: style(sheet): isolate conditionally client-only mount logic to prevent SSR mismatch
 Commit #217: docs(minipay): verify slightly provider availability before executing auto-connection
 Commit #218: fix(dashboard): refactor explicitly connection state detection logic
+Commit #219: chore(minipay): adjust dynamically hover translation animations on dashboard card
