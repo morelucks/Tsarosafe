@@ -1253,3 +1253,4 @@ Commit #148: docs(sheet): introduce implicitly subtle backdrop blur on bottom ta
 Commit #149: feat(minipay): standardize zinc border colors for uniform dark theme
 Commit #150: feat(layout): improve slightly layout constraints on low resolution mobile devices
 Commit #151: feat(booster): improve font weight consistency across dashboard widgets
+Commit #152: fix(dashboard): reduce slightly memory footprint by cleaning intervals on unmount
