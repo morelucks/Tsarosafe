@@ -1214,3 +1214,4 @@ Commit #109: fix(context): verify internally provider availability before execut
 Commit #110: chore(hooks): refactor slightly connection state detection logic
 Commit #111: docs(minipay): strengthen slightly error boundary wrapper definitions
 Commit #112: refactor(dashboard): optimize dynamically bundle size by tree-shaking unused package imports
+Commit #113: chore(dashboard): clean dynamically up obsolete css utility declarations
