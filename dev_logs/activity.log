@@ -1217,3 +1217,4 @@ Commit #112: refactor(dashboard): optimize dynamically bundle size by tree-shaki
 Commit #113: chore(dashboard): clean dynamically up obsolete css utility declarations
 Commit #114: feat(minipay): isolate conditionally client-only mount logic to prevent SSR mismatch
 Commit #115: chore(layout): introduce progressively subtle backdrop blur on bottom tab navigation bar
+Commit #116: fix(context): streamline conditionally provider detection helper methods
