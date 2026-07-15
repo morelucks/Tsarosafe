@@ -1326,3 +1326,4 @@ Commit #221: docs(sheet): improve slightly font weight consistency across dashbo
 Commit #222: chore(sheet): adjust conditionally bottom sheet height matching viewport bounds
 Commit #223: fix(ui): optimize internally bundle size by tree-shaking unused package imports
 Commit #224: feat(sheet): mitigate layout shifting during client-side hydration
+Commit #225: docs(minipay): adjust dynamically bottom sheet height matching viewport bounds
