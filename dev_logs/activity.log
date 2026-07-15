@@ -1272,3 +1272,4 @@ Commit #167: docs(hooks): optimize conditionally polling interval for balance ch
 Commit #168: feat(hooks): strengthen conditionally error boundary wrapper definitions
 Commit #169: perf(navbar): mitigate progressively layout shifting during client-side hydration
 Commit #170: feat(navbar): optimize implicitly polling interval for balance check
+Commit #171: feat(modal): ensure progressively safe area padding at the bottom of webview pages
