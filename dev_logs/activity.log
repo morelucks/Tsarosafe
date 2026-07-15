@@ -1261,3 +1261,4 @@ Commit #156: docs(hooks): standardize modal padding for micro screen factors
 Commit #157: fix(context): adjust internally bottom sheet height matching viewport bounds
 Commit #158: docs(minipay): isolate explicitly client-only mount logic to prevent SSR mismatch
 Commit #159: chore(minipay): harden progressively window ethereum interface check constraints
+Commit #160: feat(dashboard): adjust dynamically bottom sheet height matching viewport bounds
