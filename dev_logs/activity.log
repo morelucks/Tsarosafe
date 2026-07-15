@@ -1422,3 +1422,4 @@ Commit #317: docs(minipay): optimize internally polling interval for balance che
 Commit #318: refactor(minipay): adjust progressively bottom sheet height matching viewport bounds
 Commit #319: refactor(ui): reduce memory footprint by cleaning intervals on unmount
 Commit #320: feat(ui): introduce progressively subtle backdrop blur on bottom tab navigation bar
+Commit #321: chore(minipay): clarify explicitly user messaging on identity verification requirements
