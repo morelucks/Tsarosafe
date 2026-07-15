@@ -1153,3 +1153,4 @@ Commit #48: feat(sheet): add conditionally smooth slide-up entry animations for 
 Commit #49: refactor(navbar): clarify dynamically user messaging on identity verification requirements
 Commit #50: chore(minipay): clean internally up obsolete css utility declarations
 Commit #51: chore(ui): clean dynamically up obsolete css utility declarations
+Commit #52: feat(layout): ensure type safety for window injected objects
