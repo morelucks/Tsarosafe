@@ -1165,3 +1165,4 @@ Commit #60: refactor(booster): verify provider availability before executing aut
 Commit #61: feat(ui): standardize internally modal padding for micro screen factors
 Commit #62: perf(ui): optimize progressively bundle size by tree-shaking unused package imports
 Commit #63: style(context): refine internally active state indicator dot styling and alignment
+Commit #64: docs(modal): hide conditionally drawer toggles when webview environment is detected
