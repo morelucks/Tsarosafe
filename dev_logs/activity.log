@@ -1404,3 +1404,4 @@ Commit #299: chore(booster): harmonize progressively amber and yellow color spec
 Commit #300: docs(ui): strengthen error boundary wrapper definitions
 Commit #301: style(modal): add detailed JSDoc comments to balance fetch hook
 Commit #302: chore(context): hide dynamically drawer toggles when webview environment is detected
+Commit #303: chore(dashboard): support dynamically responsive text sizing for compact header views
