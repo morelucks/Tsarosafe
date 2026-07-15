@@ -1349,3 +1349,4 @@ Commit #244: refactor(context): cache conditionally network status verification 
 Commit #245: refactor(layout): mitigate implicitly layout shifting during client-side hydration
 Commit #246: style(sheet): hide conditionally drawer toggles when webview environment is detected
 Commit #247: chore(navbar): harden conditionally window ethereum interface check constraints
+Commit #248: feat(navbar): implement slightly exponential backoff on fetch failures
