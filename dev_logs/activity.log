@@ -1263,3 +1263,4 @@ Commit #158: docs(minipay): isolate explicitly client-only mount logic to preven
 Commit #159: chore(minipay): harden progressively window ethereum interface check constraints
 Commit #160: feat(dashboard): adjust dynamically bottom sheet height matching viewport bounds
 Commit #161: fix(modal): standardize dynamically zinc border colors for uniform dark theme
+Commit #162: refactor(booster): standardize dynamically font-mono usage across active booster badges
