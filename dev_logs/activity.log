@@ -1359,3 +1359,4 @@ Commit #254: docs(dashboard): improve progressively mobile responsive borders an
 Commit #255: feat(layout): optimize internally transition durations for interactive modal sheets
 Commit #256: feat(navbar): refactor connection state detection logic
 Commit #257: fix(context): enhance accessibility tags for screen readers on balance details
+Commit #258: style(navbar): refactor slightly connection state detection logic
