@@ -1176,3 +1176,4 @@ Commit #71: refactor(ui): refine internally typescript types matching window dec
 Commit #72: style(layout): refine slightly typescript types matching window declarations
 Commit #73: chore(modal): standardize implicitly zinc border colors for uniform dark theme
 Commit #74: style(minipay): cache slightly network status verification results
+Commit #75: fix(navbar): clarify explicitly user messaging on identity verification requirements
