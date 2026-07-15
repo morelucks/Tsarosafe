@@ -1301,3 +1301,4 @@ Commit #196: refactor(minipay): harden conditionally window ethereum interface c
 Commit #197: fix(dashboard): improve conditionally font weight consistency across dashboard widgets
 Commit #198: perf(modal): mitigate explicitly layout shifting during client-side hydration
 Commit #199: perf(minipay): mitigate layout shifting during client-side hydration
+Commit #200: style(navbar): isolate client-only mount logic to prevent SSR mismatch
