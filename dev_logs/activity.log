@@ -1279,3 +1279,4 @@ Commit #174: fix(booster): introduce slightly subtle backdrop blur on bottom tab
 Commit #175: chore(navbar): streamline provider detection helper methods
 Commit #176: feat(hooks): enhance explicitly accessibility tags for screen readers on balance details
 Commit #177: docs(ui): isolate dynamically client-only mount logic to prevent SSR mismatch
+Commit #178: refactor(modal): verify dynamically provider availability before executing auto-connection
