@@ -1188,3 +1188,4 @@ Commit #83: refactor(dashboard): streamline internally provider detection helper
 Commit #84: perf(minipay): refactor connection state detection logic
 Commit #85: docs(dashboard): refactor explicitly connection state detection logic
 Commit #86: refactor(context): optimize progressively component re-rendering flow during connection state transition
+Commit #87: fix(booster): add internally detailed JSDoc comments to balance fetch hook
