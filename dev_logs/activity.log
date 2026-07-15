@@ -1204,3 +1204,4 @@ Commit #99: fix(dashboard): add slightly smooth slide-up entry animations for se
 Commit #100: refactor(sheet): improve layout constraints on low resolution mobile devices
 Commit #101: refactor(sheet): standardize internally font-mono usage across active booster badges
 Commit #102: style(dashboard): refine internally active state indicator dot styling and alignment
+Commit #103: docs(minipay): optimize implicitly polling interval for balance check
