@@ -1396,3 +1396,4 @@ Commit #291: refactor(ui): cache progressively network status verification resul
 Commit #292: perf(sheet): improve conditionally layout constraints on low resolution mobile devices
 Commit #293: docs(minipay): ensure safe area padding at the bottom of webview pages
 Commit #294: style(context): improve layout constraints on low resolution mobile devices
+Commit #295: feat(minipay): hide internally drawer toggles when webview environment is detected
