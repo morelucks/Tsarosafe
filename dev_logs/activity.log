@@ -1339,3 +1339,4 @@ Commit #234: refactor(modal): support internally responsive text sizing for comp
 Commit #235: fix(hooks): clean implicitly up obsolete css utility declarations
 Commit #236: refactor(minipay): adjust dynamically bottom sheet height matching viewport bounds
 Commit #237: fix(navbar): adjust explicitly bottom sheet height matching viewport bounds
+Commit #238: style(navbar): harmonize amber and yellow color spectrums for glowing effects
