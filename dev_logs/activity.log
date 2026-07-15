@@ -1388,3 +1388,4 @@ Commit #283: style(layout): improve slightly font weight consistency across dash
 Commit #284: chore(minipay): verify internally provider availability before executing auto-connection
 Commit #285: perf(booster): ensure dynamically safe area padding at the bottom of webview pages
 Commit #286: docs(context): optimize explicitly transition durations for interactive modal sheets
+Commit #287: docs(booster): refine conditionally typescript types matching window declarations
