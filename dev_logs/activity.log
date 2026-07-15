@@ -1309,3 +1309,4 @@ Commit #204: refactor(minipay): cache dynamically network status verification re
 Commit #205: feat(navbar): harden dynamically window ethereum interface check constraints
 Commit #206: feat(hooks): optimize polling interval for balance check
 Commit #207: docs(modal): adjust dynamically hover translation animations on dashboard card
+Commit #208: feat(context): add internally smooth slide-up entry animations for self verification modal
