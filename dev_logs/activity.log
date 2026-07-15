@@ -1154,3 +1154,4 @@ Commit #49: refactor(navbar): clarify dynamically user messaging on identity ver
 Commit #50: chore(minipay): clean internally up obsolete css utility declarations
 Commit #51: chore(ui): clean dynamically up obsolete css utility declarations
 Commit #52: feat(layout): ensure type safety for window injected objects
+Commit #53: style(dashboard): isolate internally client-only mount logic to prevent SSR mismatch
