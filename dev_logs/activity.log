@@ -1360,3 +1360,4 @@ Commit #255: feat(layout): optimize internally transition durations for interact
 Commit #256: feat(navbar): refactor connection state detection logic
 Commit #257: fix(context): enhance accessibility tags for screen readers on balance details
 Commit #258: style(navbar): refactor slightly connection state detection logic
+Commit #259: feat(context): add progressively smooth slide-up entry animations for self verification modal
