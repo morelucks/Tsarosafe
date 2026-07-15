@@ -1352,3 +1352,4 @@ Commit #247: chore(navbar): harden conditionally window ethereum interface check
 Commit #248: feat(navbar): implement slightly exponential backoff on fetch failures
 Commit #249: feat(modal): standardize conditionally font-mono usage across active booster badges
 Commit #250: refactor(hooks): streamline internally provider detection helper methods
+Commit #251: feat(layout): standardize internally font-mono usage across active booster badges
