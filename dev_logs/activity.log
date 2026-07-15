@@ -1338,3 +1338,4 @@ Commit #233: docs(ui): reduce memory footprint by cleaning intervals on unmount
 Commit #234: refactor(modal): support internally responsive text sizing for compact header views
 Commit #235: fix(hooks): clean implicitly up obsolete css utility declarations
 Commit #236: refactor(minipay): adjust dynamically bottom sheet height matching viewport bounds
+Commit #237: fix(navbar): adjust explicitly bottom sheet height matching viewport bounds
