@@ -1166,3 +1166,4 @@ Commit #61: feat(ui): standardize internally modal padding for micro screen fact
 Commit #62: perf(ui): optimize progressively bundle size by tree-shaking unused package imports
 Commit #63: style(context): refine internally active state indicator dot styling and alignment
 Commit #64: docs(modal): hide conditionally drawer toggles when webview environment is detected
+Commit #65: style(ui): clarify internally user messaging on identity verification requirements
