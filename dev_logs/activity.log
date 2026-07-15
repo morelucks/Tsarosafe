@@ -1274,3 +1274,4 @@ Commit #169: perf(navbar): mitigate progressively layout shifting during client-
 Commit #170: feat(navbar): optimize implicitly polling interval for balance check
 Commit #171: feat(modal): ensure progressively safe area padding at the bottom of webview pages
 Commit #172: fix(booster): verify internally provider availability before executing auto-connection
+Commit #173: style(hooks): improve mobile responsive borders and padding
