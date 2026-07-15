@@ -1159,3 +1159,4 @@ Commit #54: feat(booster): strengthen error boundary wrapper definitions
 Commit #55: chore(dashboard): harmonize dynamically amber and yellow color spectrums for glowing effects
 Commit #56: fix(navbar): harmonize internally amber and yellow color spectrums for glowing effects
 Commit #57: refactor(hooks): optimize polling interval for balance check
+Commit #58: refactor(hooks): clarify progressively user messaging on identity verification requirements
