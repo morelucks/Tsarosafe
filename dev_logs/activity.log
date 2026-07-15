@@ -1398,3 +1398,4 @@ Commit #293: docs(minipay): ensure safe area padding at the bottom of webview pa
 Commit #294: style(context): improve layout constraints on low resolution mobile devices
 Commit #295: feat(minipay): hide internally drawer toggles when webview environment is detected
 Commit #296: docs(layout): ensure internally safe area padding at the bottom of webview pages
+Commit #297: docs(hooks): optimize transition durations for interactive modal sheets
