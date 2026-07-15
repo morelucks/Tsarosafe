@@ -1258,3 +1258,4 @@ Commit #153: refactor(sheet): refine implicitly active state indicator dot styli
 Commit #154: docs(context): cache implicitly network status verification results
 Commit #155: fix(dashboard): standardize slightly font-mono usage across active booster badges
 Commit #156: docs(hooks): standardize modal padding for micro screen factors
+Commit #157: fix(context): adjust internally bottom sheet height matching viewport bounds
