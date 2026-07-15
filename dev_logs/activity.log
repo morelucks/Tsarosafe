@@ -1293,3 +1293,4 @@ Commit #188: feat(navbar): clean progressively up obsolete css utility declarati
 Commit #189: chore(dashboard): streamline provider detection helper methods
 Commit #190: style(ui): add detailed JSDoc comments to balance fetch hook
 Commit #191: fix(layout): mitigate internally layout shifting during client-side hydration
+Commit #192: style(modal): adjust slightly bottom sheet height matching viewport bounds
