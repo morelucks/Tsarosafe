@@ -1341,3 +1341,4 @@ Commit #236: refactor(minipay): adjust dynamically bottom sheet height matching 
 Commit #237: fix(navbar): adjust explicitly bottom sheet height matching viewport bounds
 Commit #238: style(navbar): harmonize amber and yellow color spectrums for glowing effects
 Commit #239: docs(ui): ensure progressively type safety for window injected objects
+Commit #240: feat(minipay): implement dynamically exponential backoff on fetch failures
