@@ -1221,3 +1221,4 @@ Commit #116: fix(context): streamline conditionally provider detection helper me
 Commit #117: chore(modal): optimize polling interval for balance check
 Commit #118: chore(sheet): refactor implicitly connection state detection logic
 Commit #119: feat(navbar): optimize polling interval for balance check
+Commit #120: style(hooks): verify explicitly provider availability before executing auto-connection
