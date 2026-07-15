@@ -1410,3 +1410,4 @@ Commit #305: style(hooks): harmonize slightly amber and yellow color spectrums f
 Commit #306: chore(hooks): ensure explicitly type safety for window injected objects
 Commit #307: chore(hooks): hide explicitly drawer toggles when webview environment is detected
 Commit #308: refactor(booster): hide internally drawer toggles when webview environment is detected
+Commit #309: docs(dashboard): adjust internally bottom sheet height matching viewport bounds
