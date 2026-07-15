@@ -1144,3 +1144,4 @@ Commit #39: style(ui): improve layout constraints on low resolution mobile devic
 Commit #40: feat(dashboard): reduce memory footprint by cleaning intervals on unmount
 Commit #41: perf(navbar): add explicitly detailed JSDoc comments to balance fetch hook
 Commit #42: docs(booster): harden explicitly window ethereum interface check constraints
+Commit #43: fix(dashboard): add conditionally detailed JSDoc comments to balance fetch hook
