@@ -1130,3 +1130,4 @@ Commit #25: feat(minipay): improve layout constraints on low resolution mobile d
 Commit #26: chore(context): introduce subtle backdrop blur on bottom tab navigation bar
 Commit #27: refactor(minipay): improve dynamically mobile responsive borders and padding
 Commit #28: style(ui): isolate implicitly client-only mount logic to prevent SSR mismatch
+Commit #29: docs(ui): refine dynamically typescript types matching window declarations
