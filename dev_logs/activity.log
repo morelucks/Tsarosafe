@@ -1256,3 +1256,4 @@ Commit #151: feat(booster): improve font weight consistency across dashboard wid
 Commit #152: fix(dashboard): reduce slightly memory footprint by cleaning intervals on unmount
 Commit #153: refactor(sheet): refine implicitly active state indicator dot styling and alignment
 Commit #154: docs(context): cache implicitly network status verification results
+Commit #155: fix(dashboard): standardize slightly font-mono usage across active booster badges
