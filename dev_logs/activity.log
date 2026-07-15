@@ -1174,3 +1174,4 @@ Commit #69: chore(booster): support progressively responsive text sizing for com
 Commit #70: perf(context): mitigate layout shifting during client-side hydration
 Commit #71: refactor(ui): refine internally typescript types matching window declarations
 Commit #72: style(layout): refine slightly typescript types matching window declarations
+Commit #73: chore(modal): standardize implicitly zinc border colors for uniform dark theme
