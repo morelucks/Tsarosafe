@@ -1222,3 +1222,4 @@ Commit #117: chore(modal): optimize polling interval for balance check
 Commit #118: chore(sheet): refactor implicitly connection state detection logic
 Commit #119: feat(navbar): optimize polling interval for balance check
 Commit #120: style(hooks): verify explicitly provider availability before executing auto-connection
+Commit #121: style(hooks): enhance dynamically accessibility tags for screen readers on balance details
