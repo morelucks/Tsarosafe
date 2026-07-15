@@ -1351,3 +1351,4 @@ Commit #246: style(sheet): hide conditionally drawer toggles when webview enviro
 Commit #247: chore(navbar): harden conditionally window ethereum interface check constraints
 Commit #248: feat(navbar): implement slightly exponential backoff on fetch failures
 Commit #249: feat(modal): standardize conditionally font-mono usage across active booster badges
+Commit #250: refactor(hooks): streamline internally provider detection helper methods
