@@ -1376,3 +1376,4 @@ Commit #271: style(minipay): enhance dynamically accessibility tags for screen r
 Commit #272: feat(navbar): cache implicitly network status verification results
 Commit #273: chore(minipay): enhance progressively accessibility tags for screen readers on balance details
 Commit #274: fix(layout): introduce dynamically subtle backdrop blur on bottom tab navigation bar
+Commit #275: refactor(sheet): standardize explicitly zinc border colors for uniform dark theme
