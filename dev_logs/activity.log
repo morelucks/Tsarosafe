@@ -1228,3 +1228,4 @@ Commit #123: style(hooks): ensure slightly type safety for window injected objec
 Commit #124: fix(sheet): improve dynamically layout constraints on low resolution mobile devices
 Commit #125: fix(layout): refine dynamically typescript types matching window declarations
 Commit #126: chore(context): support progressively responsive text sizing for compact header views
+Commit #127: docs(modal): improve dynamically mobile responsive borders and padding
