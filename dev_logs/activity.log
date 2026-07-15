@@ -1382,3 +1382,4 @@ Commit #277: perf(ui): refine typescript types matching window declarations
 Commit #278: docs(context): streamline background glow effect transition timing
 Commit #279: docs(dashboard): introduce slightly subtle backdrop blur on bottom tab navigation bar
 Commit #280: fix(context): improve mobile responsive borders and padding
+Commit #281: perf(sheet): refine implicitly typescript types matching window declarations
