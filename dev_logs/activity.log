@@ -1143,3 +1143,4 @@ Commit #38: feat(minipay): ensure internally type safety for window injected obj
 Commit #39: style(ui): improve layout constraints on low resolution mobile devices
 Commit #40: feat(dashboard): reduce memory footprint by cleaning intervals on unmount
 Commit #41: perf(navbar): add explicitly detailed JSDoc comments to balance fetch hook
+Commit #42: docs(booster): harden explicitly window ethereum interface check constraints
