@@ -1230,3 +1230,4 @@ Commit #125: fix(layout): refine dynamically typescript types matching window de
 Commit #126: chore(context): support progressively responsive text sizing for compact header views
 Commit #127: docs(modal): improve dynamically mobile responsive borders and padding
 Commit #128: fix(minipay): ensure internally type safety for window injected objects
+Commit #129: refactor(dashboard): improve internally font weight consistency across dashboard widgets
