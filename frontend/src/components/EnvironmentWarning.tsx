@@ -44,8 +44,25 @@ export function EnvironmentWarning() {
               />
             </svg>
           </div>
-          <div className="flex-1">
-            <p className="text-sm font-bold">⚠️ Wallet Connection Disabled</p>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-bold">
+              ⚠️ Wallet Connection Disabled
+            </p>
+            <p className="text-sm mt-1 opacity-95">
+              <code className="bg-white/20 px-1.5 py-0.5 rounded text-xs font-mono">
+                NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID
+              </code>{' '}
+              is not configured. Get your free Project ID from{' '}
+              <a
+                href="https://cloud.reown.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline font-semibold hover:text-white/90 transition-colors"
+              >
+                cloud.reown.com
+              </a>
+              , then add it to your <code className="bg-white/20 px-1 py-0.5 rounded text-xs font-mono">.env.local</code> file.
+            </p>
           </div>
         </div>
       </div>
