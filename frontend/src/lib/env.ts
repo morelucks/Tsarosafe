@@ -42,18 +42,23 @@ export const validateEnv = (): EnvValidationResult => {
     };
   }
 
-  // Extract missing and invalid variables
+  return extractValidationErrors(parsed.error);
+};
+
+/**
+ * Extracts validation errors from Zod error object
+ */
+const extractValidationErrors = (error: any): EnvValidationResult => {
   const missingVars: string[] = [];
   const errors: Record<string, string[]> = {};
 
-  parsed.error.issues.forEach((issue) => {
+  error.issues.forEach((issue: any) => {
     const path = issue.path.join('.');
     if (!errors[path]) {
       errors[path] = [];
     }
     errors[path].push(issue.message);
 
-    // Check if variable is missing
     if (issue.code === 'invalid_type' && issue.received === 'undefined') {
       missingVars.push(path);
     }
