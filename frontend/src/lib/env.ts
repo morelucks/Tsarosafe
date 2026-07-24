@@ -76,10 +76,8 @@ const extractValidationErrors = (error: any): EnvValidationResult => {
  * @returns true if configured, false otherwise
  */
 export const isWalletConnectConfigured = (): boolean => {
-  return (
-    !!process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID &&
-    process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID.length > 0
-  );
+  const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID;
+  return !!projectId && projectId.length > 0;
 };
 
 /**
