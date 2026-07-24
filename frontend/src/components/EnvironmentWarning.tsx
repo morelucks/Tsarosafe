@@ -44,7 +44,8 @@ export function EnvironmentWarning() {
       aria-live="polite"
     >
       <div className="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
-        <div className="flex items-start gap-3">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="flex items-start gap-3 flex-1">
           <div className="flex-shrink-0 mt-0.5">
             <svg
               className="h-5 w-5"
@@ -78,6 +79,36 @@ export function EnvironmentWarning() {
               </a>
               , then add it to your <code className="bg-white/20 px-1 py-0.5 rounded text-xs font-mono">.env.local</code> file.
             </p>
+          </div>
+
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <button
+              onClick={handleDismiss}
+              className="inline-flex items-center px-3 py-1.5 border border-white/30 text-xs font-semibold rounded-md hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-orange-500"
+              aria-label="Dismiss warning"
+            >
+              Dismiss
+            </button>
+            <button
+              onClick={handleDismiss}
+              className="inline-flex items-center justify-center p-1 rounded-md hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-white"
+              aria-label="Close warning"
+            >
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
