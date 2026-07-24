@@ -95,6 +95,13 @@ export const logEnvValidation = (): void => {
     return;
   }
 
+  logValidationWarnings(result);
+};
+
+/**
+ * Logs validation warnings to console
+ */
+const logValidationWarnings = (result: EnvValidationResult): void => {
   console.warn('⚠️  Environment validation warnings:');
 
   if (result.missingVars.length > 0) {
