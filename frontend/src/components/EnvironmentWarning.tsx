@@ -10,15 +10,30 @@ import { isWalletConnectConfigured } from '@/lib/env';
 
 export function EnvironmentWarning() {
   const [isClient, setIsClient] = useState(false);
+  const [isDismissed, setIsDismissed] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
+
+    // Check if WalletConnect is configured
     const isConfigured = isWalletConnectConfigured();
     setShowWarning(!isConfigured);
+
+    // Check if user has previously dismissed the warning
+    const dismissed = localStorage.getItem('env-warning-dismissed');
+    if (dismissed === 'true') {
+      setIsDismissed(true);
+    }
   }, []);
 
-  if (!isClient || !showWarning) {
+  const handleDismiss = () => {
+    setIsDismissed(true);
+    localStorage.setItem('env-warning-dismissed', 'true');
+  };
+
+  // Don't render on server or if dismissed or if properly configured
+  if (!isClient || isDismissed || !showWarning) {
     return null;
   }
 
