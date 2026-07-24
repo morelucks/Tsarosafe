@@ -111,6 +111,20 @@ export function EnvironmentWarning() {
             </button>
           </div>
         </div>
+
+        {/* Dev-only reset button */}
+        {process.env.NODE_ENV === 'development' && (
+          <button
+            onClick={() => {
+              localStorage.removeItem('env-warning-dismissed');
+              setIsDismissed(false);
+            }}
+            className="mt-2 text-xs opacity-50 hover:opacity-100 underline"
+            aria-label="Reset warning dismissal (dev only)"
+          >
+            [Dev] Reset dismissal
+          </button>
+        )}
       </div>
     </div>
   );
