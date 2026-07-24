@@ -12,6 +12,12 @@ import { StacksWalletProvider } from "@/context/StacksWalletContext";
 import { MiniPayProvider } from "@/context/MiniPayContext";
 import MiniPayBoosterStatus from "./components/MiniPayBoosterStatus";
 import { EnvironmentWarning } from "@/components/EnvironmentWarning";
+import { logEnvValidation } from "@/lib/env";
+
+// Log environment validation on server startup
+if (typeof window === 'undefined') {
+  logEnvValidation();
+}
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
