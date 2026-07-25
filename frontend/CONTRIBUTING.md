@@ -20,3 +20,5 @@ Be respectful, inclusive, and professional.
 
 - npm or yarn package manager
 
+- Git for version control
+
