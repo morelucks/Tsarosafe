@@ -112,3 +112,5 @@ Examples:
 
 ### Pull Request Process
 
+Update from upstream before creating PR.
+
