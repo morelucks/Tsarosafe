@@ -81,3 +81,5 @@ Automated, transparent payment processing.
 
 - Next.js 16 with App Router
 
+- React 19 for UI components
+
