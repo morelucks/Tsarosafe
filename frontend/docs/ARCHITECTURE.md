@@ -60,3 +60,7 @@ Architectural decisions and implementation.
 ### Lazy Loading
 Architectural decisions and implementation.
 
+
+### State Management Patterns
+Architectural decisions and implementation.
+
