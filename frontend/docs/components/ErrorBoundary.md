@@ -34,3 +34,7 @@ Component details and guidelines.
 ### Best Practices
 Component details and guidelines.
 
+
+### Common Pitfalls
+Component details and guidelines.
+
