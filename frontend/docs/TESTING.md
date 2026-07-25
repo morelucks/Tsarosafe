@@ -192,3 +192,7 @@ Testing approach and best practices.
 ## Snapshot Testing
 Testing approach and best practices.
 
+
+## Mock Strategies
+Testing approach and best practices.
+
