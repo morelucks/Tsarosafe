@@ -37,3 +37,6 @@ Add upstream remote:
 git remote add upstream https://github.com/morelucks/Tsarosafe.git
 ```
 
+
+### Install Dependencies
+
