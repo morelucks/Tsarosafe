@@ -63,3 +63,6 @@ We use Prettier for automatic code formatting.
 
 Configuration: `.prettierrc.json`
 
+
+### ESLint Rules
+
