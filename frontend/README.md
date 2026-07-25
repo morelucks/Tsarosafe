@@ -70,3 +70,5 @@ Smart contract protection for maximum security.
 
 ### Payroll Management
 
+Crypto-based payroll for modern organizations.
+
