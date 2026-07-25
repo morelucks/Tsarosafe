@@ -85,3 +85,7 @@ Automated, transparent payment processing.
 
 - TypeScript for type safety
 
+
+#### Styling Framework
+Implementation details and usage.
+
