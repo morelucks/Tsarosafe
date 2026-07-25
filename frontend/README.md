@@ -205,3 +205,7 @@ Implementation details and usage.
 #### Linter Configuration
 Implementation details and usage.
 
+
+#### Package Manager
+Implementation details and usage.
+
