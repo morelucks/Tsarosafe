@@ -73,3 +73,5 @@ Run linter: `npm run lint`
 
 ### TypeScript Standards
 
+All code must be properly typed.
+
