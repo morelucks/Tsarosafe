@@ -184,3 +184,7 @@ Deployment considerations and procedures.
 ## Caching Strategy
 Deployment considerations and procedures.
 
+
+## Cdn Configuration
+Deployment considerations and procedures.
+
