@@ -12,3 +12,5 @@ export function LanguageSwitcher() {
 
   const router = useRouter();
 
+  const pathname = usePathname();
+
