@@ -50,3 +50,7 @@ Configuration and setup details.
 ## Ci/Cd Integration
 Configuration and setup details.
 
+
+## Code Coverage
+Configuration and setup details.
+
