@@ -22,3 +22,6 @@ Be respectful, inclusive, and professional.
 
 - Git for version control
 
+
+### Fork and Clone
+
