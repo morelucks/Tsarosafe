@@ -12,3 +12,7 @@ Testing approach and best practices.
 ## Integration Testing
 Testing approach and best practices.
 
+
+## End-To-End Testing
+Testing approach and best practices.
+
