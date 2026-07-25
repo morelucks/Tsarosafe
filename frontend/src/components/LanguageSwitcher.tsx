@@ -19,3 +19,6 @@ export function LanguageSwitcher() {
 
     const newPath = pathname.replace(/^\/[a-z]{2}/, `/${newLocale}`);
 
+    router.push(newPath);
+  };
+
