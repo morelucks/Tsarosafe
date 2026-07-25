@@ -30,3 +30,7 @@ Component details and guidelines.
 ### Edge Cases
 Component details and guidelines.
 
+
+### Best Practices
+Component details and guidelines.
+
