@@ -26,3 +26,7 @@ Component details and guidelines.
 ### Testing
 Component details and guidelines.
 
+
+### Edge Cases
+Component details and guidelines.
+
