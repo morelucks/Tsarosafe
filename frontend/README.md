@@ -265,3 +265,7 @@ Implementation details and usage.
 #### Code Formatter
 Implementation details and usage.
 
+
+#### Linter Configuration
+Implementation details and usage.
+
