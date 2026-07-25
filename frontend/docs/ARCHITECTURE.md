@@ -64,3 +64,7 @@ Architectural decisions and implementation.
 ### State Management Patterns
 Architectural decisions and implementation.
 
+
+### Data Fetching Strategies
+Architectural decisions and implementation.
+
