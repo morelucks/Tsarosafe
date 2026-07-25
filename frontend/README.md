@@ -389,3 +389,7 @@ Implementation details and usage.
 #### Development Server
 Implementation details and usage.
 
+
+#### Code Formatter
+Implementation details and usage.
+
