@@ -79,3 +79,5 @@ Automated, transparent payment processing.
 
 ### Frontend Framework
 
+- Next.js 16 with App Router
+
