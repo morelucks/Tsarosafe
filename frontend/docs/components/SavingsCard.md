@@ -18,3 +18,7 @@ Component details and guidelines.
 ### Accessibility
 Component details and guidelines.
 
+
+### Performance
+Component details and guidelines.
+
