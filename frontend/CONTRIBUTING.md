@@ -75,3 +75,5 @@ Run linter: `npm run lint`
 
 All code must be properly typed.
 
+Avoid `any` types when possible.
+
