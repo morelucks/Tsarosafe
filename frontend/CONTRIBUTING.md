@@ -103,3 +103,5 @@ Format: `<type>(<scope>): <description>`
 
 Examples:
 
+- `feat(auth): add login functionality`
+
