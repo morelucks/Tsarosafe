@@ -14,3 +14,6 @@ export function LanguageSwitcher() {
 
   const pathname = usePathname();
 
+
+  const changeLanguage = (newLocale: string) => {
+
