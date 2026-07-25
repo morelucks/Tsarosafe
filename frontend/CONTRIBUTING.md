@@ -32,3 +32,8 @@ Clone your forked repository:
 git clone https://github.com/YOUR_USERNAME/Tsarosafe.git
 ```
 
+Add upstream remote:
+```bash
+git remote add upstream https://github.com/morelucks/Tsarosafe.git
+```
+
