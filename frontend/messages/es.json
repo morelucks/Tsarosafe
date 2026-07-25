@@ -1,0 +1,104 @@
+{
+
+  "common": {
+    "connect_wallet": "Conectar Cartera"
+  },
+
+  "common": {
+    "disconnect": "Desconectar"
+  },
+
+  "common": {
+    "loading": "Cargando..."
+  },
+
+  "common": {
+    "error": "Error"
+  },
+
+  "common": {
+    "success": "Éxito"
+  },
+
+  "common": {
+    "cancel": "Cancelar"
+  },
+
+  "common": {
+    "confirm": "Confirmar"
+  },
+
+  "common": {
+    "save": "Guardar"
+  },
+
+  "common": {
+    "delete": "Eliminar"
+  },
+
+  "common": {
+    "edit": "Editar"
+  },
+
+  "hero": {
+    "title": "AHORRA MÁS INTELIGENTE."
+  },
+
+  "hero": {
+    "subtitle": "Un enfoque refinado para la riqueza digital."
+  },
+
+  "hero": {
+    "cta_dashboard": "Abrir Panel"
+  },
+
+  "hero": {
+    "cta_learn_more": "Aprender Más"
+  },
+
+  "dashboard": {
+    "title": "Panel de Control"
+  },
+
+  "dashboard": {
+    "welcome": "¡Bienvenido de nuevo!"
+  },
+
+  "dashboard": {
+    "total_savings": "Ahorros Totales"
+  },
+
+  "dashboard": {
+    "active_groups": "Grupos Activos"
+  },
+
+  "dashboard": {
+    "monthly_goal": "Progreso de Meta Mensual"
+  },
+
+  "dashboard": {
+    "quick_actions": "Acciones Rápidas"
+  },
+
+    "create_group": "Crear Grupo",
+
+    "join_group": "Unirse al Grupo",
+
+    "my_groups": "Mis Grupos",
+
+    "group_details": "Detalles del Grupo",
+
+    "contribute": "Contribuir",
+
+    "withdraw": "Retirar",
+
+    "members": "Miembros",
+
+    "target_amount": "Cantidad Objetivo",
+
+    "current_amount": "Cantidad Actual",
+
+    "progress": "Progreso",
+
+}
+

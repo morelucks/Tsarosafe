@@ -1,0 +1,104 @@
+{
+
+  "common": {
+    "connect_wallet": "Connect Wallet"
+  },
+
+  "common": {
+    "disconnect": "Disconnect"
+  },
+
+  "common": {
+    "loading": "Loading..."
+  },
+
+  "common": {
+    "error": "Error"
+  },
+
+  "common": {
+    "success": "Success"
+  },
+
+  "common": {
+    "cancel": "Cancel"
+  },
+
+  "common": {
+    "confirm": "Confirm"
+  },
+
+  "common": {
+    "save": "Save"
+  },
+
+  "common": {
+    "delete": "Delete"
+  },
+
+  "common": {
+    "edit": "Edit"
+  },
+
+  "hero": {
+    "title": "SAVE SMARTER."
+  },
+
+  "hero": {
+    "subtitle": "A refined approach to digital wealth."
+  },
+
+  "hero": {
+    "cta_dashboard": "Launch Dashboard"
+  },
+
+  "hero": {
+    "cta_learn_more": "Learn More"
+  },
+
+  "dashboard": {
+    "title": "Dashboard Overview"
+  },
+
+  "dashboard": {
+    "welcome": "Welcome back!"
+  },
+
+  "dashboard": {
+    "total_savings": "Total Savings"
+  },
+
+  "dashboard": {
+    "active_groups": "Active Groups"
+  },
+
+  "dashboard": {
+    "monthly_goal": "Monthly Goal Progress"
+  },
+
+  "dashboard": {
+    "quick_actions": "Quick Actions"
+  },
+
+    "create_group": "Create Group",
+
+    "join_group": "Join Group",
+
+    "my_groups": "My Groups",
+
+    "group_details": "Group Details",
+
+    "contribute": "Contribute",
+
+    "withdraw": "Withdraw",
+
+    "members": "Members",
+
+    "target_amount": "Target Amount",
+
+    "current_amount": "Current Amount",
+
+    "progress": "Progress",
+
+}
+

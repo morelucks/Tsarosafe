@@ -1,0 +1,104 @@
+{
+
+  "common": {
+    "connect_wallet": "Connecter Portefeuille"
+  },
+
+  "common": {
+    "disconnect": "Déconnecter"
+  },
+
+  "common": {
+    "loading": "Chargement..."
+  },
+
+  "common": {
+    "error": "Erreur"
+  },
+
+  "common": {
+    "success": "Succès"
+  },
+
+  "common": {
+    "cancel": "Annuler"
+  },
+
+  "common": {
+    "confirm": "Confirmer"
+  },
+
+  "common": {
+    "save": "Enregistrer"
+  },
+
+  "common": {
+    "delete": "Supprimer"
+  },
+
+  "common": {
+    "edit": "Modifier"
+  },
+
+  "hero": {
+    "title": "ÉCONOMISEZ PLUS INTELLIGEMMENT."
+  },
+
+  "hero": {
+    "subtitle": "Une approche raffinée de la richesse numérique."
+  },
+
+  "hero": {
+    "cta_dashboard": "Ouvrir Tableau de Bord"
+  },
+
+  "hero": {
+    "cta_learn_more": "En Savoir Plus"
+  },
+
+  "dashboard": {
+    "title": "Aperçu du Tableau de Bord"
+  },
+
+  "dashboard": {
+    "welcome": "Bienvenue!"
+  },
+
+  "dashboard": {
+    "total_savings": "Économies Totales"
+  },
+
+  "dashboard": {
+    "active_groups": "Groupes Actifs"
+  },
+
+  "dashboard": {
+    "monthly_goal": "Progrès Objectif Mensuel"
+  },
+
+  "dashboard": {
+    "quick_actions": "Actions Rapides"
+  },
+
+    "create_group": "Créer Groupe",
+
+    "join_group": "Rejoindre Groupe",
+
+    "my_groups": "Mes Groupes",
+
+    "group_details": "Détails du Groupe",
+
+    "contribute": "Contribuer",
+
+    "withdraw": "Retirer",
+
+    "members": "Membres",
+
+    "target_amount": "Montant Cible",
+
+    "current_amount": "Montant Actuel",
+
+    "progress": "Progrès",
+
+}
+
