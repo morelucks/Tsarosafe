@@ -10,3 +10,5 @@ Next.js App Router provides the foundation.
 
 ### Application Layer (`src/app`)
 
+Contains all route handlers and page components.
+
