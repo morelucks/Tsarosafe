@@ -256,3 +256,7 @@ Deployment considerations and procedures.
 ## Environment Variables
 Deployment considerations and procedures.
 
+
+## Asset Optimization
+Deployment considerations and procedures.
+
