@@ -4,3 +4,5 @@
 
 Thank you for considering contributing to TsaroSafe!
 
+We're excited to have you here.
+
