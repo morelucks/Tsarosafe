@@ -60,3 +60,6 @@ Track progress toward shared financial goals.
 
 Transparent, on-chain fund management ensures trust.
 
+
+### Solo Vaults
+
