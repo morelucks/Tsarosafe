@@ -8,3 +8,7 @@
     "disconnect": "Disconnect"
   },
 
+  "common": {
+    "loading": "Loading..."
+  },
+
