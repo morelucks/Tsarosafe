@@ -65,3 +65,5 @@ Transparent, on-chain fund management ensures trust.
 
 Private savings with complete user control.
 
+Smart contract protection for maximum security.
+
