@@ -252,3 +252,7 @@ Deployment considerations and procedures.
 ## Static Generation
 Deployment considerations and procedures.
 
+
+## Environment Variables
+Deployment considerations and procedures.
+
