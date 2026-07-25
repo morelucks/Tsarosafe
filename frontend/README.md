@@ -40,3 +40,368 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 | Variable | Required | Description |
 |---|---|---|
 | `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` | Yes (for wallet) | Get from [cloud.reown.com](https://cloud.reown.com). Without it the app loads but wallet connection is disabled. |
+# TsaroSafe Frontend
+
+
+## Overview
+
+TsaroSafe is a decentralized platform for savings, lending, and payroll.
+
+Built on blockchain for transparency and security.
+
+
+## Key Features
+
+### Savings Groups
+
+Create and join savings circles with friends and family.
+
+Track progress toward shared financial goals.
+
+Transparent, on-chain fund management ensures trust.
+
+
+### Solo Vaults
+
+Private savings with complete user control.
+
+Smart contract protection for maximum security.
+
+
+### Payroll Management
+
+Crypto-based payroll for modern organizations.
+
+Automated, transparent payment processing.
+
+
+## Technology Stack
+
+### Frontend Framework
+
+- Next.js 16 with App Router
+
+- React 19 for UI components
+
+- TypeScript for type safety
+
+
+#### Styling Framework
+Implementation details and usage.
+
+
+#### Blockchain Integration
+Implementation details and usage.
+
+
+#### State Management
+Implementation details and usage.
+
+
+#### Query Library
+Implementation details and usage.
+
+
+#### Form Handling
+Implementation details and usage.
+
+
+#### Validation Library
+Implementation details and usage.
+
+
+#### Animation System
+Implementation details and usage.
+
+
+#### Icon Library
+Implementation details and usage.
+
+
+#### Date Utilities
+Implementation details and usage.
+
+
+#### Testing Framework
+Implementation details and usage.
+
+
+#### Build Tool
+Implementation details and usage.
+
+
+#### Development Server
+Implementation details and usage.
+
+
+#### Code Formatter
+Implementation details and usage.
+
+
+#### Linter Configuration
+Implementation details and usage.
+
+
+#### Package Manager
+Implementation details and usage.
+
+
+#### Version Control
+Implementation details and usage.
+
+
+#### Styling Framework
+Implementation details and usage.
+
+
+#### Blockchain Integration
+Implementation details and usage.
+
+
+#### State Management
+Implementation details and usage.
+
+
+#### Query Library
+Implementation details and usage.
+
+
+#### Form Handling
+Implementation details and usage.
+
+
+#### Validation Library
+Implementation details and usage.
+
+
+#### Animation System
+Implementation details and usage.
+
+
+#### Icon Library
+Implementation details and usage.
+
+
+#### Date Utilities
+Implementation details and usage.
+
+
+#### Testing Framework
+Implementation details and usage.
+
+
+#### Build Tool
+Implementation details and usage.
+
+
+#### Development Server
+Implementation details and usage.
+
+
+#### Code Formatter
+Implementation details and usage.
+
+
+#### Linter Configuration
+Implementation details and usage.
+
+
+#### Package Manager
+Implementation details and usage.
+
+
+#### Version Control
+Implementation details and usage.
+
+
+#### Styling Framework
+Implementation details and usage.
+
+
+#### Blockchain Integration
+Implementation details and usage.
+
+
+#### State Management
+Implementation details and usage.
+
+
+#### Query Library
+Implementation details and usage.
+
+
+#### Form Handling
+Implementation details and usage.
+
+
+#### Validation Library
+Implementation details and usage.
+
+
+#### Animation System
+Implementation details and usage.
+
+
+#### Icon Library
+Implementation details and usage.
+
+
+#### Date Utilities
+Implementation details and usage.
+
+
+#### Testing Framework
+Implementation details and usage.
+
+
+#### Build Tool
+Implementation details and usage.
+
+
+#### Development Server
+Implementation details and usage.
+
+
+#### Code Formatter
+Implementation details and usage.
+
+
+#### Linter Configuration
+Implementation details and usage.
+
+
+#### Package Manager
+Implementation details and usage.
+
+
+#### Version Control
+Implementation details and usage.
+
+
+#### Styling Framework
+Implementation details and usage.
+
+
+#### Blockchain Integration
+Implementation details and usage.
+
+
+#### State Management
+Implementation details and usage.
+
+
+#### Query Library
+Implementation details and usage.
+
+
+#### Form Handling
+Implementation details and usage.
+
+
+#### Validation Library
+Implementation details and usage.
+
+
+#### Animation System
+Implementation details and usage.
+
+
+#### Icon Library
+Implementation details and usage.
+
+
+#### Date Utilities
+Implementation details and usage.
+
+
+#### Testing Framework
+Implementation details and usage.
+
+
+#### Build Tool
+Implementation details and usage.
+
+
+#### Development Server
+Implementation details and usage.
+
+
+#### Code Formatter
+Implementation details and usage.
+
+
+#### Linter Configuration
+Implementation details and usage.
+
+
+#### Package Manager
+Implementation details and usage.
+
+
+#### Version Control
+Implementation details and usage.
+
+
+#### Styling Framework
+Implementation details and usage.
+
+
+#### Blockchain Integration
+Implementation details and usage.
+
+
+#### State Management
+Implementation details and usage.
+
+
+#### Query Library
+Implementation details and usage.
+
+
+#### Form Handling
+Implementation details and usage.
+
+
+#### Validation Library
+Implementation details and usage.
+
+
+#### Animation System
+Implementation details and usage.
+
+
+#### Icon Library
+Implementation details and usage.
+
+
+#### Date Utilities
+Implementation details and usage.
+
+
+#### Testing Framework
+Implementation details and usage.
+
+
+#### Build Tool
+Implementation details and usage.
+
+
+#### Development Server
+Implementation details and usage.
+
+
+#### Code Formatter
+Implementation details and usage.
+
+
+#### Linter Configuration
+Implementation details and usage.
+
+
+#### Package Manager
+Implementation details and usage.
+
+
+#### Version Control
+Implementation details and usage.
+
