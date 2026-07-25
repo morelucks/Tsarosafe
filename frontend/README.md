@@ -52,3 +52,5 @@ Built on blockchain for transparency and security.
 
 ## Key Features
 
+### Savings Groups
+
