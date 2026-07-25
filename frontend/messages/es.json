@@ -12,3 +12,7 @@
     "loading": "Cargando..."
   },
 
+  "common": {
+    "error": "Error"
+  },
+
