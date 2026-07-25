@@ -30,3 +30,7 @@ Configuration and setup details.
 ## Security Scanning
 Configuration and setup details.
 
+
+## Dependency Updates
+Configuration and setup details.
+
