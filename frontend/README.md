@@ -49,3 +49,6 @@ TsaroSafe is a decentralized platform for savings, lending, and payroll.
 
 Built on blockchain for transparency and security.
 
+
+## Key Features
+
