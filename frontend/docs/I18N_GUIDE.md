@@ -218,3 +218,5 @@
 
 // translation guide implementation detail
 
+// component integration implementation detail
+
