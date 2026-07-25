@@ -58,3 +58,7 @@ Configuration and setup details.
 ## Bundle Analysis
 Configuration and setup details.
 
+
+## Type Checking
+Configuration and setup details.
+
