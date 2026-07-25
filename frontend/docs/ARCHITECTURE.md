@@ -252,3 +252,7 @@ Architectural decisions and implementation.
 ### Caching Strategy
 Architectural decisions and implementation.
 
+
+### Code Splitting
+Architectural decisions and implementation.
+
