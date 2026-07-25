@@ -101,3 +101,5 @@ Follow Conventional Commits specification.
 
 Format: `<type>(<scope>): <description>`
 
+Examples:
+
