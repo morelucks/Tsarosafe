@@ -64,3 +64,7 @@
     "welcome": "Welcome back!"
   },
 
+  "dashboard": {
+    "total_savings": "Total Savings"
+  },
+
