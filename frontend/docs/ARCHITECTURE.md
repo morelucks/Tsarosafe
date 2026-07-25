@@ -20,3 +20,7 @@ Reusable UI components following atomic design.
 
 Custom React hooks encapsulate business logic.
 
+
+### State Management Patterns
+Architectural decisions and implementation.
+
