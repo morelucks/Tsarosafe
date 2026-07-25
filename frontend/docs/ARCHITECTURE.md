@@ -120,3 +120,7 @@ Architectural decisions and implementation.
 ### Form Validation
 Architectural decisions and implementation.
 
+
+### Authentication Flow
+Architectural decisions and implementation.
+
