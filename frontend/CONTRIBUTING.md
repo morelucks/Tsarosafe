@@ -114,3 +114,5 @@ Examples:
 
 Update from upstream before creating PR.
 
+Fill out the PR template completely.
+
