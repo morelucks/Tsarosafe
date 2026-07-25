@@ -18,3 +18,5 @@ Reusable UI components following atomic design.
 
 ### Business Logic (`src/hooks`)
 
+Custom React hooks encapsulate business logic.
+
