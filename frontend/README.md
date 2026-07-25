@@ -63,3 +63,5 @@ Transparent, on-chain fund management ensures trust.
 
 ### Solo Vaults
 
+Private savings with complete user control.
+
