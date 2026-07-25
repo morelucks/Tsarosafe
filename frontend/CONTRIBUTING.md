@@ -84,3 +84,5 @@ Avoid `any` types when possible.
 
 - `feat/` - New features
 
+- `fix/` - Bug fixes
+
