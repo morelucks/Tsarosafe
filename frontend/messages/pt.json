@@ -4,3 +4,7 @@
     "connect_wallet": "Conectar Carteira"
   },
 
+  "common": {
+    "disconnect": "Desconectar"
+  },
+
