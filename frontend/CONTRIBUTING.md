@@ -59,3 +59,5 @@ Open http://localhost:3000
 
 ### Prettier Configuration
 
+We use Prettier for automatic code formatting.
+
