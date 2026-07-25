@@ -66,3 +66,5 @@ Configuration: `.prettierrc.json`
 
 ### ESLint Rules
 
+ESLint enforces code quality standards.
+
