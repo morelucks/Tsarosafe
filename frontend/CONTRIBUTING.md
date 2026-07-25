@@ -82,3 +82,5 @@ Avoid `any` types when possible.
 
 ### Branch Naming Conventions
 
+- `feat/` - New features
+
