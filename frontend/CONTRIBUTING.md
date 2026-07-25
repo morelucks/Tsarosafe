@@ -94,3 +94,6 @@ Avoid `any` types when possible.
 
 - `chore/` - Maintenance tasks
 
+
+### Commit Message Format
+
