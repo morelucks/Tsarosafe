@@ -10,3 +10,5 @@ export function LanguageSwitcher() {
 
   const locale = useLocale();
 
+  const router = useRouter();
+
