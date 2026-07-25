@@ -14,3 +14,7 @@ Component details and guidelines.
 ### Styling Approach
 Component details and guidelines.
 
+
+### Accessibility
+Component details and guidelines.
+
