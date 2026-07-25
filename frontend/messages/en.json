@@ -4,3 +4,7 @@
     "connect_wallet": "Connect Wallet"
   },
 
+  "common": {
+    "disconnect": "Disconnect"
+  },
+
