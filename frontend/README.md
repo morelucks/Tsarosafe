@@ -72,3 +72,5 @@ Smart contract protection for maximum security.
 
 Crypto-based payroll for modern organizations.
 
+Automated, transparent payment processing.
+
