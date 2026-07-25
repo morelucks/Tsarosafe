@@ -236,3 +236,7 @@ Architectural decisions and implementation.
 ### Loading State Management
 Architectural decisions and implementation.
 
+
+### Form Validation
+Architectural decisions and implementation.
+
