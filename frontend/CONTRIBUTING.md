@@ -116,3 +116,5 @@ Update from upstream before creating PR.
 
 Fill out the PR template completely.
 
+Link related issues in description.
+
