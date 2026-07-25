@@ -8,3 +8,5 @@ Next.js App Router provides the foundation.
 
 ## Directory Structure
 
+### Application Layer (`src/app`)
+
