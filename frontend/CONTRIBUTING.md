@@ -40,3 +40,8 @@ git remote add upstream https://github.com/morelucks/Tsarosafe.git
 
 ### Install Dependencies
 
+```bash
+cd frontend
+npm install
+```
+
