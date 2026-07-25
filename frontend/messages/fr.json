@@ -4,3 +4,7 @@
     "connect_wallet": "Connecter Portefeuille"
   },
 
+  "common": {
+    "disconnect": "Déconnecter"
+  },
+
