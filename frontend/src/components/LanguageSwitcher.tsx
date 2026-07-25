@@ -8,3 +8,5 @@ import { useLocale } from 'next-intl';
 
 export function LanguageSwitcher() {
 
+  const locale = useLocale();
+
