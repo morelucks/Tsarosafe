@@ -17,3 +17,5 @@ export function LanguageSwitcher() {
 
   const changeLanguage = (newLocale: string) => {
 
+    const newPath = pathname.replace(/^\/[a-z]{2}/, `/${newLocale}`);
+
