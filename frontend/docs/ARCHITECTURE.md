@@ -16,3 +16,5 @@ Contains all route handlers and page components.
 
 Reusable UI components following atomic design.
 
+### Business Logic (`src/hooks`)
+
