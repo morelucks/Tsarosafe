@@ -236,3 +236,5 @@
 
 // locale persistence implementation detail
 
+// translation guide implementation detail
+
