@@ -27,3 +27,8 @@ Be respectful, inclusive, and professional.
 
 Fork the repository on GitHub.
 
+Clone your forked repository:
+```bash
+git clone https://github.com/YOUR_USERNAME/Tsarosafe.git
+```
+
