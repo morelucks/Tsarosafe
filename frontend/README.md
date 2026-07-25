@@ -74,3 +74,6 @@ Crypto-based payroll for modern organizations.
 
 Automated, transparent payment processing.
 
+
+## Technology Stack
+
