@@ -18,3 +18,5 @@ Be respectful, inclusive, and professional.
 
 - Node.js v18 or higher
 
+- npm or yarn package manager
+
