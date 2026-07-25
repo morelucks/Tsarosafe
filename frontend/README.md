@@ -77,3 +77,5 @@ Automated, transparent payment processing.
 
 ## Technology Stack
 
+### Frontend Framework
+
