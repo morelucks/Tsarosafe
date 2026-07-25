@@ -1,0 +1,2 @@
+// component integration implementation detail
+
