@@ -90,3 +90,5 @@ Avoid `any` types when possible.
 
 - `refactor/` - Code improvements
 
+- `test/` - Test additions
+
