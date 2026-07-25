@@ -16,3 +16,5 @@ Be respectful, inclusive, and professional.
 
 ### Prerequisites
 
+- Node.js v18 or higher
+
