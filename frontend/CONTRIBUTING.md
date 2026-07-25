@@ -9,3 +9,5 @@ We're excited to have you here.
 
 ## Code of Conduct
 
+Be respectful, inclusive, and professional.
+
