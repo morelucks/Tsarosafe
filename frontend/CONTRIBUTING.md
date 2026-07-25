@@ -109,3 +109,6 @@ Examples:
 
 - `docs(readme): update installation steps`
 
+
+### Pull Request Process
+
