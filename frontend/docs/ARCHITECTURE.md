@@ -56,3 +56,7 @@ Architectural decisions and implementation.
 ### Code Splitting
 Architectural decisions and implementation.
 
+
+### Lazy Loading
+Architectural decisions and implementation.
+
