@@ -14,3 +14,5 @@ Contains all route handlers and page components.
 
 ### Component Layer (`src/components`)
 
+Reusable UI components following atomic design.
+
