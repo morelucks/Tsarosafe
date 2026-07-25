@@ -47,3 +47,5 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 TsaroSafe is a decentralized platform for savings, lending, and payroll.
 
+Built on blockchain for transparency and security.
+
