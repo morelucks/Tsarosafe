@@ -107,3 +107,5 @@ Examples:
 
 - `fix(ui): correct button alignment`
 
+- `docs(readme): update installation steps`
+
