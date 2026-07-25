@@ -70,3 +70,6 @@ ESLint enforces code quality standards.
 
 Run linter: `npm run lint`
 
+
+### TypeScript Standards
+
