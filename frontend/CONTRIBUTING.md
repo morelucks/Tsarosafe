@@ -68,3 +68,5 @@ Configuration: `.prettierrc.json`
 
 ESLint enforces code quality standards.
 
+Run linter: `npm run lint`
+
