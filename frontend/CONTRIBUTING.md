@@ -88,3 +88,5 @@ Avoid `any` types when possible.
 
 - `docs/` - Documentation updates
 
+- `refactor/` - Code improvements
+
