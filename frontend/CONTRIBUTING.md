@@ -118,3 +118,5 @@ Fill out the PR template completely.
 
 Link related issues in description.
 
+Wait for code review and approval.
+
