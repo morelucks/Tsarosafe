@@ -244,3 +244,7 @@ Architectural decisions and implementation.
 ### Authentication Flow
 Architectural decisions and implementation.
 
+
+### Authorization Patterns
+Architectural decisions and implementation.
+
