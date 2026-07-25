@@ -83,3 +83,5 @@ Automated, transparent payment processing.
 
 - React 19 for UI components
 
+- TypeScript for type safety
+
