@@ -68,3 +68,7 @@ Deployment considerations and procedures.
 ## Cdn Configuration
 Deployment considerations and procedures.
 
+
+## Monitoring Setup
+Deployment considerations and procedures.
+
