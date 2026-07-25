@@ -204,3 +204,7 @@ Testing approach and best practices.
 ## Unit Testing
 Testing approach and best practices.
 
+
+## Component Testing
+Testing approach and best practices.
+
