@@ -20,3 +20,7 @@ Testing approach and best practices.
 ## Accessibility Testing
 Testing approach and best practices.
 
+
+## Performance Testing
+Testing approach and best practices.
+
