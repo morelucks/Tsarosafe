@@ -99,3 +99,5 @@ Avoid `any` types when possible.
 
 Follow Conventional Commits specification.
 
+Format: `<type>(<scope>): <description>`
+
