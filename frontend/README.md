@@ -56,3 +56,5 @@ Built on blockchain for transparency and security.
 
 Create and join savings circles with friends and family.
 
+Track progress toward shared financial goals.
+
