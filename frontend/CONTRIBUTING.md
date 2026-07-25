@@ -61,3 +61,5 @@ Open http://localhost:3000
 
 We use Prettier for automatic code formatting.
 
+Configuration: `.prettierrc.json`
+
