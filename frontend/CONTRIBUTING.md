@@ -86,3 +86,5 @@ Avoid `any` types when possible.
 
 - `fix/` - Bug fixes
 
+- `docs/` - Documentation updates
+
