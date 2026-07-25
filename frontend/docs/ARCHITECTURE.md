@@ -248,3 +248,7 @@ Architectural decisions and implementation.
 ### Authorization Patterns
 Architectural decisions and implementation.
 
+
+### Caching Strategy
+Architectural decisions and implementation.
+
