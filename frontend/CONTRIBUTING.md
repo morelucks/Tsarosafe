@@ -25,3 +25,5 @@ Be respectful, inclusive, and professional.
 
 ### Fork and Clone
 
+Fork the repository on GitHub.
+
