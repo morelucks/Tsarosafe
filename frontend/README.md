@@ -54,3 +54,5 @@ Built on blockchain for transparency and security.
 
 ### Savings Groups
 
+Create and join savings circles with friends and family.
+
