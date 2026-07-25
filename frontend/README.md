@@ -67,3 +67,6 @@ Private savings with complete user control.
 
 Smart contract protection for maximum security.
 
+
+### Payroll Management
+
