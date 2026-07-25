@@ -92,3 +92,5 @@ Avoid `any` types when possible.
 
 - `test/` - Test additions
 
+- `chore/` - Maintenance tasks
+
