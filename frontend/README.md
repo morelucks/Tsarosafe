@@ -40,3 +40,5 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 | Variable | Required | Description |
 |---|---|---|
 | `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` | Yes (for wallet) | Get from [cloud.reown.com](https://cloud.reown.com). Without it the app loads but wallet connection is disabled. |
+# TsaroSafe Frontend
+
