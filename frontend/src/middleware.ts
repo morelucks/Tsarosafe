@@ -5,3 +5,6 @@ export default createMiddleware({
 
   locales: ['en', 'es', 'pt', 'fr'],
 
+  defaultLocale: 'en'
+});
+
