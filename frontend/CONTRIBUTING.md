@@ -77,3 +77,6 @@ All code must be properly typed.
 
 Avoid `any` types when possible.
 
+
+## Making Changes
+
