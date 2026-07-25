@@ -1,2 +1,6 @@
 {
 
+  "common": {
+    "connect_wallet": "Connect Wallet"
+  },
+
