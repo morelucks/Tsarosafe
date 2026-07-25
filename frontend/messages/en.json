@@ -60,3 +60,7 @@
     "title": "Dashboard Overview"
   },
 
+  "dashboard": {
+    "welcome": "Welcome back!"
+  },
+
