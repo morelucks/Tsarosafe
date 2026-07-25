@@ -97,3 +97,5 @@ Avoid `any` types when possible.
 
 ### Commit Message Format
 
+Follow Conventional Commits specification.
+
