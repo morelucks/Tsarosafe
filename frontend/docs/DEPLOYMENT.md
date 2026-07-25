@@ -100,3 +100,7 @@ Deployment considerations and procedures.
 ## Asset Optimization
 Deployment considerations and procedures.
 
+
+## Caching Strategy
+Deployment considerations and procedures.
+
