@@ -105,3 +105,5 @@ Examples:
 
 - `feat(auth): add login functionality`
 
+- `fix(ui): correct button alignment`
+
